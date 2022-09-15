@@ -123,4 +123,10 @@ export const reset = `
     border-collapse: collapse;
     border-spacing: 0;
   }
-  `;
+  `
+
+export const flexCenter = `
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  `

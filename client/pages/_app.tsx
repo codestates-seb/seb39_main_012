@@ -1,3 +1,4 @@
+import Layout from '@/components/Layout/Layout'
 import type {AppProps} from 'next/app'
 import {RecoilRoot} from 'recoil'
 import {GlobalStyle} from '../styles/GlobalStyle'
@@ -6,7 +7,9 @@ function MyApp({Component, pageProps}: AppProps) {
   return (
     <RecoilRoot>
       <GlobalStyle />
-      <Component {...pageProps} />
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </RecoilRoot>
   )
 }

@@ -1,5 +1,5 @@
-import { createGlobalStyle } from "styled-components";
-import { reset } from "./reset";
+import {createGlobalStyle} from 'styled-components'
+import {reset} from './css'
 
 export const GlobalStyle = createGlobalStyle`
   ${reset}
@@ -8,4 +8,4 @@ export const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
   
-`;
+`
