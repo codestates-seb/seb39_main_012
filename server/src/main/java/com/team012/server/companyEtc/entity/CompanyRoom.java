@@ -25,4 +25,28 @@ public class CompanyRoom {
 
     @OneToOne(mappedBy = "companyRoom")
     private CompanyPosts companyPosts;
+
+    public void addBig() {
+        big++;
+    }
+
+    public void addMedium() {
+        medium++;
+    }
+
+    public void addSmall() {
+        small++;
+    }
+
+    public void minusBig() {
+        big--;
+    }
+
+    public void minusMedium() {
+        medium--;
+    }
+
+    public void minusSmall() {
+        small--;
+    }
 }
