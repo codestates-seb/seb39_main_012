@@ -1,5 +1,7 @@
 package com.team012.server.companyPosts.controller;
 
+import com.team012.server.companyEtc.aws.service.AwsS3Service;
+import com.team012.server.companyEtc.entity.CompanyPostsImg;
 import com.team012.server.companyPosts.dto.CompanyPostsDto;
 import com.team012.server.companyPosts.entity.CompanyPosts;
 import com.team012.server.companyPosts.mapper.CompanyPostsMapper;
@@ -11,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 //import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -20,14 +23,17 @@ import java.util.List;
 public class CompanyPostsController {
 
     private final CompanyPostsService companyPostsService;
+    private final AwsS3Service awsS3Service;
     private final CompanyPostsMapper mapper;
 
     @PostMapping("/create") //@AuthenticationPrincipal PrincipalDetails principal 이거 없으므로 일단 dto에 companyId보냄
-    public ResponseEntity create(@RequestBody CompanyPostsDto.PostDto postDto) {
-        Long companyId = postDto.getCompanyId();
-        CompanyPosts companyPosts = mapper.postDtoToCompanyPosts(postDto);
+    public ResponseEntity create(@RequestPart(value = "request") CompanyPostsDto.PostDto request,
+                                 @RequestPart(value = "file") List<MultipartFile> file) {
+        Long companyId = request.getCompanyId();
+        CompanyPosts companyPosts = mapper.postDtoToCompanyPosts(request);
+        List<CompanyPostsImg> imageUrlList = awsS3Service.uploadFilesV2(file);
 
-        CompanyPosts response = companyPostsService.save(companyPosts, companyId);
+        CompanyPosts response = companyPostsService.save(companyPosts, companyId, imageUrlList);
 
         return new ResponseEntity<>(mapper.companyPostsToResponseDto(response), HttpStatus.CREATED);
     }

@@ -2,6 +2,7 @@ package com.team012.server.companyPosts.service;
 
 import com.team012.server.company.entity.Company;
 import com.team012.server.company.repository.CompanyRepository;
+import com.team012.server.companyEtc.entity.CompanyPostsImg;
 import com.team012.server.companyPosts.entity.CompanyPosts;
 import com.team012.server.companyPosts.repository.CompanyPostsRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -21,7 +23,7 @@ public class CompanyPostsService {
     private final CompanyPostsRepository companyPostsRepository;
     private final CompanyRepository companyRepository;
 
-    public CompanyPosts save(CompanyPosts companyPosts, Long companyId) {
+    public CompanyPosts save(CompanyPosts companyPosts, Long companyId, List<CompanyPostsImg> imageUrlList) {
         Company mock = Company.builder()
                 .address("서울시 강남구")
                 .companyName("코드스테이츠")
@@ -33,10 +35,10 @@ public class CompanyPostsService {
                 .build();
         companyRepository.save(mock);
         companyPosts.setCompany(mock);
-
         Company company = companyRepository.findById(companyId)
                 .orElseThrow(() -> new RuntimeException("Company Not Found"));
         if(company.getCompanyPosts() == null) {
+            companyPosts.setCompanyPostsImgList(imageUrlList);
             return companyPostsRepository.save(companyPosts);
         } else throw new RuntimeException("CompanyPost already Exist");
     }

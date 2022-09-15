@@ -1,6 +1,7 @@
 package com.team012.server.companyPosts.dto;
 
 import com.team012.server.company.entity.Company;
+import com.team012.server.companyEtc.entity.CompanyPostsImg;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -37,6 +38,7 @@ public class CompanyPostsDto {
         private String content;
         private String address;
         private Long companyId;
+        private List<CompanyPostsImg> companyPostsImgList;
         private List<String> postTags;
     }
 }
