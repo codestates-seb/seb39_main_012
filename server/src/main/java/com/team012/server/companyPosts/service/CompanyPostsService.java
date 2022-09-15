@@ -2,7 +2,9 @@ package com.team012.server.companyPosts.service;
 
 import com.team012.server.company.entity.Company;
 import com.team012.server.company.repository.CompanyRepository;
+import com.team012.server.companyEtc.aws.service.AwsS3Service;
 import com.team012.server.companyEtc.entity.CompanyPostsImg;
+import com.team012.server.companyEtc.repository.CompanyPostsImgRepository;
 import com.team012.server.companyPosts.entity.CompanyPosts;
 import com.team012.server.companyPosts.repository.CompanyPostsRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +13,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -22,8 +26,10 @@ public class CompanyPostsService {
 
     private final CompanyPostsRepository companyPostsRepository;
     private final CompanyRepository companyRepository;
+    private final CompanyPostsImgRepository imgRepository;
+    private final AwsS3Service awsS3Service;
 
-    public CompanyPosts save(CompanyPosts companyPosts, Long companyId, List<CompanyPostsImg> imageUrlList) {
+    public CompanyPosts save(CompanyPosts companyPosts, Long companyId, List<MultipartFile> files) {
         Company mock = Company.builder()
                 .address("서울시 강남구")
                 .companyName("코드스테이츠")
@@ -38,14 +44,24 @@ public class CompanyPostsService {
         Company company = companyRepository.findById(companyId)
                 .orElseThrow(() -> new RuntimeException("Company Not Found"));
         if(company.getCompanyPosts() == null) {
-            companyPosts.setCompanyPostsImgList(imageUrlList);
+            List<CompanyPostsImg> lists = awsS3Service.uploadFilesV2(files);
+
+
+            companyPosts.setCompanyPostsImgList(lists);
+            for (CompanyPostsImg c : lists) {
+                c.setCompanyPosts(companyPosts);
+            }
+
             return companyPostsRepository.save(companyPosts);
+
         } else throw new RuntimeException("CompanyPost already Exist");
     }
 
-    public CompanyPosts update(CompanyPosts companyPosts, Long companyId) {
+    public CompanyPosts update(CompanyPosts companyPosts, Long companyId, List<MultipartFile> multipartFile) {
         Long companyPostsId = companyPosts.getId();
         CompanyPosts findCompanyPosts = findById(companyPostsId);
+
+        List<CompanyPostsImg> companyPostsImgs;
 
         if(Objects.equals(companyId, findCompanyPosts.getCompany().getId())) {
 
@@ -53,6 +69,11 @@ public class CompanyPostsService {
             Optional.ofNullable(companyPosts.getTitle()).ifPresent(findCompanyPosts::setTitle);
             Optional.ofNullable(companyPosts.getContent()).ifPresent(findCompanyPosts::setContent);
             Optional.ofNullable(companyPosts.getCompanyServiceTagList()).ifPresent(findCompanyPosts::setCompanyServiceTagList);
+            Optional.ofNullable(companyPosts.getCompanyPostsImgList()).ifPresent(imgList -> {
+                List<CompanyPostsImg> companyPostsImgList = findCompanyPosts.getCompanyPostsImgList();
+                imgRepository.deleteAll(companyPostsImgList);
+                findCompanyPosts.setCompanyPostsImgList(awsS3Service.reviseFileV1(companyPostsImgList,multipartFile, findCompanyPosts));
+            });
 
             return companyPostsRepository.save(findCompanyPosts);
         }

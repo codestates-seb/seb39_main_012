@@ -1,5 +1,6 @@
 package com.team012.server.companyPosts.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.team012.server.baseEntity.BaseEntity;
 import com.team012.server.company.entity.Company;
 import com.team012.server.companyEtc.entity.CompanyPostsImg;
@@ -14,7 +15,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class CompanyPosts extends BaseEntity {
 
     @Id
@@ -38,8 +39,9 @@ public class CompanyPosts extends BaseEntity {
     @JoinColumn(name = "company_room_id")
     private CompanyRoom companyRoom;
 
-    @OneToMany(mappedBy = "companyPosts",cascade = CascadeType.REMOVE)
-    private List<CompanyPostsImg> companyPostsImgList;
+    @OneToMany(mappedBy = "companyPosts",cascade = {CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.MERGE})
+    @JsonManagedReference
+    private List<CompanyPostsImg> companyPostsImgList = new ArrayList<>();
 
     @OneToMany(mappedBy = "companyPosts",cascade = CascadeType.REMOVE)
     private List<Like> likeList;

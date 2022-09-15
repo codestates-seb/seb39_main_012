@@ -31,21 +31,21 @@ public class CompanyPostsController {
                                  @RequestPart(value = "file") List<MultipartFile> file) {
         Long companyId = request.getCompanyId();
         CompanyPosts companyPosts = mapper.postDtoToCompanyPosts(request);
-        List<CompanyPostsImg> imageUrlList = awsS3Service.uploadFilesV2(file);
 
-        CompanyPosts response = companyPostsService.save(companyPosts, companyId, imageUrlList);
+        CompanyPosts response = companyPostsService.save(companyPosts, companyId, file);
 
         return new ResponseEntity<>(mapper.companyPostsToResponseDto(response), HttpStatus.CREATED);
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity update (@PathVariable("id") Long id,
-                                  @RequestBody CompanyPostsDto.PatchDto patchDto) {
-        Long companyId = patchDto.getCompanyId();
+                                  @RequestPart(value = "request") CompanyPostsDto.PatchDto request,
+                                  @RequestPart(value = "file", required = false) List<MultipartFile> file) {
+        Long companyId = request.getCompanyId();
 
-        CompanyPosts companyPosts = mapper.patchDtoToCompanyPosts(patchDto);
+        CompanyPosts companyPosts = mapper.patchDtoToCompanyPosts(request);
         companyPosts.setId(id);
-        CompanyPosts response = companyPostsService.update(companyPosts, companyId);
+        CompanyPosts response = companyPostsService.update(companyPosts, companyId, file);
 
         return new ResponseEntity<>(mapper.companyPostsToResponseDto(response),HttpStatus.OK);
     }
