@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @RequestMapping("/posts")
@@ -33,14 +34,14 @@ public class CompanyPostsController {
         Long companyId = request.getCompanyId();
         CompanyPosts companyPosts = mapper.postDtoToCompanyPosts(request);
 
-        if(request.getPostTags() != null ){
+        Optional.ofNullable(request.getPostTags()).ifPresent(tag -> {
             String postTags = listToString.listToString(request.getPostTags());
-            companyPosts.setPostTags(postTags);
-        } else {companyPosts.setPostTags("");}
-        if(request.getAvailableServiceTags() != null) {
+            if(postTags.length() !=0) companyPosts.setPostTags(postTags);
+        });
+        Optional.ofNullable(request.getAvailableServiceTags()).ifPresent(tag -> {
             String availableServiceTags = listToString.listToString(request.getAvailableServiceTags());
-            companyPosts.setAvailableServiceTags(availableServiceTags);
-        } else {companyPosts.setAvailableServiceTags("");}
+            if(availableServiceTags.length() != 0) companyPosts.setAvailableServiceTags(availableServiceTags);
+        });
 
         CompanyPosts response = companyPostsService.save(companyPosts, companyId, file);
 
@@ -56,14 +57,14 @@ public class CompanyPostsController {
         CompanyPosts companyPosts = mapper.patchDtoToCompanyPosts(request);
         companyPosts.setId(id);
 
-        if(request.getPostTags() != null ){
+        Optional.ofNullable(request.getPostTags()).ifPresent(tag -> {
             String postTags = listToString.listToString(request.getPostTags());
             companyPosts.setPostTags(postTags);
-        } else {companyPosts.setPostTags("");}
-        if(request.getAvailableServiceTags() != null) {
+        });
+        Optional.ofNullable(request.getAvailableServiceTags()).ifPresent(tag -> {
             String availableServiceTags = listToString.listToString(request.getAvailableServiceTags());
             companyPosts.setAvailableServiceTags(availableServiceTags);
-        } else {companyPosts.setAvailableServiceTags("");}
+        });
 
         CompanyPosts response = companyPostsService.update(companyPosts, companyId, file);
 

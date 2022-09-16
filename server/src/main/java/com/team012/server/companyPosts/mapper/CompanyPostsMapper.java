@@ -9,6 +9,7 @@ import org.mapstruct.ReportingPolicy;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CompanyPostsMapper {
@@ -30,14 +31,18 @@ public interface CompanyPostsMapper {
                 .address(companyPosts.getAddress())
                 .companyPostsImgList(companyPosts.getCompanyPostsImgList())
                 .build();
-        if(companyPosts.getPostTags() != null) {
-            List<String> postTags = Arrays.asList(companyPosts.getPostTags().split(","));
-            responseDto.setPostTags(postTags);
-        }
-        if(companyPosts.getAvailableServiceTags() != null) {
-            List<String> availableServiceTags = Arrays.asList(companyPosts.getAvailableServiceTags().split(","));
-            responseDto.setAvailableServiceTags(availableServiceTags);
-        }
+        Optional.ofNullable(companyPosts.getPostTags()).ifPresent(tag -> {
+            if(tag.length() != 0) {
+                List<String> postTags = Arrays.asList(companyPosts.getPostTags().split(","));
+                responseDto.setPostTags(postTags);
+            }
+        });
+        Optional.ofNullable(companyPosts.getAvailableServiceTags()).ifPresent(tag -> {
+            if(tag.length() != 0) {
+                List<String> availableServiceTags = Arrays.asList(companyPosts.getAvailableServiceTags().split(","));
+                responseDto.setAvailableServiceTags(availableServiceTags);
+            }
+        });
         return responseDto;
     }
 
