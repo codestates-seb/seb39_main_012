@@ -26,12 +26,11 @@ public class CompanyPostsController {
     private final AwsS3Service awsS3Service;
     private final CompanyPostsMapper mapper;
 
-    @PostMapping("/create") //@AuthenticationPrincipal PrincipalDetails principal 이거 없으므로 일단 dto에 companyId보냄
+    @PostMapping("/create") //@AuthenticationPrincipal PrincipalDetails principal가 없으므로 일단 dto에 companyId 포함시킴
     public ResponseEntity create(@RequestPart(value = "request") CompanyPostsDto.PostDto request,
                                  @RequestPart(value = "file") List<MultipartFile> file) {
         Long companyId = request.getCompanyId();
         CompanyPosts companyPosts = mapper.postDtoToCompanyPosts(request);
-
         CompanyPosts response = companyPostsService.save(companyPosts, companyId, file);
 
         return new ResponseEntity<>(mapper.companyPostsToResponseDto(response), HttpStatus.CREATED);

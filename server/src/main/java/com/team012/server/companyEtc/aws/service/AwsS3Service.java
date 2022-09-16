@@ -6,6 +6,7 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.util.IOUtils;
@@ -40,46 +41,49 @@ public class AwsS3Service {
     private String bucketName;
 
 
-
-    public String uploadFileV1(MultipartFile multipartFile) throws IOException {
+    //s3로 파일 업로드 하고 url 리턴하는 메서드
+    public String uploadFile(MultipartFile multipartFile) throws IOException {
         validateFileExists(multipartFile);
 
-        String fileName = CommonUtils.buildFileName(multipartFile.getOriginalFilename());
+        String fileName = originalFileName(multipartFile);
 
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentType(multipartFile.getContentType());
         try (InputStream inputStream = multipartFile.getInputStream()){
-            amazonS3Client.putObject(new PutObjectRequest(bucketName, fileName, inputStream, objectMetadata)
+            byte[] bytes = IOUtils.toByteArray(inputStream);
+            objectMetadata.setContentLength(bytes.length);
+            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+            amazonS3Client.putObject(new PutObjectRequest(bucketName,fileName,byteArrayInputStream,objectMetadata)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
         } catch (IOException e) {
             throw new FileUploadException();
         }
-        return amazonS3Client.getUrl(bucketName, fileName).toString();
+        String url = amazonS3Client.getUrl(bucketName, fileName).toString();
+
+        return url;
     }
 
-    public List<CompanyPostsImg> uploadFilesV2(List<MultipartFile> multipartFileList) {
+    //파일 이름 추출하는 메서드
+    public String originalFileName(MultipartFile multipartFile) {
+        return CommonUtils.buildFileName(multipartFile.getOriginalFilename());
+    }
+
+    //file 이름과 url 받아서 List<CompanyPostsImg> 로 리턴하는 메서드
+    public List<CompanyPostsImg> convertCompanyPostImg(List<MultipartFile> multipartFileList) {
         if (multipartFileList.size() > 5) {
             throw new RuntimeException("Image uploads are limited to 5");
         }
         List<CompanyPostsImg> fileList = new ArrayList<>();
 
         multipartFileList.forEach(file -> {
-            validateFileExists(file);
 
-            String fileName = CommonUtils.buildFileName(file.getOriginalFilename());
-            ObjectMetadata objectMetadata = new ObjectMetadata();
-            objectMetadata.setContentType(file.getContentType());
-
-            try (InputStream inputStream = file.getInputStream()){
-                byte[] bytes = IOUtils.toByteArray(inputStream);
-                objectMetadata.setContentLength(bytes.length);
-                ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
-                amazonS3Client.putObject(new PutObjectRequest(bucketName,fileName,byteArrayInputStream,objectMetadata)
-                        .withCannedAcl(CannedAccessControlList.PublicRead));
+            String url;
+            try {
+                url = uploadFile(file);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            String url = amazonS3Client.getUrl(bucketName, fileName).toString();
+            String fileName = originalFileName(file);
 
             CompanyPostsImg companyPostsImg = CompanyPostsImg.builder()
                     .fileName(fileName)
@@ -90,12 +94,8 @@ public class AwsS3Service {
         return fileList;
     }
 
-    private  void validateFileExists(MultipartFile multipartFile) {
-        if(multipartFile.isEmpty()) {
-            throw new RuntimeException("EmptyFileException()");
-        }
-    }
-    public List<CompanyPostsImg> reviseFileV1(List<CompanyPostsImg> imgList,List<MultipartFile> multipartFileList, CompanyPosts companyPosts) {
+    //List<CompanyPostsImg> 수정 메서드(기존 s3에 있는 파일 삭제 후 추가) s3에 기존 파일이 삭제되지 않는 에러가 있음 추후 수정 예정
+    public List<CompanyPostsImg> reviseFileV1(List<CompanyPostsImg> imgList,List<MultipartFile> multipartFileList) {
         List<String> list = imgList.stream().map(CompanyPostsImg::getFileName).collect(Collectors.toList());
         for(int i = 0; i< list.size(); i++) { //기존 파일 삭제
             String currentFilePath = list.get(i);
@@ -106,10 +106,24 @@ public class AwsS3Service {
                     amazonS3Client.deleteObject(bucketName, currentFilePath);
                 }
             }
-//            imgRepository.delete(imgList.get(i));
         }
-        return  uploadFilesV2(multipartFileList);
+        return  convertCompanyPostImg(multipartFileList);
 
     }
 
+    //s3에 업로드된 파일 삭제 메서드
+    public void deleteFile(List<CompanyPostsImg> imgList) {
+        List<String> fileNameList = imgList.stream().map(img -> img.getFileName()).collect(Collectors.toList());
+        for(String file : fileNameList) {
+            amazonS3Client.deleteObject(new DeleteObjectRequest(bucketName, file));
+        }
+
+    }
+
+    //s3에 업로드 할 사진 validation 메서드
+    private  void validateFileExists(MultipartFile multipartFile) {
+        if(multipartFile.isEmpty()) {
+            throw new RuntimeException("EmptyFileException()");
+        }
+    }
 }

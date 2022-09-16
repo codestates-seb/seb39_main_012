@@ -30,7 +30,7 @@ public class CompanyPostsService {
     private final AwsS3Service awsS3Service;
 
     public CompanyPosts save(CompanyPosts companyPosts, Long companyId, List<MultipartFile> files) {
-        Company mock = Company.builder()
+        Company mock = Company.builder() //더미 데이터
                 .address("서울시 강남구")
                 .companyName("코드스테이츠")
                 .ceo("이동주")
@@ -44,14 +44,12 @@ public class CompanyPostsService {
         Company company = companyRepository.findById(companyId)
                 .orElseThrow(() -> new RuntimeException("Company Not Found"));
         if(company.getCompanyPosts() == null) {
-            List<CompanyPostsImg> lists = awsS3Service.uploadFilesV2(files);
-
+            List<CompanyPostsImg> lists = awsS3Service.convertCompanyPostImg(files);
 
             companyPosts.setCompanyPostsImgList(lists);
             for (CompanyPostsImg c : lists) {
                 c.setCompanyPosts(companyPosts);
             }
-
             return companyPostsRepository.save(companyPosts);
 
         } else throw new RuntimeException("CompanyPost already Exist");
@@ -61,19 +59,22 @@ public class CompanyPostsService {
         Long companyPostsId = companyPosts.getId();
         CompanyPosts findCompanyPosts = findById(companyPostsId);
 
-        List<CompanyPostsImg> companyPostsImgs;
-
         if(Objects.equals(companyId, findCompanyPosts.getCompany().getId())) {
 
             Optional.ofNullable(companyPosts.getAddress()).ifPresent(findCompanyPosts::setAddress);
             Optional.ofNullable(companyPosts.getTitle()).ifPresent(findCompanyPosts::setTitle);
             Optional.ofNullable(companyPosts.getContent()).ifPresent(findCompanyPosts::setContent);
             Optional.ofNullable(companyPosts.getCompanyServiceTagList()).ifPresent(findCompanyPosts::setCompanyServiceTagList);
-            Optional.ofNullable(companyPosts.getCompanyPostsImgList()).ifPresent(imgList -> {
-                List<CompanyPostsImg> companyPostsImgList = findCompanyPosts.getCompanyPostsImgList();
+            List<CompanyPostsImg> imgList = companyPosts.getCompanyPostsImgList();
+            if (imgList != null) {
+                List<CompanyPostsImg> companyPostsImgList = imgRepository.findAllByCompanyPostsId(companyPostsId);
+                List<CompanyPostsImg> companyPostsImgs1 = awsS3Service.reviseFileV1(companyPostsImgList, multipartFile);
+                for (CompanyPostsImg c : companyPostsImgs1) {
+                    c.setCompanyPosts(findCompanyPosts);
+                }
+                findCompanyPosts.setCompanyPostsImgList(companyPostsImgs1);
                 imgRepository.deleteAll(companyPostsImgList);
-                findCompanyPosts.setCompanyPostsImgList(awsS3Service.reviseFileV1(companyPostsImgList,multipartFile, findCompanyPosts));
-            });
+            }
 
             return companyPostsRepository.save(findCompanyPosts);
         }
@@ -95,6 +96,8 @@ public class CompanyPostsService {
 
     public void delete(Long companyPostsId) {
         CompanyPosts companyPosts = findById(companyPostsId);
+        awsS3Service.deleteFile(companyPosts.getCompanyPostsImgList());
+
         companyPostsRepository.delete(companyPosts);
     }
 }

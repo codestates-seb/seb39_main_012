@@ -39,7 +39,7 @@ public class CompanyPosts extends BaseEntity {
     @JoinColumn(name = "company_room_id")
     private CompanyRoom companyRoom;
 
-    @OneToMany(mappedBy = "companyPosts",cascade = {CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(mappedBy = "companyPosts",cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<CompanyPostsImg> companyPostsImgList = new ArrayList<>();
 
