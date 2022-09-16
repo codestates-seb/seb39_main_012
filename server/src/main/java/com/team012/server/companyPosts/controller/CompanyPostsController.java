@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,7 +30,7 @@ public class CompanyPostsController {
     private final CompanyPostsMapper mapper;
 
     @PostMapping("/create") //@AuthenticationPrincipal PrincipalDetails principal가 없으므로 일단 dto에 companyId 포함시킴
-    public ResponseEntity create(@RequestPart(value = "request") CompanyPostsDto.PostDto request,
+    public ResponseEntity create(@RequestPart(value = "request") @Valid CompanyPostsDto.PostDto request,
                                  @RequestPart(value = "file") List<MultipartFile> file) {
         Long companyId = request.getCompanyId();
         CompanyPosts companyPosts = mapper.postDtoToCompanyPosts(request);

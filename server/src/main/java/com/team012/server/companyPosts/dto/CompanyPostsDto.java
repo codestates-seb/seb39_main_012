@@ -4,15 +4,21 @@ import com.team012.server.company.entity.Company;
 import com.team012.server.companyEtc.entity.CompanyPostsImg;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
+@Validated
 public class CompanyPostsDto {
 
     @Getter
     public static class PostDto {
+        @NotBlank
         private String title;
+        @NotBlank
         private String content;
+        @NotBlank
         private String address;
         private Long companyId;
         private List<String> postTags;
