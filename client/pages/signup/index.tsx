@@ -16,51 +16,12 @@ export interface Form {
 
 function SignUp() {
   const [mode, setMode] = useState<'user' | 'company'>('user')
-  const [form, setForm] = useState({
-    email: '',
-    password: '',
-    passwordCheck: '',
-    name: '',
-    phone: '',
-    companyName: '',
-    address: '',
-    detailAddress: '',
-  })
-
-  const [checks, setChecks] = useState({
-    totalAgree: false,
-    useAgree: false,
-    privateAgree: false,
-    snsAgree: false,
-    ageAgree: false,
-  })
-
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const {name, value} = e.target
-    setForm({
-      ...form,
-      [name]: value,
-    })
-  }
-
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    const newForm: Partial<Form> = form
-
-    if (mode === 'user') {
-      delete newForm.companyName
-      delete newForm.address
-      delete newForm.detailAddress
-    }
-
-    console.log(newForm)
-  }
 
   return (
     <Container>
       <Title>회원가입</Title>
       <SignUpTab mode={mode} setMode={setMode} />
-      <UserForm form={form} onChange={onChange} setForm={setForm} mode={mode} onSubmit={onSubmit} />
+      <UserForm mode={mode} />
     </Container>
   )
 }

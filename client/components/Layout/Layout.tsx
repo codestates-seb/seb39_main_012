@@ -6,12 +6,20 @@ interface Props {
 }
 
 function Layout({children}: Props) {
-  return <LayOutContainer>{children}</LayOutContainer>
+  return (
+    <LayOutContainer>
+      <Box>{children}</Box>
+    </LayOutContainer>
+  )
 }
 
 export default Layout
 
 const LayOutContainer = styled.div`
   margin: auto;
-  width: 1280px;
+  width: 76.7%;
+`
+const Box = styled.div`
+  display: flex;
+  justify-content: center;
 `
