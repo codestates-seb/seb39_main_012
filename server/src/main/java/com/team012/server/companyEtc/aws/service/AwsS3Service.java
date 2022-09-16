@@ -113,7 +113,7 @@ public class AwsS3Service {
 
     //s3에 업로드된 파일 삭제 메서드
     public void deleteFile(List<CompanyPostsImg> imgList) {
-        List<String> fileNameList = imgList.stream().map(img -> img.getFileName()).collect(Collectors.toList());
+        List<String> fileNameList = imgList.stream().map(CompanyPostsImg::getFileName).collect(Collectors.toList());
         for(String file : fileNameList) {
             amazonS3Client.deleteObject(new DeleteObjectRequest(bucketName, file));
         }

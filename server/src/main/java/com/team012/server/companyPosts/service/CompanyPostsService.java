@@ -64,7 +64,9 @@ public class CompanyPostsService {
             Optional.ofNullable(companyPosts.getAddress()).ifPresent(findCompanyPosts::setAddress);
             Optional.ofNullable(companyPosts.getTitle()).ifPresent(findCompanyPosts::setTitle);
             Optional.ofNullable(companyPosts.getContent()).ifPresent(findCompanyPosts::setContent);
-            Optional.ofNullable(companyPosts.getCompanyServiceTagList()).ifPresent(findCompanyPosts::setCompanyServiceTagList);
+            Optional.ofNullable(companyPosts.getPostTags()).ifPresent(findCompanyPosts::setPostTags);
+            Optional.ofNullable(companyPosts.getAvailableServiceTags()).ifPresent(findCompanyPosts::setAvailableServiceTags);
+
             List<CompanyPostsImg> imgList = companyPosts.getCompanyPostsImgList();
             if (imgList != null) {
                 List<CompanyPostsImg> companyPostsImgList = imgRepository.findAllByCompanyPostsId(companyPostsId);
@@ -85,11 +87,12 @@ public class CompanyPostsService {
         Optional<CompanyPosts> findCompanyPosts
                 = companyPostsRepository.findById(companyPostsId);
 
-        return findCompanyPosts.orElseThrow(() -> new RuntimeException("CompanyPosts Not Found"));
+        return findCompanyPosts.orElseThrow(()
+                -> new RuntimeException("CompanyPosts Not Found"));
     }
 
     public Page<CompanyPosts> findByPage(int page, int size) {
-        Pageable pageable = PageRequest.of(page-1, size, Sort.Direction.DESC,"id");
+        Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC,"id");
 
         return companyPostsRepository.findAll(pageable);
     }

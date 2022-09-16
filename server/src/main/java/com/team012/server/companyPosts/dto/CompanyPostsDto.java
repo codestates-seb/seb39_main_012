@@ -16,7 +16,7 @@ public class CompanyPostsDto {
         private String address;
         private Long companyId;
         private List<String> postTags;
-        private List<String> avaliableService;
+        private List<String> availableServiceTags;
     }
 
     @Getter
@@ -27,7 +27,7 @@ public class CompanyPostsDto {
         private String address;
         private Long companyId;
         private List<String> postTags;
-        private List<String> avaliableService;
+        private List<String> availableServiceTags;
     }
 
     @Getter
@@ -40,5 +40,14 @@ public class CompanyPostsDto {
         private Long companyId;
         private List<CompanyPostsImg> companyPostsImgList;
         private List<String> postTags;
+        private List<String> availableServiceTags;
+
+        public void setPostTags(List<String> postTags) {
+            this.postTags = postTags;
+        }
+
+        public void setAvailableServiceTags(List<String> availableServiceTags) {
+            this.availableServiceTags = availableServiceTags;
+        }
     }
 }

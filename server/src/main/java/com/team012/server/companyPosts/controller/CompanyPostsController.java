@@ -2,6 +2,7 @@ package com.team012.server.companyPosts.controller;
 
 import com.team012.server.companyEtc.aws.service.AwsS3Service;
 import com.team012.server.companyEtc.entity.CompanyPostsImg;
+import com.team012.server.companyPosts.converter.ListToString;
 import com.team012.server.companyPosts.dto.CompanyPostsDto;
 import com.team012.server.companyPosts.entity.CompanyPosts;
 import com.team012.server.companyPosts.mapper.CompanyPostsMapper;
@@ -23,7 +24,7 @@ import java.util.List;
 public class CompanyPostsController {
 
     private final CompanyPostsService companyPostsService;
-    private final AwsS3Service awsS3Service;
+    private final ListToString listToString;
     private final CompanyPostsMapper mapper;
 
     @PostMapping("/create") //@AuthenticationPrincipal PrincipalDetails principal가 없으므로 일단 dto에 companyId 포함시킴
@@ -31,6 +32,16 @@ public class CompanyPostsController {
                                  @RequestPart(value = "file") List<MultipartFile> file) {
         Long companyId = request.getCompanyId();
         CompanyPosts companyPosts = mapper.postDtoToCompanyPosts(request);
+
+        if(request.getPostTags() != null ){
+            String postTags = listToString.listToString(request.getPostTags());
+            companyPosts.setPostTags(postTags);
+        } else {companyPosts.setPostTags("");}
+        if(request.getAvailableServiceTags() != null) {
+            String availableServiceTags = listToString.listToString(request.getAvailableServiceTags());
+            companyPosts.setAvailableServiceTags(availableServiceTags);
+        } else {companyPosts.setAvailableServiceTags("");}
+
         CompanyPosts response = companyPostsService.save(companyPosts, companyId, file);
 
         return new ResponseEntity<>(mapper.companyPostsToResponseDto(response), HttpStatus.CREATED);
@@ -44,6 +55,16 @@ public class CompanyPostsController {
 
         CompanyPosts companyPosts = mapper.patchDtoToCompanyPosts(request);
         companyPosts.setId(id);
+
+        if(request.getPostTags() != null ){
+            String postTags = listToString.listToString(request.getPostTags());
+            companyPosts.setPostTags(postTags);
+        } else {companyPosts.setPostTags("");}
+        if(request.getAvailableServiceTags() != null) {
+            String availableServiceTags = listToString.listToString(request.getAvailableServiceTags());
+            companyPosts.setAvailableServiceTags(availableServiceTags);
+        } else {companyPosts.setAvailableServiceTags("");}
+
         CompanyPosts response = companyPostsService.update(companyPosts, companyId, file);
 
         return new ResponseEntity<>(mapper.companyPostsToResponseDto(response),HttpStatus.OK);
@@ -60,7 +81,7 @@ public class CompanyPostsController {
     @GetMapping
     public ResponseEntity gets(@RequestParam int page,
                                @RequestParam int size) {
-        Page<CompanyPosts> companyPostsPage = companyPostsService.findByPage(page+1, size);
+        Page<CompanyPosts> companyPostsPage = companyPostsService.findByPage(page-1, size);
         List<CompanyPosts> companyPostsList = companyPostsPage.getContent();
 
         return new ResponseEntity<>(new MultiResponseDto<>(mapper.companyPostsToResponseDtos(companyPostsList), companyPostsPage), HttpStatus.OK);

@@ -10,6 +10,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Entity
@@ -46,21 +47,21 @@ public class CompanyPosts extends BaseEntity {
     @OneToMany(mappedBy = "companyPosts",cascade = CascadeType.REMOVE)
     private List<Like> likeList;
 
-    private String companyServiceTagList;
+    private String postTags;
+    
+    private String availableServiceTags;
 
-    public void stringToList(String companyServiceTagList) {
-        List<String> list = new ArrayList<>();
-    }
+
 
     @Builder
-    public CompanyPosts(String title, String content, String address, String companyServiceTagList) {
+    public CompanyPosts(String title, String content, String address, String postTags, String availableServiceTags) {
         this.title = title;
         this.content = content;
         this.address = address;
-        this.companyServiceTagList = companyServiceTagList;
+        this.postTags = postTags;
+        this.availableServiceTags = availableServiceTags;
     }
-
-//일단 CompanyRoom은 생성자에서 제외시킴 추후 작업 예정
+    //일단 CompanyRoom은 생성자에서 제외시킴 추후 작업 예정
 
     //    @OneToMany(mappedBy = "companyPosts")
 //    private List<CompanyServiceTag> companyServiceTagList;
