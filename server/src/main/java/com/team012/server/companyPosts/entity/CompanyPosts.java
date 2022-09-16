@@ -1,5 +1,6 @@
 package com.team012.server.companyPosts.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.team012.server.baseEntity.BaseEntity;
 import com.team012.server.company.entity.Company;
 import com.team012.server.companyEtc.entity.CompanyPostsImg;
@@ -9,12 +10,13 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class CompanyPosts extends BaseEntity {
 
     @Id
@@ -38,27 +40,28 @@ public class CompanyPosts extends BaseEntity {
     @JoinColumn(name = "company_room_id")
     private CompanyRoom companyRoom;
 
-    @OneToMany(mappedBy = "companyPosts",cascade = CascadeType.REMOVE)
-    private List<CompanyPostsImg> companyPostsImgList;
+    @OneToMany(mappedBy = "companyPosts",cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<CompanyPostsImg> companyPostsImgList = new ArrayList<>();
 
     @OneToMany(mappedBy = "companyPosts",cascade = CascadeType.REMOVE)
     private List<Like> likeList;
 
-    private String companyServiceTagList;
+    private String postTags;
+    
+    private String availableServiceTags;
 
-    public void stringToList(String companyServiceTagList) {
-        List<String> list = new ArrayList<>();
-    }
+
 
     @Builder
-    public CompanyPosts(String title, String content, String address, String companyServiceTagList) {
+    public CompanyPosts(String title, String content, String address, String postTags, String availableServiceTags) {
         this.title = title;
         this.content = content;
         this.address = address;
-        this.companyServiceTagList = companyServiceTagList;
+        this.postTags = postTags;
+        this.availableServiceTags = availableServiceTags;
     }
-
-//일단 CompanyRoom은 생성자에서 제외시킴 추후 작업 예정
+    //일단 CompanyRoom은 생성자에서 제외시킴 추후 작업 예정
 
     //    @OneToMany(mappedBy = "companyPosts")
 //    private List<CompanyServiceTag> companyServiceTagList;

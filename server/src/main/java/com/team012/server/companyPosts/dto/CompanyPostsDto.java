@@ -1,21 +1,28 @@
 package com.team012.server.companyPosts.dto;
 
 import com.team012.server.company.entity.Company;
+import com.team012.server.companyEtc.entity.CompanyPostsImg;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
+@Validated
 public class CompanyPostsDto {
 
     @Getter
     public static class PostDto {
+        @NotBlank
         private String title;
+        @NotBlank
         private String content;
+        @NotBlank
         private String address;
         private Long companyId;
         private List<String> postTags;
-        private List<String> avaliableService;
+        private List<String> availableServiceTags;
     }
 
     @Getter
@@ -26,7 +33,7 @@ public class CompanyPostsDto {
         private String address;
         private Long companyId;
         private List<String> postTags;
-        private List<String> avaliableService;
+        private List<String> availableServiceTags;
     }
 
     @Getter
@@ -37,6 +44,16 @@ public class CompanyPostsDto {
         private String content;
         private String address;
         private Long companyId;
+        private List<CompanyPostsImg> companyPostsImgList;
         private List<String> postTags;
+        private List<String> availableServiceTags;
+
+        public void setPostTags(List<String> postTags) {
+            this.postTags = postTags;
+        }
+
+        public void setAvailableServiceTags(List<String> availableServiceTags) {
+            this.availableServiceTags = availableServiceTags;
+        }
     }
 }

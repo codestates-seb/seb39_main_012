@@ -1,5 +1,8 @@
 package com.team012.server.companyPosts.controller;
 
+import com.team012.server.companyEtc.aws.service.AwsS3Service;
+import com.team012.server.companyEtc.entity.CompanyPostsImg;
+import com.team012.server.companyPosts.converter.ListToString;
 import com.team012.server.companyPosts.dto.CompanyPostsDto;
 import com.team012.server.companyPosts.entity.CompanyPosts;
 import com.team012.server.companyPosts.mapper.CompanyPostsMapper;
@@ -11,8 +14,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 //import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @RequestMapping("/posts")
@@ -20,26 +26,48 @@ import java.util.List;
 public class CompanyPostsController {
 
     private final CompanyPostsService companyPostsService;
+    private final ListToString listToString;
     private final CompanyPostsMapper mapper;
 
-    @PostMapping("/create") //@AuthenticationPrincipal PrincipalDetails principal 이거 없으므로 일단 dto에 companyId보냄
-    public ResponseEntity create(@RequestBody CompanyPostsDto.PostDto postDto) {
-        Long companyId = postDto.getCompanyId();
-        CompanyPosts companyPosts = mapper.postDtoToCompanyPosts(postDto);
+    @PostMapping("/create") //@AuthenticationPrincipal PrincipalDetails principal가 없으므로 일단 dto에 companyId 포함시킴
+    public ResponseEntity create(@RequestPart(value = "request") @Valid CompanyPostsDto.PostDto request,
+                                 @RequestPart(value = "file") List<MultipartFile> file) {
+        Long companyId = request.getCompanyId();
+        CompanyPosts companyPosts = mapper.postDtoToCompanyPosts(request);
 
-        CompanyPosts response = companyPostsService.save(companyPosts, companyId);
+        Optional.ofNullable(request.getPostTags()).ifPresent(tag -> {
+            String postTags = listToString.listToString(request.getPostTags());
+            if(postTags.length() !=0) companyPosts.setPostTags(postTags);
+        });
+        Optional.ofNullable(request.getAvailableServiceTags()).ifPresent(tag -> {
+            String availableServiceTags = listToString.listToString(request.getAvailableServiceTags());
+            if(availableServiceTags.length() != 0) companyPosts.setAvailableServiceTags(availableServiceTags);
+        });
+
+        CompanyPosts response = companyPostsService.save(companyPosts, companyId, file);
 
         return new ResponseEntity<>(mapper.companyPostsToResponseDto(response), HttpStatus.CREATED);
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity update (@PathVariable("id") Long id,
-                                  @RequestBody CompanyPostsDto.PatchDto patchDto) {
-        Long companyId = patchDto.getCompanyId();
+                                  @RequestPart(value = "request") CompanyPostsDto.PatchDto request,
+                                  @RequestPart(value = "file", required = false) List<MultipartFile> file) {
+        Long companyId = request.getCompanyId();
 
-        CompanyPosts companyPosts = mapper.patchDtoToCompanyPosts(patchDto);
+        CompanyPosts companyPosts = mapper.patchDtoToCompanyPosts(request);
         companyPosts.setId(id);
-        CompanyPosts response = companyPostsService.update(companyPosts, companyId);
+
+        Optional.ofNullable(request.getPostTags()).ifPresent(tag -> {
+            String postTags = listToString.listToString(request.getPostTags());
+            companyPosts.setPostTags(postTags);
+        });
+        Optional.ofNullable(request.getAvailableServiceTags()).ifPresent(tag -> {
+            String availableServiceTags = listToString.listToString(request.getAvailableServiceTags());
+            companyPosts.setAvailableServiceTags(availableServiceTags);
+        });
+
+        CompanyPosts response = companyPostsService.update(companyPosts, companyId, file);
 
         return new ResponseEntity<>(mapper.companyPostsToResponseDto(response),HttpStatus.OK);
     }
@@ -55,7 +83,7 @@ public class CompanyPostsController {
     @GetMapping
     public ResponseEntity gets(@RequestParam int page,
                                @RequestParam int size) {
-        Page<CompanyPosts> companyPostsPage = companyPostsService.findByPage(page+1, size);
+        Page<CompanyPosts> companyPostsPage = companyPostsService.findByPage(page-1, size);
         List<CompanyPosts> companyPostsList = companyPostsPage.getContent();
 
         return new ResponseEntity<>(new MultiResponseDto<>(mapper.companyPostsToResponseDtos(companyPostsList), companyPostsPage), HttpStatus.OK);

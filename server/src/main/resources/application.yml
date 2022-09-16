@@ -26,3 +26,15 @@ logging:
       springframework:
         orm:
           jpa: DEBUG
+
+cloud:
+  aws:
+    credentials:
+      access-key: #엑서스 키
+      secret-key: # 엑서스 시크릿 키
+    s3:
+      bucket: #버킷 이름
+    region:
+      static: "ap-northeast-2" #지역
+    stack:
+      auto: false
