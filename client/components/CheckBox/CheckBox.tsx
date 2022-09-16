@@ -1,18 +1,18 @@
 import {colors} from '@/styles/colors'
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import styled from 'styled-components'
+import {Checks} from '../SignUp/AgreeBox'
 
 interface Props {
-  size: number
-  bgColor?: string
-  color?: string
-  isChecked?: boolean
+  onClick: () => void
+  checks: Checks
+  setChecks: React.Dispatch<React.SetStateAction<Checks>>
+  name: keyof Checks
 }
 
-function CheckBox({...props}: Props) {
-  const [isChecked, setIsChecked] = useState(false)
+function CheckBox({onClick, checks, name}: Props) {
   return (
-    <CheckBoxs {...props} isChecked={isChecked} onClick={() => setIsChecked(!isChecked)}>
+    <CheckBoxs onClick={onClick} isChecked={checks[name]}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
@@ -29,21 +29,22 @@ function CheckBox({...props}: Props) {
 
 export default CheckBox
 
-const CheckBoxs = styled.div<Props>`
-  transition: all 0.3s;
+const CheckBoxs = styled.div<{isChecked: boolean}>`
+  transition: all 0.1s;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: ${({size}) => size ?? '3'}px;
-  height: ${({size}) => size ?? '3'}px;
+  width: 15px;
+  height: 15px;
   border-radius: 50%;
-  background-color: ${({isChecked, bgColor}) => (isChecked ? bgColor ?? '#56d402' : 'none')};
+  border: solid 1px gray;
+  background-color: ${({isChecked}) => (isChecked ? colors.mainColor : 'white')};
   border: ${({isChecked}) => (isChecked ? 'none' : 'gray solid 0.5px')};
   cursor: pointer;
 
   svg {
-    width: 10rem;
-    height: 10rem;
     color: ${({isChecked}) => (isChecked ? 'white' : colors.grey3)};
+    width: 100%;
+    height: 100%;
   }
 `
