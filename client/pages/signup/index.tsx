@@ -32,9 +32,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 0 auto;
-  width: 456px;
-  height: 100vh;
+  height: 100%;
 `
 
 const Title = styled.h1`

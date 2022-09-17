@@ -1,17 +1,22 @@
+import useDebounce from '@/hooks/useDebounce'
 import {Form} from '@/pages/signup'
 import {Validate} from '@/utils/validate'
-import React, {useState} from 'react'
+import axios from 'axios'
+import {useRouter} from 'next/router'
+import React, {useEffect, useState} from 'react'
 import styled from 'styled-components'
 import AuthButton from '../AuthButton/AuthButton'
 import LabelInput from '../LabelInput/LabelInput'
 import AgreeBox from './AgreeBox'
 import Postcode from './Postcode'
-
+import {toast, ToastContainer} from 'react-toastify'
 interface Props {
   mode: 'user' | 'company'
 }
 
 function UserForm({mode}: Props) {
+  const router = useRouter()
+
   const [form, setForm] = useState({
     email: '',
     password: '',
@@ -37,6 +42,15 @@ function UserForm({mode}: Props) {
     snsAgree: false,
     ageAgree: false,
   })
+
+  const debouceValue = useDebounce(form.email)
+
+  const [emailDuplicate, setEmailDuplicate] = useState(false)
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3000/api/auth/check?email=${debouceValue}`)
+      .then((res) => setEmailDuplicate(res.data))
+  }, [debouceValue])
 
   const {email, password, passwordCheck, name, phone, companyName, detailAddress, address} = form
 
@@ -69,7 +83,7 @@ function UserForm({mode}: Props) {
     })
   }
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const newForm: Partial<Form> = form
 
@@ -101,7 +115,14 @@ function UserForm({mode}: Props) {
       return
     }
 
-    console.log(newForm)
+    const result = await axios.post('http://localhost:3000/api/auth/signup', newForm)
+
+    if (result.status === 200) {
+      router.push('/')
+      toast.success('회원가입이 완료되었습니다.')
+    } else {
+      alert('회원가입에 실패했습니다.')
+    }
   }
 
   return (
@@ -114,6 +135,7 @@ function UserForm({mode}: Props) {
         label={'이메일'}
         Errors={errors.email}
         ErrorMessage={'이메일 형식이 올바르지 않습니다.'}
+        emailDuplicate={emailDuplicate}
       />
       <LabelInput
         type={'password'}
@@ -140,6 +162,7 @@ function UserForm({mode}: Props) {
         value={phone}
         onChange={onChange}
         label={'전화번호'}
+        placeholder={'Ex) 010-1234-5678'}
         Errors={errors.phone}
         ErrorMessage={'핸드폰 번호 형식이 올바르지 않습니다.'}
       />
@@ -183,8 +206,11 @@ export default UserForm
 
 const SignUpForm = styled.form`
   display: flex;
+  width: 100%;
   flex-direction: column;
+  align-items: center;
   margin-top: 36px;
+  margin-bottom: 36px;
   gap: 16px;
 `
 const AddressBox = styled.div`
