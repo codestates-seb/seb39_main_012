@@ -3,7 +3,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 interface Props {
-  title: string
+  title?: string
   width?: string
   height?: string
   backgroundColor?: string
@@ -26,9 +26,9 @@ function AuthButton({title, width, height, backgroundColor, marginTop}: Props) {
 
 export default AuthButton
 
-const Button = styled.button<Props>`
+export const Button = styled.button<Props>`
   margin: 0 auto;
-  width: ${({width}) => width ?? '40rem'};
+  width: ${({width}) => width ?? '39rem'};
   height: ${({height}) => height ?? '5rem'};
   background-color: ${({backgroundColor}) => backgroundColor ?? colors.mainColor};
   border: none;

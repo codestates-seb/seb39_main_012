@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import CheckBoxLabel from './CheckBoxLabel'
 
@@ -93,6 +93,11 @@ const Container = styled.div`
   display: flex;
   width: 100%;
   margin-bottom: 40px;
+
+  @media (max-width: 390px) {
+    width: 80%;
+    flex-direction: column;
+  }
 `
 const AgreeTitle = styled.h2`
   flex: 2;
