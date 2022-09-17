@@ -25,13 +25,18 @@
 
 <br>
 
+## 🌟 BE 기술 스택
+![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)
+![MySQL](https://img.shields.io/badge/mysql-%2300f.svg?style=for-the-badge&logo=mysql&logoColor=white)
+
+<br>
+
 ## 🌟 프로젝트 문서
 - 🖌 Figma [[바로가기]](https://www.figma.com/file/IPeBo0ZKWKwJXa619E7rUY/Project-Moongtel?node-id=0%3A1)
 - 📝 프로젝트 기획서
 - 📝 API 문서
 
 <br>
-
 
 ## 🌟 팀원
 
