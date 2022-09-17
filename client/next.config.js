@@ -5,6 +5,15 @@ const nextConfig = {
   compiler: {
     styledComponents: true, // styled-components classname Erorr
   },
-};
+  webpack(config) {
+    config.module.rules.push({
+      test: /\.svg$/i,
+      issuer: /\.[jt]sx?$/,
+      use: ['@svgr/webpack'],
+    })
 
-module.exports = nextConfig;
+    return config
+  },
+}
+
+module.exports = nextConfig
