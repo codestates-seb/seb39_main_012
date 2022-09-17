@@ -20,7 +20,7 @@
 ## 🌟 FE 기술 스택
 
 <div align="left" style="display:flex;">
-    <img src="https://user-images.githubusercontent.com/65848374/190869019-cc3bcd42-9433-4085-b13a-28729e1cb339.png" width="600" alt="logo"/>
+    <img src="https://user-images.githubusercontent.com/65848374/190868327-d98f8151-0fff-4dba-b220-c34f041aedb7.jpg" width="600" alt="logo"/>
 </div>
 
 <br>
