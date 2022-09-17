@@ -3,10 +3,13 @@ import styled from 'styled-components'
 import TapMenu from '@/components/Login/TapMenu'
 import LoginForm from '@/components/Login/LoginForm'
 import SocialAuthButtons from '@/components/SocialAuthButtons/SocialAuthButtons'
+import axios from 'axios'
+import {useRouter} from 'next/router'
+import {toast} from 'react-toastify'
 
 const index = () => {
   const [error, setErorr] = useState(false)
-
+  const router = useRouter()
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const formdata = new FormData(e.currentTarget)
@@ -16,7 +19,13 @@ const index = () => {
       email,
       password,
     }
-    console.log(form)
+    const result = await axios.post('/api/auth/login', form)
+    if (result.status === 200) {
+      router.push('/')
+      toast.success('로그인 성공')
+    } else {
+      setErorr(true)
+    }
   }
 
   return (
@@ -36,11 +45,10 @@ export default index
 const Container = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center;
   margin: 0 auto;
-  height: 100vh;
   width: 33.33%;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
+  margin-top: 5rem;
 `
 
 const Wrapper = styled.div``

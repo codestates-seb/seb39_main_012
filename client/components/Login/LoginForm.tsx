@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import {colors} from '@/styles/colors'
 import {useRouter} from 'next/router'
 import Input from '../Input/Input'
-import AuthButton from '../AuthButton/AuthButton'
+import AuthButton, {Button} from '../AuthButton/AuthButton'
 
 interface Prop {
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void
@@ -17,7 +17,7 @@ const LoginForm = ({onSubmit}: Prop) => {
         <Input
           type={'string'}
           placeholder={'이메일'}
-          name={'id'}
+          name={'email'}
           width={'56rem'}
           height={'5rem'}
           marginBottom={'2rem'}
@@ -36,13 +36,7 @@ const LoginForm = ({onSubmit}: Prop) => {
         <span>이메일 저장</span>
       </KeepEmail>
       <AuthButton title={'로그인'} width={'100%'} />
-      <AuthButton
-        title={'게스트로 로그인하기'}
-        width={'100%'}
-        backgroundColor={'rgb(11, 80, 2)'}
-        marginTop={'1rem'}
-      />
-
+      <GuestButton>Guest</GuestButton>
       <HelpLogin>
         <span>아아디 찾기</span>
         <span>비밀번호 찾기</span>
@@ -86,5 +80,15 @@ const HelpLogin = styled.div`
     font-weight: 500;
     color: ${colors.grey2};
     cursor: pointer;
+  }
+`
+const GuestButton = styled(Button)`
+  background-color: ${colors.mainColor2};
+  width: 100%;
+  margin-top: 1rem;
+  color: #cdb07b;
+  :hover {
+    background-color: ${colors.mainColor2};
+    opacity: 0.8;
   }
 `
