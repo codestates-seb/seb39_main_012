@@ -1,7 +1,8 @@
 package com.team012.server.companyPosts.controller;
 
-import com.team012.server.companyEtc.aws.service.AwsS3Service;
-import com.team012.server.companyEtc.entity.CompanyPostsImg;
+import com.team012.server.address.Address;
+import com.team012.server.companyPosts.Tag.AvaliableServiceTags.service.AvaTagsService;
+import com.team012.server.companyPosts.Tag.PostsTag.service.TagService;
 import com.team012.server.companyPosts.converter.ListToString;
 import com.team012.server.companyPosts.dto.CompanyPostsDto;
 import com.team012.server.companyPosts.entity.CompanyPosts;
@@ -12,13 +13,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-//import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @RequestMapping("/posts")
@@ -26,6 +25,8 @@ import java.util.Optional;
 public class CompanyPostsController {
 
     private final CompanyPostsService companyPostsService;
+    private final TagService tagService;
+    private final AvaTagsService avaTagsService;
     private final ListToString listToString;
     private final CompanyPostsMapper mapper;
 
@@ -35,16 +36,11 @@ public class CompanyPostsController {
         Long companyId = request.getCompanyId();
         CompanyPosts companyPosts = mapper.postDtoToCompanyPosts(request);
 
-        Optional.ofNullable(request.getPostTags()).ifPresent(tag -> {
-            String postTags = listToString.listToString(request.getPostTags());
-            if(postTags.length() !=0) companyPosts.setPostTags(postTags);
-        });
-        Optional.ofNullable(request.getAvailableServiceTags()).ifPresent(tag -> {
-            String availableServiceTags = listToString.listToString(request.getAvailableServiceTags());
-            if(availableServiceTags.length() != 0) companyPosts.setAvailableServiceTags(availableServiceTags);
-        });
-
-        CompanyPosts response = companyPostsService.save(companyPosts, companyId, file);
+        Address address = listToString.ListToAddress(request.getAddress());
+        companyPosts.setAddress(address);
+        List<String> postsTags = request.getPostTags();
+        List<String> availableServiceTags = request.getAvailableServiceTags();
+        CompanyPosts response = companyPostsService.save(companyPosts, companyId, file,postsTags,availableServiceTags);
 
         return new ResponseEntity<>(mapper.companyPostsToResponseDto(response), HttpStatus.CREATED);
     }
@@ -58,16 +54,13 @@ public class CompanyPostsController {
         CompanyPosts companyPosts = mapper.patchDtoToCompanyPosts(request);
         companyPosts.setId(id);
 
-        Optional.ofNullable(request.getPostTags()).ifPresent(tag -> {
-            String postTags = listToString.listToString(request.getPostTags());
-            companyPosts.setPostTags(postTags);
-        });
-        Optional.ofNullable(request.getAvailableServiceTags()).ifPresent(tag -> {
-            String availableServiceTags = listToString.listToString(request.getAvailableServiceTags());
-            companyPosts.setAvailableServiceTags(availableServiceTags);
-        });
+        Address address = listToString.ListToAddress(request.getAddress());
+        companyPosts.setAddress(address);
 
-        CompanyPosts response = companyPostsService.update(companyPosts, companyId, file);
+        List<String> postsTags = request.getPostTags();
+        List<String> availableServiceTags = request.getAvailableServiceTags();
+        CompanyPosts response = companyPostsService.update(companyPosts, companyId, file, postsTags, availableServiceTags);
+
 
         return new ResponseEntity<>(mapper.companyPostsToResponseDto(response),HttpStatus.OK);
     }

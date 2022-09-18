@@ -5,6 +5,8 @@ import com.team012.server.company.repository.CompanyRepository;
 import com.team012.server.companyEtc.aws.service.AwsS3Service;
 import com.team012.server.companyEtc.entity.CompanyPostsImg;
 import com.team012.server.companyEtc.repository.CompanyPostsImgRepository;
+import com.team012.server.companyPosts.Tag.AvaliableServiceTags.service.AvaTagsService;
+import com.team012.server.companyPosts.Tag.PostsTag.service.TagService;
 import com.team012.server.companyPosts.entity.CompanyPosts;
 import com.team012.server.companyPosts.repository.CompanyPostsRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +17,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -27,9 +28,11 @@ public class CompanyPostsService {
     private final CompanyPostsRepository companyPostsRepository;
     private final CompanyRepository companyRepository;
     private final CompanyPostsImgRepository imgRepository;
+    private final AvaTagsService avaTagsService;
+    private final TagService tagService;
     private final AwsS3Service awsS3Service;
 
-    public CompanyPosts save(CompanyPosts companyPosts, Long companyId, List<MultipartFile> files) {
+    public CompanyPosts save(CompanyPosts companyPosts, Long companyId, List<MultipartFile> files, List<String> postsTags, List<String> aTags) {
         Company mock = Company.builder() //더미 데이터
                 .address("서울시 강남구")
                 .companyName("코드스테이츠")
@@ -43,6 +46,7 @@ public class CompanyPostsService {
         companyPosts.setCompany(mock);
         Company company = companyRepository.findById(companyId)
                 .orElseThrow(() -> new RuntimeException("Company Not Found"));
+
         if(company.getCompanyPosts() == null) {
             List<CompanyPostsImg> lists = awsS3Service.convertCompanyPostImg(files);
 
@@ -50,12 +54,18 @@ public class CompanyPostsService {
             for (CompanyPostsImg c : lists) {
                 c.setCompanyPosts(companyPosts);
             }
-            return companyPostsRepository.save(companyPosts);
+
+            CompanyPosts companyPosts1 = companyPostsRepository.save(companyPosts);
+
+            tagService.saveCompanyPostsTags(tagService.saveOrFind(postsTags),companyPosts1);
+            avaTagsService.saveCompanyPostsTags(avaTagsService.saveOrFind(aTags), companyPosts1);
+
+            return companyPosts1;
 
         } else throw new RuntimeException("CompanyPost already Exist");
     }
 
-    public CompanyPosts update(CompanyPosts companyPosts, Long companyId, List<MultipartFile> multipartFile) {
+    public CompanyPosts update(CompanyPosts companyPosts, Long companyId, List<MultipartFile> multipartFile, List<String> postsTags, List<String> aTags) {
         Long companyPostsId = companyPosts.getId();
         CompanyPosts findCompanyPosts = findById(companyPostsId);
 
@@ -64,8 +74,6 @@ public class CompanyPostsService {
             Optional.ofNullable(companyPosts.getAddress()).ifPresent(findCompanyPosts::setAddress);
             Optional.ofNullable(companyPosts.getTitle()).ifPresent(findCompanyPosts::setTitle);
             Optional.ofNullable(companyPosts.getContent()).ifPresent(findCompanyPosts::setContent);
-            Optional.ofNullable(companyPosts.getPostTags()).ifPresent(findCompanyPosts::setPostTags);
-            Optional.ofNullable(companyPosts.getAvailableServiceTags()).ifPresent(findCompanyPosts::setAvailableServiceTags);
 
             List<CompanyPostsImg> imgList = companyPosts.getCompanyPostsImgList();
             if (imgList != null) {
@@ -77,8 +85,14 @@ public class CompanyPostsService {
                 findCompanyPosts.setCompanyPostsImgList(companyPostsImgs1);
                 imgRepository.deleteAll(companyPostsImgList);
             }
+            CompanyPosts companyPosts1 = companyPostsRepository.save(findCompanyPosts);
 
-            return companyPostsRepository.save(findCompanyPosts);
+            tagService.deleteCompanyPostsTags(findCompanyPosts.getId());
+            avaTagsService.deletePostAvailableTags(findCompanyPosts.getId());
+            tagService.saveCompanyPostsTags(tagService.saveOrFind(postsTags),companyPosts);
+            avaTagsService.saveCompanyPostsTags(avaTagsService.saveOrFind(aTags), companyPosts);
+
+            return companyPosts1;
         }
         else throw new RuntimeException("Only Edit Your Own Posts");
     }

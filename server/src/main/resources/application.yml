@@ -30,10 +30,10 @@ logging:
 cloud:
   aws:
     credentials:
-      access-key: #엑서스 키
-      secret-key: # 엑서스 시크릿 키
+      access-key: "AKIAX5Q7M7JGTGHNJXXY" #엑서스 키
+      secret-key: "PYvHzvI9X4SBRGfTsc6ZWSfvsomnucSdwiy6ImNQ" # 엑서스 시크릿 키
     s3:
-      bucket: #버킷 이름
+      bucket: main12 #버킷 이름
     region:
       static: "ap-northeast-2" #지역
     stack:

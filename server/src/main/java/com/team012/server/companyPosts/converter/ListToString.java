@@ -1,8 +1,8 @@
 package com.team012.server.companyPosts.converter;
 
+import com.team012.server.address.Address;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -12,9 +12,15 @@ public class ListToString {
         return String.join(",",tagList);
     }
 
-    public List<String> stringToList(String tags) {
-        String[] arr = tags.split(",");
 
-        return Arrays.asList(arr);
+    public Address ListToAddress(List<String> list) {
+        String latitude = list.get(0);
+        String longitude = list.get(0);
+
+        return Address.builder()
+                .latitude(latitude)
+                .longitude(longitude)
+                .build();
     }
+
 }

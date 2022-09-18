@@ -1,6 +1,5 @@
 package com.team012.server.companyPosts.dto;
 
-import com.team012.server.company.entity.Company;
 import com.team012.server.companyEtc.entity.CompanyPostsImg;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,9 +17,10 @@ public class CompanyPostsDto {
         private String title;
         @NotBlank
         private String content;
-        @NotBlank
-        private String address;
+
+        private List<String> address; //0번째는 위도, 1번째는 경도
         private Long companyId;
+
         private List<String> postTags;
         private List<String> availableServiceTags;
     }
@@ -30,7 +30,7 @@ public class CompanyPostsDto {
 
         private String title;
         private String content;
-        private String address;
+        private List<String> address;
         private Long companyId;
         private List<String> postTags;
         private List<String> availableServiceTags;
@@ -42,7 +42,7 @@ public class CompanyPostsDto {
         private Long id;
         private String title;
         private String content;
-        private String address;
+        private List<String> address;
         private Long companyId;
         private List<CompanyPostsImg> companyPostsImgList;
         private List<String> postTags;
