@@ -15,7 +15,7 @@ public class ListToString {
 
     public Address ListToAddress(List<String> list) {
         String latitude = list.get(0);
-        String longitude = list.get(0);
+        String longitude = list.get(1);
 
         return Address.builder()
                 .latitude(latitude)
