@@ -14,6 +14,10 @@ public class CompanyRoom {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String name;
+
+    private int count;
+
     @Column(name = "big")
     private Integer big;
 
@@ -25,4 +29,28 @@ public class CompanyRoom {
 
     @OneToOne(mappedBy = "companyRoom")
     private CompanyPosts companyPosts;
+
+    public void addBig() {
+        big++;
+    }
+
+    public void addMedium() {
+        medium++;
+    }
+
+    public void addSmall() {
+        small++;
+    }
+
+    public void minusBig() {
+        big--;
+    }
+
+    public void minusMedium() {
+        medium--;
+    }
+
+    public void minusSmall() {
+        small--;
+    }
 }
