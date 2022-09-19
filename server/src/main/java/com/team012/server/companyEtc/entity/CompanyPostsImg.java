@@ -11,6 +11,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class CompanyPostsImg {
 
+    // git
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
