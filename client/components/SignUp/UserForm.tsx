@@ -9,7 +9,8 @@ import AuthButton from '../AuthButton/AuthButton'
 import LabelInput from '../LabelInput/LabelInput'
 import AgreeBox from './AgreeBox'
 import Postcode from './Postcode'
-import {toast, ToastContainer} from 'react-toastify'
+import {toast} from 'react-toastify'
+
 interface Props {
   mode: 'user' | 'company'
 }
@@ -32,6 +33,7 @@ function UserForm({mode}: Props) {
     email: true,
     password: true,
     passwordCheck: true,
+    name: true,
     phone: true,
   })
 
@@ -46,6 +48,7 @@ function UserForm({mode}: Props) {
   const debouceValue = useDebounce(form.email)
 
   const [emailDuplicate, setEmailDuplicate] = useState(false)
+
   useEffect(() => {
     axios
       .get(`http://localhost:3000/api/auth/check?email=${debouceValue}`)
@@ -56,11 +59,14 @@ function UserForm({mode}: Props) {
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let error = false
+
     const {name, value} = e.target
+
     setForm({
       ...form,
       [name]: value,
     })
+
     if (name === 'email') {
       error = Validate.emailValidate(value)
     }
@@ -71,6 +77,10 @@ function UserForm({mode}: Props) {
 
     if (name === 'passwordCheck') {
       error = Validate.passwordConfirmValidate(password, value)
+    }
+
+    if (name === 'name') {
+      error = Validate.userNameValidate(value)
     }
 
     if (name === 'phone') {
@@ -104,7 +114,9 @@ function UserForm({mode}: Props) {
       errors.email === true ||
       errors.password === true ||
       errors.passwordCheck === true ||
-      errors.phone === true
+      errors.phone === true ||
+      errors.name === true ||
+      emailDuplicate === true
     ) {
       alert('입력값을 확인해주세요')
       return
@@ -155,7 +167,15 @@ function UserForm({mode}: Props) {
         Errors={errors.passwordCheck}
         ErrorMessage={'비밀번호가 일치하지 않습니다. 다시 확인해 주세요.'}
       />
-      <LabelInput type={'text'} name={'name'} value={name} onChange={onChange} label={'이름'} />
+      <LabelInput
+        type={'text'}
+        name={'name'}
+        value={name}
+        onChange={onChange}
+        label={'이름'}
+        Errors={errors.name}
+        ErrorMessage={'이름에는 공백이 들어갈 수 없습니다.'}
+      />
       <LabelInput
         type={'text'}
         name={'phone'}
