@@ -26,8 +26,12 @@
 <br>
 
 ## 🌟 BE 기술 스택
-![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)
+![SpringBoot](https://img.shields.io/badge/springboot-%236DB33F.svg?style=for-the-badge&logo=springboot&logoColor=white)
+![SpringSecurity](https://img.shields.io/badge/SpringSecurity-%236DB33F.svg?style=for-the-badge&logo=SpringSecurity&logoColor=white)
+![JPA](https://img.shields.io/badge/JPA-%236DB33F.svg?style=for-the-badge&logo=JPA&logoColor=white)
 ![MySQL](https://img.shields.io/badge/mysql-%2300f.svg?style=for-the-badge&logo=mysql&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-%2300f.svg?style=for-the-badge&logo=JWT&logoColor=white)
+
 
 <br>
 
