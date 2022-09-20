@@ -13,13 +13,13 @@ import javax.annotation.PostConstruct;
 @Configuration
 public class AWSConfig {
 
-    @Value("AKIAS5J4NNZTGJBC36GF")
+    @Value("")
     private String accessKey;
 
-    @Value("kKu2S+gUvGyOFqOP/HN16hyOANDocCd+dHOwziV6")
+    @Value("")
     private String accessSecret;
 
-    @Value("cloud.aws.region.static")
+    @Value("")
     private String region;
 
     @PostConstruct
