@@ -1,4 +1,4 @@
-package com.team012.server.review.entity.config;
+package com.team012.server.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

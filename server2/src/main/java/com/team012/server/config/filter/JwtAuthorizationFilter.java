@@ -1,8 +1,8 @@
-package com.team012.server.review.entity.config.filter;
+package com.team012.server.config.filter;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.team012.server.review.entity.config.oauth.PrincipalDetails;
+import com.team012.server.config.oauth.PrincipalDetails;
 import com.team012.server.users.entity.Users;
 import com.team012.server.users.repository.UsersRepository;
 import org.springframework.security.authentication.AuthenticationManager;

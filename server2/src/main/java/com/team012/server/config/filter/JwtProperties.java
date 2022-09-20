@@ -1,4 +1,4 @@
-package com.team012.server.review.entity.config.filter;
+package com.team012.server.config.filter;
 
 public interface JwtProperties {
 	String SECRET = "BE012"; // 우리 서버만 알고 있는 비밀값

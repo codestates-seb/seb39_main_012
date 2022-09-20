@@ -1,7 +1,7 @@
-package com.team012.server.review.entity.config;
+package com.team012.server.config;
 
-import com.team012.server.review.entity.config.filter.JwtAuthenticationFilter;
-import com.team012.server.review.entity.config.filter.JwtAuthorizationFilter;
+import com.team012.server.config.filter.JwtAuthenticationFilter;
+import com.team012.server.config.filter.JwtAuthorizationFilter;
 import com.team012.server.users.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

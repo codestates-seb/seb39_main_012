@@ -1,4 +1,4 @@
-package com.team012.server.review.entity.config.oauth;
+package com.team012.server.config.oauth;
 
 import com.team012.server.users.entity.Users;
 import lombok.Getter;
