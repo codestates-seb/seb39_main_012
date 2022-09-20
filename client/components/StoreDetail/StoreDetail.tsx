@@ -1,14 +1,59 @@
+import React, {useState, useEffect} from 'react'
+import {useRouter} from 'next/router'
 import {colors} from '@/styles/colors'
-import React from 'react'
 import styled from 'styled-components'
 import Image from 'next/image'
 import SectionTitle from './SectionTitle'
 import AvailableServiceCard from './AvailableServiceCard'
+import {AiFillStar} from 'react-icons/ai'
+import {AiFillHeart} from 'react-icons/ai'
+import {AiOutlineHeart} from 'react-icons/ai'
+import {FiShare} from 'react-icons/fi'
+import {FiMapPin} from 'react-icons/fi'
+import CompanyReviewCard from './CompanyReviewCard'
+import ReviewStarGenerator from './ReviewStarGenerator'
+import CompanyReviewListCard from './CompanyReviewListCard'
 
 const StoreDetail = () => {
+  const router = useRouter()
+  const {postId} = router.query
+  const [addLike, setAddLike] = useState(false)
+
+  useEffect(() => {
+    if (window.Kakao) {
+      const kakao = window.Kakao
+      if (!kakao.isInitialized()) {
+        window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_API_KEY)
+      }
+    }
+  }, [])
+
+  const shareKakao = () => {
+    // window.Kakao.Link.sendCustom
+    window.Kakao.Share.sendScrap({
+      requestUrl: location.origin + location.pathname,
+      // requestUrl: location.href,
+      // templateId: 83072,
+      // })
+      templateId: 83074,
+      templateArgs: {
+        title: '화성시 방교동 도그플래닛',
+        description: '호텔링 바로 예약하기',
+        pageId: postId,
+        // image_url:''
+        // pagePathname: location.pathname,
+      },
+      installTalk: true,
+    })
+  }
+
+  const addLikeHandler = () => {
+    setAddLike(!addLike)
+  }
+
   return (
     <Container>
-      <CompanyIntoTop>
+      <CompanyInfoTop>
         <CompanyInfoTitleBox>
           <CompanyTitleText>
             <h1>화성시 방교동 도그플래닛</h1>
@@ -16,7 +61,9 @@ const StoreDetail = () => {
           <CompanyTitleSub>
             <CompanyTitleSubLeft>
               <CompanyTitleSubLeftReview>
-                <span>별</span>
+                <span>
+                  <AiFillStar color={colors.mainColor} size="20" />
+                </span>
                 <span>4.8</span>
               </CompanyTitleSubLeftReview>
               <CompanyTitleSubLeftTag>
@@ -26,35 +73,36 @@ const StoreDetail = () => {
               </CompanyTitleSubLeftTag>
             </CompanyTitleSubLeft>
             <CompanyTitleSubRight>
-              <CompanyPageShare>
-                <span>쉐어아이콘</span>
+              <CompanyPageShare onClick={shareKakao}>
+                <span>
+                  <FiShare />
+                </span>
                 <span>Share</span>
               </CompanyPageShare>
-              <CompanyPageLike>
-                <span>하트아이콘</span>
+              <CompanyPageLike onClick={addLikeHandler}>
+                <span>{addLike ? <AiFillHeart size="15" /> : <AiOutlineHeart size="15" />}</span>
                 <span>Save</span>
               </CompanyPageLike>
             </CompanyTitleSubRight>
           </CompanyTitleSub>
         </CompanyInfoTitleBox>
-        {/* company image */}
         <CompanyImages>
-          <CompanyImagesLeft>
+          <CompanyImageLeft>
             <ImageWrapper>
               <Image
                 src="/images/company1.png"
                 alt="company-detail-image-1"
-                width={600}
-                height={500}
+                width={640}
+                height={505}
               />
             </ImageWrapper>
-          </CompanyImagesLeft>
-          <CompanyImagesMiddle>
+          </CompanyImageLeft>
+          <CompanyImageRight>
             <ImageWrapper>
               <Image
                 src="/images/company2.png"
                 alt="company-detail-image-2"
-                width={300}
+                width={320}
                 height={250}
               />
             </ImageWrapper>
@@ -62,17 +110,15 @@ const StoreDetail = () => {
               <Image
                 src="/images/company3.png"
                 alt="company-detail-image-3"
-                width={300}
+                width={320}
                 height={250}
               />
             </ImageWrapper>
-          </CompanyImagesMiddle>
-          <CompanyImagesRight>
             <ImageWrapper>
               <Image
                 src="/images/company4.png"
                 alt="company-detail-image-4"
-                width={300}
+                width={320}
                 height={250}
               />
             </ImageWrapper>
@@ -80,13 +126,13 @@ const StoreDetail = () => {
               <Image
                 src="/images/company5.png"
                 alt="company-detail-image-5"
-                width={300}
+                width={320}
                 height={250}
               />
             </ImageWrapper>
-          </CompanyImagesRight>
+          </CompanyImageRight>
         </CompanyImages>
-      </CompanyIntoTop>
+      </CompanyInfoTop>
       {/* 하단작업 */}
       <CompanyInfoBottom>
         <CompanyDesc>
@@ -129,42 +175,115 @@ const StoreDetail = () => {
               <AvailableServiceCard
                 serviceTitle={'소형견 케어'}
                 serviceContent={'7kg 미만'}
-                iconImage={'/images/authGoogle.png'}
+                iconImageSrc={'/images/authGoogle.png'}
                 alt={'소형견 케어'}
               />
               <AvailableServiceCard
-                serviceTitle={'소형견 케어'}
-                serviceContent={'7kg 미만'}
-                iconImage={'/images/authGoogle.png'}
-                alt={'소형견 케어'}
+                serviceTitle={'중형견 케어'}
+                serviceContent={'7kg~14kg 미만'}
+                iconImageSrc={'/images/authGoogle.png'}
+                alt={'중형견 케어'}
               />
               <AvailableServiceCard
-                serviceTitle={'소형견 케어'}
-                serviceContent={'7kg 미만'}
-                iconImage={'/images/authGoogle.png'}
-                alt={'소형견 케어'}
+                serviceTitle={'대형견 케어'}
+                serviceContent={'15kg 이상'}
+                iconImageSrc={'/images/authGoogle.png'}
+                alt={'중형견 케어'}
               />
               <AvailableServiceCard
-                serviceTitle={'소형견 케어'}
-                serviceContent={'7kg 미만'}
-                iconImage={'/images/authGoogle.png'}
-                alt={'소형견 케어'}
+                serviceTitle={'노견 케어'}
+                serviceContent={'8년이상 노견돌봄 가능'}
+                iconImageSrc={'/images/authGoogle.png'}
+                alt={'노견 케어'}
               />
             </AvailableServiceCards>
           </CompanyAvailableService>
           <CompanyLocation>
             <SectionTitle title={'위치'} />
             <CompanyLocationAddress>
-              <span>아이콘</span>
+              <span>
+                <FiMapPin size={14} />
+              </span>
               <span>경기 화성시 동탄기흥로257번 나길 34-4 1층</span>
             </CompanyLocationAddress>
-
-            <CompanyLocationMap>KAKAOMAP</CompanyLocationMap>
+            <CompanyLocationMap></CompanyLocationMap>
           </CompanyLocation>
           <CompanyReviews>
-            <SectionTitle title={'리뷰 50건'} />
-            <div></div>
-            <div></div>
+            <SectionTitle title={'리뷰'} sub1={'50'} sub2={'건'} />
+            <CompanyReviewsCards>
+              <CompanyReviewCard
+                reviewImageSrc={'/images/review1.jpg'}
+                alt={'company-review-image1'}
+                reviewTitle={'너무 만족했습니다!'}
+                reviewStarNum={5}
+                reviewContent={
+                  '럭키를 잘 케어해주셔서 덕분에 마음 편히 여름 휴가를 다녀올 수 있었습니다! 정말 감사합니다! :D'
+                }
+                reviewDate={'2022.08.21'}
+                reviewerName={'뭉식구'}
+              />
+              <CompanyReviewCard
+                reviewImageSrc={'/images/review2.jpg'}
+                alt={'company-review-image2'}
+                reviewTitle={'귀요미 덕화짱 호텔에서 잘 쉬다가 왔어여!'}
+                reviewStarNum={4}
+                reviewContent={
+                  '덕화가 사회성이 많이 부족해서 호텔링하기 전에 걱정이 많았는데 오히려 몇일 친구들이랑 지내면서 사교성이 생긴 것 같네용 ㅎㅎ'
+                }
+                reviewDate={'2022.09.10'}
+                reviewerName={'지수정'}
+              />
+              <CompanyReviewCard
+                reviewImageSrc={'/images/review3.jpg'}
+                alt={'company-review-image3'}
+                reviewTitle={'반장이 맡겼습니다~~'}
+                reviewStarNum={4}
+                reviewContent={
+                  '추석 연휴동안 여행을 가게되었는데 반장이 맡길 곳이 없어서 이번에 처음 호텔링 서비스 이용하게 되었습니다~! 시설도 깨끗하고 케어해주시는 분도 친절하셨습니다.'
+                }
+                reviewDate={'2022.09.21'}
+                reviewerName={'정환민'}
+              />
+            </CompanyReviewsCards>
+            <CompanyReviewsList>
+              <CompanyReviewListCard
+                reviewStarNum={5}
+                reviewerName={'김민겸'}
+                reviewDate={'2022.09.21'}
+                reviewTitle={'울 댕댕이 호텔가서 친구들이랑 잘 놀아서 좋습니다~'}
+                reviewContent={
+                  '보내주신 사진보니까 저희집 댕댕이가 친구들이랑 아주 잘노네요 ㅎㅎ 도그플래닛인싸입니다 ㅋㅋ 처음 맡길 때는 너무 말썽부리지 않을까 걱정반 불안반으로 맡기게 되었는데 결론은 선택을 잘한 것 같습니다~~ 처음 호텔링 이용해보는건데 실외배변 하던 아이라 걱정이 정말 많았거든요...ㅠㅠ 초반에 밥이랑 간식을 안먹기는했지만 그래도 4일 동안 무탈하게 잘 지내다가 와서 너무 감사드립니다! 다음 달에도해외 출장이 잡혀있어서 3일 정도 더 호텔링 예정인데 믿고 맡기도록 하겠습니다! ^^ 사장님 너무 친절하세용~ 도그플래닛 추천입니닷~!'
+                }
+                reviewImageSrc1={'/images/review4.jpg'}
+                reviewImageSrc2={'/images/review5.jpg'}
+                reviewImageSrc3={'/images/review6.jpg'}
+              />
+              <CompanyReviewListCard
+                reviewStarNum={4}
+                reviewerName={'김민겸'}
+                reviewDate={'2022.09.21'}
+                reviewTitle={'울 댕댕이 호텔가서 친구들이랑 잘 놀아서 좋습니다~'}
+                reviewContent={
+                  '보내주신 사진보니까 저희집 댕댕이가 친구들이랑 아주 잘노네요 ㅎㅎ 도그플래닛인싸입니다 ㅋㅋ 처음 맡길 때는 너무 말썽부리지 않을까 걱정반 불안반으로 맡기게 되었는데 결론은 선택을 잘한 것 같습니다~~ 처음 호텔링 이용해보는건데 실외배변 하던 아이라 걱정이 정말 많았거든요...ㅠㅠ 초반에 밥이랑 간식을 안먹기는했지만 그래도 4일 동안 무탈하게 잘 지내다가 와서 너무 감사드립니다! 다음 달에도해외 출장이 잡혀있어서 3일 정도 더 호텔링 예정인데 믿고 맡기도록 하겠습니다! ^^ 사장님 너무 친절하세용~ 도그플래닛 추천입니닷~!'
+                }
+                reviewImageSrc1={'/images/review4.jpg'}
+                reviewImageSrc2={'/images/review5.jpg'}
+                reviewImageSrc3={'/images/review6.jpg'}
+              />
+              <CompanyReviewListCard
+                reviewStarNum={3}
+                reviewerName={'김민겸'}
+                reviewDate={'2022.09.21'}
+                reviewTitle={'울 댕댕이 호텔가서 친구들이랑 잘 놀아서 좋습니다~'}
+                reviewContent={
+                  '보내주신 사진보니까 저희집 댕댕이가 친구들이랑 아주 잘노네요 ㅎㅎ 도그플래닛인싸입니다 ㅋㅋ 처음 맡길 때는 너무 말썽부리지 않을까 걱정반 불안반으로 맡기게 되었는데 결론은 선택을 잘한 것 같습니다~~ 처음 호텔링 이용해보는건데 실외배변 하던 아이라 걱정이 정말 많았거든요...ㅠㅠ 초반에 밥이랑 간식을 안먹기는했지만 그래도 4일 동안 무탈하게 잘 지내다가 와서 너무 감사드립니다! 다음 달에도해외 출장이 잡혀있어서 3일 정도 더 호텔링 예정인데 믿고 맡기도록 하겠습니다! ^^ 사장님 너무 친절하세용~ 도그플래닛 추천입니닷~!'
+                }
+                reviewImageSrc1={'/images/review4.jpg'}
+                reviewImageSrc2={'/images/review5.jpg'}
+                reviewImageSrc3={'/images/review6.jpg'}
+              />
+            </CompanyReviewsList>
+            <CompanyReviewsPagination>페이지네이션</CompanyReviewsPagination>
           </CompanyReviews>
         </CompanyDesc>
         <CompanyReservation>
@@ -184,21 +303,21 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  max-width: 120rem;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
-    'Open Sans', 'Helvetica Neue', sans-serif;
+  margin-top: 2rem;
 `
 
-const CompanyIntoTop = styled.div`
+const CompanyInfoTop = styled.div`
   flex: 1;
+  display: flex;
+  flex-direction: column;
 `
 
 const CompanyInfoTitleBox = styled.div``
 
 const CompanyTitleText = styled.div`
   h1 {
-    font-size: 2.2rem;
-    font-weight: 500;
+    font-size: 2.1rem;
+    font-weight: 600;
   }
 `
 
@@ -215,66 +334,92 @@ const CompanyTitleSubLeft = styled.div`
 
 const CompanyTitleSubLeftReview = styled.div`
   margin-right: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   span:first-child {
   }
+
   span:last-child {
     margin-left: 0.5rem;
   }
 `
 const CompanyTitleSubLeftTag = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   span {
     color: ${colors.grey4};
-    margin-left: 0.5rem;
+    margin-left: 0.8rem;
   }
 `
 
 const CompanyTitleSubRight = styled.div`
   display: flex;
-  font-size: 1.2rem;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.4rem;
 `
 
 const CompanyPageShare = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   span:last-child {
     margin-left: 0.5rem;
     text-decoration: underline;
     font-weight: 700;
     cursor: pointer;
+  }
+
+  :hover {
+    color: ${colors.mainColor};
   }
 `
 const CompanyPageLike = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-left: 2rem;
-  span:first-child {
-  }
+
   span:last-child {
-    margin-left: 0.5rem;
+    margin-left: 0.2rem;
     text-decoration: underline;
     font-weight: 700;
     cursor: pointer;
+  }
+
+  :hover {
+    color: ${colors.mainColor};
   }
 `
 
 const CompanyImages = styled.div`
-  display: flex;
   margin-top: 2rem;
   cursor: pointer;
+  display: flex;
+  max-width: 128rem;
 `
+
+const CompanyImageLeft = styled.div`
+  flex: 1;
+  margin-right: 10px;
+  border-radius: 3rem;
+`
+const CompanyImageRight = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  flex: 1;
+`
+
 const ImageWrapper = styled.div`
-  border-radius: 1.5rem;
+  border-radius: 1rem;
+  flex: 1 1 40%;
   overflow: hidden;
-  margin: 0.8rem 0.8rem 0 0;
-`
-
-const CompanyImagesLeft = styled.div`
-  flex: 2;
-`
-
-const CompanyImagesMiddle = styled.div`
-  flex: 1;
-`
-
-const CompanyImagesRight = styled.div`
-  flex: 1;
 `
 
 const CompanyInfoBottom = styled.div`
@@ -282,6 +427,7 @@ const CompanyInfoBottom = styled.div`
   display: flex;
   margin-top: 5rem;
 `
+
 const CompanyDesc = styled.div`
   flex: 2;
 `
@@ -303,6 +449,7 @@ const CompanyIntroBg = styled.div`
 const CompanyAvailableService = styled.div`
   margin-top: 5rem;
 `
+
 const AvailableServiceCards = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -324,10 +471,13 @@ const CompanyLocation = styled.div`
 `
 
 const CompanyLocationAddress = styled.div`
+  display: flex;
+  margin-left: 0.5rem;
+  color: ${colors.grey4};
+
   span:last-child {
     font-size: 1.6rem;
-    color: ${colors.grey4};
-    margin-left: 1rem;
+    margin-left: 0.2rem;
   }
 `
 
@@ -335,9 +485,22 @@ const CompanyLocationMap = styled.div`
   display: flex;
 `
 
+const CompanyReviews = styled.div`
+  margin-top: 5rem;
+`
+
+const CompanyReviewsCards = styled.div`
+  display: flex;
+  gap: 1rem;
+`
+
+const CompanyReviewsList = styled.div`
+  margin: 5rem 0;
+`
+
+const CompanyReviewsPagination = styled.div``
+
 const CompanyReservation = styled.div`
   flex: 1;
-`
-const CompanyReviews = styled.div`
   margin-top: 5rem;
 `

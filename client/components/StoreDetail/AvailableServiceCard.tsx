@@ -2,26 +2,34 @@ import React from 'react'
 import {colors} from '@/styles/colors'
 import Image from 'next/image'
 import styled from 'styled-components'
+import {FaDog} from 'react-icons/fa'
 
 interface AvailableServiceCardProps {
   serviceTitle: string
   serviceContent: string
-  iconImage: string
+  iconImageSrc: string
   alt: string
+  // width: number
+  // height: number
 }
 
 const AvailableServiceCard = ({
   serviceTitle,
   serviceContent,
-  iconImage,
+  iconImageSrc,
   alt,
-}: AvailableServiceCardProps) => {
+}: // width,
+// height,
+AvailableServiceCardProps) => {
   return (
     <AvailableServiceBg>
       <AvailableServiceIcon>
-        <AvailableServiceIconWrapper>
-          <Image src={iconImage} alt={alt} width={60} height={60} />
-        </AvailableServiceIconWrapper>
+        <AvailableServiceIconBg>
+          <AvailableServiceIconWrapper>
+            <FaDog size={40} color={colors.grey2} />
+            {/* <Image src={iconImageSrc} alt={alt} width={width} height={height} /> */}
+          </AvailableServiceIconWrapper>
+        </AvailableServiceIconBg>
       </AvailableServiceIcon>
       <AvailableServiceContent>
         <h3>{serviceTitle}</h3>
@@ -35,13 +43,24 @@ export default AvailableServiceCard
 
 const AvailableServiceBg = styled.div`
   display: flex;
-  width: 30%;
+  flex: 0 0 30%;
   border-radius: 1.5rem;
   padding: 0.8rem;
 `
 
-const AvailableServiceIconWrapper = styled.div`
+const AvailableServiceIconBg = styled.div`
   margin: 1rem;
+  width: 6rem;
+  height: 6rem;
+  background-color: rgb(255, 255, 255);
+  border-radius: 50%;
+  position: relative;
+`
+
+const AvailableServiceIconWrapper = styled.div`
+  position: absolute;
+  top: 7px;
+  left: 10px;
 `
 
 const AvailableServiceIcon = styled.div`
@@ -58,7 +77,7 @@ const AvailableServiceContent = styled.div`
   color: rgb(51, 51, 51);
 
   h3 {
-    font-size: 1.6rem;
+    font-size: 1.5rem;
   }
 
   h3:first-child {
