@@ -37,12 +37,14 @@ dependencies {
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.2.Final'
     implementation 'com.google.code.gson:gson:2.9.0' // json parsing 해주는 라이브러리
     implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.4.2'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    testImplementation 'org.springframework.security:spring-security-test'
+    implementation 'com.auth0:java-jwt:4.0.0' // 추가
+
+
 
 
 //	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-//	implementation 'org.springframework.boot:spring-boot-starter-security'
-// 	testImplementation 'org.springframework.security:spring-security-test'
-
 
 }
 

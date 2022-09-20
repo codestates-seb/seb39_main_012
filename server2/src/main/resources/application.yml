@@ -16,6 +16,7 @@ spring:
     properties:
       hibernate:
         format_sql: true  # (3) SQL pretty print
+
   servlet:
     multipart:
       max-file-size: 20MB
@@ -27,6 +28,8 @@ logging:
       springframework:
         orm:
           jpa: DEBUG
+
+
 
 cloud:
   aws:
