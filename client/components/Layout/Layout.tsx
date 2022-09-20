@@ -24,6 +24,10 @@ const LayOutContainer = styled.div`
   flex-direction: column;
   margin: auto;
   max-width: 1280px;
+
+  @media (max-width: 1350px) {
+    margin: 0 30px;
+  }
 `
 const Box = styled.div`
   display: flex;
