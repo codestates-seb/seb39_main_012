@@ -27,7 +27,7 @@ public class AwsS3Service {
 
     private final AmazonS3Client amazonS3Client;
 
-    @Value("mongtel-img-bucket")
+    @Value("")
     private String bucketName;
 
     //s3로 파일 업로드 하고 url 리턴하는 메서드
