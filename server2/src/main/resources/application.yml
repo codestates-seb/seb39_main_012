@@ -16,6 +16,10 @@ spring:
     properties:
       hibernate:
         format_sql: true  # (3) SQL pretty print
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
 
 logging:
   level:
@@ -23,3 +27,15 @@ logging:
       springframework:
         orm:
           jpa: DEBUG
+
+cloud:
+  aws:
+    credentials:
+      accessKey: { }       # AWS IAM AccessKey 적기
+      secretKey: { }   # AWS IAM SecretKey 적기
+    s3:
+      bucket: {  }    # ex) marryting-gyunny
+    region:
+      static: 
+    stack:
+      auto: false

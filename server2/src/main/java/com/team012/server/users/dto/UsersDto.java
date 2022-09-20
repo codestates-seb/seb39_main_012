@@ -1,16 +1,11 @@
 package com.team012.server.users.dto;
 
-import com.team012.server.users.entity.Users;
-import com.team012.server.posts.entity.Posts;
-import com.team012.server.reply.entity.CompanyReply;
-import com.team012.server.reservation.entity.Reservation;
 import lombok.*;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class UsersDto {
@@ -19,7 +14,7 @@ public class UsersDto {
     @Setter
     @Validated
     @NoArgsConstructor
-    public static class Post {
+    public static class CompanyPost {
         @NotBlank(message = "이메일을 입력해주세요.")
         @Email
         private String email;
@@ -43,15 +38,22 @@ public class UsersDto {
         @NotBlank(message = "주소를 입력해주세요.")
         private String address;
 
+        private String detailAddress;
+
+        private String role;
+
         @Builder
-        public Post(String email, String password, String username,
-                    String companyName, String phone, String address) {
+        public CompanyPost(String email, String password, String username,
+                    String companyName, String phone, String address,
+                    String detailAddress, String role) {
             this.email = email;
             this.password = password;
             this.username = username;
             this.companyName = companyName;
             this.phone = phone;
             this.address = address;
+            this.detailAddress = detailAddress;
+            this.role = role;
         }
     }
 
@@ -59,25 +61,45 @@ public class UsersDto {
     @Setter
     @Validated
     @NoArgsConstructor
-    public static class CheckEmail {
-        @Email
+    public static class CustomerPost {
         @NotBlank(message = "이메일을 입력해주세요.")
+        @Email
         private String email;
+        // 암호화 필요
+        @NotBlank
+        @Pattern(regexp = "(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{8,16}",
+                message = "비밀번호는 영어, 숫자, 특수문자로 8에서 16자리로 구성되어야 합니다.")
+        private String password;
+
+        @NotBlank(message = "닉네임을 입력해주세요.")
+        private String username;
+
+        @NotBlank
+        @Pattern(regexp = "^010-\\d{3,4}-\\d{4}$",
+                message = "휴대폰 번호는 010으로 시작하는 11자리 숫자와 '-'로 구성되어야 합니다.")
+        private String phone;
+
+        private String role;
+
 
         @Builder
-        public CheckEmail(String email) {
+        public CustomerPost(String email, String password, String username, String phone, String role) {
             this.email = email;
+            this.password = password;
+            this.username = username;
+            this.phone = phone;
+            this.role = role;
         }
     }
 
     @Getter
     @Setter
     @NoArgsConstructor
-    public static class Response {
+    public static class MessageResponse {
         private String message;
 
         @Builder
-        public Response(String message) {
+        public MessageResponse(String message) {
             this.message = message;
         }
     }
@@ -85,14 +107,22 @@ public class UsersDto {
     @Getter
     @Setter
     @NoArgsConstructor
-    public static class CompanyReservationInfoResponse {
-        private Users companyInfo;
+    public static class InfoResponse {
+        private String username;
+        private String phone;
+        private String email;
 
-        private List<Reservation> reservationList;
+        private String companyName;
+        private List<UsersDto.ReservationList> reservationList;
 
         @Builder
-        public CompanyReservationInfoResponse(Users companyInfo, List<Reservation> reservationList) {
-            this.companyInfo = companyInfo;
+        public InfoResponse(String username, String phone,
+                            String email, String companyName,
+                            List<UsersDto.ReservationList> reservationList) {
+            this.username = username;
+            this.phone = phone;
+            this.email = email;
+            this.companyName = companyName;
             this.reservationList = reservationList;
         }
     }
@@ -100,31 +130,21 @@ public class UsersDto {
     @Getter
     @Setter
     @NoArgsConstructor
-    public static class CompanyInfoResponse {
-        private String email;
+    public static class ReservationList {
+        private Long id;
         private String companyName;
-        private String address;
-        private String username;
-        private String phone;
-        private LocalDateTime createdAt;
-        private List<CompanyReply> replyList;
-        private Posts posts;
-        private List<Reservation> reservationList;
+        private String checkIn;
+        private String checkOut;
+        private String user;
 
         @Builder
-        public CompanyInfoResponse(String email, String companyName, String address,
-                                   String username, String phone,
-                                   LocalDateTime createdAt, List<CompanyReply> replyList,
-                                   Posts posts, List<Reservation> reservationList) {
-            this.email = email;
+        public ReservationList(Long id, String companyName, String checkIn, String checkOut, String user) {
+            this.id = id;
             this.companyName = companyName;
-            this.address = address;
-            this.username = username;
-            this.phone = phone;
-            this.createdAt = createdAt;
-            this.replyList = replyList;
-            this.posts = posts;
-            this.reservationList = reservationList;
+            this.checkIn = checkIn;
+            this.checkOut = checkOut;
+            this.user = user;
         }
     }
+
 }

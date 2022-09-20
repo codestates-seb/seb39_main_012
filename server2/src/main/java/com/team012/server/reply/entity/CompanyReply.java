@@ -20,8 +20,8 @@ public class CompanyReply {
     private String content;
 
     @ManyToOne
-    @JoinColumn(name = "company_id")
-    private Users company;
+    @JoinColumn(name = "users_id")
+    private Users users;
 
     @OneToOne
     @JoinColumn(name = "customer_review_id")
