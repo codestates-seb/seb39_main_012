@@ -5,10 +5,27 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 public class ReservationDto {
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class Post {
+        private Long companyId;
+        private String checkIn;
+        private String checkOut;
+        private Integer totalPrice;
+
+        @Builder
+        public Post(Long companyId, String checkIn, String checkOut, Integer totalPrice) {
+            this.companyId = companyId;
+            this.checkIn = checkIn;
+            this.checkOut = checkOut;
+            this.totalPrice = totalPrice;
+        }
+    }
 
     @Getter
     @Setter
@@ -26,10 +43,10 @@ public class ReservationDto {
     @Setter
     @NoArgsConstructor
     public static class ReservationListResponse {
-        private List<Reservation> reservationList;
+        private Page<Reservation> reservationList;
 
         @Builder
-        public ReservationListResponse(List<Reservation> reservationList) {
+        public ReservationListResponse(Page<Reservation> reservationList) {
             this.reservationList = reservationList;
         }
     }

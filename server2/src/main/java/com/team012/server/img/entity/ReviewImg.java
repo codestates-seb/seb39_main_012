@@ -1,7 +1,6 @@
 package com.team012.server.img.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.team012.server.posts.entity.Posts;
+import com.team012.server.review.entity.Review;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +12,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
-public class PostsImg {
+public class ReviewImg {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,12 +24,11 @@ public class PostsImg {
     private String imgUrl;
 
     @ManyToOne
-    @JoinColumn(name = "posts_id")
-    @JsonBackReference
-    private Posts posts;
+    @JoinColumn(name = "review_id")
+    private Review review;
 
     @Builder
-    public PostsImg(String fileName, String imgUrl) {
+    public ReviewImg(String fileName, String imgUrl) {
         this.fileName = fileName;
         this.imgUrl = imgUrl;
     }

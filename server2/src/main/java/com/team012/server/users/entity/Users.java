@@ -35,6 +35,9 @@ public class Users extends BaseEntity {
     @Column(name = "address")
     private String address;
 
+    @Column(name = "detail_address")
+    private String detailAddress;
+
     @Column(name = "username")
     private String username;
 
@@ -46,7 +49,7 @@ public class Users extends BaseEntity {
     private String role;
 
     // 리뷰에 사장님이 댓글 다는 기능인데 지금은 보류
-    @OneToMany(mappedBy = "company")
+    @OneToMany(mappedBy = "users")
     private List<CompanyReply> companyReplyList;
 
     // 예약
@@ -72,12 +75,13 @@ public class Users extends BaseEntity {
     @Builder
     public Users(String email, String password,
                  String companyName, String address,
-                 String username, String phone,
-                 String role) {
+                 String detailAddress, String username,
+                 String phone, String role) {
         this.email = email;
         this.password = password;
         this.companyName = companyName;
         this.address = address;
+        this.detailAddress = detailAddress;
         this.username = username;
         this.phone = phone;
         this.role = role;

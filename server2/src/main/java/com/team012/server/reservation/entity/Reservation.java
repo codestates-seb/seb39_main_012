@@ -27,7 +27,10 @@ public class Reservation implements Comparable<Reservation> {
     private LocalDate checkOut;
 
     @Column(name = "total_price")
-    private String totalPrice;
+    private Integer totalPrice;
+
+    @Column(name = "companyId")
+    private Long companyId;
 
     // 예약 확정인지 아닌지 판별 -->
     @Column(name = "status")
@@ -38,8 +41,10 @@ public class Reservation implements Comparable<Reservation> {
     private Users users;
 
     @Builder
-    public Reservation(LocalDate checkIn, LocalDate checkOut,
-                       String totalPrice, String status) {
+    public Reservation(Long companyId,
+                       LocalDate checkIn, LocalDate checkOut,
+                       Integer totalPrice, String status) {
+        this.companyId = companyId;
         this.checkIn = checkIn;
         this.checkOut = checkOut;
         this.totalPrice = totalPrice;
