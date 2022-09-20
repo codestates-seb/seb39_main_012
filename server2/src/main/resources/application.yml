@@ -31,11 +31,11 @@ logging:
 cloud:
   aws:
     credentials:
-      accessKey: { AKIAS5J4NNZTGJBC36GF }       # AWS IAM AccessKey 적기
-      secretKey: { kKu2S+gUvGyOFqOP/HN16hyOANDocCd+dHOwziV6 }   # AWS IAM SecretKey 적기
+      accessKey: { }       # AWS IAM AccessKey 적기
+      secretKey: { }   # AWS IAM SecretKey 적기
     s3:
-      bucket: { mongtel-img-bucket }    # ex) marryting-gyunny
+      bucket: {  }    # ex) marryting-gyunny
     region:
-      static: ap-northeast-2
+      static: 
     stack:
       auto: false
