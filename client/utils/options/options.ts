@@ -1,11 +1,17 @@
 export const categoryTags = [
+  '전체',
   '소형견',
   '중형견',
   '대형견',
-  '노견케어',
   '데이케어',
-  '호텔링',
+  '노견케어',
   '미용',
   '산책',
   '훈련',
+]
+
+export const dogSizeOption = [
+  {label: '소형견', value: 'small'},
+  {label: '중형견', value: 'medium'},
+  {label: '대형견', value: 'large'},
 ]
