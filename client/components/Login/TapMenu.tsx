@@ -42,8 +42,6 @@ const TabMenu = styled.ul`
   list-style: none;
   margin: 2rem 0;
   border-bottom: 2px solid ${colors.grey1};
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
-    'Open Sans', 'Helvetica Neue', sans-serif;
 
   .submenu {
     width: 100%;

@@ -1,53 +1,88 @@
 import React, {useEffect, useState} from 'react'
 import styled from 'styled-components'
-import Search from './Search'
 import Link from 'next/link'
-import {colors} from '@/styles/colors'
 import {useRouter} from 'next/router'
+import {colors} from '@/styles/colors'
 import Image from 'next/image'
-import MoblieLogo from '@/public/svg/MoblieLogo.png'
-import Logo from '@/public/svg/Logoimg.png'
-import {useScreenX} from '@/hooks/useScreenX'
+import SearchBar from './SearchBar'
 import {GiHamburgerMenu} from 'react-icons/gi'
+import {BsSearch} from 'react-icons/bs'
 
-function Header() {
+const Header = () => {
   const router = useRouter()
-  const {screenX} = useScreenX()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isLogin, setIsLogin] = useState(false)
 
   return (
     <Container>
-      <LogoBox onClick={() => router.push('/')}>
-        <Image src={screenX <= 890 ? MoblieLogo : Logo} objectFit="cover" />
-      </LogoBox>
-      <Search />
-      <TextBox>
-        <Link href="/login" passHref>
-          <StyledLink>로그인</StyledLink>
-        </Link>
-        <Link href="/signup" passHref>
-          <StyledLink>회원가입</StyledLink>
-        </Link>
-        <Link href="/login" passHref>
-          <StyledLink>예약내역</StyledLink>
-        </Link>
-      </TextBox>
-      <HamburgerBox onClick={() => setIsMenuOpen((pre) => !pre)}>
-        <GiHamburgerMenu />
-      </HamburgerBox>
-      {isMenuOpen && (
-        <MobileMenu>
-          <Link href="/login" passHref>
-            <MobileLink>로그인</MobileLink>
+      <Wrapper>
+        <HeaderLogo>
+          <MobileHeaderWrapper>
+            <BsSearch className="MobileSearchIcon" onClick={() => router.push('/')} />
+          </MobileHeaderWrapper>
+          <DesktopHeaderWrapper className="DesktopLogo">
+            <Image
+              src="/svg/DesktopLogo.png"
+              width={190}
+              height={40}
+              onClick={() => router.push('/')}
+            />
+          </DesktopHeaderWrapper>
+        </HeaderLogo>
+        <HeaderSearch>
+          <MobileHeaderWrapper className="MobileLogo">
+            <Image
+              src="/svg/DesktopLogo.png"
+              width={170}
+              height={35}
+              onClick={() => router.push('/')}
+            />
+          </MobileHeaderWrapper>
+          <DesktopHeaderWrapper className="DesktopSearchBar">
+            <SearchBar />
+          </DesktopHeaderWrapper>
+        </HeaderSearch>
+        <HeaderMenus>
+          <Link href="/login">
+            <HeaderMenu>로그인</HeaderMenu>
           </Link>
-          <Link href="/signup" passHref>
-            <MobileLink>회원가입</MobileLink>
+          <Link href="/signup">
+            <HeaderMenu>회원가입</HeaderMenu>
           </Link>
-          <Link href="/login" passHref>
-            <MobileLink>예약내역</MobileLink>
+          <Link href="/login">
+            <HeaderMenu>예약내역</HeaderMenu>
           </Link>
-        </MobileMenu>
-      )}
+        </HeaderMenus>
+        <HamburgerBox onClick={() => setIsMenuOpen(!isMenuOpen)}>
+          <GiHamburgerMenu className="HamburgerMenuIcon" />
+        </HamburgerBox>
+        {isMenuOpen && !isLogin && (
+          <MobileMenus>
+            <Link href="/login">
+              <MobileMenu onClick={() => setIsMenuOpen(!isMenuOpen)}>로그인</MobileMenu>
+            </Link>
+            <Link href="/signup">
+              <MobileMenu onClick={() => setIsMenuOpen(!isMenuOpen)}>회원가입</MobileMenu>
+            </Link>
+            <Link href="/login">
+              <MobileMenu onClick={() => setIsMenuOpen(!isMenuOpen)}>예약내역</MobileMenu>
+            </Link>
+          </MobileMenus>
+        )}
+        {isMenuOpen && isLogin && (
+          <MobileMenus>
+            <Link href="/">
+              <MobileMenu onClick={() => setIsMenuOpen(!isMenuOpen)}>마이페이지</MobileMenu>
+            </Link>
+            <Link href="/">
+              <MobileMenu onClick={() => setIsMenuOpen(!isMenuOpen)}>예약내역</MobileMenu>
+            </Link>
+            <Link href="/">
+              <MobileMenu onClick={() => setIsMenuOpen(!isMenuOpen)}>로그아웃</MobileMenu>
+            </Link>
+          </MobileMenus>
+        )}
+      </Wrapper>
     </Container>
   )
 }
@@ -55,86 +90,159 @@ function Header() {
 export default Header
 
 const Container = styled.div`
-  position: relative;
+  height: 100px;
   width: 100%;
-  height: 150px;
+  display: flex;
+
+  @media (max-width: 768px) {
+    height: 80px;
+  }
+`
+
+const Wrapper = styled.div`
+  flex: 1;
   display: flex;
   justify-content: space-between;
   align-items: center;
+`
+
+const HeaderLogo = styled.div`
+  flex: 1;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
 
   @media (max-width: 768px) {
-    height: 100px;
-  }
-  @media (max-width: 390px) {
-    height: 75px;
+    display: inline-flex;
+    flex: 0;
   }
 `
-const LogoBox = styled.div`
-  height: 43px;
+const DesktopHeaderWrapper = styled.div`
   cursor: pointer;
-`
 
-const TextBox = styled.nav`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-  @media (max-width: 890px) {
+  .DesktopLogo {
+  }
+
+  .DesktopSearchBar {
+  }
+
+  display: block;
+
+  @media (max-width: 768px) {
     display: none;
   }
 `
-const StyledLink = styled.a`
-  font-size: 25px;
-  font-weight: 600;
-  font-family: 'Inter';
-  font-style: normal;
-  line-height: 30px;
-  color: #000000;
-  text-decoration: none;
+
+const MobileHeaderWrapper = styled.div`
+  cursor: pointer;
+
+  .MobileLogo {
+  }
+
+  .MobileSearchIcon {
+    color: rgb(51, 51, 51);
+    font-size: 2.7rem;
+  }
+
+  @media (min-width: 768px) {
+    display: none;
+  }
+`
+
+const HeaderSearch = styled.div`
+  flex: 1;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+`
+
+const HeaderMenus = styled.div`
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-weight: bold;
+  cursor: pointer;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
+`
+
+const HeaderMenu = styled.div`
+  font-size: 1.6rem;
+  margin-left: 2.5rem;
   white-space: nowrap;
+
   &:hover {
     color: ${colors.mainColor};
   }
-  @media (max-width: 1100px) {
-    font-size: 17px;
-  }
-  @media (max-width: 890px) {
-    font-size: 15px;
-  }
 `
+
 const HamburgerBox = styled.div`
-  margin-top: 1.5rem;
-  font-size: 3rem;
   cursor: pointer;
+
+  .HamburgerMenuIcon {
+    font-size: 3.5rem;
+    position: relative;
+  }
+
   @media (min-width: 768px) {
     display: none;
+  }
+`
+
+const MobileMenus = styled.div`
+  border: 1px solid ${colors.grey1};
+  background-color: rgb(255, 255, 255);
+  position: absolute;
+  top: 70px;
+  right: -6.2rem;
+  width: 20rem;
+  transform: translateX(-45%);
+  border-radius: 0.7rem;
+  z-index: 100;
+  animation: slideIn 0.3s ease-in-out;
+  cursor: pointer;
+
+  @keyframes slideIn {
+    0% {
+      transform: translateX(-45%) translateY(-10%);
+    }
+    100% {
+      transform: translateX(-45%) translateY(0);
+    }
+  }
+
+  @media (min-width: 768px) {
+    display: none;
+    flex: 0;
   }
 `
 
 const MobileMenu = styled.div`
-  position: absolute;
-  bottom: -80px;
-  width: 100%;
-  background-color: #fff;
-
-  animation: growDown 250ms ease-in;
-  transform-origin: top center;
-
+  height: 10%;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+  border-bottom: 1px solid ${colors.grey1};
 
-  text-align: center;
-
-  @keyframes growDown {
-    0% {
-      transform: scaleY(0);
-    }
-    100% {
-      transform: scaleY(1);
-    }
+  &:hover {
+    background-color: ${colors.mainColor};
+    color: rgb(255, 255, 255);
+    border-radius: 0.7rem;
   }
-  @media (min-width: 768px) {
-    display: none;
+
+  :last-child {
+    border-bottom: none;
   }
 `
-const MobileLink = styled(StyledLink)``
