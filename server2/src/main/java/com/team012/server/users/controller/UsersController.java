@@ -7,6 +7,7 @@ import com.team012.server.users.dto.UsersDto;
 import com.team012.server.users.entity.Users;
 import com.team012.server.users.mapper.UsersMapper;
 import com.team012.server.users.service.UsersService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1/users")
 @Validated
+@RequiredArgsConstructor
 public class UsersController {
 
     private final UsersService usersService;
@@ -27,12 +29,6 @@ public class UsersController {
     private final ReservationService reservationService;
 
     private final UsersMapper mapper;
-
-    public UsersController(UsersService usersService, ReservationService reservationService, UsersMapper mapper) {
-        this.usersService = usersService;
-        this.reservationService = reservationService;
-        this.mapper = mapper;
-    }
 
     // 회사 회원가입
     @PostMapping("/join/company")
@@ -60,9 +56,8 @@ public class UsersController {
         return usersService.getEmail(email);
     }
 
-
     // 업체 정보 페이지 조회 (업체 정보 + 예약 현황)
-    @GetMapping("/profile/{company_name}")
+    @GetMapping("/company/profile/{company_name}")
     public ResponseEntity getCompany(@PathVariable("company_name") String companyName,
                                      @Positive @RequestParam int page,
                                      @Positive @RequestParam int size) {
@@ -103,7 +98,7 @@ public class UsersController {
     }
 
     // 고객 마이페이지 조회
-    @GetMapping("/profile/{customer_id}")
+    @GetMapping("/customer/profile/{customer_id}")
     public ResponseEntity getCustomer(@PathVariable("customer_id") Long id,
                                       @Positive @RequestParam Integer page,
                                       @Positive @RequestParam Integer size) {

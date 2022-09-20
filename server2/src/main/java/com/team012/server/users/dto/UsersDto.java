@@ -95,6 +95,19 @@ public class UsersDto {
     @Getter
     @Setter
     @NoArgsConstructor
+    public static class Login {
+
+        @NotBlank(message = "아이디를 입력하세요.")
+        private String username;
+
+        @NotBlank(message = "비밀번호를 입력하세요.")
+        private String password;
+
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
     public static class MessageResponse {
         private String message;
 

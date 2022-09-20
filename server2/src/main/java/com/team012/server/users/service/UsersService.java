@@ -5,28 +5,26 @@ import com.team012.server.users.entity.Users;
 import com.team012.server.users.repository.UsersRepository;
 import com.team012.server.reservation.entity.Reservation;
 import com.team012.server.reservation.repository.ReservationRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Service
+@RequiredArgsConstructor
 public class UsersService {
     private final UsersRepository usersRepository;
     private final ReservationRepository reservationRepository;
-
-//    private final BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    public UsersService(UsersRepository usersRepository, ReservationRepository reservationRepository) {
-        this.usersRepository = usersRepository;
-        this.reservationRepository = reservationRepository;
-    }
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     // 업체 이름으로 조회
     public Users getCompany(String companyName) {
-        Users company = usersRepository.findByCompanyName(companyName);
-        return company;
+        return usersRepository.findByCompanyName(companyName);
     }
 
     // 이메일 중복체크
@@ -37,18 +35,20 @@ public class UsersService {
 
     // Company 회원가입..
     public Users createCompany(UsersDto.CompanyPost dto) {
+
         // 비밀번호 암호화
-//        String encPassword = bCryptPasswordEncoder.encode(company.getPassword());
+        String encPassword = bCryptPasswordEncoder.encode(dto.getPassword());
 
         // 객체에 반영
         Users savedCompany
                 = Users.builder()
                 .email(dto.getEmail())
-                .password(dto.getPassword())
+                .password(encPassword)
                 .username(dto.getUsername())
                 .companyName(dto.getCompanyName())
                 .phone(dto.getPhone())
                 .address(dto.getAddress())
+                .detailAddress(dto.getDetailAddress())
                 .role(dto.getRole())
                 .build();
 
@@ -60,10 +60,15 @@ public class UsersService {
 
     // Customer 회원가입
     public Users createCustomer(UsersDto.CustomerPost dto) {
+        // 회원이 있는지 없는지 체크
+
+        // 비밀번호 암호화
+        String encPassword = bCryptPasswordEncoder.encode(dto.getPassword());
+
         Users savedCustomer
                 = Users.builder()
                 .email(dto.getEmail())
-                .password(dto.getPassword())
+                .password(encPassword)
                 .username(dto.getUsername())
                 .phone(dto.getPhone())
                 .role(dto.getRole())
@@ -74,6 +79,25 @@ public class UsersService {
 
         return savedCustomer;
     }
+
+    // 유저 로그인
+    public Boolean loginUsers(UsersDto.Login dto) {
+
+        Users findUsers = usersRepository.findByUsername(dto.getUsername());
+
+        // 아이디가 없는 경우
+        if (findUsers == null) return false;
+
+        // 암호화한 비밀번호 비교
+        String encodePassword = findUsers.getPassword();
+        boolean matchPassword = bCryptPasswordEncoder.matches(dto.getPassword(), encodePassword);
+
+        // 비밀번호가 틀리는 경우 false
+        // 로그인 성공..! true
+        return matchPassword;
+
+    }
+
 
     // 회사 정보 조회
     public ArrayList<UsersDto.ReservationList> getReservationList(Long userId, Integer size, Integer page) {

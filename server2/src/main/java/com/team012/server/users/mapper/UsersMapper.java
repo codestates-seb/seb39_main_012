@@ -12,8 +12,6 @@ import java.util.List;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UsersMapper {
-    Users companyDtoPostToCompany(UsersDto.Post dto);
-
     List<UsersDto.ReservationList> pageToUsersDtoReservationList(Page<Reservation> reservationPage);
 
     SingleResponseDto<Users> usersToSingleResponseDto(Users users);
