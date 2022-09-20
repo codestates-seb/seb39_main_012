@@ -34,7 +34,7 @@ function LabelInput({
           {...props}
         />
       </LabelBox>
-      {Errors && value && value.length > 1 && <ErrorMessageBox>{ErrorMessage}</ErrorMessageBox>}
+      {Errors && value && value.length >= 1 && <ErrorMessageBox>{ErrorMessage}</ErrorMessageBox>}
       {emailDuplicate && <ErrorMessageBox>이미 사용중인 이메일입니다.</ErrorMessageBox>}
     </LabelContainer>
   )

@@ -47,7 +47,6 @@ const Container = styled.div`
   justify-content: center;
   margin: 0 auto;
   width: 33.33%;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
   margin-top: 5rem;
 `
 

@@ -23,6 +23,14 @@ function passwordConfirmValidate(password: string, passwordConfirm: string) {
   return false
 }
 
+function userNameValidate(username: string) {
+  const reg = /\s/g
+  if (reg.test(username)) {
+    return true
+  }
+  return false
+}
+
 function phoneValidate(phoneNumber: string) {
   var patternPhone = /01[016789]-[^0][0-9]{2,3}-[0-9]{3,4}/
 
@@ -37,5 +45,6 @@ const Validate = {
   passwordValidate,
   passwordConfirmValidate,
   phoneValidate,
+  userNameValidate,
 }
 export {Validate}

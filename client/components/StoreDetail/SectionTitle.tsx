@@ -1,16 +1,21 @@
 import React from 'react'
 import styled from 'styled-components'
 import Image from 'next/image'
+import {colors} from '@/styles/colors'
 
 interface SectionTitleProps {
   title: string
+  sub1?: string
+  sub2?: string
 }
 
-const SectionTitle = ({title}: SectionTitleProps) => {
+const SectionTitle = ({title, sub1, sub2}: SectionTitleProps) => {
   return (
     <CompanySectionTitle>
       <Image src="/images/dogpaw.png" alt="google-login" width={25} height={25} />
-      <span>{title}</span>
+      <span className="text title">{title}</span>
+      <span className="text sub1">{sub1}</span>
+      <span className="text">{sub2}</span>
     </CompanySectionTitle>
   )
 }
@@ -22,9 +27,17 @@ const CompanySectionTitle = styled.div`
   align-items: center;
   margin-bottom: 2rem;
 
-  span {
+  .text {
     font-size: 2rem;
+    font-weight: 700;
+  }
+
+  .title {
     margin-left: 0.5rem;
-    font-weight: 500;
+  }
+
+  .sub1 {
+    color: ${colors.mainColor};
+    margin-left: 0.5rem;
   }
 `

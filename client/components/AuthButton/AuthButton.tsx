@@ -28,13 +28,13 @@ export default AuthButton
 
 export const Button = styled.button<Props>`
   margin: 0 auto;
-  width: ${({width}) => width ?? '39rem'};
-  height: ${({height}) => height ?? '5rem'};
+  width: ${({width}) => width ?? '34rem'};
+  height: ${({height}) => height ?? '4rem'};
   background-color: ${({backgroundColor}) => backgroundColor ?? colors.mainColor};
   border: none;
   border-radius: 3px;
   color: rgb(255, 255, 255);
-  font-size: 22px;
+  font-size: 18px;
   margin-top: ${({marginTop}) => marginTop ?? '0'};
   cursor: pointer;
 
