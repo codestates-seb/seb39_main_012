@@ -14,11 +14,12 @@ export default CategoryTag
 
 const Container = styled.div`
   ${flexCenter}
-  width: 107px;
-  height: 107px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   cursor: pointer;
   font-size: 20px;
+  margin: 10px 0;
 
   @media (max-width: 768px) {
     width: 75px;
@@ -27,8 +28,8 @@ const Container = styled.div`
   }
 
   @media (max-width: 390px) {
-    width: 55px;
-    height: 55px;
+    width: 60px;
+    height: 60px;
     font-size: 10px;
   }
 `
