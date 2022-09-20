@@ -1,23 +1,23 @@
-package com.team012.server.config.oauth.provider;
+package com.team012.server.review.entity.config.oauth.provider;
 
 import java.util.Map;
 
-public class GoogleUserInfo implements OAuth2UserInfo{
+public class NaverUserInfo implements OAuth2UserInfo{
 
     private Map<String, Object> attributes; // getAttributes() 를 받을 것
 
-    public GoogleUserInfo(Map<String, Object> attributes) {
+    public NaverUserInfo(Map<String, Object> attributes) {
         this.attributes = attributes;
     }
 
     @Override
     public String getProviderId() {
-        return (String)attributes.get("sub");
+        return (String)attributes.get("id");
     }
 
     @Override
     public String getProvider() {
-        return "google";
+        return "naver";
     }
 
     @Override

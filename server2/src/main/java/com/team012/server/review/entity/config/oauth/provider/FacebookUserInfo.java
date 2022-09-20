@@ -1,12 +1,12 @@
-package com.team012.server.config.oauth.provider;
+package com.team012.server.review.entity.config.oauth.provider;
 
 import java.util.Map;
 
-public class NaverUserInfo implements OAuth2UserInfo{
+public class FacebookUserInfo implements OAuth2UserInfo{
 
     private Map<String, Object> attributes; // getAttributes() 를 받을 것
 
-    public NaverUserInfo(Map<String, Object> attributes) {
+    public FacebookUserInfo(Map<String, Object> attributes) {
         this.attributes = attributes;
     }
 
@@ -17,7 +17,7 @@ public class NaverUserInfo implements OAuth2UserInfo{
 
     @Override
     public String getProvider() {
-        return "naver";
+        return "facebook";
     }
 
     @Override

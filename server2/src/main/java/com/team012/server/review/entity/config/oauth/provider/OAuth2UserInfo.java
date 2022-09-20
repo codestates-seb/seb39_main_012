@@ -1,4 +1,4 @@
-package com.team012.server.config.oauth.provider;
+package com.team012.server.review.entity.config.oauth.provider;
 
 public interface OAuth2UserInfo {
 

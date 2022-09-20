@@ -1,15 +1,13 @@
-package com.team012.server.config.oauth;
+package com.team012.server.review.entity.config.oauth;
 
 import com.team012.server.users.entity.Users;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Map;
 
 @Getter
 @Setter
@@ -17,15 +15,8 @@ public class PrincipalDetails implements UserDetails {
 
     private Users users;
 
-    private Map<String, Object> attributes;
-
     public PrincipalDetails(Users users) {
         this.users = users;
-    }
-
-    public PrincipalDetails(Users users, Map<String, Object> attributes) {
-        this.users = users;
-        this.attributes = attributes;
     }
 
     @Override
@@ -39,7 +30,7 @@ public class PrincipalDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return users.getUsername();
+        return users.getEmail();
     }
 
     @Override

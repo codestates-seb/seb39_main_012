@@ -1,4 +1,4 @@
-package com.team012.server.config.oauth;
+package com.team012.server.review.entity.config.oauth;
 
 import com.team012.server.users.entity.Users;
 import com.team012.server.users.repository.UsersRepository;
@@ -16,8 +16,8 @@ public class PrincipalDetailsService implements UserDetailsService {
     private final UsersRepository usersRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Users usersEntity = usersRepository.findByUsername(username);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Users usersEntity = usersRepository.findByEmail(email);
         return new PrincipalDetails(usersEntity);
     }
 }

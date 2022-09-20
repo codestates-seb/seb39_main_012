@@ -56,27 +56,6 @@ public class UsersController {
         return usersService.getEmail(email);
     }
 
-    // 로그인
-    @PostMapping("/login")
-    public ResponseEntity login(@Valid @RequestBody UsersDto.Login dto) {
-        boolean login = usersService.loginUsers(dto);
-
-        UsersDto.MessageResponse errorResponse
-                = UsersDto.MessageResponse.builder()
-                .message("입력하신 정보를 다시 확인해주세요..!")
-                .build();
-
-        if (!login) return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-
-        UsersDto.MessageResponse successResponse
-                = UsersDto.MessageResponse.builder()
-                .message("로그인 성공..!")
-                .build();
-
-        return new ResponseEntity<>(successResponse, HttpStatus.OK);
-    }
-
-
     // 업체 정보 페이지 조회 (업체 정보 + 예약 현황)
     @GetMapping("/company/profile/{company_name}")
     public ResponseEntity getCompany(@PathVariable("company_name") String companyName,

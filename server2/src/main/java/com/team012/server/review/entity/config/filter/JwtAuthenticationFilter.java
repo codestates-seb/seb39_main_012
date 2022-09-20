@@ -1,10 +1,10 @@
-package com.team012.server.config.filter;
+package com.team012.server.review.entity.config.filter;
 
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.team012.server.config.oauth.PrincipalDetails;
+import com.team012.server.review.entity.config.oauth.PrincipalDetails;
 import com.team012.server.users.entity.Users;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -34,7 +34,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             ObjectMapper om = new ObjectMapper();
             Users users = om.readValue(request.getInputStream(), Users.class);
 
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(users.getUsername(), users.getPassword());
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(users.getEmail(), users.getPassword());
 
             Authentication authentication = authenticationManager.authenticate(authenticationToken);
 
@@ -58,7 +58,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .withSubject(principalDetails.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + (JwtProperties.EXPIRATION_TIME)))
                 .withClaim("id", principalDetails.getUsers().getId())
+                .withClaim("email", principalDetails.getUsers().getEmail())
                 .withClaim("username", principalDetails.getUsers().getUsername())
+                .withClaim("companyName", principalDetails.getUsers().getCompanyName())
                 .sign(Algorithm.HMAC512(JwtProperties.SECRET));
         response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + jwtToken);
     }
