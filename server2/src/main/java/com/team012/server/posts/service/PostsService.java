@@ -25,11 +25,11 @@ public class PostsService {
     private final PostsImgRepository imgRepository;
     private final AwsS3Service awsS3Service;
 
-    public Posts save(PostsDto.PostDto post, List<MultipartFile> files) {
+    public Posts save(PostsDto.PostDto post, List<MultipartFile> files, Long companyId) {
         Posts posts = Posts.builder()
                 .title(post.getTitle())
                 .content(post.getContent())
-//                .usersId(userId)
+                .companyId(companyId)
                 .latitude(post.getCoordinate().get(0))
                 .longitude(post.getCoordinate().get(1))
                 .address(post.getCoordinate().get(2))
@@ -39,16 +39,16 @@ public class PostsService {
 //        Optional<Posts> find = postsRepository.findByUsersId(userId);
 
 
-            List<PostsImg> lists = awsS3Service.convertPostImg(files);
+        List<PostsImg> lists = awsS3Service.convertPostImg(files);
 
-            posts.setPostsImgList(lists);
-            for (PostsImg c : lists) {
-                c.setPosts(posts);
-            }
+        posts.setPostsImgList(lists);
+        for (PostsImg c : lists) {
+            c.setPosts(posts);
+        }
 
-            Posts posts1 = postsRepository.save(posts);
+        Posts posts1 = postsRepository.save(posts);
 
-            return posts1;
+        return posts1;
 
     }
 
@@ -57,26 +57,26 @@ public class PostsService {
         Posts findPosts = findById(postsId);
 
 
-            Optional.ofNullable(post.getCoordinate().get(0)).ifPresent(findPosts::setLatitude);
-            Optional.ofNullable(post.getCoordinate().get(1)).ifPresent(findPosts::setLongitude);
-            Optional.ofNullable(post.getCoordinate().get(2)).ifPresent(findPosts::setAddress);
-            Optional.ofNullable(post.getCoordinate().get(3)).ifPresent(findPosts::setDetailAddress);
-            Optional.ofNullable(post.getTitle()).ifPresent(findPosts::setTitle);
-            Optional.ofNullable(post.getContent()).ifPresent(findPosts::setContent);
+        Optional.ofNullable(post.getCoordinate().get(0)).ifPresent(findPosts::setLatitude);
+        Optional.ofNullable(post.getCoordinate().get(1)).ifPresent(findPosts::setLongitude);
+        Optional.ofNullable(post.getCoordinate().get(2)).ifPresent(findPosts::setAddress);
+        Optional.ofNullable(post.getCoordinate().get(3)).ifPresent(findPosts::setDetailAddress);
+        Optional.ofNullable(post.getTitle()).ifPresent(findPosts::setTitle);
+        Optional.ofNullable(post.getContent()).ifPresent(findPosts::setContent);
 
 
-            if (multipartFile != null) {
+        if (multipartFile != null) {
 
-                List<PostsImg> postsImgList = imgRepository.findAllByPostsId(postsId);
-                List<PostsImg> postsImgs1 = awsS3Service.reviseFileV1(postsImgList, multipartFile);
-                for (PostsImg c : postsImgs1) {
-                    c.setPosts(findPosts);
-                }
-                findPosts.setPostsImgList(postsImgs1);
-                imgRepository.deleteAll(postsImgList);
+            List<PostsImg> postsImgList = imgRepository.findAllByPostsId(postsId);
+            List<PostsImg> postsImgs1 = awsS3Service.reviseFileV1(postsImgList, multipartFile);
+            for (PostsImg c : postsImgs1) {
+                c.setPosts(findPosts);
             }
-            Posts posts1 = postsRepository.save(findPosts);
-            return posts1;
+            findPosts.setPostsImgList(postsImgs1);
+            imgRepository.deleteAll(postsImgList);
+        }
+        Posts posts1 = postsRepository.save(findPosts);
+        return posts1;
 
     }
 
@@ -89,7 +89,7 @@ public class PostsService {
     }
 
     public Page<Posts> findByPage(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC,"id");
+        Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "id");
 
         return postsRepository.findAll(pageable);
     }

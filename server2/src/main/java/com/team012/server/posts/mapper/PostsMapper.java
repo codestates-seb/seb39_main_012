@@ -21,31 +21,32 @@ public interface PostsMapper {
 
         List<String> address = List.of(posts.getLatitude(), posts.getLongitude(), posts.getAddress(), posts.getDetailAddress());
         List<Room> roomList = roomService.findAllRoom(posts.getId());
-
+        Long comapnyId = posts.getCompanyId();
 
         PostsDto.ResponseDto responseDto = PostsDto.ResponseDto.builder()
                 .id(posts.getId())
                 .title(posts.getTitle())
+                .companyId(comapnyId)
                 .content(posts.getContent())
                 .address(address)
                 .postsImgList(posts.getPostsImgList())
                 .roomDtoList(roomList)
                 .build();
 
-        if(posts.getPostsHashTags().size() != 0) {
+        if (posts.getPostsHashTags().size() != 0) {
             List<PostsHashTags> list = posts.getPostsHashTags();
             List<String> pt = new ArrayList<>();
-            for(PostsHashTags c : list) {
+            for (PostsHashTags c : list) {
                 String tags = c.getHashTag().getTag();
                 pt.add(tags);
             }
             responseDto.setHashTag(pt);
         }
 
-        if(posts.getPostAvailableTags().size() != 0) {
+        if (posts.getPostAvailableTags().size() != 0) {
             List<PostsServiceTag> list = posts.getPostAvailableTags();
             List<String> ast = new ArrayList<>();
-            for(PostsServiceTag c : list) {
+            for (PostsServiceTag c : list) {
                 String tags = c.getServiceTag().getTag();
                 ast.add(tags);
             }
@@ -58,9 +59,9 @@ public interface PostsMapper {
     default List<PostsDto.ResponseListDto> postsToResponseDtos(List<Posts> postsList, RoomService roomService) {
         List<PostsDto.ResponseListDto> responseListDtos = new ArrayList<>();
 
-        for(Posts p : postsList) {
+        for (Posts p : postsList) {
             PostsImg img = p.getPostsImgList().get(0);
-            ImgDto.ResponseListDto imgDto=
+            ImgDto.ResponseListDto imgDto =
                     ImgDto.ResponseListDto.builder()
                             .fileName(img.getFileName())
                             .url(img.getImgUrl())
@@ -70,12 +71,12 @@ public interface PostsMapper {
 
             PostsDto.ResponseListDto responseListDto =
                     PostsDto.ResponseListDto.builder()
-                    .id(p.getId())
-                    .title(p.getTitle())
-                    .address(address)
-                    .img(imgDto)
-                    .minPrice(minPrice)
-                    .build();
+                            .id(p.getId())
+                            .title(p.getTitle())
+                            .address(address)
+                            .img(imgDto)
+                            .minPrice(minPrice)
+                            .build();
             responseListDtos.add(responseListDto);
         }
         return responseListDtos;

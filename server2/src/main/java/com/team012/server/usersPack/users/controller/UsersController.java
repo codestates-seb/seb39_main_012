@@ -1,7 +1,9 @@
 package com.team012.server.usersPack.users.controller;
 
 import com.team012.server.company.service.CompanyService;
-import com.team012.server.usersPack.users.dto.UsersDto;
+import com.team012.server.usersPack.users.dto.CompanySignUpRequestDto;
+import com.team012.server.usersPack.users.dto.CustomerSignUpRequestDto;
+import com.team012.server.usersPack.users.dto.UsersMessageResponseDto;
 import com.team012.server.usersPack.users.entity.Users;
 import com.team012.server.usersPack.users.service.UsersService;
 import lombok.RequiredArgsConstructor;
@@ -20,16 +22,12 @@ public class UsersController {
 
     private final UsersService usersService;
 
-    private final CompanyService companyService;
-
     // 회사 회원가입
     @PostMapping("/join/company")
-    public ResponseEntity postCompany(@Valid @RequestBody UsersDto.CompanyPost dto) {
-        Users users = usersService.createCompany(dto);
-        Long userId = users.getId();
-        companyService.createCompany(dto, userId);
-
-        UsersDto.MessageResponse response = UsersDto.MessageResponse.builder()
+    public ResponseEntity postCompany(@Valid @RequestBody CompanySignUpRequestDto dto) {
+        usersService.createCompany(dto);
+        UsersMessageResponseDto response = UsersMessageResponseDto
+                .builder()
                 .message("회원가입 완료..!")
                 .build();
         return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -37,10 +35,10 @@ public class UsersController {
 
     // 고객 회원가입
     @PostMapping("/join/customer")
-    public ResponseEntity postCustomer(@Valid @RequestBody UsersDto.CustomerPost dto) {
+    public ResponseEntity postCustomer(@Valid @RequestBody CustomerSignUpRequestDto dto) {
         usersService.createCustomer(dto);
-
-        UsersDto.MessageResponse response = UsersDto.MessageResponse.builder()
+        UsersMessageResponseDto response = UsersMessageResponseDto
+                .builder()
                 .message("회원가입 완료..!")
                 .build();
         return new ResponseEntity<>(response, HttpStatus.CREATED);

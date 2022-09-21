@@ -5,8 +5,10 @@ import com.team012.server.company.room.entity.Room;
 import com.team012.server.posts.img.dto.ImgDto;
 import com.team012.server.posts.img.entity.PostsImg;
 import com.team012.server.utils.validator.ListSize;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotBlank;
@@ -16,6 +18,7 @@ import java.util.List;
 public class PostsDto {
 
     @Getter
+    @NoArgsConstructor
     public static class PostDto {
         @NotBlank
         private String title;
@@ -32,6 +35,7 @@ public class PostsDto {
     }
 
     @Getter
+    @NoArgsConstructor
     public static class PatchDto {
 
         private Long id;
@@ -49,12 +53,14 @@ public class PostsDto {
 
     @Getter
     @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class ResponseDto {
         private Long id;
         private String title;
         private String content;
         private List<String> address;
-        private Long userId;
+        private Long companyId;
         private List<PostsImg> postsImgList;
         private List<String> hashTag;
         private List<String> serviceTag;
@@ -63,6 +69,7 @@ public class PostsDto {
         public void setHashTag(List<String> hashTag) {
             this.hashTag = hashTag;
         }
+
         public void setServiceTag(List<String> serviceTag) {
             this.serviceTag = serviceTag;
         }
@@ -71,6 +78,8 @@ public class PostsDto {
 
     @Getter
     @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class ResponseListDto {
         private Long id;
         private String title;
