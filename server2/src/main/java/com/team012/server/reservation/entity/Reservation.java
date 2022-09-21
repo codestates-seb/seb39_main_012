@@ -1,6 +1,6 @@
 package com.team012.server.reservation.entity;
 
-import com.team012.server.users.entity.Users;
+import com.team012.server.usersPack.users.entity.Users;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
