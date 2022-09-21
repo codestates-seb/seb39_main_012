@@ -1,9 +1,10 @@
 package com.team012.server.usersPack.users.service;
 
+import com.team012.server.company.service.CompanyService;
+import com.team012.server.usersPack.users.dto.CompanySignUpRequestDto;
+import com.team012.server.usersPack.users.dto.CustomerSignUpRequestDto;
 import com.team012.server.usersPack.users.repository.UsersRepository;
-import com.team012.server.usersPack.users.dto.UsersDto;
 import com.team012.server.usersPack.users.entity.Users;
-import com.team012.server.reservation.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,8 @@ import org.springframework.stereotype.Service;
 public class UsersService {
     private final UsersRepository usersRepository;
 
-    private final ReservationRepository reservationRepository;
+    private final CompanyService companyService;
+
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     // 이메일 중복체크
@@ -23,7 +25,7 @@ public class UsersService {
     }
 
     // Company 회원가입..
-    public Users createCompany(UsersDto.CompanyPost dto) {
+    public Users createCompany(CompanySignUpRequestDto dto) {
 
         // 비밀번호 암호화
         String encPassword = bCryptPasswordEncoder.encode(dto.getPassword());
@@ -38,14 +40,15 @@ public class UsersService {
                 .roles("ROLE_COMPANY")
                 .build();
 
-        usersRepository.save(savedCompanyUser);
-        // DB에 저장
+        Users users = usersRepository.save(savedCompanyUser);
+
+        companyService.createCompany(dto, users.getId());
 
         return savedCompanyUser;
     }
 
     // Customer 회원가입
-    public Users createCustomer(UsersDto.CustomerPost dto) {
+    public Users createCustomer(CustomerSignUpRequestDto dto) {
         // 회원이 있는지 없는지 체크
 
         // 비밀번호 암호화

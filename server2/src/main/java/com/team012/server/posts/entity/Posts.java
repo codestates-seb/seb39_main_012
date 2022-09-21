@@ -8,7 +8,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -18,7 +17,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@DynamicUpdate
+// @DynamicUpdate --> 서버의 부하를 줄여준다 ?????
 public class Posts {
 
     @Id
@@ -31,33 +30,31 @@ public class Posts {
     @Column(name = "content")
     private String content;
 
-
     private String latitude;
     private String longitude;
     private String address;
     private String detailAddress;
 
     private Long companyId;
-//    private Long usersId;
 
     // 이미지 업로드 테이블
 
-    @OneToMany(mappedBy = "posts",cascade = CascadeType.ALL)
-    @JsonManagedReference//순환참조 방지(...)
+    @OneToMany(mappedBy = "posts", cascade = CascadeType.ALL)
+    @JsonManagedReference  // 순환참조 방지(...)
     private List<PostsImg> postsImgList = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "posts",cascade = CascadeType.REMOVE)
-//    private List<Like> likeList;
 
-
-    @OneToMany(mappedBy = "posts", cascade = {CascadeType.REMOVE,CascadeType.MERGE})
+    @OneToMany(mappedBy = "posts", cascade = {CascadeType.REMOVE, CascadeType.MERGE})
     private List<PostsServiceTag> postAvailableTags = new ArrayList<>();
 
-    @OneToMany(mappedBy = "posts", cascade = {CascadeType.REMOVE,CascadeType.MERGE})
+    @OneToMany(mappedBy = "posts", cascade = {CascadeType.REMOVE, CascadeType.MERGE})
     private List<PostsHashTags> postsHashTags = new ArrayList<>();
 
     @Builder
-    public Posts(String title, String content, String latitude, String longitude, String address, String detailAddress, Long companyId) {
+    public Posts(String title, String content,
+                 String latitude, String longitude,
+                 String address, String detailAddress,
+                 Long companyId) {
         this.title = title;
         this.content = content;
         this.latitude = latitude;
@@ -67,5 +64,4 @@ public class Posts {
         this.companyId = companyId;
 
     }
-
 }

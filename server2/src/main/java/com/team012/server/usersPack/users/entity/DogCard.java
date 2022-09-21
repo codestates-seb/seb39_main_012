@@ -1,4 +1,4 @@
-package com.team012.server.usersPack.dogCard.entity;
+package com.team012.server.usersPack.users.entity;
 
 import com.team012.server.usersPack.users.entity.Users;
 import lombok.Getter;

@@ -1,7 +1,6 @@
 package com.team012.server.usersPack.users.entity;
 
 import com.team012.server.utils.baseEntity.BaseEntity;
-import com.team012.server.usersPack.dogCard.entity.DogCard;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

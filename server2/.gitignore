@@ -39,4 +39,5 @@ out/
 ### DS_Store ###
 .DS_Store
 
+## yml 파일 누락시키키 ##
 **/src/main/resources/application.yml
