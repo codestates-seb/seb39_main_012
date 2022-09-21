@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -46,16 +47,15 @@ public class PostsService {
             c.setPosts(posts);
         }
 
-        Posts posts1 = postsRepository.save(posts);
-
-        return posts1;
+        return postsRepository.save(posts);
 
     }
 
-    public Posts update(PostsDto.PatchDto post, List<MultipartFile> multipartFile) {
+    public Posts update(PostsDto.PatchDto post, List<MultipartFile> multipartFile, Long companyId) {
         Long postsId = post.getId();
         Posts findPosts = findById(postsId);
 
+        if(!Objects.equals(findPosts.getCompanyId(), companyId)) throw new RuntimeException("companyId 일치하지 않음");
 
         Optional.ofNullable(post.getCoordinate().get(0)).ifPresent(findPosts::setLatitude);
         Optional.ofNullable(post.getCoordinate().get(1)).ifPresent(findPosts::setLongitude);
@@ -94,8 +94,9 @@ public class PostsService {
         return postsRepository.findAll(pageable);
     }
 
-    public void delete(Long postsId) {
+    public void delete(Long postsId, Long companyId) {
         Posts posts = findById(postsId);
+        if(posts.getCompanyId() != companyId) throw new RuntimeException("companyId가 일치하지 않음");
         awsS3Service.deleteFile(posts.getPostsImgList());
         postsRepository.delete(posts);
     }
