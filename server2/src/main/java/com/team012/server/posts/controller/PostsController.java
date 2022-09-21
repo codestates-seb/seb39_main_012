@@ -64,14 +64,21 @@ public class PostsController {
     @PatchMapping("/{id}")
     public ResponseEntity update(@PathVariable("id") Long id,
                                  @RequestPart(value = "request") PostsDto.PatchDto request,
-                                 @RequestPart(value = "file", required = false) List<MultipartFile> file) {
+                                 @RequestPart(value = "file", required = false) List<MultipartFile> file,
+                                 @AuthenticationPrincipal PrincipalDetails principalDetails) {
+
+        Long userId = principalDetails.getUsers().getId();
+
+        // 회사정보 --> posts 에 넣어줘야 한다..
+        Company company = companyService.getCompany(userId);
+        Long companyId = company.getId();
 
         request.setId(id);
         List<String> hashTag = request.getHashTag();
         List<String> serviceTag = request.getServiceTag();
         List<RoomDto.PostDto> roomList = request.getRoomDtoList();
 
-        Posts response = postsService.update(request, file);
+        Posts response = postsService.update(request, file, companyId);
 
         tagService.deleteCompanyPostsTags(response.getId());
         serviceTagService.deletePostAvailableTags(response.getId());
@@ -103,7 +110,13 @@ public class PostsController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable("id") Long id) {
+    public ResponseEntity delete(@PathVariable("id") Long id,
+                                 @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        Long userId = principalDetails.getUsers().getId();
+
+        // 회사정보 --> posts 에 넣어줘야 한다..
+        Company company = companyService.getCompany(userId);
+
         postsService.delete(id);
         roomService.deleteAll(id);
 

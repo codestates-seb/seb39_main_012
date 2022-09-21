@@ -1,5 +1,6 @@
 package com.team012.server.company.room.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.team012.server.usersPack.users.entity.Users;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,6 +30,7 @@ public class Room {
 
     @ManyToOne
     @JoinColumn(name = "users_id")
+    @JsonIgnore
     private Users users;
 
     @Column(name = "posts_id")
