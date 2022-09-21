@@ -117,7 +117,7 @@ public class PostsController {
         // 회사정보 --> posts 에 넣어줘야 한다..
         Company company = companyService.getCompany(userId);
 
-        postsService.delete(id);
+        postsService.delete(id, company.getId());
         roomService.deleteAll(id);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

@@ -94,8 +94,9 @@ public class PostsService {
         return postsRepository.findAll(pageable);
     }
 
-    public void delete(Long postsId) {
+    public void delete(Long postsId, Long companyId) {
         Posts posts = findById(postsId);
+        if(posts.getCompanyId() != companyId) throw new RuntimeException("companyId가 일치하지 않음");
         awsS3Service.deleteFile(posts.getPostsImgList());
         postsRepository.delete(posts);
     }
