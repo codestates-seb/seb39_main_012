@@ -25,9 +25,11 @@ public class CompanyService {
         return companyRepository.save(savedCompany);
     }
 
+    // companyRepository 에 findByUserId(Long userId) 메서드 추가
     public Company getCompany(Long userId) {
-        return companyRepository
-                .findById(userId)
-                .orElseThrow(() -> new RuntimeException("Company가 존재하지 않습니다."));
+        Company findCompany = companyRepository.findByUserId(userId);
+        if (findCompany == null) throw new RuntimeException("Company가 없습니다.");
+
+        return findCompany;
     }
 }
