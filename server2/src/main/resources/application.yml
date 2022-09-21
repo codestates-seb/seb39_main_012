@@ -34,11 +34,11 @@ logging:
 cloud:
   aws:
     credentials:
-      accessKey: { }       # AWS IAM AccessKey 적기
-      secretKey: { }   # AWS IAM SecretKey 적기
+      accessKey: AKIAS5J4NNZTDN7WGC7T       # AWS IAM AccessKey 적기
+      secretKey: vvz/P3tFrKM18KQSxPoDh2LhG/1HwtyvXinUGANf   # AWS IAM SecretKey 적기
     s3:
-      bucket: {  }    # ex) marryting-gyunny
+      bucket: moongtel    # ex) marryting-gyunny
     region:
-      static: 
+      static: "ap-northeast-2"
     stack:
       auto: false

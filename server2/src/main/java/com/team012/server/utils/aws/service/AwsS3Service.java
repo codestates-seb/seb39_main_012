@@ -6,8 +6,8 @@ import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.util.IOUtils;
+import com.team012.server.posts.img.entity.PostsImg;
 import com.team012.server.utils.aws.utils.CommonUtils;
-import com.team012.server.img.entity.PostsImg;
 import com.team012.server.reviewPack.reviewImg.entity.ReviewImg;
 import com.team012.server.reviewPack.reviewImg.repository.ReviewImgRepository;
 import lombok.RequiredArgsConstructor;
@@ -100,9 +100,9 @@ public class AwsS3Service {
 
     //file 이름과 url 받아서 List<PostsImg> 로 리턴하는 메서드
     public List<PostsImg> convertPostImg(List<MultipartFile> multipartFileList) {
-//        if (multipartFileList.size() != 5) {
-//            throw new RuntimeException("you need to upload 5 image");
-//        }
+        if (multipartFileList.size() != 5) {
+            throw new RuntimeException("you need to upload 5 image");
+        }
         List<PostsImg> fileList = new ArrayList<>();
 
         multipartFileList.forEach(file -> {

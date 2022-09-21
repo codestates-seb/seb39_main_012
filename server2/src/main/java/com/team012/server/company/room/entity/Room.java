@@ -1,13 +1,16 @@
-package com.team012.server.company.entity;
+package com.team012.server.company.room.entity;
 
 import com.team012.server.usersPack.users.entity.Users;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 public class Room {
     @Id
@@ -27,5 +30,16 @@ public class Room {
     @ManyToOne
     @JoinColumn(name = "users_id")
     private Users users;
+
+    @Column(name = "posts_id")
+    private Long postsId;
+
+    @Builder
+    public Room(String size, Integer count, Integer price, Long postsId) {
+        this.size = size;
+        this.count = count;
+        this.price = price;
+        this.postsId = postsId;
+    }
 
 }
