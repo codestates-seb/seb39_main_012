@@ -35,6 +35,29 @@ public class AwsS3Service {
     @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
 
+    /**
+     * 단일 파일 업로드
+     */
+    public String singleUploadFile(MultipartFile multipartFile) {
+
+        validateFileExists(multipartFile);
+
+        String fileName = originalFileName(multipartFile);
+
+        ObjectMetadata objectMetadata = new ObjectMetadata();
+        objectMetadata.setContentType(multipartFile.getContentType());
+
+        try (InputStream inputStream = multipartFile.getInputStream()) {
+
+            amazonS3Client.putObject(new PutObjectRequest(bucketName, fileName, inputStream, objectMetadata)
+                    .withCannedAcl(CannedAccessControlList.PublicRead));
+
+        } catch (IOException e) {
+            throw new RuntimeException();
+        }
+        return amazonS3Client.getUrl(bucketName, fileName).toString();
+    }
+
     //s3로 파일 업로드 하고 url 리턴하는 메서드
     public String uploadFile(MultipartFile multipartFile) throws IOException {
         validateFileExists(multipartFile);
