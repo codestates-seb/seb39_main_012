@@ -39,4 +39,4 @@ out/
 ### DS_Store ###
 .DS_Store
 
-**/server2/src/main/resources/application.yml
+**/src/main/resources/application.yml
