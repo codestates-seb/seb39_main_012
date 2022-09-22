@@ -1,4 +1,4 @@
-package com.team012.server.reviewPack.reviewImg.entity;
+package com.team012.server.reviewPack.review.entity;
 
 import com.team012.server.reviewPack.review.entity.Review;
 import lombok.Builder;

@@ -1,6 +1,6 @@
 package com.team012.server.like.entity;
 
-import com.team012.server.posts.entity.Posts;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -8,15 +8,20 @@ import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
-@Table(name = "likes")
-public class Like {
+public class Likes {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "posts_id")
-    private Posts posts;
+    private Long usersId;
+
+    private Long postsId;
+
+    public Likes(Long usersId, Long postsId) {
+        this.usersId = usersId;
+        this.postsId = postsId;
+    }
 }

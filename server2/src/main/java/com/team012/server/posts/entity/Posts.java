@@ -37,6 +37,8 @@ public class Posts {
 
     private Long companyId;
 
+    private Integer likesCount;
+
     // 이미지 업로드 테이블
 
     @OneToMany(mappedBy = "posts", cascade = CascadeType.ALL)

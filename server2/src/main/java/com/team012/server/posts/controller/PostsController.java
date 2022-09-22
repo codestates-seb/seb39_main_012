@@ -41,7 +41,6 @@ public class PostsController {
                                  @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
         Long userId = principalDetails.getUsers().getId();
-
         // 회사정보 --> posts 에 넣어줘야 한다..
         Company company = companyService.getCompany(userId);
         Long companyId = company.getId();

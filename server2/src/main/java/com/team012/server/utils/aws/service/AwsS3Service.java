@@ -8,8 +8,8 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.util.IOUtils;
 import com.team012.server.posts.img.entity.PostsImg;
 import com.team012.server.utils.aws.utils.CommonUtils;
-import com.team012.server.reviewPack.reviewImg.entity.ReviewImg;
-import com.team012.server.reviewPack.reviewImg.repository.ReviewImgRepository;
+import com.team012.server.reviewPack.review.entity.ReviewImg;
+import com.team012.server.reviewPack.review.repository.ReviewImgRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,6 +34,29 @@ public class AwsS3Service {
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
+
+    /**
+     * 단일 파일 업로드
+     */
+    public String singleUploadFile(MultipartFile multipartFile) {
+
+        validateFileExists(multipartFile);
+
+        String fileName = originalFileName(multipartFile);
+
+        ObjectMetadata objectMetadata = new ObjectMetadata();
+        objectMetadata.setContentType(multipartFile.getContentType());
+
+        try (InputStream inputStream = multipartFile.getInputStream()) {
+
+            amazonS3Client.putObject(new PutObjectRequest(bucketName, fileName, inputStream, objectMetadata)
+                    .withCannedAcl(CannedAccessControlList.PublicRead));
+
+        } catch (IOException e) {
+            throw new RuntimeException();
+        }
+        return amazonS3Client.getUrl(bucketName, fileName).toString();
+    }
 
     //s3로 파일 업로드 하고 url 리턴하는 메서드
     public String uploadFile(MultipartFile multipartFile) throws IOException {
@@ -96,6 +119,25 @@ public class AwsS3Service {
         });
 
         return fileList;
+    }
+
+    // review 이미지 업데이트
+    public List<ReviewImg> updateReviewImg(List<ReviewImg> reviewImgList, List<MultipartFile> multipartFileList) {
+        if (multipartFileList.size() > 3) throw new RuntimeException("사진 파일 갯수 초과");
+
+        // 기존에 있있던 파일이름 불러오기
+        List<String> list = reviewImgList.stream().map(ReviewImg::getFileName).collect(Collectors.toList());
+        for (String file : list) {
+            if (!"".equals(file) && file != null) {
+                boolean isExistObject = amazonS3Client.doesObjectExist(bucketName, file);
+
+                // 파일이 있으면 삭제
+                if (isExistObject) amazonS3Client.deleteObject(bucketName, file);
+            }
+        }
+
+        // 삭제후 새로운 이미지 업로드
+        return convertReviewImg(multipartFileList);
     }
 
     //file 이름과 url 받아서 List<PostsImg> 로 리턴하는 메서드

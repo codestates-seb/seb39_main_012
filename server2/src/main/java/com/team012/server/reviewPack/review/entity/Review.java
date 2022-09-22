@@ -1,8 +1,5 @@
 package com.team012.server.reviewPack.review.entity;
 
-import com.team012.server.reviewPack.reviewImg.entity.ReviewImg;
-import com.team012.server.posts.entity.Posts;
-import com.team012.server.usersPack.users.entity.Users;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,19 +24,19 @@ public class Review {
     @Column(name = "score")
     private Integer score;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "users_id")
-    private Users users;
+    @Column(name = "user_id")
+    private Long userId;
 
-    @ManyToOne
-    @JoinColumn(name = "posts_id")
-    private Posts posts;
+    @Column(name = "posts_id")
+    private Long postsId;
 
     @OneToMany(mappedBy = "review")
     private List<ReviewImg> reviewImgList;
 
     @Builder
-    public Review(String content, Integer score) {
+    public Review(String content, Integer score, Long postsId, Long userId) {
+        this.postsId = postsId;
+        this.userId = userId;
         this.content = content;
         this.score = score;
     }

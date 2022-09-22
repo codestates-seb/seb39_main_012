@@ -100,4 +100,8 @@ public class PostsService {
         awsS3Service.deleteFile(posts.getPostsImgList());
         postsRepository.delete(posts);
     }
+
+    public void savedLikesCount(Posts posts) {
+        postsRepository.save(posts);
+    }
 }
