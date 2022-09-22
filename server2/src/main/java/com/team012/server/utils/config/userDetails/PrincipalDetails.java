@@ -1,6 +1,6 @@
 package com.team012.server.utils.config.userDetails;
 
-import com.team012.server.usersPack.users.entity.Users;
+import com.team012.server.users.entity.Users;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;

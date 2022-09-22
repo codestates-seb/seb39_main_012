@@ -2,7 +2,7 @@ package com.team012.server.company.service;
 
 import com.team012.server.company.entity.Company;
 import com.team012.server.company.repository.CompanyRepository;
-import com.team012.server.usersPack.users.dto.CompanySignUpRequestDto;
+import com.team012.server.users.dto.CompanySignUpRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
