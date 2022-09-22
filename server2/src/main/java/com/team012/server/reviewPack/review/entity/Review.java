@@ -1,8 +1,5 @@
 package com.team012.server.reviewPack.review.entity;
 
-import com.team012.server.reviewPack.reviewImg.entity.ReviewImg;
-import com.team012.server.posts.entity.Posts;
-import com.team012.server.usersPack.users.entity.Users;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

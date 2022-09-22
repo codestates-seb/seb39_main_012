@@ -2,14 +2,14 @@ package com.team012.server.reviewPack.review.service;
 
 import com.team012.server.reviewPack.review.dto.ReviewCreateRequestDto;
 import com.team012.server.reviewPack.review.dto.ReviewPatchRequestDto;
+import com.team012.server.reviewPack.review.repository.ReviewImgRepository;
 import com.team012.server.utils.aws.service.AwsS3Service;
-import com.team012.server.reviewPack.reviewImg.entity.ReviewImg;
-import com.team012.server.posts.entity.Posts;
-import com.team012.server.posts.repository.PostsRepository;
+import com.team012.server.reviewPack.review.entity.ReviewImg;
 import com.team012.server.reviewPack.review.repository.ReviewRepository;
 import com.team012.server.reviewPack.review.entity.Review;
 import com.team012.server.usersPack.users.entity.Users;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,9 +17,12 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
+
+    private final ReviewImgRepository reviewImgRepository;
 
     private final AwsS3Service awsS3Service;
 
@@ -47,13 +50,17 @@ public class ReviewService {
 
     public Review updateReview(Long id, ReviewPatchRequestDto dto, List<MultipartFile> files) {
         Review findReview = reviewRepository.findById(id).orElse(null);
-        if (findReview == null) throw new NullPointerException();
+        if (findReview == null) throw new NullPointerException("리뷰가 없습니다.");
 
-        List<ReviewImg> lists = awsS3Service.convertReviewImg(files);
-
-        // json 으로 받은 데이터 추가
+        // 데이터 수정
         findReview.setContent(dto.getContent());
         findReview.setScore(dto.getScore());
+
+        // 리뷰 이미지 검색
+        List<ReviewImg> reviewImgList = reviewImgRepository.findByReview_Id(id);
+        log.info("리뷰에 달린 파일들 : {}", reviewImgList);
+
+        List<ReviewImg> lists = awsS3Service.updateReviewImg(reviewImgList, files);
 
         // 이미지 파일 연결 & 이미지 파일 엔티티에 리뷰 아이디 연결
         findReview.setReviewImgList(lists);
