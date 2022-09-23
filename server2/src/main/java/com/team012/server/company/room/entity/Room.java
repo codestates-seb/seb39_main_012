@@ -1,16 +1,13 @@
 package com.team012.server.company.room.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.team012.server.company.entity.Company;
-import com.team012.server.usersPack.users.entity.Users;
+import com.team012.server.users.entity.Users;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Getter

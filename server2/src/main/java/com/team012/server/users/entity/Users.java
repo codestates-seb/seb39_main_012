@@ -1,6 +1,7 @@
-package com.team012.server.usersPack.users.entity;
+package com.team012.server.users.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.team012.server.users.entity.DogCard;
 import com.team012.server.utils.baseEntity.BaseEntity;
 import lombok.Builder;
 import lombok.Getter;

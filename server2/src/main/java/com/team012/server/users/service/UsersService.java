@@ -1,10 +1,10 @@
-package com.team012.server.usersPack.users.service;
+package com.team012.server.users.service;
 
 import com.team012.server.company.service.CompanyService;
-import com.team012.server.usersPack.users.dto.CompanySignUpRequestDto;
-import com.team012.server.usersPack.users.dto.CustomerSignUpRequestDto;
-import com.team012.server.usersPack.users.repository.UsersRepository;
-import com.team012.server.usersPack.users.entity.Users;
+import com.team012.server.users.dto.CompanySignUpRequestDto;
+import com.team012.server.users.dto.CustomerSignUpRequestDto;
+import com.team012.server.users.entity.Users;
+import com.team012.server.users.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

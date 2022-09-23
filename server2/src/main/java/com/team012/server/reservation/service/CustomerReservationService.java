@@ -8,10 +8,11 @@ import com.team012.server.posts.service.PostsService;
 import com.team012.server.reservation.dto.*;
 import com.team012.server.reservation.entity.Reservation;
 import com.team012.server.reservation.repository.ReservationRepository;
-import com.team012.server.usersPack.users.entity.DogCard;
-import com.team012.server.usersPack.users.entity.Users;
-import com.team012.server.usersPack.users.service.DogCardService;
-import com.team012.server.usersPack.users.service.UsersService;
+
+import com.team012.server.users.entity.DogCard;
+import com.team012.server.users.entity.Users;
+import com.team012.server.users.service.DogCardService;
+import com.team012.server.users.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

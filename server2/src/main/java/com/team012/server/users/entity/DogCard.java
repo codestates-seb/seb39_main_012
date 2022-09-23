@@ -1,4 +1,4 @@
-package com.team012.server.usersPack.users.entity;
+package com.team012.server.users.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
