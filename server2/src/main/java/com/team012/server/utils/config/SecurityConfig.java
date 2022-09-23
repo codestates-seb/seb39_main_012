@@ -2,7 +2,7 @@ package com.team012.server.utils.config;
 
 import com.team012.server.utils.config.filter.JwtAuthenticationFilter;
 import com.team012.server.utils.config.filter.JwtAuthorizationFilter;
-import com.team012.server.usersPack.users.repository.UsersRepository;
+import com.team012.server.users.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

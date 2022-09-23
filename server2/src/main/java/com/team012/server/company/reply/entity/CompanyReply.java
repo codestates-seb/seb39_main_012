@@ -1,7 +1,7 @@
 package com.team012.server.company.reply.entity;
 
-import com.team012.server.usersPack.users.entity.Users;
-import com.team012.server.reviewPack.review.entity.Review;
+import com.team012.server.users.entity.Users;
+import com.team012.server.review.entity.Review;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

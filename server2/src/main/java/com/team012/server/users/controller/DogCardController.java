@@ -1,0 +1,67 @@
+package com.team012.server.users.controller;
+
+import com.team012.server.users.entity.DogCard;
+import com.team012.server.users.dto.DogCardDto;
+import com.team012.server.users.mapper.DogCardMapper;
+import com.team012.server.users.service.DogCardService;
+import com.team012.server.utils.config.userDetails.PrincipalDetails;
+import com.team012.server.utils.response.SingleResponseDto;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+@RequestMapping("/v1/dogCard")
+@RestController
+@RequiredArgsConstructor
+@Slf4j
+public class DogCardController {
+
+    private final DogCardMapper mapper;
+    private final DogCardService dogCardService;
+
+    @PostMapping("/create")
+    public ResponseEntity createCard(@RequestPart(value = "dogCardDto") DogCardDto.Post dogCardDto,
+                                     @RequestPart(value = "file") MultipartFile file,
+                                     @AuthenticationPrincipal PrincipalDetails principalDetails) {
+
+
+        DogCard dogCard = mapper.dogDtoToDogCard(dogCardDto);
+        dogCardService.savedDogCard(dogCard, file, principalDetails.getUsers());
+
+
+        log.info("dogName = {}", dogCard.getDogName());
+        log.info("dogType = {}", dogCard.getType());
+        log.info("dogImageUrl = {}", dogCard.getPhotoImgUrl());
+
+
+        return new ResponseEntity<>(new SingleResponseDto<>
+                ("create success"), HttpStatus.CREATED);
+    }
+
+    @PatchMapping("/{dog-card-id}")
+    public ResponseEntity patchCard(@PathVariable("dog-card-id") long dogCardId,
+                                    @RequestPart(value = "dogCardDto") DogCardDto.Post dogCardDto,
+                                    @RequestPart(value = "file") MultipartFile file,
+                                    @AuthenticationPrincipal PrincipalDetails principalDetails
+    ) {
+
+        DogCard dogCard = mapper.dogDtoToDogCard(dogCardDto);
+
+        dogCardService.updateDogCard(dogCardId,dogCard, file, principalDetails.getUsers());
+
+        return new ResponseEntity<>(new SingleResponseDto<>
+                ("patch success"), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{dog-card-id}")
+    public ResponseEntity findCard(@PathVariable("dog-card-id") long dogCardId) {
+
+        DogCardDto.Response response = mapper.dogCardToDtoResponse(dogCardService.findById(dogCardId));
+        return new ResponseEntity<>(new SingleResponseDto(response), HttpStatus.OK);
+
+    }
+}

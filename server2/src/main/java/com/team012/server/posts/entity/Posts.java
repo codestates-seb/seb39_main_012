@@ -47,7 +47,6 @@ public class Posts {
     @JsonManagedReference  // 순환참조 방지(...)
     private List<PostsImg> postsImgList = new ArrayList<>();
 
-
     @OneToMany(mappedBy = "posts", cascade = {CascadeType.REMOVE, CascadeType.MERGE})
     private List<PostsServiceTag> postAvailableTags = new ArrayList<>();
 
