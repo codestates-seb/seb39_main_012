@@ -8,9 +8,10 @@ interface Props {
   height?: string
   backgroundColor?: string
   marginTop?: string
+  hoverFontColor?: string
 }
 
-function AuthButton({title, width, height, backgroundColor, marginTop}: Props) {
+function AuthButton({title, width, height, backgroundColor, marginTop, hoverFontColor}: Props) {
   return (
     <Button
       title={title}
@@ -18,6 +19,7 @@ function AuthButton({title, width, height, backgroundColor, marginTop}: Props) {
       height={height}
       backgroundColor={backgroundColor}
       marginTop={marginTop}
+      hoverFontColor={hoverFontColor}
     >
       {title}
     </Button>
@@ -40,5 +42,6 @@ export const Button = styled.button<Props>`
 
   :hover {
     background-color: rgba(111, 167, 103, 0.8);
+    color: ${({hoverFontColor}) => hoverFontColor ?? 'rgb(255, 255, 255)'};
   }
 `

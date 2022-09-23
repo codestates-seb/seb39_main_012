@@ -2,13 +2,12 @@ import {useState} from 'react'
 import styled from 'styled-components'
 import TapMenu from '@/components/Login/TapMenu'
 import LoginForm from '@/components/Login/LoginForm'
-import SocialAuthButtons from '@/components/SocialAuthButtons/SocialAuthButtons'
 import axios from 'axios'
 import {useRouter} from 'next/router'
 import {toast} from 'react-toastify'
 
 const index = () => {
-  const [error, setErorr] = useState(false)
+  const [error, setError] = useState(false)
   const router = useRouter()
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -24,7 +23,7 @@ const index = () => {
       router.push('/')
       toast.success('로그인 성공')
     } else {
-      setErorr(true)
+      setError(true)
     }
   }
 
@@ -34,7 +33,6 @@ const index = () => {
         <Title>로그인</Title>
         <TapMenu />
         <LoginForm onSubmit={onSubmit} />
-        <SocialAuthButtons />
       </Wrapper>
     </Container>
   )
@@ -47,14 +45,14 @@ const Container = styled.div`
   justify-content: center;
   margin: 0 auto;
   width: 33.33%;
-  margin-top: 5rem;
+  margin-top: 3em;
 `
 
 const Wrapper = styled.div``
 
 const Title = styled.h1`
-  font-size: 3rem;
+  font-size: 2.5rem;
   font-weight: bold;
-  margin-bottom: 34px;
+  margin: 3rem 0 5rem 0;
   text-align: center;
 `

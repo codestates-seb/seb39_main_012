@@ -4,6 +4,7 @@ import {colors} from '@/styles/colors'
 import {useRouter} from 'next/router'
 import Input from '../Input/Input'
 import AuthButton, {Button} from '../AuthButton/AuthButton'
+import CheckBox from '../CheckBox/CheckBox'
 
 interface Prop {
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void
@@ -18,24 +19,24 @@ const LoginForm = ({onSubmit}: Prop) => {
           type={'string'}
           placeholder={'이메일'}
           name={'email'}
-          width={'56rem'}
-          height={'5rem'}
+          width={'42rem'}
+          height={'4.2rem'}
           marginBottom={'2rem'}
         />
         <Input
           type={'password'}
           placeholder={'비밀번호'}
           name={'password'}
-          width={'56rem'}
-          height={'5rem'}
+          width={'42rem'}
+          height={'4.2rem'}
           marginBottom={'2rem'}
         />
       </InputWrapper>
       <KeepEmail>
-        <input type="checkbox" name="" id="" />
+        <input type="checkbox" />
         <span>이메일 저장</span>
       </KeepEmail>
-      <AuthButton title={'로그인'} width={'100%'} />
+      <AuthButton title={'로그인'} width={'100%'} height={'4.5rem'} hoverFontColor={'#e5f9ef'} />
       <GuestButton>Guest</GuestButton>
       <HelpLogin>
         <span>아아디 찾기</span>
@@ -72,7 +73,7 @@ const KeepEmail = styled.div`
 `
 
 const HelpLogin = styled.div`
-  font-size: 1.4rem;
+  font-size: 1.35rem;
   margin: 3rem 0;
 
   span {
@@ -83,12 +84,15 @@ const HelpLogin = styled.div`
   }
 `
 const GuestButton = styled(Button)`
-  background-color: ${colors.mainColor2};
+  background-color: rgb(253, 208, 124);
   width: 100%;
+  height: 4.5rem;
   margin-top: 1rem;
-  color: #cdb07b;
+  color: rgb(255, 255, 255);
+
   :hover {
-    background-color: ${colors.mainColor2};
+    background-color: rgba(253, 208, 124, 0.9);
+    color: rgb(205, 176, 123);
     opacity: 0.8;
   }
 `
