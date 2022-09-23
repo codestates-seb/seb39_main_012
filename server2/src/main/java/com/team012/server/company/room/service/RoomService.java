@@ -20,7 +20,7 @@ public class RoomService {
 
     private final RoomRepository roomRepository;
 
-    public List<Room> saveList(List<RoomDto.PostDto> list, Long postsId, Company company) {
+    public List<Room> saveList(List<RoomDto.PostDto> list, Long postsId) {
         List<Room> roomList = new ArrayList<>();
         for(RoomDto.PostDto room : list) {
             Room room1 = Room.builder()
@@ -29,11 +29,9 @@ public class RoomService {
                     .postsId(postsId)
                     .build();
             roomList.add(room1);
-            room1.setCompany(company);
         }
 
         List<Room> list1 = roomRepository.saveAll(roomList);
-        company.setRoom(roomList);
         return list1;
     }
 

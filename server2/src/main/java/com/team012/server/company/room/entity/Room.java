@@ -35,17 +35,6 @@ public class Room {
     @Column(name = "posts_id")
     private Long postsId;
 
-    @ManyToOne
-    @JoinColumn(name = "company_id")
-    @JsonBackReference
-    private Company company;
-
-    public void setCompany(Company company) {
-        this.company = company;
-        if(!company.getRoom().contains(this)) {
-            company.getRoom().add(this);
-        }
-    }
 
     @Builder
     public Room(String size,Integer price, Long postsId) {

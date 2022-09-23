@@ -35,14 +35,6 @@ public class Company {
     @Column(name = "user_id")
     private Long userId;
 
-    @OneToMany(mappedBy = "company")
-    @JsonManagedReference
-    private List<Room> room = new ArrayList<>();
-
-    public void setRoom(List<Room> room) {
-        this.room = room;
-    }
-
     @Builder
     public Company(String companyName, String ceo, String address, String detailAddress, Long userId) {
         this.companyName = companyName;
