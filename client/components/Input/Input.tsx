@@ -34,7 +34,8 @@ const StyleInput = styled.input<InputProps>`
   margin-bottom: ${({marginBottom}) => marginBottom ?? '0'};
   border-radius: 3px;
   background-color: ${colors.grey1};
-  border: none;
+  border: 0.05rem solid ${colors.grey1};
+  outline: 0.4rem solid ${colors.grey1};
 
   ::placeholder {
     color: ${colors.grey2};
