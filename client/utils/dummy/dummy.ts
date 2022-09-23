@@ -19,3 +19,10 @@ export const dummyPosts = [
     rating: 4.5,
   },
 ]
+
+export const userData = {
+  username: '김민지',
+  email: 'test1234@test.com',
+  phone: '010-1234-5678',
+  profileImg: 'https://dimg.donga.com/wps/NEWS/IMAGE/2021/05/17/106977090.2.jpg',
+}

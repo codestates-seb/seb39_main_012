@@ -144,6 +144,7 @@ const TextBox = styled.div`
 
   @media (max-width: 768px) {
     height: 100%;
+    width: 20%;
   }
 `
 
@@ -165,6 +166,7 @@ const DateBox = styled.div`
   @media (max-width: 768px) {
     height: 100%;
     font-size: 10px;
+    width: 40%;
   }
 `
 

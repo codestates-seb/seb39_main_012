@@ -26,7 +26,11 @@ const LayOutContainer = styled.div`
   max-width: 1280px;
 
   @media (max-width: 1350px) {
-    margin: 0 30px;
+    margin: 0 15px;
+  }
+
+  @media (max-width: 390px) {
+    margin: 0 7.5px;
   }
 `
 const Box = styled.div`
