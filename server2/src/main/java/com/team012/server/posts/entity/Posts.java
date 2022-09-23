@@ -37,7 +37,7 @@ public class Posts {
 
     private Long companyId;
 
-    private Integer roomCount; //add
+    private Integer roomCount; //room에 count없에는 대신 추가(전체 방의 갯수)
 
     private Integer likesCount;
 
