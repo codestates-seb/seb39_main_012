@@ -1,5 +1,6 @@
 package com.team012.server.usersPack.users.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.team012.server.utils.baseEntity.BaseEntity;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,6 +38,7 @@ public class Users extends BaseEntity {
 
     // 강아지 카드
     @OneToMany(mappedBy = "users")
+    @JsonManagedReference
     private List<DogCard> dogCardList;
 
     @Builder

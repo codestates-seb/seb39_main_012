@@ -35,6 +35,7 @@ public class PostsService {
                 .longitude(post.getCoordinate().get(1))
                 .address(post.getCoordinate().get(2))
                 .detailAddress(post.getCoordinate().get(3))
+                .roomCount(post.getRoomCount())//add
                 .build();
 
 //        Optional<Posts> find = postsRepository.findByUsersId(userId);
@@ -63,6 +64,7 @@ public class PostsService {
         Optional.ofNullable(post.getCoordinate().get(3)).ifPresent(findPosts::setDetailAddress);
         Optional.ofNullable(post.getTitle()).ifPresent(findPosts::setTitle);
         Optional.ofNullable(post.getContent()).ifPresent(findPosts::setContent);
+        Optional.ofNullable(post.getRoomCount()).ifPresent(findPosts::setRoomCount); //add
 
 
         if (multipartFile != null) {

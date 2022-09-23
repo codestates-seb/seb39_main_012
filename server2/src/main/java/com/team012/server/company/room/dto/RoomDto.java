@@ -8,15 +8,12 @@ public class RoomDto {
     @Getter
     public static class PostDto {
         private String size;
-        private Integer count;
         private Integer price;
-//        private MultipartFile multipartFile;
     }
 
     @Getter
     public static class PatchDto {
         private String size;
-        private Integer count;
         private Integer price;
 
     }
@@ -25,7 +22,6 @@ public class RoomDto {
     @Builder
     public static class ResponseDto {
         private String size;
-        private Integer count;
         private Integer price;
 
     }

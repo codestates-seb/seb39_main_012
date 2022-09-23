@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class UsersService {
@@ -67,6 +69,11 @@ public class UsersService {
         usersRepository.save(savedCustomer);
 
         return savedCustomer;
+    }
+
+    public Users findUsersById(Long usersId) {
+        return usersRepository.findById(usersId)
+                .orElseThrow(() -> new RuntimeException("member Not found"));
     }
 
 

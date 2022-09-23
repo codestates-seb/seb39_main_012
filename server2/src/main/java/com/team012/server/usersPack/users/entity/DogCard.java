@@ -1,5 +1,6 @@
 package com.team012.server.usersPack.users.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -58,5 +59,6 @@ public class DogCard {
     // 강아지 큐카드는 한명의 회원이 가질 수 있다.
     @ManyToOne // 회원 삭제시 강아지 큐카드도 삭제
     @JoinColumn(name = "users_id")
+    @JsonBackReference
     private Users users;
 }

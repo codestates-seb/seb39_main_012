@@ -30,6 +30,8 @@ public class PostsDto {
         private List<String> hashTag;
         private List<String> serviceTag;
 
+        private Integer roomCount;
+
         @ListSize
         private List<RoomDto.PostDto> roomDtoList;
     }
@@ -44,6 +46,7 @@ public class PostsDto {
         private List<String> coordinate;
         private List<String> hashTag;
         private List<String> serviceTag;
+        private Integer roomCount;
         private List<RoomDto.PostDto> roomDtoList;
 
         public void setId(Long id) {
@@ -86,6 +89,5 @@ public class PostsDto {
         private String address;
         private ImgDto.ResponseListDto img;
         private Integer minPrice;
-//        private String roomImg;
     }
 }

@@ -1,10 +1,15 @@
 package com.team012.server.company.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.team012.server.company.room.entity.Room;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -29,6 +34,14 @@ public class Company {
 
     @Column(name = "user_id")
     private Long userId;
+
+    @OneToMany(mappedBy = "company")
+    @JsonManagedReference
+    private List<Room> room = new ArrayList<>();
+
+    public void setRoom(List<Room> room) {
+        this.room = room;
+    }
 
     @Builder
     public Company(String companyName, String ceo, String address, String detailAddress, Long userId) {
