@@ -11,7 +11,7 @@ const modeOptions = {
     borderRadius: '20px',
   },
   my: {
-    borderRadius: '20px',
+    borderRadius: '10px 10px 0px 30px;',
   },
   review: {
     borderRadius: '20px',
@@ -34,6 +34,7 @@ const CardBox = styled.div<{borderRadius: string; height?: string}>`
   height: 100%;
 
   img {
+    object-fit: cover;
     height: 100%;
     width: 100%;
     border-radius: ${({borderRadius}) => borderRadius};
