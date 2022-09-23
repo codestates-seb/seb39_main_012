@@ -65,7 +65,7 @@ public class UsersController {
     @GetMapping("/customer/profile")
     public ResponseEntity getCustomer(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         Long userId = principalDetails.getUsers().getId();
-        Users findUser = usersService.getCustomer(userId);
+        Users findUser = usersService.findUsersById(userId);
         List<DogCard> dogCardList = dogCardService.getListDogCard(userId);
         List<Review> reviewList = usersReviewManageReviewService.getListReview(userId);
 

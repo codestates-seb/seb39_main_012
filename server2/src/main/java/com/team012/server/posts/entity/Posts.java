@@ -37,6 +37,8 @@ public class Posts {
 
     private Long companyId;
 
+    private Integer roomCount; //room에 count없에는 대신 추가(전체 방의 갯수)
+
     private Integer likesCount;
 
     // 이미지 업로드 테이블
@@ -54,7 +56,7 @@ public class Posts {
     @Builder
     public Posts(String title, String content,
                  String latitude, String longitude,
-                 String address, String detailAddress,
+                 String address, String detailAddress,Integer roomCount,
                  Long companyId) {
         this.title = title;
         this.content = content;
@@ -62,6 +64,7 @@ public class Posts {
         this.longitude = longitude;
         this.address = address;
         this.detailAddress = detailAddress;
+        this.roomCount = roomCount; //add
         this.companyId = companyId;
 
     }

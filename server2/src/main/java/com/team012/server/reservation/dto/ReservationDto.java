@@ -32,11 +32,7 @@ public class ReservationDto {
     @NoArgsConstructor
     public static class Patch {
         private Long id;
-        private Boolean status;
 
-        public Patch(Boolean status) {
-            this.status = status;
-        }
     }
 
     @Getter
