@@ -20,12 +20,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
-
+@Transactional
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -40,6 +41,7 @@ public class CustomerReservationService {
 
 
     // 상세 페이지에서 예약 내역 적는 부분(posts 상세 페이지 ---> 예약 상세 페이지)
+    @Transactional(readOnly = true)
     public CreateReservationDto registerReservation(RegisterReservationDto dto, Long userId, Long postsId) {
         usersService.findUsersById(userId); //validation check
 
@@ -64,6 +66,7 @@ public class CustomerReservationService {
     }
 
     //돈 계산 및 에약 가능 여부 판단.
+    @Transactional(readOnly = true)
     public Integer calculatePriceAndAvailableBooking(RegisterReservationDto dto, Long postsId) {
 
         LocalDate checkIn = LocalDate.parse(dto.getCheckIn(), DateTimeFormatter.ISO_DATE);
@@ -155,13 +158,14 @@ public class CustomerReservationService {
     }
 
     //예약 전체 조회(미래 예약 날짜)
+    @Transactional(readOnly = true)
     public Page<Reservation> findReservationList(Long userId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "checkOut");
 
         Page<Reservation> reservations =  reservationRepository.findByUsersId(userId,LocalDate.now(), pageable);
         return reservations;
     }
-
+    @Transactional(readOnly = true)
     public Page<Reservation> getReservation(Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "companyId");
 
@@ -170,6 +174,7 @@ public class CustomerReservationService {
     }
 
     //갔다 온 호텔 전체 조회
+    @Transactional(readOnly = true)
     public Page<Reservation> findReservationAfterCheckOutList(Long userId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "checkOut");
 
@@ -190,7 +195,7 @@ public class CustomerReservationService {
         reservationRepository.delete(reservation);
     }
 
-
+    @Transactional(readOnly = true)
     public Integer findReservations(String checkIn, String checkOut, Long companyId) {
         LocalDate checkInDate = LocalDate.parse(checkIn,DateTimeFormatter.ISO_LOCAL_DATE);
         LocalDate checkOutDate = LocalDate.parse(checkOut,DateTimeFormatter.ISO_LOCAL_DATE);

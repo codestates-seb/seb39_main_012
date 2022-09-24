@@ -11,10 +11,11 @@ import com.team012.server.users.entity.Users;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-
+@Transactional
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -75,6 +76,7 @@ public class ReviewService {
         reviewRepository.deleteById(id);
     }
 
+    @Transactional(readOnly = true)
     public List<Review> getListReview(Long id) {
         return reviewRepository.findByUserId(id);
     }

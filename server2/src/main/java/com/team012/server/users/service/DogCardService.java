@@ -6,11 +6,12 @@ import com.team012.server.users.repository.DogCardRepository;
 import com.team012.server.utils.aws.service.AwsS3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
-
+@Transactional
 @Service
 @RequiredArgsConstructor
 public class DogCardService {
@@ -64,7 +65,7 @@ public class DogCardService {
         return dogCardRepository.save(findDogCard);
     }
 
-
+    @Transactional(readOnly = true)
     public DogCard findById(Long dogCardId) {
 
         Optional<DogCard> findDogCard = dogCardRepository.findById(dogCardId);
@@ -74,6 +75,7 @@ public class DogCardService {
     }
 
     // 강아지 큐카드 유저 아이디를 통한 조회
+    @Transactional(readOnly = true)
     public List<DogCard> getListDogCard(Long userId) {
         return dogCardRepository.findByUsers_Id(userId);
     }

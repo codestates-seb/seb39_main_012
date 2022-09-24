@@ -14,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
@@ -22,7 +24,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
+@Transactional
 @RequiredArgsConstructor
 @Service
 @Slf4j
@@ -38,6 +40,7 @@ public class AwsS3Service {
     /**
      * 단일 파일 업로드
      */
+
     public String singleUploadFile(MultipartFile multipartFile) {
 
         validateFileExists(multipartFile);
@@ -59,6 +62,7 @@ public class AwsS3Service {
     }
 
     //s3로 파일 업로드 하고 url 리턴하는 메서드
+
     public String uploadFile(MultipartFile multipartFile) throws IOException {
         validateFileExists(multipartFile);
 
@@ -94,6 +98,7 @@ public class AwsS3Service {
     }
 
     // review 이미지 업로드
+
     public List<ReviewImg> convertReviewImg(List<MultipartFile> multipartFileList) {
         if (multipartFileList.size() > 3) throw new RuntimeException("사진 파일 갯수 초과");
 
@@ -122,6 +127,7 @@ public class AwsS3Service {
     }
 
     // review 이미지 업데이트
+
     public List<ReviewImg> updateReviewImg(List<ReviewImg> reviewImgList, List<MultipartFile> multipartFileList) {
         if (multipartFileList.size() > 3) throw new RuntimeException("사진 파일 갯수 초과");
 
@@ -141,6 +147,7 @@ public class AwsS3Service {
     }
 
     //file 이름과 url 받아서 List<PostsImg> 로 리턴하는 메서드
+
     public List<PostsImg> convertPostImg(List<MultipartFile> multipartFileList) {
         if (multipartFileList.size() != 5) {
             throw new RuntimeException("you need to upload 5 image");
@@ -173,8 +180,7 @@ public class AwsS3Service {
         for (int i = 0; i < list.size(); i++) { //기존 파일 삭제
             String currentFilePath = list.get(i);
             if (!"".equals(currentFilePath) && currentFilePath != null) {
-//                boolean isExistObject = amazonS3Client.doesObjectExist(bucketName, currentFilePath);
-                boolean isExistObject = false;
+                boolean isExistObject = amazonS3Client.doesObjectExist(bucketName, currentFilePath);
 
                 if (isExistObject) {
                     amazonS3Client.deleteObject(bucketName, currentFilePath);
@@ -186,6 +192,7 @@ public class AwsS3Service {
     }
 
     //s3에 업로드된 파일 삭제 메서드
+    @Transactional(propagation = Propagation.REQUIRED)
     public void deleteFile(List<PostsImg> imgList) {
         List<String> fileNameList = imgList.stream().map(PostsImg::getFileName).collect(Collectors.toList());
         for (String file : fileNameList) {
@@ -196,9 +203,8 @@ public class AwsS3Service {
 
     //s3에 업로드 할 사진 validation 메서드
     private void validateFileExists(MultipartFile multipartFile) {
-//        if(multipartFile.isEmpty()) {
-//            throw new RuntimeException("EmptyFileException()");
-//
-//        }
+        if(multipartFile.isEmpty()) {
+            throw new RuntimeException("EmptyFileException()");
+        }
     }
 }

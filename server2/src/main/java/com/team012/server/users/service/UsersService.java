@@ -8,9 +8,10 @@ import com.team012.server.users.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
-
+@Transactional
 @Service
 @RequiredArgsConstructor
 public class UsersService {
@@ -71,6 +72,7 @@ public class UsersService {
         return savedCustomer;
     }
 
+    @Transactional(readOnly = true)
     public Users findUsersById(Long usersId) {
         return usersRepository.findById(usersId)
                 .orElseThrow(() -> new RuntimeException("member Not found"));
