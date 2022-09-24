@@ -20,6 +20,11 @@ import java.util.List;
 // @DynamicUpdate --> 서버의 부하를 줄여준다 ?????
 public class Posts {
 
+    @PrePersist
+    public void prePersist() {
+        this.likesCount = this.likesCount == null? 0:this.likesCount;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

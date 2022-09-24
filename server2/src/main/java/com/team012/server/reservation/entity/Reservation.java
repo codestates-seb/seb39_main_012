@@ -15,6 +15,11 @@ import java.util.List;
 @Getter
 public class Reservation implements Comparable<Reservation> {
 
+    @PrePersist
+    public void prePersist() {
+        this.dogCount = this.dogCount == null? 0:this.dogCount;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -41,7 +46,6 @@ public class Reservation implements Comparable<Reservation> {
 
     private Long postsId;
 
-    @Column(columnDefinition = "integer default 0")
     private Integer dogCount; //예약된 강아지 수
 
     @ElementCollection(fetch = FetchType.LAZY)
