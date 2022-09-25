@@ -7,14 +7,15 @@ import com.team012.server.posts.Tag.HashTag.repository.PostsHashTagRepository;
 import com.team012.server.posts.entity.Posts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-@Service
+@Transactional
 @RequiredArgsConstructor
+@Service
 public class TagService {
 
     private final HashTagRepository hashTagRepository;

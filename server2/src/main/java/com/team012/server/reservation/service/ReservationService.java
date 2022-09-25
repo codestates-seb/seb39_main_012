@@ -6,8 +6,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-
+@Transactional
 @Service
 public class ReservationService {
 
@@ -18,6 +19,7 @@ public class ReservationService {
     }
 
     // 회사별 예약 조회
+    @Transactional(readOnly = true)
     public Page<Reservation> getReservation(Long companyId, Integer page, Integer size) {
 
         // id 기준으로 내림차순 정렬

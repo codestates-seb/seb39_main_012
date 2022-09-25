@@ -4,7 +4,8 @@ import com.team012.server.company.reply.entity.CompanyReply;
 import com.team012.server.company.reply.repository.CompanyReplyRepository;
 import com.team012.server.company.reply.dto.CompanyReplyDto;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
+@Transactional
 @Service
 public class CompanyReplyService {
 

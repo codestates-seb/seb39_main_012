@@ -18,13 +18,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-
-@Service
-@RequiredArgsConstructor
+@Transactional
 @Slf4j
+@RequiredArgsConstructor
+@Service
 public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final ReviewImgRepository reviewImgRepository;
@@ -79,6 +80,7 @@ public class ReviewService {
         reviewRepository.deleteById(id);
     }
 
+    @Transactional(readOnly = true)
     public List<Review> getListReview(Long id) {
         return reviewRepository.findByUserId(id);
     }

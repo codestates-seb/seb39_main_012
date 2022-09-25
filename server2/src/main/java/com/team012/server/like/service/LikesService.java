@@ -6,9 +6,12 @@ import com.team012.server.posts.entity.Posts;
 import com.team012.server.posts.service.PostsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+
+@Transactional
+@AllArgsConstructor
 @Service
-@RequiredArgsConstructor
 public class LikesService {
 
     private final LikesRepository likeRepository;
@@ -33,14 +36,17 @@ public class LikesService {
         return false;
     }
 
+    @Transactional(readOnly = true)
     private boolean isNotAlreadyLike(Long usersId, Long postsId) {
         return likeRepository.findByUsersIdAndPostsId(usersId, postsId).isEmpty();
     }
 
+    @Transactional(readOnly = true)
     private boolean isAlreadyLike(long likesId) {
         return likeRepository.findById(likesId).isPresent();
     }
 
+    @Transactional(readOnly = true)
     private Likes findLikes(Long usersId, Long postsId) {
         return likeRepository.findByUsersIdAndPostsId(usersId, postsId).orElse(null);
     }

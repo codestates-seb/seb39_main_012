@@ -9,11 +9,12 @@ import com.team012.server.posts.repository.PostsRepository;
 import com.team012.server.posts.service.PostsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class RoomService {
@@ -45,16 +46,16 @@ public class RoomService {
 
         return roomRepository.save(findRoom);
     }
-
+    @Transactional(readOnly = true)
     public Room findRoom(Long roomId) {
         return roomRepository.findById(roomId).orElseThrow(() -> new RuntimeException("room not exist"));
     }
-
+    @Transactional(readOnly = true)
     public Room findRoomByPostsIdAndSize(Long postsId, String size) {
         return roomRepository.findByPostsIdAndSize(postsId, size)
                 .orElseThrow(() -> new RuntimeException("room not found"));
     }
-
+    @Transactional(readOnly = true)
     public List<Room> findAllRoom(Long postsId) {
         List<Room> roomList = roomRepository.findAllByPostsId(postsId);
         return roomList;
@@ -69,7 +70,7 @@ public class RoomService {
         List<Room> roomList = roomRepository.findAllByPostsId(postsId);
         roomRepository.deleteAll(roomList);
     }
-
+    @Transactional(readOnly = true)
     public Integer findMinPrice(Long postId) {
         return roomRepository.findMinPrice(postId);
     }

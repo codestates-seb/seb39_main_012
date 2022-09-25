@@ -12,12 +12,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+@Transactional
 @Service
 @RequiredArgsConstructor
 public class PostsService {
@@ -82,7 +84,7 @@ public class PostsService {
         return posts1;
 
     }
-
+    @Transactional(readOnly = true)
     public Posts findById(Long postsId) {
         Optional<Posts> findCompanyPosts
                 = postsRepository.findById(postsId);
@@ -90,7 +92,7 @@ public class PostsService {
         return findCompanyPosts.orElseThrow(()
                 -> new RuntimeException("Posts Not Found"));
     }
-
+    @Transactional(readOnly = true)
     public Page<Posts> findByPage(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "id");
 

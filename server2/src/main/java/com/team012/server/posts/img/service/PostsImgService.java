@@ -6,13 +6,16 @@ import com.team012.server.utils.aws.service.AwsS3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
+
+@Transactional
 @Slf4j
-@Service
 @RequiredArgsConstructor
+@Service
 public class PostsImgService {
     private final PostsImgRepository imgRepository;
     private final AwsS3Service awsS3Service;
