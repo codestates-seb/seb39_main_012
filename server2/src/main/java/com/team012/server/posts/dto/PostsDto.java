@@ -4,6 +4,7 @@ import com.team012.server.company.room.dto.RoomDto;
 import com.team012.server.company.room.entity.Room;
 import com.team012.server.posts.img.dto.ImgDto;
 import com.team012.server.posts.img.entity.PostsImg;
+import com.team012.server.review.entity.Review;
 import com.team012.server.utils.validator.ListSize;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -64,6 +65,8 @@ public class PostsDto {
         private String content;
         private List<String> address;
         private Long companyId;
+        private Double avgScore; // 평균 별점
+        private List<Review> reviewList; // 리뷰 리스트 최신 아이디 순
         private List<PostsImg> postsImgList;
         private List<String> hashTag;
         private List<String> serviceTag;

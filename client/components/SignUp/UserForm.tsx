@@ -106,8 +106,7 @@ function UserForm({mode}: Props) {
     const {email, password, passwordCheck, name, phone} = newForm
 
     if (!email || !password || !passwordCheck || !name || !phone) {
-      alert('모든 항목을 입력해주세요')
-      return
+      return toast.error('모든 항목을 입력해주세요')
     }
 
     if (
@@ -118,13 +117,11 @@ function UserForm({mode}: Props) {
       errors.name === true ||
       emailDuplicate === true
     ) {
-      alert('입력값을 확인해주세요')
-      return
+      return toast.error('항목을 다시 확인해주세요')
     }
 
     if (!checks.useAgree || !checks.privateAgree || !checks.ageAgree) {
-      alert('필수 항목에 동의해주세요')
-      return
+      return toast.error('필수 약관에 동의해주세요')
     }
 
     const result = await axios.post('http://localhost:3000/api/auth/signup', newForm)
@@ -133,7 +130,7 @@ function UserForm({mode}: Props) {
       router.push('/')
       toast.success('회원가입이 완료되었습니다.')
     } else {
-      alert('회원가입에 실패했습니다.')
+      toast.error('회원가입에 실패했습니다.')
     }
   }
 

@@ -1,5 +1,6 @@
 package com.team012.server.users.service;
 
+import com.team012.server.company.entity.Company;
 import com.team012.server.company.service.CompanyService;
 import com.team012.server.users.dto.CompanySignUpRequestDto;
 import com.team012.server.users.entity.Users;
@@ -41,4 +42,8 @@ public class UsersManageCompanyService {
         return savedCompanyUser;
     }
 
+    // userId 로 업체정보 불러오기
+    public Company getCompany(Long userId) {
+        return companyService.getCompany(userId);
+    }
 }

@@ -33,7 +33,7 @@ const TabMenu = styled.ul`
   background-color: #fff;
   color: #9a9a9a;
   font-weight: bold;
-  font-size: 2rem;
+  font-size: 1.5rem;
   display: flex;
   flex-direction: row;
   text-align: center;
@@ -52,6 +52,6 @@ const TabMenu = styled.ul`
   .focused {
     border-bottom: 3px solid #1b1b1b;
     color: #3e3e3e;
-    transition: 0.3s;
+    transition: 0.2s;
   }
 `

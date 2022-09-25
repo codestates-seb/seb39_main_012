@@ -1,6 +1,7 @@
 import SignUpTab from '@/components/SignUp/SignUpTab'
 import UserForm from '@/components/SignUp/UserForm'
 import React, {useState} from 'react'
+import {ToastContainer} from 'react-toastify'
 import styled from 'styled-components'
 
 export interface Form {
@@ -19,6 +20,7 @@ function SignUp() {
 
   return (
     <Container>
+      <ToastContainer></ToastContainer>
       <Title>회원가입</Title>
       <SignUpTab mode={mode} setMode={setMode} />
       <UserForm mode={mode} />

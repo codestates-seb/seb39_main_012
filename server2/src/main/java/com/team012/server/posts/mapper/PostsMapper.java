@@ -8,6 +8,7 @@ import com.team012.server.posts.dto.PostsDto;
 import com.team012.server.posts.entity.Posts;
 import com.team012.server.posts.img.dto.ImgDto;
 import com.team012.server.posts.img.entity.PostsImg;
+import com.team012.server.review.entity.Review;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
@@ -21,14 +22,15 @@ public interface PostsMapper {
 
         List<String> address = List.of(posts.getLatitude(), posts.getLongitude(), posts.getAddress(), posts.getDetailAddress());
         List<Room> roomList = roomService.findAllRoom(posts.getId());
-        Long comapnyId = posts.getCompanyId();
+        Long companyId = posts.getCompanyId();
 
         PostsDto.ResponseDto responseDto = PostsDto.ResponseDto.builder()
                 .id(posts.getId())
                 .title(posts.getTitle())
-                .companyId(comapnyId)
+                .companyId(companyId)
                 .content(posts.getContent())
                 .address(address)
+                .avgScore(posts.getAvgScore())
                 .postsImgList(posts.getPostsImgList())
                 .roomDtoList(roomList)
                 .build();
@@ -80,5 +82,50 @@ public interface PostsMapper {
             responseListDtos.add(responseListDto);
         }
         return responseListDtos;
+    }
+
+
+    // 상세페이지 조회를 위한 디폴트 메서드
+    default PostsDto.ResponseDto postsToPostsViewDto(Posts posts,
+                                                     RoomService roomService,
+                                                     List<Review> reviewList) {
+
+        List<String> address = List.of(posts.getLatitude(), posts.getLongitude(), posts.getAddress(), posts.getDetailAddress());
+        List<Room> roomList = roomService.findAllRoom(posts.getId());
+        Long companyId = posts.getCompanyId();
+
+        PostsDto.ResponseDto responseDto = PostsDto.ResponseDto.builder()
+                .id(posts.getId())
+                .title(posts.getTitle())
+                .companyId(companyId)
+                .content(posts.getContent())
+                .address(address)
+                .avgScore(posts.getAvgScore())
+                .reviewList(reviewList)
+                .postsImgList(posts.getPostsImgList())
+                .roomDtoList(roomList)
+                .build();
+
+        if (posts.getPostsHashTags().size() != 0) {
+            List<PostsHashTags> list = posts.getPostsHashTags();
+            List<String> pt = new ArrayList<>();
+            for (PostsHashTags c : list) {
+                String tags = c.getHashTag().getTag();
+                pt.add(tags);
+            }
+            responseDto.setHashTag(pt);
+        }
+
+        if (posts.getPostAvailableTags().size() != 0) {
+            List<PostsServiceTag> list = posts.getPostAvailableTags();
+            List<String> ast = new ArrayList<>();
+            for (PostsServiceTag c : list) {
+                String tags = c.getServiceTag().getTag();
+                ast.add(tags);
+            }
+            responseDto.setServiceTag(ast);
+        }
+
+        return responseDto;
     }
 }

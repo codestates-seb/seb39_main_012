@@ -39,7 +39,7 @@ const CheckBoxs = styled.div<{isChecked: boolean}>`
   border-radius: 50%;
   border: solid 1px gray;
   background-color: ${({isChecked}) => (isChecked ? colors.mainColor : 'white')};
-  border: ${({isChecked}) => (isChecked ? 'none' : 'gray solid 0.5px')};
+  border: ${({isChecked}) => (isChecked ? `${colors.mainColor} solid 0.5px` : 'gray solid 0.5px')};
   cursor: pointer;
 
   svg {

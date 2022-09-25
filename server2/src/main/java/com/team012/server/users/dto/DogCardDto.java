@@ -58,4 +58,12 @@ public class DogCardDto {
         private String username;
         private String etc;
     }
+
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    public static class Message {
+        private String message;
+    }
 }

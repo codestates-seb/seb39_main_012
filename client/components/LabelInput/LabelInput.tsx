@@ -7,6 +7,7 @@ interface Props extends InputProps {
   Errors?: boolean
   ErrorMessage?: string
   emailDuplicate?: boolean
+  marginRight?: string
 }
 
 function LabelInput({
@@ -19,12 +20,13 @@ function LabelInput({
   Errors,
   ErrorMessage,
   emailDuplicate,
+  marginRight,
   ...props
 }: Props) {
   return (
     <LabelContainer>
       <LabelBox>
-        <Label>{label}</Label>
+        <Label marginRight={marginRight}>{label}</Label>
         <Input
           type={type}
           name={name}
@@ -34,7 +36,9 @@ function LabelInput({
           {...props}
         />
       </LabelBox>
-      {Errors && value && value.length >= 1 && <ErrorMessageBox>{ErrorMessage}</ErrorMessageBox>}
+      {(Errors && value && value.length >= 1 && (
+        <ErrorMessageBox>{ErrorMessage}</ErrorMessageBox>
+      )) || <NoError></NoError>}
       {emailDuplicate && <ErrorMessageBox>이미 사용중인 이메일입니다.</ErrorMessageBox>}
     </LabelContainer>
   )
@@ -45,6 +49,7 @@ export default LabelInput
 const LabelContainer = styled.div`
   display: flex;
   flex-direction: column;
+  white-space: nowrap;
 `
 
 const LabelBox = styled.div`
@@ -56,14 +61,15 @@ const LabelBox = styled.div`
     align-items: flex-start;
   }
 `
-const Label = styled.label`
+const Label = styled.label<{marginRight?: string}>`
   font-size: 14px;
   font-weight: 400;
-  margin-right: 47px;
+  margin-right: ${({marginRight}) => marginRight ?? '47px'};
   width: 80px;
 `
 const ErrorMessageBox = styled.div`
-  margin-top: 5px;
+  height: 10px;
+  margin-top: 10px;
   margin-left: 13rem;
   font-size: 10px;
   color: red;
@@ -71,4 +77,9 @@ const ErrorMessageBox = styled.div`
   @media (max-width: 390px) {
     margin-left: 0;
   }
+`
+
+const NoError = styled.div`
+  margin-top: 10px;
+  height: 10px;
 `

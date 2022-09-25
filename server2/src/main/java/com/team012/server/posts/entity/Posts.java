@@ -46,6 +46,8 @@ public class Posts {
 
     private Integer likesCount;
 
+    private Double avgScore;
+
     // 이미지 업로드 테이블
 
     @OneToMany(mappedBy = "posts", cascade = CascadeType.ALL)
@@ -61,16 +63,17 @@ public class Posts {
     @Builder
     public Posts(String title, String content,
                  String latitude, String longitude,
-                 String address, String detailAddress,Integer roomCount,
-                 Long companyId) {
+                 String address, String detailAddress, Integer roomCount,
+                 Long companyId, Double avgScore) {
         this.title = title;
         this.content = content;
         this.latitude = latitude;
         this.longitude = longitude;
         this.address = address;
         this.detailAddress = detailAddress;
-        this.roomCount = roomCount; //add
+        this.roomCount = roomCount; // add
         this.companyId = companyId;
+        this.avgScore = avgScore; // add
 
     }
 }

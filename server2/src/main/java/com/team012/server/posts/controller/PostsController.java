@@ -10,6 +10,8 @@ import com.team012.server.posts.dto.PostsDto;
 import com.team012.server.posts.entity.Posts;
 import com.team012.server.posts.mapper.PostsMapper;
 import com.team012.server.posts.service.PostsService;
+import com.team012.server.review.entity.Review;
+import com.team012.server.review.service.ReviewService;
 import com.team012.server.utils.config.userDetails.PrincipalDetails;
 import com.team012.server.utils.response.MultiResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +32,7 @@ public class PostsController {
 
     private final CompanyService companyService;
     private final PostsService postsService;
+    private final ReviewService reviewService;
     private final RoomService roomService;
     private final TagService tagService;
     private final ServiceTagService serviceTagService;
@@ -91,18 +94,28 @@ public class PostsController {
         return new ResponseEntity<>(mapper.postsToResponseDto(response, roomService), HttpStatus.OK);
     }
 
+    // 게시판 상세조회
     @GetMapping("/{id}")
-    public ResponseEntity get(@PathVariable("id") Long id) {
-
+    public ResponseEntity get(@PathVariable("id") Long id,
+                              @RequestParam Integer page,
+                              @RequestParam Integer size) {
         Posts response = postsService.findById(id);
 
-        return new ResponseEntity<>(mapper.postsToResponseDto(response, roomService), HttpStatus.OK);
+        // 평균값 넣어주기
+//        response.setAvgScore(postsAvgScoreService.averageCompanyScore(id));
+//        postsAvgScoreService.averageCompanyScore(id);
+        // 작성된 리뷰 리스트 페이징처리 해서 넣어주기
+        List<Review> reviewPage = reviewService.findByPage(page - 1, size).getContent();
+
+        return new ResponseEntity<>(mapper.postsToPostsViewDto(response, roomService, reviewPage), HttpStatus.OK);
     }
 
+    // 메인페이지 조회 (별점 순으로 기준해서 정렬)
     @GetMapping
     public ResponseEntity gets(@RequestParam int page,
                                @RequestParam int size) {
-        Page<Posts> postsPage = postsService.findByPage(page - 1, size);
+        // avgScore 기준으로 정렬된 페이징 처리
+        Page<Posts> postsPage = postsService.mainPageAvgScoreView(page - 1, size);
         List<Posts> postsList = postsPage.getContent();
 
         return new ResponseEntity<>(new MultiResponseDto<>(mapper.postsToResponseDtos(postsList, roomService), postsPage), HttpStatus.OK);

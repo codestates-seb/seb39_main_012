@@ -37,23 +37,8 @@ public class ReservationController {
         Page<Reservation> reservationPage= reservationService.getReservation(companyId, page -1, size);
         List<Reservation> reservationList = reservationPage.getContent();
 
-
         return new ResponseEntity<>(new MultiResponseDto<>(reservationList, reservationPage), HttpStatus.OK);
     }
-
-    // 예약하기 API (고객기준)
-//    @PostMapping("/book")
-//    public ResponseEntity bookReservation(@RequestBody ReservationDto.Post dto) {
-//
-//        Reservation reservation = reservationService.bookReservation(dto);
-//        ReservationDto.Response response =
-//                ReservationDto.Response
-//                        .builder()
-//                        .message("예약 성공")
-//                        .build();
-//
-//        return new ResponseEntity<>(response, HttpStatus.CREATED);
-//    }
 
     // 예약확정 API (회사기준)
     @GetMapping("/confirm/{reservationId}")
@@ -62,13 +47,6 @@ public class ReservationController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-    // 예약수정 API (고객기준)
-//    @PatchMapping("/edit")
-//    public ResponseEntity editReservation(ReservationDto.Patch dto) {
-//
-//        return null;
-//    }
 
     // 예약취소 API (회사) --> 삭제
     @DeleteMapping("/cancel/{reservationId}")

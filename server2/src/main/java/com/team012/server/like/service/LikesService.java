@@ -4,9 +4,10 @@ import com.team012.server.like.entity.Likes;
 import com.team012.server.like.repository.LikesRepository;
 import com.team012.server.posts.entity.Posts;
 import com.team012.server.posts.service.PostsService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 @Transactional
 @AllArgsConstructor
@@ -15,6 +16,7 @@ public class LikesService {
 
     private final LikesRepository likeRepository;
     private final PostsService postsService;
+
     public boolean booleanLike(Long usersId, Long postsId) {
 
 

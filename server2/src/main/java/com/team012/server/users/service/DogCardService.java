@@ -74,6 +74,10 @@ public class DogCardService {
 
     }
 
+    public void deleteDogCard(Long dogCardId) {
+        dogCardRepository.deleteById(dogCardId);
+    }
+
     // 강아지 큐카드 유저 아이디를 통한 조회
     @Transactional(readOnly = true)
     public List<DogCard> getListDogCard(Long userId) {
