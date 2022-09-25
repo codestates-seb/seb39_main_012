@@ -8,8 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 @Transactional
-@Service
 @RequiredArgsConstructor
+@Service
 public class UsersManageReviewService {
 
     private final ReviewService reviewService;

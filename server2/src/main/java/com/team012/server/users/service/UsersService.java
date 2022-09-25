@@ -12,8 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 @Transactional
-@Service
 @RequiredArgsConstructor
+@Service
 public class UsersService {
     private final UsersRepository usersRepository;
 

@@ -5,9 +5,8 @@ import com.team012.server.company.reply.repository.CompanyReplyRepository;
 import com.team012.server.company.reply.dto.CompanyReplyDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-@Service
 @Transactional
+@Service
 public class CompanyReplyService {
 
     private final CompanyReplyRepository companyReplyRepository;

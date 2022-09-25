@@ -12,8 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Optional;
 @Transactional
-@Service
 @RequiredArgsConstructor
+@Service
 public class DogCardService {
 
     private final DogCardRepository dogCardRepository;

@@ -12,6 +12,7 @@ import com.team012.server.review.entity.ReviewImg;
 import com.team012.server.review.repository.ReviewImgRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -26,8 +27,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 @Transactional
 @RequiredArgsConstructor
-@Service
 @Slf4j
+@Service
 public class AwsS3Service {
 
     private final AmazonS3Client amazonS3Client;
@@ -78,8 +79,7 @@ public class AwsS3Service {
                     .withCannedAcl(CannedAccessControlList.PublicRead));
         } catch (Exception e) {
             log.error("Can not upload image, ", e);
-            return "url";
-//            throw new FileUploadException();
+            throw new FileUploadException();
         }
         String url = amazonS3Client.getUrl(bucketName, fileName).toString();
 

@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-@Service
 @RequiredArgsConstructor
+@Service
 public class UsersManageCompanyService {
 
     private final UsersRepository usersRepository;

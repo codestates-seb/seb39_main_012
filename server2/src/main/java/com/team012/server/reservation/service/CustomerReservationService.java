@@ -28,8 +28,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 @Transactional
 @Slf4j
-@Service
 @RequiredArgsConstructor
+@Service
 public class CustomerReservationService {
     //고객 기준
 
@@ -76,7 +76,7 @@ public class CustomerReservationService {
         Integer count = 0;
         Set<String> set = dto.getMap().keySet();
         for(String s : set) { //예약할 마리 수 및 1박 당 가격
-            Room room = roomService.findRoomByPostsIdAndSize(postsId ,s);
+            Room room = roomService.findRoomByPostsIdAndSize(postsId ,s); //리스트로 list.get(0)에는 roomId, list.get(1)에는 count넣을 수 있는지 프론트와 상의하기
             count += dto.getMap().get(s); //예약할 마리 수
             price += room.getPrice() * count; //1박 당 가격
         }

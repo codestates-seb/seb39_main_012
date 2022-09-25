@@ -11,10 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-@Slf4j
-@Service
-@RequiredArgsConstructor
+
 @Transactional
+@Slf4j
+@RequiredArgsConstructor
+@Service
 public class PostsImgService {
     private final PostsImgRepository imgRepository;
     private final AwsS3Service awsS3Service;

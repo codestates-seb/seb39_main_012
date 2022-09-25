@@ -16,9 +16,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 @Transactional
-@Service
-@RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
+@Service
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;

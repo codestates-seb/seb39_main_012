@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-@Service
 @AllArgsConstructor
+@Service
 public class LikesService {
 
     private final LikesRepository likeRepository;

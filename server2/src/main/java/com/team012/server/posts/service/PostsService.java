@@ -18,9 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-
-@RequiredArgsConstructor
 @Transactional
+@RequiredArgsConstructor
 @Service
 public class PostsService {
 
