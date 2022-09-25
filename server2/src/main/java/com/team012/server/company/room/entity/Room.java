@@ -1,18 +1,15 @@
 package com.team012.server.company.room.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.team012.server.users.entity.Users;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,20 +21,7 @@ public class Room {
     @Column(name = "price") // 두당 가격
     private Integer price;
 
-    @ManyToOne
-    @JoinColumn(name = "users_id")
-    @JsonIgnore
-    private Users users;
-
     @Column(name = "posts_id")
     private Long postsId;
-
-
-    @Builder
-    public Room(String size,Integer price, Long postsId) {
-        this.size = size;
-        this.price = price;
-        this.postsId = postsId;
-    }
 
 }

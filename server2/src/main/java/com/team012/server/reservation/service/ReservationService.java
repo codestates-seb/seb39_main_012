@@ -2,6 +2,7 @@ package com.team012.server.reservation.service;
 
 import com.team012.server.reservation.repository.ReservationRepository;
 import com.team012.server.reservation.entity.Reservation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -10,18 +11,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Service
+@RequiredArgsConstructor
 public class ReservationService {
 
     private final ReservationRepository reservationRepository;
 
-    public ReservationService(ReservationRepository reservationRepository) {
-        this.reservationRepository = reservationRepository;
-    }
-
     // 회사별 예약 조회
     @Transactional(readOnly = true)
     public Page<Reservation> getReservation(Long companyId, Integer page, Integer size) {
-
         // id 기준으로 내림차순 정렬
         Page<Reservation> reservation = reservationRepository.findByCompanyId(companyId,
                 PageRequest.of(page, size, Sort.by("usersId").descending()));

@@ -19,6 +19,7 @@ public class PostsImg {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "file_name")
     private String fileName;
 
     @Column(name = "img_url")

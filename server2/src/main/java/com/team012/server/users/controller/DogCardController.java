@@ -14,7 +14,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-@RequestMapping("/v1/dogCard")
+@RequestMapping("/v1/customer/dogCard")
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -23,6 +23,7 @@ public class DogCardController {
     private final DogCardMapper mapper;
     private final DogCardService dogCardService;
 
+    // 강아지 큐카드 생성
     @PostMapping("/create")
     public ResponseEntity createCard(@RequestPart(value = "dogCardDto") DogCardDto.Post dogCardDto,
                                      @RequestPart(value = "file") MultipartFile file,
@@ -41,6 +42,7 @@ public class DogCardController {
         return new ResponseEntity<>(new SingleResponseDto<>("create success"), HttpStatus.CREATED);
     }
 
+    // 강아지 큐카드 수정
     @PatchMapping("/{dog-card-id}")
     public ResponseEntity patchCard(@PathVariable("dog-card-id") long dogCardId,
                                     @RequestPart(value = "dogCardDto") DogCardDto.Post dogCardDto,
@@ -55,6 +57,7 @@ public class DogCardController {
                 ("patch success"), HttpStatus.CREATED);
     }
 
+    // 강아지 카드 상세 조회
     @GetMapping("/{dog-card-id}")
     public ResponseEntity findCard(@PathVariable("dog-card-id") long dogCardId) {
 
@@ -62,6 +65,7 @@ public class DogCardController {
         return new ResponseEntity<>(new SingleResponseDto(response), HttpStatus.OK);
     }
 
+    // 강아지 카드 삭제
     @DeleteMapping("/{dogCardId}")
     public ResponseEntity deleteCard(@PathVariable("dogCardId") Long dogCardId) {
 

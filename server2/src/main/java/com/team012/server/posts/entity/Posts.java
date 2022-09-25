@@ -35,21 +35,31 @@ public class Posts {
     @Column(name = "content")
     private String content;
 
+    @Column(name = "latitude")
     private String latitude;
+
+    @Column(name = "longitude")
     private String longitude;
+
+    @Column(name = "address")
     private String address;
+
+    @Column(name = "detail_address")
     private String detailAddress;
 
+    @Column(name = "company_id")
     private Long companyId;
 
+    @Column(name = "room_count")
     private Integer roomCount; //room에 count없에는 대신 추가(전체 방의 갯수)
 
+    @Column(name = "likes_count")
     private Integer likesCount;
 
+    @Column(name = "avg_score")
     private Double avgScore;
 
     // 이미지 업로드 테이블
-
     @OneToMany(mappedBy = "posts", cascade = CascadeType.ALL)
     @JsonManagedReference  // 순환참조 방지(...)
     private List<PostsImg> postsImgList = new ArrayList<>();
