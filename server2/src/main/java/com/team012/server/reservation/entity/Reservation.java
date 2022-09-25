@@ -42,10 +42,13 @@ public class Reservation implements Comparable<Reservation> {
     @Column(name = "status")
     private String status = "미정";
 
+    @Column(name = "users_id")
     private Long usersId;
 
+    @Column(name = "posts_id")
     private Long postsId;
 
+    @Column(name = "dog_count")
     private Integer dogCount; //예약된 강아지 수
 
     @ElementCollection(fetch = FetchType.LAZY)

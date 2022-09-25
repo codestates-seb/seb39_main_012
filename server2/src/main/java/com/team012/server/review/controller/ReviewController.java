@@ -19,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController
-@RequestMapping("/v1/customer")
+@RequestMapping("/v1/customer/review")
 @RequiredArgsConstructor
 public class ReviewController {
 
@@ -27,9 +27,8 @@ public class ReviewController {
 
     private final PostsAvgScoreService postsAvgScoreService;
 
-
     // 고객이 업체 리뷰작성 API (임시)
-    @PostMapping("/review/write")
+    @PostMapping("/write")
     public ResponseEntity postReview(@RequestPart(value = "dto") ReviewCreateRequestDto dto,
                                      @RequestPart(value = "multipartFile") List<MultipartFile> multipartFile,
                                      @AuthenticationPrincipal PrincipalDetails principalDetails) {
@@ -54,7 +53,7 @@ public class ReviewController {
 
 
     // 고객이 업체 리뷰수정 API (고객 마이페이지에서 수정)
-    @PatchMapping("/review/update/{reviewId}")
+    @PatchMapping("/update/{reviewId}")
     public ResponseEntity updateReview(@PathVariable("reviewId") Long id,
                                        @RequestPart(value = "dto") ReviewPatchRequestDto dto,
                                        @RequestPart(value = "multipartFile") List<MultipartFile> multipartFile) {

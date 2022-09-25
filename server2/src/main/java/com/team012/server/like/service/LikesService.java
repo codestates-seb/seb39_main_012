@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 @Transactional
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class LikesService {
 
@@ -37,17 +37,17 @@ public class LikesService {
     }
 
     @Transactional(readOnly = true)
-    private boolean isNotAlreadyLike(Long usersId, Long postsId) {
+    public boolean isNotAlreadyLike(Long usersId, Long postsId) {
         return likeRepository.findByUsersIdAndPostsId(usersId, postsId).isEmpty();
     }
 
     @Transactional(readOnly = true)
-    private boolean isAlreadyLike(long likesId) {
+    public boolean isAlreadyLike(long likesId) {
         return likeRepository.findById(likesId).isPresent();
     }
 
     @Transactional(readOnly = true)
-    private Likes findLikes(Long usersId, Long postsId) {
+    public Likes findLikes(Long usersId, Long postsId) {
         return likeRepository.findByUsersIdAndPostsId(usersId, postsId).orElse(null);
     }
 }

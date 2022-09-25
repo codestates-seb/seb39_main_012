@@ -26,7 +26,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RequiredArgsConstructor
-@RequestMapping("/v1/posts")
+@RequestMapping("/v1/company/posts")
 @RestController
 public class PostsController {
 
@@ -101,9 +101,6 @@ public class PostsController {
                               @RequestParam Integer size) {
         Posts response = postsService.findById(id);
 
-        // 평균값 넣어주기
-//        response.setAvgScore(postsAvgScoreService.averageCompanyScore(id));
-//        postsAvgScoreService.averageCompanyScore(id);
         // 작성된 리뷰 리스트 페이징처리 해서 넣어주기
         List<Review> reviewPage = reviewService.findByPage(page - 1, size).getContent();
 

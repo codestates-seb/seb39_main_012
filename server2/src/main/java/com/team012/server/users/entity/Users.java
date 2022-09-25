@@ -1,8 +1,8 @@
 package com.team012.server.users.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.team012.server.users.entity.DogCard;
 import com.team012.server.utils.baseEntity.BaseEntity;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +14,9 @@ import java.util.List;
 
 @Entity
 @Getter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class Users extends BaseEntity {
 
     @Id
@@ -41,17 +43,6 @@ public class Users extends BaseEntity {
     @OneToMany(mappedBy = "users")
     @JsonManagedReference
     private List<DogCard> dogCardList;
-
-    @Builder
-    public Users(String email, String password,
-                 String username, String phone,
-                 String roles) {
-        this.email = email;
-        this.password = password;
-        this.username = username;
-        this.phone = phone;
-        this.roles = roles;
-    }
 
     public List<String> getRoleList() {
         if (this.roles.length() > 0) {
