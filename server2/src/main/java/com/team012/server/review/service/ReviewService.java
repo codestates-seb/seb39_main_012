@@ -1,5 +1,8 @@
 package com.team012.server.review.service;
 
+import com.team012.server.posts.entity.Posts;
+import com.team012.server.posts.service.PostsAvgScoreService;
+import com.team012.server.posts.service.PostsService;
 import com.team012.server.review.dto.ReviewCreateRequestDto;
 import com.team012.server.review.dto.ReviewPatchRequestDto;
 import com.team012.server.review.entity.Review;
@@ -10,6 +13,10 @@ import com.team012.server.review.entity.ReviewImg;
 import com.team012.server.users.entity.Users;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,11 +26,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class ReviewService {
-
     private final ReviewRepository reviewRepository;
-
     private final ReviewImgRepository reviewImgRepository;
-
     private final AwsS3Service awsS3Service;
 
     public Review createReview(ReviewCreateRequestDto dto, List<MultipartFile> files, Users writeUsers) {
@@ -77,5 +81,12 @@ public class ReviewService {
 
     public List<Review> getListReview(Long id) {
         return reviewRepository.findByUserId(id);
+    }
+
+    // 페이징 처리
+    public Page<Review> findByPage(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "id");
+
+        return reviewRepository.findAll(pageable);
     }
 }

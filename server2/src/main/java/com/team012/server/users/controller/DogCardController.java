@@ -38,20 +38,18 @@ public class DogCardController {
         log.info("dogImageUrl = {}", dogCard.getPhotoImgUrl());
 
 
-        return new ResponseEntity<>(new SingleResponseDto<>
-                ("create success"), HttpStatus.CREATED);
+        return new ResponseEntity<>(new SingleResponseDto<>("create success"), HttpStatus.CREATED);
     }
 
     @PatchMapping("/{dog-card-id}")
     public ResponseEntity patchCard(@PathVariable("dog-card-id") long dogCardId,
                                     @RequestPart(value = "dogCardDto") DogCardDto.Post dogCardDto,
                                     @RequestPart(value = "file") MultipartFile file,
-                                    @AuthenticationPrincipal PrincipalDetails principalDetails
-    ) {
+                                    @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
         DogCard dogCard = mapper.dogDtoToDogCard(dogCardDto);
 
-        dogCardService.updateDogCard(dogCardId,dogCard, file, principalDetails.getUsers());
+        dogCardService.updateDogCard(dogCardId, dogCard, file, principalDetails.getUsers());
 
         return new ResponseEntity<>(new SingleResponseDto<>
                 ("patch success"), HttpStatus.CREATED);
@@ -62,6 +60,16 @@ public class DogCardController {
 
         DogCardDto.Response response = mapper.dogCardToDtoResponse(dogCardService.findById(dogCardId));
         return new ResponseEntity<>(new SingleResponseDto(response), HttpStatus.OK);
+    }
 
+    @DeleteMapping("/{dogCardId}")
+    public ResponseEntity deleteCard(@PathVariable("dogCardId") Long dogCardId) {
+
+        DogCardDto.Message response = DogCardDto.Message
+                .builder()
+                .message("삭제완료..!")
+                .build();
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

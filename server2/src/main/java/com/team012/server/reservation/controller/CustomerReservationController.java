@@ -28,6 +28,8 @@ public class CustomerReservationController {
                                             @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
         Long userId = principalDetails.getUsers().getId();
+
+        // 예약
         CreateReservationDto createReservationDto
                 = customerReservationService.registerReservation(registerReservationDto, userId, postsId);
 
@@ -90,6 +92,12 @@ public class CustomerReservationController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    // 예약 수정 API 생성이 어딘지 물어보고 하기
+    @PatchMapping("/{reservationId}")
+    public ResponseEntity updateReservation(@PathVariable("reservationId") Long id) {
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @GetMapping("/test")
     public ResponseEntity<Integer> test(@RequestParam String checkIn,
                                @RequestParam String checkOut,
@@ -97,5 +105,6 @@ public class CustomerReservationController {
         Integer find = customerReservationService.findReservations(checkIn, checkOut, companyId);
         return new ResponseEntity<>(find, HttpStatus.OK);
     }
+
 
 }

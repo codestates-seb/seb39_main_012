@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping
-@RequiredArgsConstructor
+@RequestMapping("/v1")
 @Slf4j
+@RequiredArgsConstructor
 public class LikesController {
     private final LikesService likeService;
 
@@ -27,11 +27,11 @@ public class LikesController {
         boolean result = false;
 
         if (principal != null) {
-            result = likeService.booleanLike(principal.getUsers().getId(),postsId);
+            result = likeService.booleanLike(principal.getUsers().getId(), postsId);
         }
 
         return result ?
                 new ResponseEntity<>("좋아요 추가", HttpStatus.OK) :
-                new ResponseEntity<>("좋아요 삭제",HttpStatus.BAD_REQUEST);
+                new ResponseEntity<>("좋아요 삭제", HttpStatus.BAD_REQUEST);
     }
 }

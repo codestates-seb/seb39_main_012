@@ -18,8 +18,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class PostsService {
 
     private final PostsRepository postsRepository;
@@ -27,6 +27,7 @@ public class PostsService {
     private final AwsS3Service awsS3Service;
 
     public Posts save(PostsDto.PostDto post, List<MultipartFile> files, Long companyId) {
+
         Posts posts = Posts.builder()
                 .title(post.getTitle())
                 .content(post.getContent())
@@ -36,10 +37,10 @@ public class PostsService {
                 .address(post.getCoordinate().get(2))
                 .detailAddress(post.getCoordinate().get(3))
                 .roomCount(post.getRoomCount())//add
+                .avgScore(0.0) // --> 처음 평균값은 0.0;
                 .build();
 
 //        Optional<Posts> find = postsRepository.findByUsersId(userId);
-
 
         List<PostsImg> lists = awsS3Service.convertPostImg(files);
 
@@ -56,7 +57,7 @@ public class PostsService {
         Long postsId = post.getId();
         Posts findPosts = findById(postsId);
 
-        if(!Objects.equals(findPosts.getCompanyId(), companyId)) throw new RuntimeException("companyId 일치하지 않음");
+        if (!Objects.equals(findPosts.getCompanyId(), companyId)) throw new RuntimeException("companyId 일치하지 않음");
 
         Optional.ofNullable(post.getCoordinate().get(0)).ifPresent(findPosts::setLatitude);
         Optional.ofNullable(post.getCoordinate().get(1)).ifPresent(findPosts::setLongitude);
@@ -98,12 +99,21 @@ public class PostsService {
 
     public void delete(Long postsId, Long companyId) {
         Posts posts = findById(postsId);
-        if(posts.getCompanyId() != companyId) throw new RuntimeException("companyId가 일치하지 않음");
+        if (posts.getCompanyId() != companyId) throw new RuntimeException("companyId가 일치하지 않음");
         awsS3Service.deleteFile(posts.getPostsImgList());
         postsRepository.delete(posts);
     }
 
     public void savedLikesCount(Posts posts) {
+        postsRepository.save(posts);
+    }
+
+    public Page<Posts> mainPageAvgScoreView(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "avgScore");
+        return postsRepository.findAll(pageable);
+    }
+
+    public void save(Posts posts) {
         postsRepository.save(posts);
     }
 }

@@ -1,5 +1,7 @@
 package com.team012.server.users.controller;
 
+import com.team012.server.reservation.entity.Reservation;
+import com.team012.server.reservation.service.ReservationService;
 import com.team012.server.review.entity.Review;
 import com.team012.server.users.dto.CustomerProfileViewResponseDto;
 import com.team012.server.users.dto.CustomerSignUpRequestDto;
@@ -13,6 +15,7 @@ import com.team012.server.users.service.UsersManageReviewService;
 import com.team012.server.users.service.UsersService;
 import com.team012.server.utils.config.userDetails.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -26,10 +29,12 @@ import java.util.List;
 @RequestMapping("/v1/users")
 @Validated
 @RequiredArgsConstructor
+@Slf4j
 public class UsersController {
 
     private final UsersService usersService;
     private final DogCardService dogCardService;
+    private final ReservationService reservationService;
     private final UsersManageReviewService usersReviewManageReviewService;
     private final UsersManageCompanyService usersManageCompanyService;
 
@@ -65,9 +70,11 @@ public class UsersController {
     @GetMapping("/customer/profile")
     public ResponseEntity getCustomer(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         Long userId = principalDetails.getUsers().getId();
+        log.info("userId : {}", userId);
         Users findUser = usersService.findUsersById(userId);
         List<DogCard> dogCardList = dogCardService.getListDogCard(userId);
         List<Review> reviewList = usersReviewManageReviewService.getListReview(userId);
+        List<Reservation> reservationList = reservationService.getReservation(userId, 0, 6).getContent();
 
         CustomerProfileViewResponseDto response
                 = CustomerProfileViewResponseDto
@@ -75,6 +82,7 @@ public class UsersController {
                 .users(findUser)
                 .dogCardList(dogCardList)
                 .reviewList(reviewList)
+                .reservationList(reservationList)
                 .build();
 
         return new ResponseEntity<>(response, HttpStatus.OK);
