@@ -18,10 +18,9 @@ import java.util.List;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface PostsMapper {
 
-    default PostsDto.ResponseDto postsToResponseDto(Posts posts, RoomService roomService) {
+    default PostsDto.ResponseDto postsToResponseDto(Posts posts, List<Room> roomList) {
 
         List<String> address = List.of(posts.getLatitude(), posts.getLongitude(), posts.getAddress(), posts.getDetailAddress());
-        List<Room> roomList = roomService.findAllRoom(posts.getId());
         Long companyId = posts.getCompanyId();
 
         PostsDto.ResponseDto responseDto = PostsDto.ResponseDto.builder()
@@ -87,11 +86,10 @@ public interface PostsMapper {
 
     // 상세페이지 조회를 위한 디폴트 메서드
     default PostsDto.ResponseDto postsToPostsViewDto(Posts posts,
-                                                     RoomService roomService,
+                                                     List<Room> roomList,
                                                      List<Review> reviewList) {
 
         List<String> address = List.of(posts.getLatitude(), posts.getLongitude(), posts.getAddress(), posts.getDetailAddress());
-        List<Room> roomList = roomService.findAllRoom(posts.getId());
         Long companyId = posts.getCompanyId();
 
         PostsDto.ResponseDto responseDto = PostsDto.ResponseDto.builder()

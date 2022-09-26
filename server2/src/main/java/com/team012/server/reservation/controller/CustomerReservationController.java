@@ -30,17 +30,17 @@ public class CustomerReservationController {
         Long userId = principalDetails.getUsers().getId();
 
         // 예약
-        CreateReservationDto createReservationDto
+        Reservation reservation
                 = customerReservationService.registerReservation(registerReservationDto, userId, postsId);
 
-        return new ResponseEntity<>(createReservationDto, HttpStatus.OK);
+        return new ResponseEntity<>(reservation, HttpStatus.OK);
     }
 
     //계산 및 예약 가능 여부 확인
     @PostMapping("/{postsId}/calculate")
     public ResponseEntity<Integer> calculatePrice(@PathVariable("postsId") Long postsId,
                                                                @RequestBody RegisterReservationDto dto) {
-        Integer price = customerReservationService.calculatePriceAndAvailableBooking(dto, postsId);
+        Integer price = customerReservationService.calculatePriceAndAvailableBooking(dto, postsId).get(1);
         return new ResponseEntity<>(price, HttpStatus.OK);
     }
 
@@ -52,11 +52,11 @@ public class CustomerReservationController {
 
         Long userId = principalDetails.getUsers().getId();
 
-        CreateReservationDto createReservationDto = dto.getCreateReservationDto();
+        Reservation reservation = dto.getReservation();
         ReservationUserInfoDto reservationUserInfoDto = dto.getReservationUserInfoDto();
 
         ResponseReservationDto responseReservationDto
-                = customerReservationService.createReservation(createReservationDto, userId, reservationUserInfoDto);
+                = customerReservationService.createReservation(reservation, userId, reservationUserInfoDto);
         return new ResponseEntity<>(responseReservationDto, HttpStatus.CREATED);
     }
 
@@ -98,13 +98,6 @@ public class CustomerReservationController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/test")
-    public ResponseEntity<Integer> test(@RequestParam String checkIn,
-                               @RequestParam String checkOut,
-                               @RequestParam Long companyId) {
-        Integer find = customerReservationService.findReservations(checkIn, checkOut, companyId);
-        return new ResponseEntity<>(find, HttpStatus.OK);
-    }
 
 
 }

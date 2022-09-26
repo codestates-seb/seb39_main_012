@@ -42,8 +42,6 @@ public class PostsService {
                 .avgScore(0.0) // --> 처음 평균값은 0.0;
                 .build();
 
-//        Optional<Posts> find = postsRepository.findByUsersId(userId);
-
         List<PostsImg> lists = awsS3Service.convertPostImg(files);
 
         posts.setPostsImgList(lists);
@@ -89,8 +87,7 @@ public class PostsService {
         Optional<Posts> findCompanyPosts
                 = postsRepository.findById(postsId);
 
-        return findCompanyPosts.orElseThrow(()
-                -> new RuntimeException("Posts Not Found"));
+        return findCompanyPosts.orElseThrow(() -> new RuntimeException("Posts Not Found"));
     }
     @Transactional(readOnly = true)
     public Page<Posts> findByPage(int page, int size) {
