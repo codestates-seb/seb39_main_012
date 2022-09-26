@@ -2,6 +2,7 @@ package com.team012.server.posts.controller;
 
 import com.team012.server.company.entity.Company;
 import com.team012.server.company.room.dto.RoomDto;
+import com.team012.server.company.room.entity.Room;
 import com.team012.server.company.room.service.RoomService;
 import com.team012.server.company.service.CompanyService;
 import com.team012.server.posts.Tag.HashTag.service.TagService;
@@ -9,6 +10,7 @@ import com.team012.server.posts.Tag.ServiceTag.service.ServiceTagService;
 import com.team012.server.posts.dto.PostsDto;
 import com.team012.server.posts.entity.Posts;
 import com.team012.server.posts.mapper.PostsMapper;
+import com.team012.server.posts.service.PostsSearchService;
 import com.team012.server.posts.service.PostsService;
 import com.team012.server.review.entity.Review;
 import com.team012.server.review.service.ReviewService;
@@ -59,8 +61,9 @@ public class PostsController {
 
         tagService.saveCompanyPostsTags(tagService.saveOrFind(hashTag), response);
         serviceTagService.saveCompanyPostsTags(serviceTagService.saveOrFind(serviceTag), response);
+        List<Room> roomList1 = roomService.findAllRoom(response.getId());
 
-        return new ResponseEntity<>(mapper.postsToResponseDto(response, roomService), HttpStatus.CREATED);
+        return new ResponseEntity<>(mapper.postsToResponseDto(response, roomList1), HttpStatus.CREATED);
     }
 
     @PatchMapping("/{id}")
@@ -89,9 +92,9 @@ public class PostsController {
         serviceTagService.saveCompanyPostsTags(serviceTagService.saveOrFind(serviceTag), response);
 
         roomService.deleteAll(response.getId());
-        roomService.saveList(roomList, response.getId());
+        List<Room> roomList1 = roomService.saveList(roomList, response.getId());
 
-        return new ResponseEntity<>(mapper.postsToResponseDto(response, roomService), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.postsToResponseDto(response, roomList1), HttpStatus.OK);
     }
 
     // 게시판 상세조회
@@ -103,20 +106,12 @@ public class PostsController {
 
         // 작성된 리뷰 리스트 페이징처리 해서 넣어주기
         List<Review> reviewPage = reviewService.findByPage(page - 1, size).getContent();
+        List<Room> roomList = roomService.findAllRoom(id);
 
-        return new ResponseEntity<>(mapper.postsToPostsViewDto(response, roomService, reviewPage), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.postsToPostsViewDto(response, roomList, reviewPage), HttpStatus.OK);
     }
 
-    // 메인페이지 조회 (별점 순으로 기준해서 정렬)
-    @GetMapping
-    public ResponseEntity gets(@RequestParam int page,
-                               @RequestParam int size) {
-        // avgScore 기준으로 정렬된 페이징 처리
-        Page<Posts> postsPage = postsService.mainPageAvgScoreView(page - 1, size);
-        List<Posts> postsList = postsPage.getContent();
 
-        return new ResponseEntity<>(new MultiResponseDto<>(mapper.postsToResponseDtos(postsList, roomService), postsPage), HttpStatus.OK);
-    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable("id") Long id,

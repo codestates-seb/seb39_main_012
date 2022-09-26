@@ -23,10 +23,10 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     Page<Reservation> findByUsersIdAndWent(@Param("id") Long id,@Param("date") LocalDate date, Pageable pageable);
 
     //지정한 체크인과 체크아웃 사이에 호텔의 예약이 몇개 되어있는지 확인
-    @Query("select COALESCE(sum(r.dogCount),0) from Reservation r where r.companyId = :companyId and " +
-            "((:checkIn < r.checkIn and r.checkIn < :checkOut) or " +
-            "(:checkIn between r.checkIn and r.checkOut) or " +
-            "(:checkIn < r.checkIn and r.checkIn < :checkOut))") //COALESCE  -> 값이 없을 경우 두번째 파라미터를 리턴한다고 합니다...
-    Integer findByCheckInCheckOut(LocalDate checkIn, LocalDate checkOut, Long companyId);
+//    @Query("select COALESCE(sum(r.dogCount),0) from Reservation r where r.companyId = :companyId and " +
+//            "((:checkIn < r.checkIn and r.checkIn < :checkOut) or " +
+//            "(:checkIn between r.checkIn and r.checkOut) or " +
+//            "(:checkIn < r.checkIn and r.checkIn < :checkOut))") //COALESCE  -> 값이 없을 경우 두번째 파라미터를 리턴한다고 합니다...
+//    Integer findByCheckInCheckOut(LocalDate checkIn, LocalDate checkOut, Long companyId);
 
 }
