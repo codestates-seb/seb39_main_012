@@ -1,7 +1,7 @@
 package com.team012.server.reservation.controller;
 
 import com.team012.server.reservation.dto.*;
-import com.team012.server.reservation.entity.Reservation;
+import com.team012.server.reservation.entity.ReservList;
 import com.team012.server.reservation.service.CustomerReservationService;
 import com.team012.server.utils.config.userDetails.PrincipalDetails;
 import com.team012.server.utils.response.MultiResponseDto;
@@ -30,7 +30,7 @@ public class CustomerReservationController {
         Long userId = principalDetails.getUsers().getId();
 
         // 예약
-        Reservation reservation
+        ReservationCreateDto reservation
                 = customerReservationService.registerReservation(registerReservationDto, userId, postsId);
 
         return new ResponseEntity<>(reservation, HttpStatus.OK);
@@ -52,11 +52,11 @@ public class CustomerReservationController {
 
         Long userId = principalDetails.getUsers().getId();
 
-        Reservation reservation = dto.getReservation();
+        ReservationCreateDto reservationCreateDto = dto.getReservationCreateDto();
         ReservationUserInfoDto reservationUserInfoDto = dto.getReservationUserInfoDto();
 
         ResponseReservationDto responseReservationDto
-                = customerReservationService.createReservation(reservation, userId, reservationUserInfoDto);
+                = customerReservationService.createReservation(reservationCreateDto, userId,postsId, reservationUserInfoDto);
         return new ResponseEntity<>(responseReservationDto, HttpStatus.CREATED);
     }
 
@@ -65,8 +65,8 @@ public class CustomerReservationController {
     public ResponseEntity findReservationsBeforeCheckIn(@RequestParam int page, int size
                                                         ,@AuthenticationPrincipal PrincipalDetails principalDetails) {
         Long userId = principalDetails.getUsers().getId();
-        Page<Reservation> reservationList =  customerReservationService.findReservationList(userId,page -1, size);
-        List<Reservation> reservations = reservationList.getContent();
+        Page<ReservList> reservationList =  customerReservationService.findReservationList(userId,page -1, size);
+        List<ReservList> reservations = reservationList.getContent();
 
         return new ResponseEntity<>(new MultiResponseDto<>(reservations, reservationList), HttpStatus.OK);
     }
@@ -76,18 +76,18 @@ public class CustomerReservationController {
     public ResponseEntity findReservationAfterCheckOut(@RequestParam int page, int size
                                                         ,@AuthenticationPrincipal PrincipalDetails principalDetails) {
         Long userId = principalDetails.getUsers().getId();
-        Page<Reservation> reservationList =  customerReservationService.findReservationAfterCheckOutList(userId, page -1, size);
-        List<Reservation> reservations = reservationList.getContent();
+        Page<ReservList> reservationList =  customerReservationService.findReservationAfterCheckOutList(userId, page -1, size);
+        List<ReservList> reservations = reservationList.getContent();
 
         return new ResponseEntity<>(new MultiResponseDto<>(reservations, reservationList), HttpStatus.OK);
     }
 
-    //reservationId로 삭제
-    @DeleteMapping("/{reservationId}")
-    public ResponseEntity deleteReservation(@PathVariable("reservationId") Long reservationId,
+    //reservListId 로 삭제
+    @DeleteMapping("/{reservListId}")
+    public ResponseEntity deleteReservation(@PathVariable("reservListId") Long reservListId,
                                             @AuthenticationPrincipal PrincipalDetails principalDetails) {
         Long userId = principalDetails.getUsers().getId();
-        customerReservationService.deleteReservation(userId, reservationId);
+        customerReservationService.deleteReservation(userId, reservListId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

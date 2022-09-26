@@ -2,7 +2,7 @@ package com.team012.server.reservation.controller;
 
 import com.team012.server.company.service.CompanyService;
 import com.team012.server.reservation.dto.ReservationDto;
-import com.team012.server.reservation.entity.Reservation;
+import com.team012.server.reservation.entity.ReservList;
 import com.team012.server.reservation.service.ReservationService;
 import com.team012.server.utils.config.userDetails.PrincipalDetails;
 import com.team012.server.utils.response.MultiResponseDto;
@@ -34,8 +34,8 @@ public class ReservationController {
         Long findCompanyId = companyService.getCompany(principalDetails.getUsers().getId()).getId();
         if(companyId != findCompanyId) throw new RuntimeException("company가 일치하지 않음");
 
-        Page<Reservation> reservationPage= reservationService.getReservation(companyId, page -1, size);
-        List<Reservation> reservationList = reservationPage.getContent();
+        Page<ReservList> reservationPage= reservationService.getReservation(companyId, page -1, size);
+        List<ReservList> reservationList = reservationPage.getContent();
 
         return new ResponseEntity<>(new MultiResponseDto<>(reservationList, reservationPage), HttpStatus.OK);
     }

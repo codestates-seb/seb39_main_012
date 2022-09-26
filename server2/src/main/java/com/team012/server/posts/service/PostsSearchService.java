@@ -19,8 +19,6 @@ import java.time.format.DateTimeFormatter;
 public class PostsSearchService {
 
     private final PostsRepository postsRepository;
-    private final ReservationRepository reservationRepository;
-    private final PostsHashTagRepository postsHashTagRepository;
 
     //주소로 검색한 결과 페이지로 리턴
     public Page<Posts> findPostsByAddress(String address, int page, int size) {
