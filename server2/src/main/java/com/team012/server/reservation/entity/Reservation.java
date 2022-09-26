@@ -17,7 +17,7 @@ public class Reservation implements Comparable<Reservation> {
 
     @PrePersist
     public void prePersist() {
-        this.dogCount = this.dogCount == null? 0:this.dogCount;
+        this.dogCount = this.dogCount == null ? 0 : this.dogCount;
     }
 
     @Id
@@ -58,7 +58,11 @@ public class Reservation implements Comparable<Reservation> {
     private UserInfo userInfo; //예약 상세 페이지에 이름, 전화번호, 이메일을 적는 칸이 있어서 넣었습니다.
 
     @Builder
-    public Reservation(LocalDate checkIn, LocalDate checkOut, Integer totalPrice, Long companyId, String status, Long usersId, Long postsId, Integer dogCount, List<Long> dogIdList, UserInfo userInfo) {
+    public Reservation(LocalDate checkIn, LocalDate checkOut,
+                       Integer totalPrice, Long companyId,
+                       String status, Long usersId,
+                       Long postsId, Integer dogCount,
+                       List<Long> dogIdList, UserInfo userInfo) {
         this.checkIn = checkIn;
         this.checkOut = checkOut;
         this.totalPrice = totalPrice;

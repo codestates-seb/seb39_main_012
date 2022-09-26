@@ -22,11 +22,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+
 @Transactional
 @Slf4j
 @RequiredArgsConstructor
@@ -34,9 +34,9 @@ import java.util.*;
 public class CustomerReservationService {
     //고객 기준
     /*
-    *
-    * 예약 건수 세는 쿼리문에 문제가 있어 일단 그부분은 주석처리했습니다.
-    * */
+     *
+     * 예약 건수 세는 쿼리문에 문제가 있어 일단 그부분은 주석처리했습니다.
+     * */
 
     private final ReservationRepository reservationRepository;
     private final UsersService usersService;
@@ -56,8 +56,8 @@ public class CustomerReservationService {
         Integer totalPrice = calculatePriceAndAvailableBooking(dto, postsId).get(1);
 
         Reservation reservation = Reservation.builder()
-                .checkIn(LocalDate.parse(dto.getCheckIn(),DateTimeFormatter.ISO_LOCAL_DATE))
-                .checkOut(LocalDate.parse(dto.getCheckOut(),DateTimeFormatter.ISO_LOCAL_DATE))
+                .checkIn(LocalDate.parse(dto.getCheckIn(), DateTimeFormatter.ISO_LOCAL_DATE))
+                .checkOut(LocalDate.parse(dto.getCheckOut(), DateTimeFormatter.ISO_LOCAL_DATE))
                 .dogCount(totalDogCount)
                 .totalPrice(totalPrice)
                 .status("미정") //미정
@@ -73,7 +73,7 @@ public class CustomerReservationService {
         LocalDate checkOut = LocalDate.parse(strCheckOut, DateTimeFormatter.ISO_DATE);
 
         //당일 예약 불가 및 하루 전날 예약 불가
-        if(checkIn.isBefore(LocalDate.now().plusDays(1)) || checkOut.isBefore(LocalDate.now().plusDays(1))) {
+        if (checkIn.isBefore(LocalDate.now().plusDays(1)) || checkOut.isBefore(LocalDate.now().plusDays(1))) {
             throw new RuntimeException("당일예약 불가 및 오늘 이전 날짜 예약 불가");
         }
     }
@@ -86,17 +86,17 @@ public class CustomerReservationService {
         LocalDate checkOut = LocalDate.parse(dto.getCheckOut(), DateTimeFormatter.ISO_DATE);
 
         int price = 0;
-        Integer totalCount =0;
+        Integer totalCount = 0;
         Integer count = 0;
         Set<String> set = dto.getMap().keySet();
-        for(String s : set) { //예약할 마리 수 및 1박 당 가격
-            Room room = roomService.findRoomByPostsIdAndSize(postsId ,s); //리스트로 list.get(0)에는 roomId, list.get(1)에는 count넣을 수 있는지 프론트와 상의하기
+        for (String s : set) { //예약할 마리 수 및 1박 당 가격
+            Room room = roomService.findRoomByPostsIdAndSize(postsId, s); //리스트로 list.get(0)에는 roomId, list.get(1)에는 count넣을 수 있는지 프론트와 상의하기
 
             count = dto.getMap().get(s); //예약할 마리 수
             totalCount += count;
             price += room.getPrice() * count; //1박 당 가격
         }
-        System.out.println("count = "+ count);
+        System.out.println("count = " + count);
 
 //        Long companyId = postsService.findById(postsId).getCompanyId();
 //        Integer bookedCount = reservationRepository.findByCheckInCheckOut(checkIn, checkOut, companyId); //예약 되어있는 총 강아지 수
@@ -118,7 +118,7 @@ public class CustomerReservationService {
         return List.of(totalCount, totalPrice); //총 가격
     }
 
-    //예약 페이지 , 결제 페이지(예약 상세 페이지 ---> 예약 완료 페이지)
+    // 예약하기
     public ResponseReservationDto createReservation(Reservation reservation, Long userId, ReservationUserInfoDto reservationUserInfoDto) {
         Users users = usersService.findUsersById(userId); //validation check
         Posts posts = postsService.findById(reservation.getPostsId());
@@ -141,17 +141,24 @@ public class CustomerReservationService {
 
         reservationRepository.save(reservation);
 
+        // 예약을 할 때 마다 등록된 방의 수에서 강아지 수에 따라 값을 빼준다.
+        posts.setRoomCount(posts.getRoomCount() - reservation.getDogCount());
+
+        // DB 데이터 반영
+        postsService.save(posts);
+
+
         //개 카드 찾기
         List<Long> dogId = reservationUserInfoDto.getDogCardsId();
         List<DogCard> dogCards = new ArrayList<>();
-        for(Long i : dogId) {
+        for (Long i : dogId) {
             DogCard dogCard = dogCardService.findById(i);
             dogCards.add(dogCard);
         }
 
         //예약 완료 화면에 띄울 response
         ResponseReservationDto responseReservationDto = ResponseReservationDto.builder()
-                .address(posts.getAddress() + " "+ posts.getDetailAddress())
+                .address(posts.getAddress() + " " + posts.getDetailAddress())
                 .username(users.getUsername())
                 .phone(reservationUserInfoDto.getUserInfo().getPhone())
                 .checkIn(reservation.getCheckIn().format(DateTimeFormatter.ISO_LOCAL_DATE))
@@ -168,9 +175,10 @@ public class CustomerReservationService {
     public Page<Reservation> findReservationList(Long userId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "checkOut");
 
-        Page<Reservation> reservations =  reservationRepository.findByUsersId(userId,LocalDate.now(), pageable);
+        Page<Reservation> reservations = reservationRepository.findByUsersId(userId, LocalDate.now(), pageable);
         return reservations;
     }
+
     @Transactional(readOnly = true)
     public Page<Reservation> getReservation(Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "companyId");
@@ -184,7 +192,7 @@ public class CustomerReservationService {
     public Page<Reservation> findReservationAfterCheckOutList(Long userId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "checkOut");
 
-        Page<Reservation> reservations =  reservationRepository.findByUsersIdAndWent(userId, LocalDate.now(), pageable);
+        Page<Reservation> reservations = reservationRepository.findByUsersIdAndWent(userId, LocalDate.now(), pageable);
         return reservations;
 
     }
@@ -192,9 +200,9 @@ public class CustomerReservationService {
     //예약 취소
     public void deleteReservation(Long userId, Long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(() -> new RuntimeException("reservation not found"));
-        if(!Objects.equals(userId, reservation.getUsersId())) throw new RuntimeException("본인의 예약만 삭제 가능");
+        if (!Objects.equals(userId, reservation.getUsersId())) throw new RuntimeException("본인의 예약만 삭제 가능");
 
-        if(reservation.getCheckIn().until(LocalDate.now(),ChronoUnit.DAYS) < 1) {
+        if (reservation.getCheckIn().until(LocalDate.now(), ChronoUnit.DAYS) < 1) {
             throw new RuntimeException("예약 취소는 하루 전에만 가능합니다");
         }
 
