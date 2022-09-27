@@ -31,6 +31,16 @@ public class Reservation implements Comparable<Reservation> {
     @DateTimeFormat(pattern = "yyyy-mm-dd")
     private LocalDate reservationDate;
 
+    //checkIn : 11/1 ~ checkOut : 11/05
+    /*
+    * reservation1 11/1
+    * reservation2 11/2
+    * reservation3 11/3
+    * reservation4 11/4
+    *
+    *
+    * */
+
     private Integer dogCount;
 
     @ManyToOne

@@ -39,7 +39,7 @@ public class CustomerReservationController {
     //계산 및 예약 가능 여부 확인
     @PostMapping("/{postsId}/calculate")
     public ResponseEntity<Integer> calculatePrice(@PathVariable("postsId") Long postsId,
-                                                               @RequestBody RegisterReservationDto dto) {
+                                                  @RequestBody RegisterReservationDto dto) {
         Integer price = customerReservationService.calculatePriceAndAvailableBooking(dto, postsId).get(1);
         return new ResponseEntity<>(price, HttpStatus.OK);
     }
