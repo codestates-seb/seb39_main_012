@@ -1,5 +1,6 @@
 package com.team012.server.users.dto;
 
+import com.team012.server.reservation.entity.ReservList;
 import com.team012.server.reservation.entity.Reservation;
 import com.team012.server.review.entity.Review;
 import com.team012.server.users.entity.DogCard;
@@ -21,7 +22,7 @@ public class CustomerProfileViewResponseDto {
     private List<DogCard> dogCardList;
 
     // 예약 호캉스 내역
-    private List<Reservation> reservationList;
+    private List<ReservList> reservationList;
 
     // 다녀온 호캉스 내역??? 상태가 다른 호텔값을 따로 뽑아서 하는지????
 
