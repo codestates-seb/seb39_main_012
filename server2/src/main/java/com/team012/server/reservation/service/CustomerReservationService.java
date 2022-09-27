@@ -174,10 +174,10 @@ public class CustomerReservationService {
         reservationRepository.saveAll(dto.getReservationList());
 
         // 예약을 할 때 마다 등록된 방의 수에서 강아지 수에 따라 값을 빼준다.
-        posts.setRoomCount(posts.getRoomCount() - reservation.getDogCount());
+//        posts.setRoomCount(posts.getRoomCount() - reservation.getDogCount());
 
         // DB 데이터 반영
-        postsService.save(posts);
+//        postsService.save(posts);
 
 
         //개 카드 찾기
@@ -229,7 +229,7 @@ public class CustomerReservationService {
 
     }
 
-    //예약 취
+    //예약 취소
     public void deleteReservation(Long userId, Long reservedId) {
 
         Optional<ReservList> reservList= reservListRepository.findByUsersIdAndReservedId(userId, reservedId);

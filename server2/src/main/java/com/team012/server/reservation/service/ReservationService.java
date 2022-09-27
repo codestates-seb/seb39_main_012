@@ -23,11 +23,6 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final ReservListRepository reservListRepository;
 
-    // 게시글에 예약된 목록 단순 조회
-    public List<Reservation> getReservationList(Long postsId) {
-        return reservationRepository.findByPostsId(postsId);
-    }
-
     // 회사별 예약 조회
     @Transactional(readOnly = true)
     public Page<ReservList> getReservation(Long companyId, Integer page, Integer size) {
