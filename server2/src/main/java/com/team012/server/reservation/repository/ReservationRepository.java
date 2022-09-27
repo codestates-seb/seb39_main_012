@@ -13,7 +13,6 @@ import java.util.List;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
 
-
     @Query("select COALESCE(sum(r.dogCount),0) from Reservation r " +
             "where r.companyId = :companyId group by r.reservationDate " +
             "having r.reservationDate between :checkIn and :checkOut")
