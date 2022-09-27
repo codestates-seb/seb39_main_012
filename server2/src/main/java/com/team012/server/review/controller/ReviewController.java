@@ -1,12 +1,12 @@
 package com.team012.server.review.controller;
 
+import com.team012.server.utils.config.userDetails.PrincipalDetails;
 import com.team012.server.posts.entity.PostsAvgScore;
 import com.team012.server.posts.service.PostsAvgScoreService;
 import com.team012.server.review.dto.ReviewCreateRequestDto;
 import com.team012.server.review.dto.ReviewPatchRequestDto;
 import com.team012.server.review.dto.ReviewResponseDto;
 import com.team012.server.review.entity.Review;
-import com.team012.server.utils.config.userDetails.PrincipalDetails;
 import com.team012.server.review.service.ReviewService;
 import com.team012.server.users.entity.Users;
 import lombok.RequiredArgsConstructor;

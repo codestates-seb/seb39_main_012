@@ -2,9 +2,9 @@ package com.team012.server.posts.Tag.ServiceTag.service;
 
 import com.team012.server.posts.Tag.ServiceTag.entity.PostsServiceTag;
 import com.team012.server.posts.Tag.ServiceTag.entity.ServiceTag;
+import com.team012.server.posts.entity.Posts;
 import com.team012.server.posts.Tag.ServiceTag.repository.PostsServiceTagRepository;
 import com.team012.server.posts.Tag.ServiceTag.repository.serviceTagRepository;
-import com.team012.server.posts.entity.Posts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

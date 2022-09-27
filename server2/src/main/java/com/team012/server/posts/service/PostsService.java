@@ -1,7 +1,7 @@
 package com.team012.server.posts.service;
 
-import com.team012.server.posts.dto.PostsDto;
 import com.team012.server.posts.entity.Posts;
+import com.team012.server.posts.dto.PostsDto;
 import com.team012.server.posts.img.entity.PostsImg;
 import com.team012.server.posts.img.repository.PostsImgRepository;
 import com.team012.server.posts.repository.PostsRepository;

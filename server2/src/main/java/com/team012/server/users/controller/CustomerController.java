@@ -1,17 +1,15 @@
 package com.team012.server.users.controller;
 
 import com.team012.server.reservation.entity.ReservList;
-import com.team012.server.reservation.entity.Reservation;
 import com.team012.server.reservation.service.ReservationService;
 import com.team012.server.review.entity.Review;
-import com.team012.server.review.service.ReviewService;
-import com.team012.server.users.dto.CustomerProfileViewResponseDto;
 import com.team012.server.users.entity.DogCard;
+import com.team012.server.utils.config.userDetails.PrincipalDetails;
+import com.team012.server.users.dto.CustomerProfileViewResponseDto;
 import com.team012.server.users.entity.Users;
 import com.team012.server.users.service.DogCardService;
 import com.team012.server.users.service.UsersManageReviewService;
 import com.team012.server.users.service.UsersService;
-import com.team012.server.utils.config.userDetails.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

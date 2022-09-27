@@ -2,8 +2,8 @@ package com.team012.server.users.controller;
 
 import com.team012.server.users.dto.CustomerSignUpRequestDto;
 import com.team012.server.users.dto.UsersMessageResponseDto;
-import com.team012.server.users.dto.CompanySignUpRequestDto;
 import com.team012.server.users.service.UsersManageCompanyService;
+import com.team012.server.users.dto.CompanySignUpRequestDto;
 import com.team012.server.users.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

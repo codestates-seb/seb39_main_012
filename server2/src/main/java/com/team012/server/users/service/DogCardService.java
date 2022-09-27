@@ -2,8 +2,8 @@ package com.team012.server.users.service;
 
 import com.team012.server.users.entity.DogCard;
 import com.team012.server.users.entity.Users;
-import com.team012.server.users.repository.DogCardRepository;
 import com.team012.server.utils.aws.service.AwsS3Service;
+import com.team012.server.users.repository.DogCardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
