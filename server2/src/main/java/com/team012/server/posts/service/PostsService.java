@@ -11,10 +11,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -30,6 +34,10 @@ public class PostsService {
 
     public Posts save(PostsDto.PostDto post, List<MultipartFile> files, Long companyId) {
 
+        LocalTime checkIn = convertCheckInToTime(post.getCheckIn());
+        LocalTime checkOut = convertCheckOutToTime(post.getCheckOut());
+        validateCheckInCheckOut(checkIn, checkOut);
+
         Posts posts = Posts.builder()
                 .title(post.getTitle())
                 .content(post.getContent())
@@ -40,6 +48,8 @@ public class PostsService {
                 .detailAddress(post.getCoordinate().get(3))
                 .roomCount(post.getRoomCount())//add
                 .avgScore(0.0) // --> 처음 평균값은 0.0;
+                .checkIn(checkIn)
+                .checkOut(checkOut)
                 .build();
 
         List<PostsImg> lists = awsS3Service.convertPostImg(files);
@@ -67,6 +77,15 @@ public class PostsService {
         Optional.ofNullable(post.getContent()).ifPresent(findPosts::setContent);
         Optional.ofNullable(post.getRoomCount()).ifPresent(findPosts::setRoomCount); //add
 
+        if(post.getCheckIn() != null) {
+            LocalTime checkIn = convertCheckInToTime(post.getCheckIn());
+            findPosts.setCheckIn(checkIn);
+        }
+        if(post.getCheckOut() != null) {
+            LocalTime checkOut = convertCheckOutToTime(post.getCheckOut());
+            findPosts.setCheckOut(checkOut);
+        }
+        validateCheckInCheckOut(findPosts.getCheckIn(), findPosts.getCheckOut());
 
         if (multipartFile != null) {
 
@@ -114,5 +133,21 @@ public class PostsService {
 
     public void save(Posts posts) {
         postsRepository.save(posts);
+    }
+
+    private LocalTime convertCheckInToTime(String strCheckIn) {
+        strCheckIn = strCheckIn.trim();
+
+        return LocalTime.parse(strCheckIn, DateTimeFormatter.ofPattern("HH:mm"));
+    }
+
+    private LocalTime convertCheckOutToTime(String strCheckOut) {
+        strCheckOut = strCheckOut.trim();
+
+        return LocalTime.parse(strCheckOut, DateTimeFormatter.ofPattern("HH:mm"));
+    }
+
+    private void validateCheckInCheckOut(LocalTime checkIn, LocalTime checkOut) {
+        if(checkOut.isBefore(checkIn)) throw new IllegalArgumentException("checkIn must be lesser then checkOut");
     }
 }
