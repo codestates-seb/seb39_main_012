@@ -19,5 +19,4 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     List<Integer> findByCheckInCheckOut(@Param("checkIn") LocalDate checkIn
             , @Param("checkOut") LocalDate checkOut
             , @Param("companyId")Long companyId);
-
 }

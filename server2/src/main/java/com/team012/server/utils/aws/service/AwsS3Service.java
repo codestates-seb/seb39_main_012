@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
 @Transactional
 @RequiredArgsConstructor
 @Slf4j
@@ -57,6 +58,7 @@ public class AwsS3Service {
                     .withCannedAcl(CannedAccessControlList.PublicRead));
 
         } catch (IOException e) {
+            log.error("Can Not Upload Image..!", e);
             throw new RuntimeException();
         }
         return amazonS3Client.getUrl(bucketName, fileName).toString();
@@ -203,7 +205,7 @@ public class AwsS3Service {
 
     //s3에 업로드 할 사진 validation 메서드
     private void validateFileExists(MultipartFile multipartFile) {
-        if(multipartFile.isEmpty()) {
+        if (multipartFile.isEmpty()) {
             throw new RuntimeException("EmptyFileException()");
         }
     }

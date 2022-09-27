@@ -17,6 +17,10 @@ import java.util.List;
 @Getter
 public class Reservation implements Comparable<Reservation> {
 
+    @PrePersist
+    public void prePersist() {
+        this.dogCount = this.dogCount == null ? 0 : this.dogCount;
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -53,6 +57,7 @@ public class Reservation implements Comparable<Reservation> {
 
     @Builder
     public Reservation(LocalDate reservationDate, Long companyId, Integer dogCount) {
+    
         this.reservationDate = reservationDate;
         this.companyId = companyId;
         this.dogCount = dogCount;

@@ -10,14 +10,12 @@ import com.team012.server.posts.Tag.ServiceTag.service.ServiceTagService;
 import com.team012.server.posts.dto.PostsDto;
 import com.team012.server.posts.entity.Posts;
 import com.team012.server.posts.mapper.PostsMapper;
-import com.team012.server.posts.service.PostsSearchService;
+import com.team012.server.posts.service.PostsReservationService;
 import com.team012.server.posts.service.PostsService;
 import com.team012.server.review.entity.Review;
 import com.team012.server.review.service.ReviewService;
 import com.team012.server.utils.config.userDetails.PrincipalDetails;
-import com.team012.server.utils.response.MultiResponseDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -38,6 +36,7 @@ public class PostsController {
     private final RoomService roomService;
     private final TagService tagService;
     private final ServiceTagService serviceTagService;
+    private final PostsReservationService postsReservationService;
     private final PostsMapper mapper;
 
     @PostMapping("/create") //@AuthenticationPrincipal PrincipalDetails principal가 없으므로 일단 dto에 companyId 포함시킴
@@ -108,9 +107,11 @@ public class PostsController {
         List<Review> reviewPage = reviewService.findByPage(page - 1, size).getContent();
         List<Room> roomList = roomService.findAllRoom(id);
 
+        // 현재날짜를 기준으로 체크아웃이 현재날짜를 지나면 roomCount 값을 예약한 강아지수 만큼 DB에 올려준다.
+        postsReservationService.checkRoomCount(id);
+
         return new ResponseEntity<>(mapper.postsToPostsViewDto(response, roomList, reviewPage), HttpStatus.OK);
     }
-
 
 
     @DeleteMapping("/{id}")
