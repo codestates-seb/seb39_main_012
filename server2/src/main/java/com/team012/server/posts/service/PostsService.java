@@ -115,4 +115,8 @@ public class PostsService {
     public void save(Posts posts) {
         postsRepository.save(posts);
     }
+
+    public Posts findByCompanyId(Long companyId) {
+        return postsRepository.findByCompanyId(companyId);
+    }
 }

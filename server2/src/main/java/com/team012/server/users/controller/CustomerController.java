@@ -32,7 +32,7 @@ public class CustomerController {
     private final ReservationService reservationService;
     private final UsersManageReviewService usersReviewManageReviewService;
 
-    // 회원 상세페이지
+    // 고객 상세페이지
     @GetMapping("/profile")
     public ResponseEntity getCustomer(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         Long userId = principalDetails.getUsers().getId();

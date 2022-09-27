@@ -18,4 +18,6 @@ public interface PostsRepository extends JpaRepository<Posts, Long> {
 
 //    @Query("select p from Posts p where p.roomCount > (select )")
 //    Page<Posts> findByCheckInCheckOut();
+
+    Posts findByCompanyId(Long companyId);
 }
