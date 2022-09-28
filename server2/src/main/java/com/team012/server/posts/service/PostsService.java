@@ -138,6 +138,7 @@ public class PostsService {
 
     public Posts findByCompanyId(Long companyId) {
         return postsRepository.findByCompanyId(companyId);
+    }
 
     private LocalTime convertCheckInToTime(String strCheckIn) {
         strCheckIn = strCheckIn.trim();
