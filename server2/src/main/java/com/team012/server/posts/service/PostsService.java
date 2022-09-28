@@ -1,7 +1,7 @@
 package com.team012.server.posts.service;
 
-import com.team012.server.posts.dto.PostsDto;
 import com.team012.server.posts.entity.Posts;
+import com.team012.server.posts.dto.PostsDto;
 import com.team012.server.posts.img.entity.PostsImg;
 import com.team012.server.posts.img.repository.PostsImgRepository;
 import com.team012.server.posts.repository.PostsRepository;
@@ -135,6 +135,10 @@ public class PostsService {
         postsRepository.save(posts);
     }
 
+
+    public Posts findByCompanyId(Long companyId) {
+        return postsRepository.findByCompanyId(companyId);
+
     private LocalTime convertCheckInToTime(String strCheckIn) {
         strCheckIn = strCheckIn.trim();
 
@@ -149,5 +153,6 @@ public class PostsService {
 
     private void validateCheckInCheckOut(LocalTime checkIn, LocalTime checkOut) {
         if(checkOut.isBefore(checkIn)) throw new IllegalArgumentException("checkIn must be lesser then checkOut");
+
     }
 }

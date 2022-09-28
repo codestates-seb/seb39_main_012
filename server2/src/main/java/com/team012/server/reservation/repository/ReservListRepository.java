@@ -1,7 +1,6 @@
 package com.team012.server.reservation.repository;
 
 import com.team012.server.reservation.entity.ReservList;
-import com.team012.server.reservation.entity.Reservation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

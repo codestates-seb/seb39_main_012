@@ -5,13 +5,15 @@ import com.team012.server.company.room.entity.Room;
 import com.team012.server.company.room.service.RoomService;
 import com.team012.server.posts.entity.Posts;
 import com.team012.server.posts.service.PostsService;
-import com.team012.server.reservation.dto.*;
 import com.team012.server.reservation.entity.ReservList;
 import com.team012.server.reservation.entity.Reservation;
 import com.team012.server.reservation.repository.ReservListRepository;
 import com.team012.server.reservation.repository.ReservationRepository;
-
 import com.team012.server.users.entity.DogCard;
+import com.team012.server.reservation.dto.RegisterReservationDto;
+import com.team012.server.reservation.dto.ReservationUserInfoDto;
+import com.team012.server.reservation.dto.ResponseReservationDto;
+
 import com.team012.server.users.entity.Users;
 import com.team012.server.users.service.DogCardService;
 import com.team012.server.users.service.UsersService;
@@ -23,6 +25,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.team012.server.reservation.dto.ReservationCreateDto;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -144,7 +147,7 @@ public class CustomerReservationService {
     }
 
     //예약 페이지 , 결제 페이지(예약 상세 페이지 ---> 예약 완료 페이지)
-    public ResponseReservationDto createReservation(ReservationCreateDto dto, Long userId, Long postsId,ReservationUserInfoDto userInfoDto) {
+    public ResponseReservationDto createReservation(ReservationCreateDto dto, Long userId, Long postsId, ReservationUserInfoDto userInfoDto) {
 
         Users users = usersService.findUsersById(userId); //validation check
         Posts posts = postsService.findById(postsId);

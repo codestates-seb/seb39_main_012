@@ -1,12 +1,9 @@
 package com.team012.server.review.service;
 
-import com.team012.server.posts.entity.Posts;
-import com.team012.server.posts.service.PostsAvgScoreService;
-import com.team012.server.posts.service.PostsService;
+import com.team012.server.review.repository.ReviewRepository;
 import com.team012.server.review.dto.ReviewCreateRequestDto;
 import com.team012.server.review.dto.ReviewPatchRequestDto;
 import com.team012.server.review.entity.Review;
-import com.team012.server.review.repository.ReviewRepository;
 import com.team012.server.review.repository.ReviewImgRepository;
 import com.team012.server.utils.aws.service.AwsS3Service;
 import com.team012.server.review.entity.ReviewImg;

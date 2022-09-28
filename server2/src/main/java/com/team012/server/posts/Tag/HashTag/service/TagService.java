@@ -2,9 +2,9 @@ package com.team012.server.posts.Tag.HashTag.service;
 
 import com.team012.server.posts.Tag.HashTag.entity.HashTag;
 import com.team012.server.posts.Tag.HashTag.entity.PostsHashTags;
+import com.team012.server.posts.entity.Posts;
 import com.team012.server.posts.Tag.HashTag.repository.HashTagRepository;
 import com.team012.server.posts.Tag.HashTag.repository.PostsHashTagRepository;
-import com.team012.server.posts.entity.Posts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

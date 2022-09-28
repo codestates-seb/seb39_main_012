@@ -1,7 +1,7 @@
 package com.team012.server.like.controller;
 
-import com.team012.server.like.service.LikesService;
 import com.team012.server.utils.config.userDetails.PrincipalDetails;
+import com.team012.server.like.service.LikesService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

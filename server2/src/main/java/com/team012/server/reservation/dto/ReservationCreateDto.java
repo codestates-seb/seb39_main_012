@@ -1,6 +1,5 @@
 package com.team012.server.reservation.dto;
 
-import com.team012.server.reservation.entity.ReservList;
 import com.team012.server.reservation.entity.Reservation;
 import lombok.Builder;
 import lombok.Getter;

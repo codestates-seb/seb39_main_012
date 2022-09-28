@@ -2,10 +2,10 @@ package com.team012.server.posts.dto;
 
 import com.team012.server.company.room.dto.RoomDto;
 import com.team012.server.company.room.entity.Room;
+import com.team012.server.utils.validator.ListSize;
 import com.team012.server.posts.img.dto.ImgDto;
 import com.team012.server.posts.img.entity.PostsImg;
 import com.team012.server.review.entity.Review;
-import com.team012.server.utils.validator.ListSize;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

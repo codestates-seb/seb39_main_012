@@ -1,7 +1,6 @@
 package com.team012.server.users.dto;
 
 import com.team012.server.reservation.entity.ReservList;
-import com.team012.server.reservation.entity.Reservation;
 import com.team012.server.review.entity.Review;
 import com.team012.server.users.entity.DogCard;
 import com.team012.server.users.entity.Users;
