@@ -3,6 +3,8 @@ package com.team012.server.users.controller;
 import com.team012.server.reservation.entity.ReservList;
 import com.team012.server.reservation.service.ReservationService;
 import com.team012.server.review.entity.Review;
+import com.team012.server.users.dto.CustomerUpdateRequestDto;
+import com.team012.server.users.dto.UsersMessageResponseDto;
 import com.team012.server.users.entity.DogCard;
 import com.team012.server.utils.config.userDetails.PrincipalDetails;
 import com.team012.server.users.dto.CustomerProfileViewResponseDto;
@@ -15,9 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -50,6 +50,21 @@ public class CustomerController {
                 .reviewList(reviewList)
                 .reservationList(reservationList)
                 .build();
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    // 고객 정보 수정 API
+    @PatchMapping("/update")
+    public ResponseEntity updateCustomer(@AuthenticationPrincipal PrincipalDetails principalDetails,
+                                         CustomerUpdateRequestDto dto) {
+        Long userId = principalDetails.getUsers().getId();
+        usersService.updateCustomer(userId, dto);
+        UsersMessageResponseDto response =
+                UsersMessageResponseDto
+                        .builder()
+                        .message("수정 완료..!")
+                        .build();
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
