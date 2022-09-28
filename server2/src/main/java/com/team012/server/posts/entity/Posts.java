@@ -1,5 +1,6 @@
 package com.team012.server.posts.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.team012.server.posts.Tag.HashTag.entity.PostsHashTags;
 import com.team012.server.posts.Tag.ServiceTag.entity.PostsServiceTag;
@@ -77,9 +78,11 @@ public class Posts {
     private List<PostsImg> postsImgList = new ArrayList<>();
 
     @OneToMany(mappedBy = "posts", cascade = {CascadeType.REMOVE, CascadeType.MERGE})
+    @JsonIgnore
     private List<PostsServiceTag> postAvailableTags = new ArrayList<>();
 
     @OneToMany(mappedBy = "posts", cascade = {CascadeType.REMOVE, CascadeType.MERGE})
+    @JsonIgnore
     private List<PostsHashTags> postsHashTags = new ArrayList<>();
 
     @Builder
