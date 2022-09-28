@@ -12,6 +12,7 @@ import com.team012.server.review.entity.Review;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +24,9 @@ public interface PostsMapper {
         List<String> address = List.of(posts.getLatitude(), posts.getLongitude(), posts.getAddress(), posts.getDetailAddress());
         Long companyId = posts.getCompanyId();
 
+        String checkIn = posts.getCheckIn().format(DateTimeFormatter.ofPattern("HH:mm"));//.substring(0, 5);
+        String checkOut = posts.getCheckOut().format(DateTimeFormatter.ofPattern("HH:mm"));//.substring(0, 5);
+
         PostsDto.ResponseDto responseDto = PostsDto.ResponseDto.builder()
                 .id(posts.getId())
                 .title(posts.getTitle())
@@ -30,6 +34,8 @@ public interface PostsMapper {
                 .content(posts.getContent())
                 .address(address)
                 .avgScore(posts.getAvgScore())
+                .checkIn(checkIn)
+                .checkOut(checkOut)
                 .postsImgList(posts.getPostsImgList())
                 .roomDtoList(roomList)
                 .build();
@@ -92,6 +98,9 @@ public interface PostsMapper {
         List<String> address = List.of(posts.getLatitude(), posts.getLongitude(), posts.getAddress(), posts.getDetailAddress());
         Long companyId = posts.getCompanyId();
 
+        String checkIn = posts.getCheckIn().format(DateTimeFormatter.ofPattern("HH:mm:ss")).substring(0, 5);
+        String checkOut = posts.getCheckOut().format(DateTimeFormatter.ofPattern("HH:mm:ss")).substring(0, 5);
+
         PostsDto.ResponseDto responseDto = PostsDto.ResponseDto.builder()
                 .id(posts.getId())
                 .title(posts.getTitle())
@@ -99,6 +108,8 @@ public interface PostsMapper {
                 .content(posts.getContent())
                 .address(address)
                 .avgScore(posts.getAvgScore())
+                .checkIn(checkIn)
+                .checkOut(checkOut)
                 .reviewList(reviewList)
                 .postsImgList(posts.getPostsImgList())
                 .roomDtoList(roomList)

@@ -232,7 +232,7 @@ public class CustomerReservationService {
 
     }
 
-    //예약 취소
+    //예약 취
     public void deleteReservation(Long userId, Long reservedId) {
 
         Optional<ReservList> reservList= reservListRepository.findByUsersIdAndReservedId(userId, reservedId);

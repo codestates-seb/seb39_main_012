@@ -8,8 +8,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +36,7 @@ public class Posts {
     private String title;
 
     @Column(name = "content")
+    @Lob
     private String content;
 
     @Column(name = "latitude")
@@ -59,6 +63,14 @@ public class Posts {
     @Column(name = "avg_score")
     private Double avgScore;
 
+    @Column(name = "check_in")
+    @DateTimeFormat(pattern = "HH:mm")
+    private LocalTime checkIn;
+
+    @Column(name = "check_out")
+    @DateTimeFormat(pattern = "HH:mm")
+    private LocalTime checkOut;
+
     // 이미지 업로드 테이블
     @OneToMany(mappedBy = "posts", cascade = CascadeType.ALL)
     @JsonManagedReference  // 순환참조 방지(...)
@@ -74,7 +86,7 @@ public class Posts {
     public Posts(String title, String content,
                  String latitude, String longitude,
                  String address, String detailAddress, Integer roomCount,
-                 Long companyId, Double avgScore) {
+                 Long companyId, Double avgScore, LocalTime checkIn, LocalTime checkOut) {
         this.title = title;
         this.content = content;
         this.latitude = latitude;
@@ -84,6 +96,8 @@ public class Posts {
         this.roomCount = roomCount; // add
         this.companyId = companyId;
         this.avgScore = avgScore; // add
+        this.checkIn = checkIn;
+        this.checkOut = checkOut;
 
     }
 }
