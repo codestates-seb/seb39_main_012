@@ -1,6 +1,6 @@
 package com.team012.server.utils.response;
 
-import lombok.Getter;
+import lombok.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 
@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Getter
+@Setter
 public class ErrorResponse {
     private Integer status;
     private String message;
@@ -37,6 +38,10 @@ public class ErrorResponse {
 
     public static ErrorResponse of(HttpStatus http) {
         return new ErrorResponse(http.value(), http.getReasonPhrase());
+    }
+
+    public static ErrorResponse of(Integer status, String message) {
+        return new ErrorResponse(status, message);
     }
 
     @Getter
