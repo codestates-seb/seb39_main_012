@@ -4,7 +4,6 @@ import com.team012.server.company.dto.CompanyProfileResponseDto;
 import com.team012.server.company.entity.Company;
 import com.team012.server.company.service.CompanyInfoService;
 import com.team012.server.company.service.CompanyService;
-import com.team012.server.posts.entity.Posts;
 import com.team012.server.users.entity.Users;
 import com.team012.server.utils.config.userDetails.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +23,9 @@ public class CompanyController {
     private final CompanyInfoService companyInfoService;
 
     @GetMapping("/profile")
-    public ResponseEntity profileCompany(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public ResponseEntity profileCompany(@AuthenticationPrincipal PrincipalDetails principalDetails,
+                                         Integer page,
+                                         Integer size) {
         // 사장님 정보
         Users findUsers = principalDetails.getUsers();
 
@@ -34,7 +35,7 @@ public class CompanyController {
         Long companyId = findCompany.getId();
 
         CompanyProfileResponseDto response =
-                companyInfoService.getProfile(findUsers, userId, companyId, 1, 5);
+                companyInfoService.getProfile(findUsers, userId, companyId, page - 1, size);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
