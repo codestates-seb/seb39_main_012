@@ -5,7 +5,6 @@ import com.team012.server.company.entity.Company;
 import com.team012.server.posts.entity.Posts;
 import com.team012.server.posts.service.PostsService;
 import com.team012.server.reservation.entity.ReservList;
-import com.team012.server.reservation.entity.Reservation;
 import com.team012.server.reservation.service.ReservationService;
 import com.team012.server.users.entity.Users;
 import lombok.RequiredArgsConstructor;

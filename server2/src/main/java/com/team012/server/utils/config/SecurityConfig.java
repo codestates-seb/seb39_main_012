@@ -44,10 +44,6 @@ public class SecurityConfig {
                 .loginProcessingUrl("/login")
                 .defaultSuccessUrl("/");
 
-//        http.oauth2Login()
-//                .loginPage("/login")
-//                .userInfoEndpoint()
-//                .userService(principalOauth2UserService);
 
         return http.build();
     }
@@ -56,7 +52,7 @@ public class SecurityConfig {
     public class CustomDsl extends AbstractHttpConfigurer<CustomDsl, HttpSecurity> {
 
         @Override
-        public void configure(HttpSecurity builder) throws Exception {
+        public void configure(HttpSecurity builder) {
             AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
             builder
                     .addFilter(corsFilter)

@@ -2,12 +2,14 @@ package com.team012.server.utils.advice;
 
 import com.team012.server.utils.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.validation.ConstraintViolationException;
+import java.io.IOException;
 
 @RestControllerAdvice
 public class GlobalExceptionAdvice {
@@ -29,7 +31,7 @@ public class GlobalExceptionAdvice {
     }
 
     // 찾는 정보가 없는 경우에 사용
-    @ExceptionHandler
+    @ExceptionHandler(NullPointerException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNullPointerException(
             NullPointerException e) {
@@ -37,5 +39,11 @@ public class GlobalExceptionAdvice {
         return response;
     }
 
+    @ExceptionHandler({AuthenticationException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleIOException(Exception e) {
+        final ErrorResponse response = ErrorResponse.of(400, "다시 입력해주세요.");
+        return response;
+    }
 
 }
