@@ -66,6 +66,8 @@ public class DogCardController {
     @DeleteMapping("/{dogCardId}")
     public ResponseEntity deleteCard(@PathVariable("dogCardId") Long dogCardId) {
 
+        dogCardService.deleteDogCard(dogCardId);
+
         DogCardDto.Message response = DogCardDto.Message
                 .builder()
                 .message("삭제완료..!")
