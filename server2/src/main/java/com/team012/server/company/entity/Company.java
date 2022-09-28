@@ -1,5 +1,6 @@
 package com.team012.server.company.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,7 +9,9 @@ import javax.persistence.*;
 
 @Entity
 @Getter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class Company {
 
     @Id
@@ -30,12 +33,4 @@ public class Company {
     @Column(name = "user_id")
     private Long userId;
 
-    @Builder
-    public Company(String companyName, String ceo, String address, String detailAddress, Long userId) {
-        this.companyName = companyName;
-        this.ceo = ceo;
-        this.address = address;
-        this.detailAddress = detailAddress;
-        this.userId = userId;
-    }
 }

@@ -50,6 +50,8 @@ public class PostsDto {
 
         @NotEmpty
         private List<RoomDto.PostDto> roomDtoList;
+
+
     }
 
     @Getter
@@ -112,6 +114,7 @@ public class PostsDto {
         private Long id;
         private String title;
         private String address;
+        private Double avgScore;  // 평균 점수 추가
         private ImgDto.ResponseListDto img;
         private Integer minPrice;
     }

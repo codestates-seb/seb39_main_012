@@ -29,15 +29,12 @@ public class DogCardController {
                                      @RequestPart(value = "file") MultipartFile file,
                                      @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-
         DogCard dogCard = mapper.dogDtoToDogCard(dogCardDto);
         dogCardService.savedDogCard(dogCard, file, principalDetails.getUsers());
-
 
         log.info("dogName = {}", dogCard.getDogName());
         log.info("dogType = {}", dogCard.getType());
         log.info("dogImageUrl = {}", dogCard.getPhotoImgUrl());
-
 
         return new ResponseEntity<>(new SingleResponseDto<>("create success"), HttpStatus.CREATED);
     }

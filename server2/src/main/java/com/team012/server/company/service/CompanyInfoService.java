@@ -32,10 +32,12 @@ public class CompanyInfoService {
         CompanyProfileResponseDto dto =
                 CompanyProfileResponseDto
                         .builder()
-                        .usersInfo(findUsers)
+                        .username(findUsers.getUsername())
+                        .email(findUsers.getEmail())
+                        .phone(findUsers.getPhone())
                         .companyInfo(company)
                         .postsInfo(posts)
-                        .reservListPage(reservationList)
+                        .reservListPage(reservationList.getContent())
                         .build();
 
         return dto;

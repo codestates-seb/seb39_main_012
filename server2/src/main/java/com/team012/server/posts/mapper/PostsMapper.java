@@ -81,6 +81,7 @@ public interface PostsMapper {
                             .id(p.getId())
                             .title(p.getTitle())
                             .address(address)
+                            .avgScore(p.getAvgScore())   // 평균 점수 추가
                             .img(imgDto)
                             .minPrice(minPrice)
                             .build();
