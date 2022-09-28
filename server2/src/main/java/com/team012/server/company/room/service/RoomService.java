@@ -1,12 +1,8 @@
 package com.team012.server.company.room.service;
 
-import com.team012.server.company.entity.Company;
 import com.team012.server.company.room.dto.RoomDto;
 import com.team012.server.company.room.entity.Room;
 import com.team012.server.company.room.repository.RoomRepository;
-import com.team012.server.posts.entity.Posts;
-import com.team012.server.posts.repository.PostsRepository;
-import com.team012.server.posts.service.PostsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
