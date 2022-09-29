@@ -1,24 +1,32 @@
-import React, {useState} from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import {colors} from '@/styles/colors'
 import {BsSearch} from 'react-icons/bs'
+import {useRecoilState} from 'recoil'
+import {titleSearchState} from '@/recoil/searchValue'
+import {useRouter} from 'next/router'
 
 const Search = () => {
-  const [searchValue, setSearchValue] = useState('')
-
+  const [searchValue, setSearchValue] = useRecoilState(titleSearchState)
+  const router = useRouter()
   return (
     <SearchContainer>
       <SearchInput
         placeholder="검색어를 입력해주세요."
         value={searchValue}
         onChange={(e) => setSearchValue(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault()
+            router.push(`/search?title=${searchValue}`)
+          }
+        }}
       />
       <BsSearch
         className="searchIcon"
         onClick={(e) => {
           e.preventDefault()
-          console.log(searchValue)
-          setSearchValue('')
+          router.push(`/search?title=${searchValue}`)
         }}
       />
     </SearchContainer>

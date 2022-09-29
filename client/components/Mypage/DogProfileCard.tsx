@@ -2,10 +2,14 @@ import React from 'react'
 import styled from 'styled-components'
 import CardImage from '../CardImage/CardImage'
 import {BsGenderMale, BsGenderFemale} from 'react-icons/bs'
-
+import {RiEditBoxLine} from 'react-icons/ri'
+import {IoMdRemoveCircle} from 'react-icons/io'
+import {useRecoilState} from 'recoil'
+import {editOpenState} from '@/recoil/editOpen'
 const imgUrl = 'https://dimg.donga.com/wps/NEWS/IMAGE/2022/01/28/111500268.2.jpg'
 
 function DogProfileCard() {
+  const [, setEditOpen] = useRecoilState(editOpenState)
   return (
     <Container>
       <ImgBox>
@@ -51,6 +55,12 @@ function DogProfileCard() {
             <InfoContent>미급여</InfoContent>
           </div>
         </InfoBox>
+        <DeleteButton onClick={() => console.log('삭제')}>
+          <IoMdRemoveCircle />
+        </DeleteButton>
+        <EditButton onClick={() => setEditOpen(true)}>
+          <RiEditBoxLine />
+        </EditButton>
       </DogBottomInfoBox>
     </Container>
   )
@@ -139,6 +149,7 @@ const DogBreed = styled.p`
 
 const DogBottomInfoBox = styled.div`
   display: flex;
+  position: absolute;
 `
 const InfoBox = styled.div`
   display: flex;
@@ -163,12 +174,12 @@ const InfoBox = styled.div`
 `
 
 const InfoTitle = styled.p`
-  font-family: 'Inter';
   font-style: normal;
   font-weight: 700;
   font-size: 13px;
   line-height: 16px;
-  color: gray;
+  color: #444;
+
   @media (max-width: 768px) {
     font-size: 12px;
   }
@@ -179,12 +190,9 @@ const InfoTitle = styled.p`
 `
 const InfoContent = styled.p`
   margin-left: 10px;
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 700;
-  font-size: 15px;
+  font-size: 13px;
   line-height: 16px;
-  color: #000000;
+  color: #555;
 
   @media (max-width: 768px) {
     font-size: 13.5px;
@@ -193,4 +201,22 @@ const InfoContent = styled.p`
   @media (max-width: 390px) {
     font-size: 8px;
   }
+`
+
+const EditButton = styled.span`
+  font-size: 20px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  color: gray;
+  cursor: pointer;
+`
+
+const DeleteButton = styled.span`
+  font-size: 20px;
+  position: absolute;
+  bottom: 0;
+  right: 25px;
+  color: #f25757;
+  cursor: pointer;
 `

@@ -4,7 +4,6 @@ import {colors} from '@/styles/colors'
 import {useRouter} from 'next/router'
 import Input from '../Input/Input'
 import AuthButton, {Button} from '../AuthButton/AuthButton'
-import CheckBox from '../CheckBox/CheckBox'
 
 interface Prop {
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void
@@ -36,7 +35,12 @@ const LoginForm = ({onSubmit}: Prop) => {
         <input type="checkbox" />
         <span>이메일 저장</span>
       </KeepEmail>
-      <AuthButton title={'로그인'} width={'100%'} height={'4.5rem'} hoverFontColor={'#e5f9ef'} />
+      <AuthButton
+        title={'로그인'}
+        width={'100%'}
+        height={'4.5rem'}
+        hoverFontColor={'rgb(229, 249, 239)'}
+      />
       <GuestButton>Guest</GuestButton>
       <HelpLogin>
         <span>아아디 찾기</span>

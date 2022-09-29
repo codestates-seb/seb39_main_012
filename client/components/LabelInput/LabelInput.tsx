@@ -38,8 +38,11 @@ function LabelInput({
       </LabelBox>
       {(Errors && value && value.length >= 1 && (
         <ErrorMessageBox>{ErrorMessage}</ErrorMessageBox>
-      )) || <NoError></NoError>}
-      {emailDuplicate && <ErrorMessageBox>이미 사용중인 이메일입니다.</ErrorMessageBox>}
+      )) || (
+        <NoError>
+          {emailDuplicate && <ErrorMessageBox>이미 사용중인 이메일입니다.</ErrorMessageBox>}
+        </NoError>
+      )}
     </LabelContainer>
   )
 }
@@ -80,6 +83,6 @@ const ErrorMessageBox = styled.div`
 `
 
 const NoError = styled.div`
-  margin-top: 10px;
   height: 10px;
+  margin-bottom: 5px;
 `

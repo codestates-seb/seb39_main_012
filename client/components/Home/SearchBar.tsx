@@ -4,6 +4,7 @@ import {flexCenter} from '@/styles/css'
 import {dogSizeOption} from '@/utils/options/options'
 import {useRouter} from 'next/router'
 import React, {useState} from 'react'
+import {toast} from 'react-toastify'
 import {useRecoilState} from 'recoil'
 import styled from 'styled-components'
 import DayPickerRange from '../DayPickerRange/DayPickerRange'
@@ -20,8 +21,7 @@ function SearchBar() {
   const handleClick = () => {
     console.log(value)
     if (!value.local || value.checkin.length <= 7 || value.checkout.length <= 7 || !value.dogSize) {
-      alert('모든 항목을 입력해주세요.')
-      return
+      return toast.error('모든 항목을 입력해주세요.')
     }
 
     route.push(
@@ -135,6 +135,11 @@ const TextBox = styled.div`
 
     &:focus {
       outline: none;
+    }
+
+    &::placeholder {
+      text-align: center;
+      color: #333;
     }
 
     @media (max-width: 768px) {
