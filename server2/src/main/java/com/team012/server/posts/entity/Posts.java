@@ -1,5 +1,6 @@
 package com.team012.server.posts.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.team012.server.posts.Tag.HashTag.entity.PostsHashTags;
 import com.team012.server.posts.Tag.ServiceTag.entity.PostsServiceTag;
@@ -77,16 +78,18 @@ public class Posts {
     private List<PostsImg> postsImgList = new ArrayList<>();
 
     @OneToMany(mappedBy = "posts", cascade = {CascadeType.REMOVE, CascadeType.MERGE})
+    @JsonIgnore
     private List<PostsServiceTag> postAvailableTags = new ArrayList<>();
 
     @OneToMany(mappedBy = "posts", cascade = {CascadeType.REMOVE, CascadeType.MERGE})
+    @JsonIgnore
     private List<PostsHashTags> postsHashTags = new ArrayList<>();
 
     @Builder
     public Posts(String title, String content,
                  String latitude, String longitude,
                  String address, String detailAddress, Integer roomCount,
-                 Long companyId, Double avgScore, LocalTime checkIn, LocalTime checkOut) {
+                 Long companyId, Double avgScore,Integer likesCount, LocalTime checkIn, LocalTime checkOut) {
         this.title = title;
         this.content = content;
         this.latitude = latitude;
@@ -96,6 +99,7 @@ public class Posts {
         this.roomCount = roomCount; // add
         this.companyId = companyId;
         this.avgScore = avgScore; // add
+        this.likesCount = likesCount;
         this.checkIn = checkIn;
         this.checkOut = checkOut;
 

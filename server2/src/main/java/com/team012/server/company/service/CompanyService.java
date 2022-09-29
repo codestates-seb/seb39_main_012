@@ -1,5 +1,6 @@
 package com.team012.server.company.service;
 
+import com.team012.server.company.dto.CompanyUpdateRequestDto;
 import com.team012.server.company.entity.Company;
 import com.team012.server.company.repository.CompanyRepository;
 import com.team012.server.users.dto.CompanySignUpRequestDto;
@@ -34,5 +35,15 @@ public class CompanyService {
         if (findCompany == null) throw new RuntimeException("Company가 없습니다.");
 
         return findCompany;
+    }
+
+    public Company updateCompany(Long userId, CompanyUpdateRequestDto dto) {
+        Company company = companyRepository.findByUserId(userId);
+        company.setCompanyName(dto.getCompanyName());
+        company.setCeo(dto.getCeo());
+        company.setAddress(dto.getAddress());
+        company.setDetailAddress(dto.getDetailAddress());
+
+        return companyRepository.save(company);
     }
 }

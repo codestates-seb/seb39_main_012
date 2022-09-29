@@ -30,7 +30,7 @@ public class Review {
     @Column(name = "posts_id")
     private Long postsId;
 
-    @OneToMany(mappedBy = "review")
+    @OneToMany(mappedBy = "review", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<ReviewImg> reviewImgList;
 }

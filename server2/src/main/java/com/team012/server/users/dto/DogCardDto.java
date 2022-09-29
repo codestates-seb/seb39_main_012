@@ -22,20 +22,6 @@ public class DogCardDto {
         private String surgery;
         private String bowelTrained;
         private String etc;
-
-
-//        {
-//            "dogName" : "testDog",
-//            "type" : "testType",
-//            "gender" : "testGender",
-//            "age" : 3,
-//            "weight" : 15,
-//            "snackMethod" : "testSnackMethod",
-//            "bark" : "testBark",
-//            "surgery" : "testSurgery",
-//            "bowelTrained" : "testBowelTrained",
-//            "etc" : "testEtc"
-//        }
     }
 
     @Builder

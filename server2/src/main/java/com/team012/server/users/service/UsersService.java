@@ -2,6 +2,7 @@ package com.team012.server.users.service;
 
 import com.team012.server.company.service.CompanyService;
 import com.team012.server.users.dto.CustomerSignUpRequestDto;
+import com.team012.server.users.dto.CustomerUpdateRequestDto;
 import com.team012.server.users.repository.UsersRepository;
 import com.team012.server.users.dto.CompanySignUpRequestDto;
 import com.team012.server.users.entity.Users;
@@ -77,6 +78,13 @@ public class UsersService {
                 .orElseThrow(() -> new RuntimeException("member Not found"));
     }
 
+    public Users updateCustomer(Long id, CustomerUpdateRequestDto dto) {
+        Users findUsers = usersRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("찾는 유저가 없습니다."));
 
+        findUsers.setUsername(dto.getUserName());
+        findUsers.setPhone(dto.getPhone());
 
+        return usersRepository.save(findUsers);
+    }
 }

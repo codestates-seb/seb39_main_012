@@ -23,8 +23,8 @@ public class CustomerReservationController {
 
     //posts 상세 페이지 ---> 예약 상세 페이지로 이동
     @PostMapping("/{postsId}")
-    public ResponseEntity beforeReservation(@PathVariable("postsId") Long postsId
-            , @RequestBody RegisterReservationDto registerReservationDto,
+    public ResponseEntity beforeReservation(@PathVariable("postsId") Long postsId,
+                                            @RequestBody RegisterReservationDto registerReservationDto,
                                             @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
         Long userId = principalDetails.getUsers().getId();
@@ -56,16 +56,16 @@ public class CustomerReservationController {
         ReservationUserInfoDto reservationUserInfoDto = dto.getReservationUserInfoDto();
 
         ResponseReservationDto responseReservationDto
-                = customerReservationService.createReservation(reservationCreateDto, userId,postsId, reservationUserInfoDto);
+                = customerReservationService.createReservation(reservationCreateDto, userId, postsId, reservationUserInfoDto);
         return new ResponseEntity<>(responseReservationDto, HttpStatus.CREATED);
     }
 
     //가기 전 호텔리스트(체크아웃 최신날짜 순)
     @GetMapping("/before")
     public ResponseEntity findReservationsBeforeCheckIn(@RequestParam int page, int size
-                                                        ,@AuthenticationPrincipal PrincipalDetails principalDetails) {
+            , @AuthenticationPrincipal PrincipalDetails principalDetails) {
         Long userId = principalDetails.getUsers().getId();
-        Page<ReservList> reservationList =  customerReservationService.findReservationList(userId,page -1, size);
+        Page<ReservList> reservationList = customerReservationService.findReservationList(userId, page - 1, size);
         List<ReservList> reservations = reservationList.getContent();
 
         return new ResponseEntity<>(new MultiResponseDto<>(reservations, reservationList), HttpStatus.OK);
@@ -74,9 +74,9 @@ public class CustomerReservationController {
     //갔다온 호텔 리스트 (체크아웃 최신날짜 순)
     @GetMapping("/after")
     public ResponseEntity findReservationAfterCheckOut(@RequestParam int page, int size
-                                                        ,@AuthenticationPrincipal PrincipalDetails principalDetails) {
+            , @AuthenticationPrincipal PrincipalDetails principalDetails) {
         Long userId = principalDetails.getUsers().getId();
-        Page<ReservList> reservationList =  customerReservationService.findReservationAfterCheckOutList(userId, page -1, size);
+        Page<ReservList> reservationList = customerReservationService.findReservationAfterCheckOutList(userId, page - 1, size);
         List<ReservList> reservations = reservationList.getContent();
 
         return new ResponseEntity<>(new MultiResponseDto<>(reservations, reservationList), HttpStatus.OK);
@@ -91,13 +91,5 @@ public class CustomerReservationController {
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
-    // 예약 수정 API 생성이 어딘지 물어보고 하기
-    @PatchMapping("/{reservationId}")
-    public ResponseEntity updateReservation(@PathVariable("reservationId") Long id) {
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-
 
 }
