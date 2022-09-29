@@ -1,15 +1,13 @@
-import React, {useState} from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import CardImage from '../CardImage/CardImage'
 import {BsGenderMale, BsGenderFemale} from 'react-icons/bs'
-import {RiEditBoxLine} from 'react-icons/ri'
-import {IoMdRemoveCircle} from 'react-icons/io'
-import {useRecoilState} from 'recoil'
-import {editOpenState} from '@/recoil/editOpen'
+import {toLocalScale} from '@/utils/util'
+import {colors} from '@/styles/colors'
+
 const imgUrl = 'https://dimg.donga.com/wps/NEWS/IMAGE/2022/01/28/111500268.2.jpg'
 
-function DogProfileCard() {
-  const [editOpen, setEditOpen] = useRecoilState(editOpenState)
+function ConfirmCard() {
   return (
     <Container>
       <ImgBox>
@@ -55,22 +53,45 @@ function DogProfileCard() {
             <InfoContent>미급여</InfoContent>
           </div>
         </InfoBox>
-        <DeleteButton onClick={() => console.log('삭제')}>
-          <IoMdRemoveCircle />
-        </DeleteButton>
-        <EditButton onClick={() => setEditOpen(true)}>
-          <RiEditBoxLine />
-        </EditButton>
       </DogBottomInfoBox>
+      <UserInfoBox>
+        <DesignTitle className="DesignTitle">우리 뽀삐 호캉스 가는날!</DesignTitle>
+        <UserNameAndTell>
+          <Name>
+            <p className="title">예약자</p>
+            <p className="content">김뽀삐</p>
+          </Name>
+          <Tell>
+            <p className="title">연락처</p>
+            <p>010-1234-5678</p>
+          </Tell>
+        </UserNameAndTell>
+        <UserAddress>
+          <p className="title">숙소</p>
+          <p>서울 강남구 도곡동 반려호텔 N층</p>
+        </UserAddress>
+        <Check>
+          <p className="title">체크인</p>
+          <p>22.09.22(목)09:00</p>
+        </Check>
+        <Check>
+          <p className="title">체크아웃</p>
+          <p>22.09.22(목)09:00</p>
+        </Check>
+        <TotalPrice>
+          <p className="title">총 결제 금액(VAT포함)</p>
+          <p>{toLocalScale(107800)}원</p>
+        </TotalPrice>
+        <RejectButton>예약 취소</RejectButton>
+      </UserInfoBox>
     </Container>
   )
 }
 
-export default DogProfileCard
+export default ConfirmCard
 
 const Container = styled.div`
   width: 300px;
-  height: 350px;
   position: relative;
   border-radius: 10px;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
@@ -78,12 +99,10 @@ const Container = styled.div`
 
   @media (max-width: 768px) {
     width: 220px;
-    height: 300px;
   }
 
   @media (max-width: 390px) {
     width: 170px;
-    height: 250px;
   }
 `
 const ImgBox = styled.div`
@@ -149,7 +168,6 @@ const DogBreed = styled.p`
 
 const DogBottomInfoBox = styled.div`
   display: flex;
-  position: absolute;
 `
 const InfoBox = styled.div`
   display: flex;
@@ -163,6 +181,7 @@ const InfoBox = styled.div`
     margin: 10px 20px;
     display: flex;
     align-items: center;
+
     @media (max-width: 768px) {
       margin: 5px 15px;
     }
@@ -195,7 +214,7 @@ const InfoContent = styled.p`
   color: #555;
 
   @media (max-width: 768px) {
-    font-size: 13.5px;
+    font-size: 13px;
   }
 
   @media (max-width: 390px) {
@@ -203,20 +222,50 @@ const InfoContent = styled.p`
   }
 `
 
-const EditButton = styled.span`
-  font-size: 20px;
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  color: gray;
-  cursor: pointer;
+const UserInfoBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  font-size: 13px;
+  gap: 20px;
+
+  .title {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    line-height: 16px;
+    color: #444;
+  }
+
+  .content {
+    font-family: 'Inter';
+    line-height: 16px;
+    color: #555;
+  }
+`
+const DesignTitle = styled.div`
+  font-family: 'Nanum Pen Script', cursive;
+  font-size: 30px;
 `
 
-const DeleteButton = styled.span`
-  font-size: 20px;
-  position: absolute;
-  bottom: 0;
-  right: 25px;
-  color: #f25757;
+const UserNameAndTell = styled.div`
+  display: flex;
+  justify-content: space-between;
+`
+
+const Name = styled.div``
+const Tell = styled.div`
+  padding-right: 30px;
+`
+
+const UserAddress = styled.div``
+const Check = styled.div``
+
+const TotalPrice = styled.div``
+const RejectButton = styled.button`
+  padding: 10px;
+  border-radius: 15px;
+  border: none;
+  color: white;
   cursor: pointer;
 `

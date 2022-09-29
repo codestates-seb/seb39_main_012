@@ -2,9 +2,6 @@ import React, {useState} from 'react'
 import styled from 'styled-components'
 import {RiEditBoxLine} from 'react-icons/ri'
 import {flexCenter} from '@/styles/css'
-import AddDogModal from './AddDogModal'
-import {useRecoilState} from 'recoil'
-import {addOpenState} from '@/recoil/editOpen'
 
 interface User {
   profileImg: string
@@ -17,16 +14,14 @@ interface Props {
   user: User
 }
 
-function UserProfileCard({user}: Props) {
+function CeoProfileCard({user}: Props) {
   const {profileImg, username, phone, email} = user
-  const [addOpen, setAddOpen] = useRecoilState(addOpenState)
+
   return (
     <Container>
-      <UserInfoBoxs>
-        <UserImgBox>
-          <img src={profileImg} alt="UserprofillImg" />
-        </UserImgBox>
-      </UserInfoBoxs>
+      <UserImgBox>
+        <img src={profileImg} alt="UserprofillImg" />
+      </UserImgBox>
       <UserInfoBox>
         <UserName>
           <span>견주</span>
@@ -34,8 +29,8 @@ function UserProfileCard({user}: Props) {
         </UserName>
         <UserTell>{phone}</UserTell>
         <UserEmail>{email}</UserEmail>
-        <AddDogButton onClick={() => setAddOpen(true)}>
-          <p>반려견 추가하기</p>
+        <AddDogButton>
+          <p>업체 등록하기</p>
           <RiEditBoxLine />
         </AddDogButton>
       </UserInfoBox>
@@ -43,7 +38,7 @@ function UserProfileCard({user}: Props) {
   )
 }
 
-export default UserProfileCard
+export default CeoProfileCard
 
 const Container = styled.div`
   display: flex;
@@ -75,25 +70,6 @@ const UserImgBox = styled.div`
       height: 130px;
     }
   }
-  &:hover::after {
-    content: '프로필 수정';
-    position: absolute;
-    ${flexCenter}
-    top: 0;
-    left: 0;
-    font-size: 20px;
-    font-weight: 600;
-    color: #fff;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    border-radius: 50%;
-    cursor: pointer;
-  }
-`
-
-const UserInfoBoxs = styled.div`
-  position: relative;
 `
 
 const UserInfoBox = styled.div`
