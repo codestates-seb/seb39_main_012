@@ -8,11 +8,18 @@ import ReservationProcessing from '@/components/Mypage/ReservationProcessing'
 import ReservationSwiper from '@/components/Mypage/ReservationSwiper'
 import ReviewTable from '@/components/Mypage/ReviewTable'
 import {ToastContainer} from 'react-toastify'
+import {useRecoilState} from 'recoil'
+import {addOpenState, editOpenState} from '@/recoil/editOpen'
+import AddDogModal from '@/components/Mypage/AddDogModal'
 
 function MyPage() {
+  const [editOpen, setEditOpen] = useRecoilState(editOpenState)
+  const [addOpen, setAddOpen] = useRecoilState(addOpenState)
   return (
     <Container>
       <ToastContainer />
+      {editOpen && <AddDogModal setIsOpen={setEditOpen} />}
+      {addOpen && <AddDogModal setIsOpen={setAddOpen} />}
       <Title>마이페이지</Title>
       <SectionTitle title={'견주님 & 반려견 정보'} />
       <UserAndDogBox>

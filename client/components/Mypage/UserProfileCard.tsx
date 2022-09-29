@@ -3,6 +3,9 @@ import styled from 'styled-components'
 import {RiEditBoxLine} from 'react-icons/ri'
 import {flexCenter} from '@/styles/css'
 import AddDogModal from './AddDogModal'
+import {useRecoilState} from 'recoil'
+import {addOpenState} from '@/recoil/editOpen'
+
 interface User {
   profileImg: string
   username: string
@@ -16,13 +19,14 @@ interface Props {
 
 function UserProfileCard({user}: Props) {
   const {profileImg, username, phone, email} = user
-  const [isOpen, setIsOpen] = useState(false)
+  const [addOpen, setAddOpen] = useRecoilState(addOpenState)
   return (
     <Container>
-      {isOpen && <AddDogModal setIsOpen={setIsOpen} />}
-      <UserImgBox>
-        <img src={profileImg} alt="UserprofillImg" />
-      </UserImgBox>
+      <UserInfoBoxs>
+        <UserImgBox>
+          <img src={profileImg} alt="UserprofillImg" />
+        </UserImgBox>
+      </UserInfoBoxs>
       <UserInfoBox>
         <UserName>
           <span>견주</span>
@@ -30,7 +34,7 @@ function UserProfileCard({user}: Props) {
         </UserName>
         <UserTell>{phone}</UserTell>
         <UserEmail>{email}</UserEmail>
-        <AddDogButton onClick={() => setIsOpen(true)}>
+        <AddDogButton onClick={() => setAddOpen(true)}>
           <p>반려견 추가하기</p>
           <RiEditBoxLine />
         </AddDogButton>
@@ -71,6 +75,25 @@ const UserImgBox = styled.div`
       height: 130px;
     }
   }
+  &:hover::after {
+    content: '프로필 수정';
+    position: absolute;
+    ${flexCenter}
+    top: 0;
+    left: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #fff;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    cursor: pointer;
+  }
+`
+
+const UserInfoBoxs = styled.div`
+  position: relative;
 `
 
 const UserInfoBox = styled.div`

@@ -6,6 +6,7 @@ import {Rating} from 'react-simple-star-rating'
 import styled from 'styled-components'
 import {AiOutlineCamera} from 'react-icons/ai'
 import {toast} from 'react-toastify'
+import {format} from 'node:path/win32'
 
 interface Props {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
@@ -17,7 +18,10 @@ function AddReviewModal({setIsOpen}: Props) {
   const [ratingValue, setRatingValue] = useState(2.5)
   const [selectedFile, setSelectedFile] = useState<any>([])
   const [fileDataURL, setFileDataURL] = useState<any>([])
-  const [text, setText] = useState('')
+  const [form, setForm] = useState({
+    title: '',
+    content: '',
+  })
 
   useEffect(() => {
     console.log(selectedFile)
@@ -77,7 +81,7 @@ function AddReviewModal({setIsOpen}: Props) {
 
     const request = {
       rating: ratingValue,
-      text,
+      ...form,
     }
 
     console.log(request)
@@ -105,7 +109,17 @@ function AddReviewModal({setIsOpen}: Props) {
           </ContentBox>
         </ProductInfo>
         <TextAreaBox>
-          <TextArea value={text} onChange={(e) => setText(e.target.value)} />
+          <Input
+            type={'text'}
+            value={form.title}
+            name={'title'}
+            onChange={(e) => setForm({...form, [e.target.name]: e.target.value})}
+          ></Input>
+          <TextArea
+            value={form.content}
+            name={'content'}
+            onChange={(e) => setForm({...form, [e.target.name]: e.target.value})}
+          />
         </TextAreaBox>
         <ReviewImgBox>
           <label htmlFor="dogImg">
@@ -146,7 +160,6 @@ const ModalContainer = styled.div`
 
 const Modal = styled.form`
   width: 450px;
-  height: 600px;
   background-color: white;
   border-radius: 10px;
   display: flex;
@@ -193,11 +206,26 @@ const ProductPrice = styled.p`
 
 const TextAreaBox = styled.div`
   display: flex;
+  width: 100%;
+  flex-direction: column;
+`
+
+const Input = styled.input`
+  margin-top: 20px;
+  width: 90%;
+  height: 15px;
+  border-radius: 10px;
+  padding: 20px;
+  border: none;
+  background-color: ${colors.grey1};
+  &:focus {
+    outline: none;
+  }
 `
 
 const TextArea = styled.textarea`
   margin-top: 25px;
-  width: 100%;
+  width: 90%;
   height: 180px;
   border: none;
   border-radius: 10px;
