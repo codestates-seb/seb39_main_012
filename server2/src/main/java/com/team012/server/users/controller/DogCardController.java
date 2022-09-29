@@ -29,15 +29,12 @@ public class DogCardController {
                                      @RequestPart(value = "file") MultipartFile file,
                                      @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-
         DogCard dogCard = mapper.dogDtoToDogCard(dogCardDto);
         dogCardService.savedDogCard(dogCard, file, principalDetails.getUsers());
-
 
         log.info("dogName = {}", dogCard.getDogName());
         log.info("dogType = {}", dogCard.getType());
         log.info("dogImageUrl = {}", dogCard.getPhotoImgUrl());
-
 
         return new ResponseEntity<>(new SingleResponseDto<>("create success"), HttpStatus.CREATED);
     }
@@ -68,6 +65,8 @@ public class DogCardController {
     // 강아지 카드 삭제
     @DeleteMapping("/{dogCardId}")
     public ResponseEntity deleteCard(@PathVariable("dogCardId") Long dogCardId) {
+
+        dogCardService.deleteDogCard(dogCardId);
 
         DogCardDto.Message response = DogCardDto.Message
                 .builder()

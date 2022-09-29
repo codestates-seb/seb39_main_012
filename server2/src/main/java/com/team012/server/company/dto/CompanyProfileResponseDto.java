@@ -3,10 +3,10 @@ package com.team012.server.company.dto;
 import com.team012.server.company.entity.Company;
 import com.team012.server.posts.entity.Posts;
 import com.team012.server.reservation.entity.ReservList;
-import com.team012.server.users.entity.Users;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
+
+import java.util.List;
 
 @Slf4j
 @Setter
@@ -15,8 +15,10 @@ import org.springframework.data.domain.Page;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CompanyProfileResponseDto {
-    private Users usersInfo;
+    private String username;
+    private String email;
+    private String phone;
     private Company companyInfo;
     private Posts postsInfo;
-    private Page<ReservList> reservListPage;
+    private List<ReservList> reservListPage;
 }

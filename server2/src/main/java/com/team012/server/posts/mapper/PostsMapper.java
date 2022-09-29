@@ -34,6 +34,7 @@ public interface PostsMapper {
                 .content(posts.getContent())
                 .address(address)
                 .avgScore(posts.getAvgScore())
+                .likesCount(posts.getLikesCount())
                 .checkIn(checkIn)
                 .checkOut(checkOut)
                 .postsImgList(posts.getPostsImgList())
@@ -81,6 +82,8 @@ public interface PostsMapper {
                             .id(p.getId())
                             .title(p.getTitle())
                             .address(address)
+                            .avgScore(p.getAvgScore())   // 평균 점수 추가
+                            .likesCount(p.getLikesCount())
                             .img(imgDto)
                             .minPrice(minPrice)
                             .build();
@@ -108,6 +111,7 @@ public interface PostsMapper {
                 .content(posts.getContent())
                 .address(address)
                 .avgScore(posts.getAvgScore())
+                .likesCount(posts.getLikesCount())
                 .checkIn(checkIn)
                 .checkOut(checkOut)
                 .reviewList(reviewList)
