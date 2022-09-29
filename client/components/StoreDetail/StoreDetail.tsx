@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import {useRouter} from 'next/router'
 import {colors} from '@/styles/colors'
 import styled from 'styled-components'
@@ -13,19 +13,24 @@ import {FiMapPin} from 'react-icons/fi'
 import CompanyReviewCard from './CompanyReviewCard'
 import CompanyReviewListCard from './CompanyReviewListCard'
 import Map from '../Map/Map'
-import 'react-date-range/dist/styles.css'
-import 'react-date-range/dist/theme/default.css'
 import {DateRange} from 'react-date-range'
 import {format} from 'date-fns'
 import koLocale from 'date-fns/locale/ko'
 import {BiPlusCircle} from 'react-icons/bi'
 import {BiMinusCircle} from 'react-icons/bi'
 import AuthButton from '../AuthButton/AuthButton'
+import LightGallery from 'lightgallery/react'
+import lgZoom from 'lightgallery/plugins/zoom'
+import lgThumbnail from 'lightgallery/plugins/thumbnail'
+import lgShare from 'lightgallery/plugins/share'
+import lgRotate from 'lightgallery/plugins/rotate'
+import lgFullscreen from 'lightgallery/plugins/fullscreen'
 
 const StoreDetail = () => {
   const router = useRouter()
   const {postId} = router.query
   const [addLike, setAddLike] = useState(false)
+  const onInit = () => {}
   const [openDate, setOpenDate] = useState(false)
   const [openDogNum, setOpenDogNum] = useState(false)
   const [openTime, setOpenTime] = useState(false)
@@ -78,11 +83,7 @@ const StoreDetail = () => {
     })
   }
 
-  const addLikeHandler = () => {
-    setAddLike(!addLike)
-  }
-
-  function getDayOfDate(reservationDate: string) {
+  const getDayOfDate = (reservationDate: string) => {
     const date = ['일', '월', '화', '수', '목', '금', '토']
     const getDayOfDate = date[new Date(reservationDate).getDay()]
     return getDayOfDate
@@ -116,61 +117,76 @@ const StoreDetail = () => {
                 </span>
                 <span>공유하기</span>
               </CompanyPageShare>
-              <CompanyPageLike onClick={addLikeHandler}>
-                <span>{addLike ? <AiFillHeart size="15" /> : <AiOutlineHeart size="15" />}</span>
-                <span>찜하기</span>
+              <CompanyPageLike onClick={() => setAddLike(!addLike)}>
+                {addLike ? (
+                  <span className="likeClicked">
+                    <AiFillHeart size="15" />
+                    <span>찜하기</span>
+                  </span>
+                ) : (
+                  <span>
+                    <AiOutlineHeart size="15" />
+                    <span>찜하기</span>
+                  </span>
+                )}
               </CompanyPageLike>
             </CompanyTitleSubRight>
           </CompanyTitleSub>
         </CompanyInfoTitleBox>
         <CompanyImages>
-          <CompanyImageLeft>
-            <ImageWrapper>
-              <Image
-                src="/images/company1.png"
-                alt="company-detail-image-1"
-                width={640}
-                height={505}
-              />
-            </ImageWrapper>
-          </CompanyImageLeft>
-          <CompanyImageRight>
-            <ImageWrapper>
-              <Image
-                src="/images/company2.png"
-                alt="company-detail-image-2"
-                width={320}
-                height={250}
-              />
-            </ImageWrapper>
-            <ImageWrapper>
-              <Image
-                src="/images/company3.png"
-                alt="company-detail-image-3"
-                width={320}
-                height={250}
-              />
-            </ImageWrapper>
-            <ImageWrapper>
-              <Image
-                src="/images/company4.png"
-                alt="company-detail-image-4"
-                width={320}
-                height={250}
-              />
-            </ImageWrapper>
-            <ImageWrapper>
-              <Image
-                src="/images/company5.png"
-                alt="company-detail-image-5"
-                width={320}
-                height={250}
-              />
-            </ImageWrapper>
-          </CompanyImageRight>
+          <LightGallery
+            onInit={onInit}
+            plugins={[lgZoom, lgThumbnail, lgShare, lgRotate, lgFullscreen]}
+            mode="lg-fade"
+          >
+            <a
+              data-lg-size="480-475-480, 800-791-800, 1406-1390"
+              className="gallery-item"
+              data-src="/images/company1.png"
+              data-responsive="/images/company1.png 480, /images/company1.png 800"
+              data-sub-html="<h4>도그플래닛</h4> <p>경기도 화성시 방교동</p>"
+            >
+              <img className="img-responsive" src="/images/company1.png" />
+            </a>
+            <a
+              data-lg-size="480-475-480, 800-791-800, 1406-1390"
+              className="gallery-item"
+              data-src="/images/company2.png"
+              data-responsive="/images/company2.png 480, /images/company2.png 800"
+              data-sub-html="<h4>도그플래닛</h4> <p>경기도 화성시 방교동</p>"
+            >
+              <img className="img-responsive" src="/images/company2.png" />
+            </a>
+            <a
+              data-lg-size="480-475-480, 800-791-800, 1406-1390"
+              className="gallery-item"
+              data-src="/images/company3.png"
+              data-responsive="/images/company3.png 480, /images/company3.png 800"
+              data-sub-html="<h4>도그플래닛</h4> <p>경기도 화성시 방교동</p>"
+            >
+              <img className="img-responsive" src="/images/company3.png" />
+            </a>
+            <a
+              data-lg-size="480-475-480, 800-791-800, 1406-1390"
+              className="gallery-item"
+              data-src="/images/company4.png"
+              data-responsive="/images/company4.png 480, /images/company4.png 800"
+              data-sub-html="<h4>도그플래닛</h4> <p>경기도 화성시 방교동</p>"
+            >
+              <img className="img-responsive" src="/images/company4.png" />
+            </a>
+            <a
+              data-lg-size="480-475-480, 800-791-800, 1406-1390"
+              className="gallery-item"
+              data-src="/images/company5.png"
+              data-responsive="/images/company5.png 480, /images/company5.png 800"
+              data-sub-html="<h4>도그플래닛</h4> <p>경기도 화성시 방교동</p>"
+            >
+              <img className="img-responsive" src="/images/company5.png" />
+            </a>
+          </LightGallery>
         </CompanyImages>
       </CompanyInfoTop>
-      {/* 하단작업 */}
       <CompanyInfoBottom>
         <CompanyDesc>
           <CompanyIntro>
@@ -621,14 +637,15 @@ const StoreDetail = () => {
             <CompanyReservationMiddleContainer>
               <CompanyReservationTable>
                 <CompanyReservationTableLeft>이용요금</CompanyReservationTableLeft>
-                <CompanyReservationTableRight>1박 케어</CompanyReservationTableRight>
               </CompanyReservationTable>
               <CompanyReservationTable>
                 <CompanyReservationTableOption>
                   <CompanyReservationTableOptionTitle>소형견</CompanyReservationTableOptionTitle>
                   <CompanyReservationTableOptionDesc>(7kg 미만)</CompanyReservationTableOptionDesc>
                 </CompanyReservationTableOption>
-                <CompanyReservationTableOptionPrice>49,000원</CompanyReservationTableOptionPrice>
+                <CompanyReservationTableOptionPrice>
+                  49,000원<span>&nbsp;/1박 케어</span>
+                </CompanyReservationTableOptionPrice>
               </CompanyReservationTable>
               <CompanyReservationTable>
                 <CompanyReservationTableOption>
@@ -637,14 +654,18 @@ const StoreDetail = () => {
                     (7kg~14.9kg)
                   </CompanyReservationTableOptionDesc>
                 </CompanyReservationTableOption>
-                <CompanyReservationTableOptionPrice>59,000원</CompanyReservationTableOptionPrice>
+                <CompanyReservationTableOptionPrice>
+                  59,000원<span>&nbsp;/1박 케어</span>
+                </CompanyReservationTableOptionPrice>
               </CompanyReservationTable>
               <CompanyReservationTable>
                 <CompanyReservationTableOption>
                   <CompanyReservationTableOptionTitle>대형견</CompanyReservationTableOptionTitle>
                   <CompanyReservationTableOptionDesc>(15kg 이상)</CompanyReservationTableOptionDesc>
                 </CompanyReservationTableOption>
-                <CompanyReservationTableOptionPrice>79,000원</CompanyReservationTableOptionPrice>
+                <CompanyReservationTableOptionPrice>
+                  79,000원<span>&nbsp;/1박 케어</span>
+                </CompanyReservationTableOptionPrice>
               </CompanyReservationTable>
             </CompanyReservationMiddleContainer>
           </CompanyReservationMiddle>
@@ -745,6 +766,12 @@ const CompanyPageLike = styled.div`
   align-items: center;
   margin-left: 2rem;
 
+  span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
   span:last-child {
     margin-left: 0.2rem;
     text-decoration: underline;
@@ -755,16 +782,45 @@ const CompanyPageLike = styled.div`
   :hover {
     color: ${colors.mainColor};
   }
+
+  .likeClicked {
+    color: ${colors.mainColor};
+  }
 `
 
 const CompanyImages = styled.div`
   margin-top: 2rem;
   cursor: pointer;
-  display: flex;
+  /* display: flex; */
   max-width: 128rem;
+
+  .lg-react-element {
+    display: grid;
+    grid-gap: 10px;
+    grid-template-areas:
+      'photoOne photoTwo photoThree'
+      'photoOne photoFour photoFive';
+    grid-template-columns: 1fr 25% 25%;
+  }
+
+  .lg-react-element > a {
+    height: 250px;
+  }
+
+  .lg-react-element > a:first-child {
+    grid-area: photoOne;
+    height: 510px !important;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    border-radius: 10px;
+  }
 `
 
-const CompanyImageLeft = styled.div`
+/* const CompanyImageLeft = styled.div`
   flex: 1;
   margin-right: 10px;
   border-radius: 3rem;
@@ -780,6 +836,54 @@ const ImageWrapper = styled.div`
   border-radius: 1rem;
   flex: 1 1 40%;
   overflow: hidden;
+` */
+
+const ModalContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+`
+const ModalBackdrop = styled.div`
+  position: fixed;
+  /* display: grid; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  place-items: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  z-index: 999;
+`
+
+const ModalView = styled.div.attrs((props) => ({
+  // attrs 메소드를 이용해 div 엘리먼트에 속성을 추가
+  role: 'dialog',
+}))`
+  border-radius: 10px;
+  background-color: pink;
+  width: 90%;
+  height: 80%;
+  padding: 5rem;
+  /* 
+  > div.close-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-right: 10px;
+    cursor: pointer;
+  }
+
+  > div.desc {
+    margin: 25px 0 0 25px;
+    color: #8e297a;
+    font-size: 1rem;
+  } */
 `
 
 const CompanyInfoBottom = styled.div`
@@ -1108,6 +1212,12 @@ const CompanyReservationTableOptionPrice = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+
+  span {
+    font-size: 1.5rem;
+    color: rgb(194, 194, 194);
+    font-weight: 600;
+  }
 `
 
 const CompanyReservationTableOptionTitle = styled.div`
@@ -1125,12 +1235,6 @@ const CompanyReservationTableLeft = styled.div`
   color: ${colors.mainColor};
   font-weight: 700;
   margin-bottom: 1.5rem;
-`
-const CompanyReservationTableRight = styled.div`
-  text-align: left;
-  font-size: 1.5rem;
-  color: rgb(177, 177, 177);
-  font-weight: 700;
 `
 
 const CompanyReservationBottom = styled.div``
