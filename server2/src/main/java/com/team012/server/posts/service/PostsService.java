@@ -156,7 +156,6 @@ public class PostsService {
     }
 
     private void validateCheckInCheckOut(LocalTime checkIn, LocalTime checkOut) {
-        if (checkOut.isBefore(checkIn)) throw new IllegalArgumentException("checkIn must be lesser then checkOut");
-
+        if(checkOut.isBefore(checkIn)) throw new IllegalArgumentException("checkIn must be lesser then checkOut");
     }
 }

@@ -29,6 +29,7 @@ public class CompanyController {
 
     // 회사 프로필 조회
     @GetMapping("/profile")
+
     public ResponseEntity profileCompany(@AuthenticationPrincipal PrincipalDetails principalDetails,
                                          Integer page,
                                          Integer size) {
@@ -41,7 +42,8 @@ public class CompanyController {
         Long companyId = findCompany.getId();
 
         CompanyProfileResponseDto response =
-                companyInfoService.getProfile(findUsers, userId, companyId, page - 1, size);
+                companyInfoService.getProfile(findUsers, userId, companyId, 1, 5);
+
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

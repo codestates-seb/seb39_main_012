@@ -57,11 +57,11 @@ public class PostsController {
 
         Posts response = postsService.save(request, file, companyId);
 
-        roomService.saveList(roomList, response.getId());
+        List<Room> roomList1 = roomService.saveList(roomList, response.getId());
 
         tagService.saveCompanyPostsTags(tagService.saveOrFind(hashTag), response);
         serviceTagService.saveCompanyPostsTags(serviceTagService.saveOrFind(serviceTag), response);
-        List<Room> roomList1 = roomService.findAllRoom(response.getId());
+
 
         return new ResponseEntity<>(mapper.postsToResponseDto(response, roomList1), HttpStatus.CREATED);
     }
