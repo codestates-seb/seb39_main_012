@@ -1,9 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 import CardImage from '../CardImage/CardImage'
-import {BsGenderMale, BsGenderFemale} from 'react-icons/bs'
+import {BsGenderMale} from 'react-icons/bs'
 import {toLocalScale} from '@/utils/util'
-import {colors} from '@/styles/colors'
 
 const imgUrl = 'https://dimg.donga.com/wps/NEWS/IMAGE/2022/01/28/111500268.2.jpg'
 

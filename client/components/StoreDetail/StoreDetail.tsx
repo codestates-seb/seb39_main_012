@@ -1,8 +1,12 @@
-import React, {useState, useEffect, useRef} from 'react'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable no-irregular-whitespace */
+/* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable @next/next/no-img-element */
+import React, {useState, useEffect} from 'react'
 import {useRouter} from 'next/router'
 import {colors} from '@/styles/colors'
 import styled from 'styled-components'
-import Image from 'next/image'
 import SectionTitle from './SectionTitle'
 import AvailableServiceCard from './AvailableServiceCard'
 import {AiFillStar} from 'react-icons/ai'
@@ -34,7 +38,7 @@ const StoreDetail = () => {
   const [openDate, setOpenDate] = useState(false)
   const [openDogNum, setOpenDogNum] = useState(false)
   const [openTime, setOpenTime] = useState(false)
-  const [reservationDate, setReservationDate] = useState('')
+
   const [date, setDate] = useState([
     {
       startDate: new Date(),
@@ -42,11 +46,7 @@ const StoreDetail = () => {
       key: 'selection',
     },
   ])
-  const [openOptions, setOpenOptions] = useState(false)
-  const [options, setOptions] = useState({
-    adult: 1,
-    child: 0,
-  })
+
   const [smallDogNum, setSmallDogNum] = useState(0)
   const [mediumDogNum, setMediumDogNum] = useState(0)
   const [largeDogNum, setLargeDogNum] = useState(0)
@@ -818,72 +818,6 @@ const CompanyImages = styled.div`
     object-fit: fill;
     border-radius: 10px;
   }
-`
-
-/* const CompanyImageLeft = styled.div`
-  flex: 1;
-  margin-right: 10px;
-  border-radius: 3rem;
-`
-const CompanyImageRight = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  flex: 1;
-`
-
-const ImageWrapper = styled.div`
-  border-radius: 1rem;
-  flex: 1 1 40%;
-  overflow: hidden;
-` */
-
-const ModalContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  width: 100vw;
-`
-const ModalBackdrop = styled.div`
-  position: fixed;
-  /* display: grid; */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  place-items: center;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  z-index: 999;
-`
-
-const ModalView = styled.div.attrs((props) => ({
-  // attrs 메소드를 이용해 div 엘리먼트에 속성을 추가
-  role: 'dialog',
-}))`
-  border-radius: 10px;
-  background-color: pink;
-  width: 90%;
-  height: 80%;
-  padding: 5rem;
-  /* 
-  > div.close-btn {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    margin-right: 10px;
-    cursor: pointer;
-  }
-
-  > div.desc {
-    margin: 25px 0 0 25px;
-    color: #8e297a;
-    font-size: 1rem;
-  } */
 `
 
 const CompanyInfoBottom = styled.div`

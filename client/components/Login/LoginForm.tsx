@@ -4,7 +4,6 @@ import {colors} from '@/styles/colors'
 import {useRouter} from 'next/router'
 import Input from '../Input/Input'
 import AuthButton, {Button} from '../AuthButton/AuthButton'
-import CheckBox from '../CheckBox/CheckBox'
 
 interface Prop {
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void

@@ -1,20 +1,47 @@
 import axios from 'axios'
-import {MdEmail} from 'react-icons/md'
 import {SERVER_URL} from '.'
 import {getUserInfo} from './getUserInfo'
-import {ILogin, ICustomerSignUp, ICompanySingUp} from './type/types'
+import {ILogin, ICustomerSignUp, ICompanySingUp, UserSignUp} from './type/types'
 
 const authAPI = axios.create({baseURL: SERVER_URL, timeout: 1000})
 
-// export const Login = async(username:string, password:string) => {
+const authInstance = axios.create({
+  baseURL: SERVER_URL,
+})
+
+const signUp = async (form: UserSignUp, mode: 'user' | 'company') => {
+  try {
+    if (mode === 'user') {
+      return await authInstance.post('/v1/users/join/customer', form)
+    } else if (mode === 'company') {
+      return await authInstance.post('/v1/users/join/company', form)
+    }
+  } catch (e) {
+    if (e instanceof Error) {
+      throw new Error(e.message)
+    }
+    throw new Error('회원가입 실패')
+  }
+}
+
+export const duplicateCheck = async (email: string) => {
+  try {
+    return await authInstance.get(`/v1/users/check?email=${email}`)
+  } catch (e) {
+    if (e instanceof Error) {
+      throw new Error(e.message)
+    }
+    throw new Error('중복확인 실패')
+  }
+}
+
 export let getUser = null
-export let jwt = ''
+export const jwt = ''
 export const Login = async (LoginForm: ILogin) => {
   try {
-    // const result = await authAPI.post('/login', {username, password})
     const result = await authAPI.post('/login', LoginForm)
     const jwt = result.headers.authorization.split(' ')[1]
-    getUser = getUserInfo(jwt) // { "email": "test@test.com", "password": "asdf1234!@#$"}
+    getUser = getUserInfo(jwt)
     console.log(getUser)
     return [result.status, jwt]
   } catch (error) {
@@ -42,6 +69,7 @@ export const CompanySingUp = async (SignUpForm: ICompanySingUp) => {
 
 export const authService = {
   Login,
+  signUp,
   CustomerSignUp,
   CompanySingUp,
 }

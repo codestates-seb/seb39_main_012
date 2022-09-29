@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import {colors} from '@/styles/colors'
 import {flexCenter} from '@/styles/css'
 import {toLocalScale} from '@/utils/util'
@@ -6,7 +7,6 @@ import {Rating} from 'react-simple-star-rating'
 import styled from 'styled-components'
 import {AiOutlineCamera} from 'react-icons/ai'
 import {toast} from 'react-toastify'
-import {format} from 'node:path/win32'
 
 interface Props {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
@@ -134,7 +134,7 @@ function AddReviewModal({setIsOpen}: Props) {
             multiple
           />
           <ReviewImgs>
-            {fileDataURL.map((url: any, idx: number) => (
+            {fileDataURL.map((url: string, idx: number) => (
               <ReviewImg key={idx} src={url} alt="ReviewImg" onClick={() => handleRemoveImg(idx)} />
             ))}
           </ReviewImgs>

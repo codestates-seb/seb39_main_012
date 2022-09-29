@@ -1,4 +1,5 @@
-import React, {useEffect, useState} from 'react'
+/* eslint-disable jsx-a11y/alt-text */
+import React, {useState} from 'react'
 import styled from 'styled-components'
 import Link from 'next/link'
 import {useRouter} from 'next/router'

@@ -35,3 +35,14 @@ export interface IPostWrite {
     price: number
   }[]
 }
+
+export interface UserSignUp {
+  email: string
+  password: string
+  username: string
+  phone: string
+  companyName?: string
+  address?: string
+  detailAddress?: string
+  ceo?: string
+}

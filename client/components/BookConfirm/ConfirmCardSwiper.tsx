@@ -1,6 +1,6 @@
 import React from 'react'
 import {Swiper, SwiperSlide} from 'swiper/react'
-import {Pagination, Navigation} from 'swiper'
+import {Navigation} from 'swiper'
 import ConfirmCard from './ConfirmCard'
 import 'swiper/css'
 import 'swiper/css/pagination'

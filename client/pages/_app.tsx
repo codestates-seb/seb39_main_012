@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @next/next/no-before-interactive-script-outside-document */
 import Layout from '@/components/Layout/Layout'
 import type {AppProps} from 'next/app'
 import Script from 'next/script'
@@ -10,7 +12,6 @@ import 'lightgallery/css/lg-zoom.css'
 import 'lightgallery/css/lg-thumbnail.css'
 import 'react-date-range/dist/styles.css'
 import 'react-date-range/dist/theme/default.css'
-
 
 declare global {
   interface Window {

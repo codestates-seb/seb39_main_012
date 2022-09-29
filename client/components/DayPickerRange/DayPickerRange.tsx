@@ -1,5 +1,5 @@
 import 'react-day-picker/dist/style.css'
-import React, {useEffect, useState} from 'react'
+import React, {useState} from 'react'
 import {format} from 'date-fns'
 import {DateRange, DayPicker, SelectRangeEventHandler} from 'react-day-picker'
 import styled from 'styled-components'

@@ -1,7 +1,7 @@
 import React from 'react'
 import DogProfileCard from '@/components/Mypage/DogProfileCard'
 import {Swiper, SwiperSlide} from 'swiper/react'
-import {FreeMode, Pagination} from 'swiper'
+import {FreeMode} from 'swiper'
 import 'swiper/css'
 import 'swiper/css/pagination'
 import 'swiper/css/navigation'

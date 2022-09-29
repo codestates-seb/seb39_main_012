@@ -1,5 +1,4 @@
 import ConfirmCardSwiper from '@/components/BookConfirm/ConfirmCardSwiper'
-import DogCardSwiper from '@/components/Mypage/DogCardSwiper'
 import SectionTitle from '@/components/StoreDetail/SectionTitle'
 import React from 'react'
 import {ToastContainer} from 'react-toastify'

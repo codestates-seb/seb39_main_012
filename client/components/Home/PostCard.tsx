@@ -6,15 +6,17 @@ import {colors} from '@/styles/colors'
 import {toLocalScale} from '@/utils/util'
 import {AiFillStar} from 'react-icons/ai'
 import {Post} from '@/types/post'
+import {useRouter} from 'next/router'
 
 interface Props {
   post: Post
 }
 
 function PostCard({post}: Props) {
+  const router = useRouter()
   // const address = `${post.address[0].split(' ')[0]} ${post.address[0].split(' ')[1]}`
   return (
-    <Container>
+    <Container onClick={() => router.push(`/detail/${post.id}`)}>
       <ImgBox>
         <CardImage mode="post" imgUrl={post.img.url} />
       </ImgBox>

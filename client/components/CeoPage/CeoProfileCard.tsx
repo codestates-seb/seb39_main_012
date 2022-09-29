@@ -1,7 +1,7 @@
-import React, {useState} from 'react'
+/* eslint-disable @next/next/no-img-element */
+import React from 'react'
 import styled from 'styled-components'
 import {RiEditBoxLine} from 'react-icons/ri'
-import {flexCenter} from '@/styles/css'
 
 interface User {
   profileImg: string

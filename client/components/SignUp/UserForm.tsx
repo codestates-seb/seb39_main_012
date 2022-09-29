@@ -9,7 +9,7 @@ import AuthButton from '../AuthButton/AuthButton'
 import LabelInput from '../LabelInput/LabelInput'
 import AgreeBox from './AgreeBox'
 import Postcode from './Postcode'
-import {authService, duplicateCheck} from '@/apis/authAPI'
+import {authService, duplicateCheck} from '@/apis/AuthAPI'
 
 interface Props {
   mode: 'user' | 'company'

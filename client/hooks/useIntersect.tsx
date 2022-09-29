@@ -1,4 +1,5 @@
-import React, {useEffect, useState} from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+import {useEffect, useState} from 'react'
 
 function useIntersect(callback: () => void) {
   const [lastIntersecting, setLastIntersecting] = useState<HTMLDivElement | null>(null)

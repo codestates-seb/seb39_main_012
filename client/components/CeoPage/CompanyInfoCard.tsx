@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import CardImage from '../CardImage/CardImage'
-import ReservedTag from '../Mypage/ReservedTag'
 import CompanyInfoTag from './CompanyInfoTag'
 
 const imgUrl = 'https://cdn.imweb.me/upload/S201807025b39d1981b0b0/1fc55d055098b.jpg'

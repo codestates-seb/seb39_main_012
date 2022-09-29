@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import CardImage from '../CardImage/CardImage'
 import {BsGenderMale, BsGenderFemale} from 'react-icons/bs'
@@ -9,7 +9,7 @@ import {editOpenState} from '@/recoil/editOpen'
 const imgUrl = 'https://dimg.donga.com/wps/NEWS/IMAGE/2022/01/28/111500268.2.jpg'
 
 function DogProfileCard() {
-  const [editOpen, setEditOpen] = useRecoilState(editOpenState)
+  const [, setEditOpen] = useRecoilState(editOpenState)
   return (
     <Container>
       <ImgBox>

@@ -54,7 +54,7 @@ function Home({posts1, posts2, pageInfo}: InferGetStaticPropsType<typeof getStat
   return (
     <Container>
       <MainBanner>
-        <Image src={mainBanner} sizes={'100%'} />
+        <Image src={mainBanner} sizes={'100%'} alt={'MainBannerImg'} />
       </MainBanner>
       <MainSearchBar>
         <SearchBar />
@@ -70,7 +70,7 @@ function Home({posts1, posts2, pageInfo}: InferGetStaticPropsType<typeof getStat
         ))}
       </PostCardBox>
       <SubBanner>
-        <Image src={subBanner} />
+        <Image src={subBanner} alt={'SubBannerImg'} />
       </SubBanner>
       <PostCardBox>
         {posts.map((post: Post, idx) => (

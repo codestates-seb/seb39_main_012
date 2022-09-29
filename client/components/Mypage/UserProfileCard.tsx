@@ -1,8 +1,8 @@
-import React, {useState} from 'react'
+/* eslint-disable @next/next/no-img-element */
+import React from 'react'
 import styled from 'styled-components'
 import {RiEditBoxLine} from 'react-icons/ri'
 import {flexCenter} from '@/styles/css'
-import AddDogModal from './AddDogModal'
 import {useRecoilState} from 'recoil'
 import {addOpenState} from '@/recoil/editOpen'
 
@@ -19,7 +19,7 @@ interface Props {
 
 function UserProfileCard({user}: Props) {
   const {profileImg, username, phone, email} = user
-  const [addOpen, setAddOpen] = useRecoilState(addOpenState)
+  const [, setAddOpen] = useRecoilState(addOpenState)
   return (
     <Container>
       <UserInfoBoxs>
