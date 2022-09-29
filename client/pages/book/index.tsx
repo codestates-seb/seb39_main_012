@@ -149,7 +149,7 @@ const Input = styled.input`
   }
 
   :focus {
-    border: 0.3rem solid ${colors.subColor3};
+    border: 1px solid ${colors.mainColor};
   }
 `
 
