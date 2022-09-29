@@ -89,6 +89,7 @@ public class PostsDto {
         private List<String> address;
         private Long companyId;
         private Double avgScore; // 평균 별점
+        private Integer likesCount;
         private String checkIn;
         private String checkOut; //추가
         private List<Review> reviewList; // 리뷰 리스트 최신 아이디 순
@@ -115,6 +116,7 @@ public class PostsDto {
         private String title;
         private String address;
         private Double avgScore;  // 평균 점수 추가
+        private Integer likesCount;
         private ImgDto.ResponseListDto img;
         private Integer minPrice;
     }

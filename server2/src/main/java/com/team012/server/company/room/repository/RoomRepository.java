@@ -13,7 +13,7 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
     List<Room> findAllByPostsId(@Param("id") Long id);
 
     @Query("select r from Room r where r.postsId = :postsId and r.size = :size")
-    Optional<Room> findByPostsIdAndSize(Long postsId, String size);
+    Optional<Room> findByPostsIdAndSize(@Param("postsId")Long postsId,@Param("size") String size);
 
     @Query("select min(r.price) from Room r where r.postsId = :id")
     Integer findMinPrice(@Param("id")Long id);
