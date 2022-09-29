@@ -77,11 +77,11 @@ public class PostsService {
         Optional.ofNullable(post.getContent()).ifPresent(findPosts::setContent);
         Optional.ofNullable(post.getRoomCount()).ifPresent(findPosts::setRoomCount); //add
 
-        if(post.getCheckIn() != null) {
+        if (post.getCheckIn() != null) {
             LocalTime checkIn = convertCheckInToTime(post.getCheckIn());
             findPosts.setCheckIn(checkIn);
         }
-        if(post.getCheckOut() != null) {
+        if (post.getCheckOut() != null) {
             LocalTime checkOut = convertCheckOutToTime(post.getCheckOut());
             findPosts.setCheckOut(checkOut);
         }
@@ -101,6 +101,7 @@ public class PostsService {
         return posts1;
 
     }
+
     @Transactional(readOnly = true)
     public Posts findById(Long postsId) {
         Optional<Posts> findCompanyPosts
@@ -108,6 +109,7 @@ public class PostsService {
 
         return findCompanyPosts.orElseThrow(() -> new RuntimeException("Posts Not Found"));
     }
+
     @Transactional(readOnly = true)
     public Page<Posts> findByPage(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "id");
@@ -138,6 +140,7 @@ public class PostsService {
 
     public Posts findByCompanyId(Long companyId) {
         return postsRepository.findByCompanyId(companyId);
+    }
 
     private LocalTime convertCheckInToTime(String strCheckIn) {
         strCheckIn = strCheckIn.trim();
@@ -153,6 +156,5 @@ public class PostsService {
 
     private void validateCheckInCheckOut(LocalTime checkIn, LocalTime checkOut) {
         if(checkOut.isBefore(checkIn)) throw new IllegalArgumentException("checkIn must be lesser then checkOut");
-
     }
 }
