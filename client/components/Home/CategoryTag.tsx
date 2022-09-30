@@ -1,4 +1,5 @@
 import {flexCenter} from '@/styles/css'
+import {useRouter} from 'next/router'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -7,7 +8,8 @@ interface Props {
 }
 
 function CategoryTag({title}: Props) {
-  return <Container onClick={() => console.log(title)}>{title}</Container>
+  const router = useRouter()
+  return <Container onClick={() => router.push(`/search?tag=${title}`)}>{title}</Container>
 }
 
 export default CategoryTag

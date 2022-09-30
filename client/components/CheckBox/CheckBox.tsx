@@ -1,5 +1,5 @@
 import {colors} from '@/styles/colors'
-import React, {useEffect, useState} from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import {Checks} from '../SignUp/AgreeBox'
 

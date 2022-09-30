@@ -1,10 +1,11 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import {useState} from 'react'
 import styled from 'styled-components'
 import TapMenu from '@/components/Login/TapMenu'
 import LoginForm from '@/components/Login/LoginForm'
-import axios from 'axios'
 import {useRouter} from 'next/router'
 import {toast} from 'react-toastify'
+import {authService} from '@/apis/AuthAPI'
 
 const index = () => {
   const [error, setError] = useState(false)
@@ -18,8 +19,9 @@ const index = () => {
       email,
       password,
     }
-    const result = await axios.post('/api/auth/login', form)
-    if (result.status === 200) {
+
+    const [result, jwt] = await authService.Login(form)
+    if (result === 200) {
       router.push('/')
       toast.success('로그인 성공')
     } else {

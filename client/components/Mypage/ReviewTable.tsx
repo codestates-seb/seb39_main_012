@@ -1,6 +1,5 @@
 import {colors} from '@/styles/colors'
 import React, {useState} from 'react'
-import {RiTruckLine} from 'react-icons/ri'
 import styled from 'styled-components'
 import AddReviewModal from './AddReviewModal'
 

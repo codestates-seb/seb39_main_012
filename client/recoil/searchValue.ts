@@ -1,7 +1,12 @@
 import {atom} from 'recoil'
 
+export const titleSearchState = atom({
+  key: 'titleSearchState',
+  default: '',
+})
+
 export const searchValueState = atom({
-  key: 'SearchValueState',
+  key: 'searchValueState',
   default: {
     local: '',
     checkin: '체크인',

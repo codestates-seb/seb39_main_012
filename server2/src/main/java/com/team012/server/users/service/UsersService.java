@@ -87,4 +87,19 @@ public class UsersService {
 
         return usersRepository.save(findUsers);
     }
+
+    /// 추가 코드 ///
+    public Users findByEmail(String phone) {
+        return usersRepository.findByPhone(phone);
+    }
+
+    public Users findByPassword(String email) {
+        return usersRepository.findByEmail(email);
+    }
+
+    // 임시비밀번호 저장
+    public void setExPassword(Users users) {
+        usersRepository.save(users);
+    }
+
 }

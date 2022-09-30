@@ -14,7 +14,7 @@ const Map = ({address, companyName}: MapProps) => {
         geocoder.addressSearch(address, (result: any, status: any) => {
           if (status === window.kakao.maps.services.Status.OK) {
             const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x)
-            const container = document.getElementById('map')!
+            const container = document.getElementById('map') as HTMLElement
             const options = {
               center: coords,
               level: 4,
@@ -30,7 +30,7 @@ const Map = ({address, companyName}: MapProps) => {
             infowindow.open(map, marker)
           } else {
             const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x)
-            const container = document.getElementById('map')!
+            const container = document.getElementById('map') as HTMLElement
             const options = {
               center: new window.kakao.maps.LatLng(33.450701, 126.570667),
               level: 3,

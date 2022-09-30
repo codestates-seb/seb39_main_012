@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import CheckBox from '../CheckBox/CheckBox'
 import {Checks} from './AgreeBox'

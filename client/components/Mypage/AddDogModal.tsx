@@ -1,10 +1,10 @@
+/* eslint-disable @next/next/no-img-element */
 import {colors} from '@/styles/colors'
 import {flexCenter} from '@/styles/css'
 import React, {useEffect, useState} from 'react'
 import styled from 'styled-components'
 import {BsPlusCircleFill} from 'react-icons/bs'
 import LabelInput from '../LabelInput/LabelInput'
-import axios from 'axios'
 import LabelRadioButton from './LabelRadioButton'
 import {toast} from 'react-toastify'
 
@@ -94,7 +94,7 @@ function AddDogModal({setIsOpen}: Props) {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    const formData = new FormData()
+    // const formData = new FormData()
 
     // selectedFile.forEach((file: any) => {
     //   formData.append('file', file)

@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable @next/next/no-img-element */
 import React from 'react'
 import styled from 'styled-components'
 
@@ -18,7 +20,7 @@ const modeOptions = {
   },
 }
 
-function CardImage({imgUrl, mode, height}: Props) {
+function CardImage({imgUrl, mode}: Props) {
   const option = modeOptions[mode]
   return (
     <CardBox borderRadius={option.borderRadius}>

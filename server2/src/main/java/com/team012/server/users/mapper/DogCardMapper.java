@@ -25,6 +25,7 @@ public interface DogCardMapper {
                 .surgery(dogCard.getSurgery())
                 .bowelTrained(dogCard.getBowelTrained())
                 .username(dogCard.getUsers().getUsername())
+                .weight(dogCard.getWeight())   // weight 추가
                 .build();
     }
 }

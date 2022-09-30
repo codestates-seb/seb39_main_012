@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {Form} from '@/pages/signup'
 import {colors} from '@/styles/colors'
 import React from 'react'

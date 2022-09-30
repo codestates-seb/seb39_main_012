@@ -12,7 +12,7 @@ interface SectionTitleProps {
 const SectionTitle = ({title, sub1, sub2}: SectionTitleProps) => {
   return (
     <CompanySectionTitle>
-      <Image src="/images/dogpaw.png" alt="google-login" width={25} height={25} />
+      <Image src="/images/dogpaw.png" alt="section-title" width={25} height={25} />
       <span className="text title">{title}</span>
       <span className="text sub1">{sub1}</span>
       <span className="text">{sub2}</span>
