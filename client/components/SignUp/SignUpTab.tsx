@@ -1,6 +1,6 @@
 import {colors} from '@/styles/colors'
 import {flexCenter} from '@/styles/css'
-import React, {useState} from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 interface Props {

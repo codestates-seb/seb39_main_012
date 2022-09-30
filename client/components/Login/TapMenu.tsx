@@ -50,8 +50,7 @@ const TabMenu = styled.ul`
   }
 
   .focused {
-    border-bottom: 3px solid #1b1b1b;
-    color: #3e3e3e;
-    transition: 0.2s;
+    border-bottom: 3px solid rgb(27, 27, 27);
+    color: rgb(62, 62, 62);
   }
 `

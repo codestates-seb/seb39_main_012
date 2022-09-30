@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable prefer-const */
 import {NextApiRequest, NextApiResponse} from 'next'
 import formidable from 'formidable'
 import fs from 'fs'

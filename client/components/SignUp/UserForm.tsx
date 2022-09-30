@@ -1,15 +1,15 @@
-import useDebounce from '@/hooks/useDebounce'
-import {Form} from '@/pages/signup'
-import {Validate} from '@/utils/validate'
-import axios from 'axios'
-import {useRouter} from 'next/router'
 import React, {useEffect, useState} from 'react'
 import styled from 'styled-components'
+import useDebounce from '@/hooks/useDebounce'
+import {toast} from 'react-toastify'
+import {Form} from '@/pages/signup'
+import {Validate} from '@/utils/validate'
+import {useRouter} from 'next/router'
 import AuthButton from '../AuthButton/AuthButton'
 import LabelInput from '../LabelInput/LabelInput'
 import AgreeBox from './AgreeBox'
 import Postcode from './Postcode'
-import {toast} from 'react-toastify'
+import {authService, duplicateCheck} from '@/apis/AuthAPI'
 
 interface Props {
   mode: 'user' | 'company'
@@ -45,14 +45,12 @@ function UserForm({mode}: Props) {
     ageAgree: false,
   })
 
-  const debouceValue = useDebounce(form.email)
+  const debouceValue = useDebounce(form.email, 300)
 
   const [emailDuplicate, setEmailDuplicate] = useState(false)
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:3000/api/auth/check?email=${debouceValue}`)
-      .then((res) => setEmailDuplicate(res.data))
+    duplicateCheck(debouceValue).then((res) => setEmailDuplicate(res.data))
   }, [debouceValue])
 
   const {email, password, passwordCheck, name, phone, companyName, detailAddress, address} = form
@@ -97,12 +95,6 @@ function UserForm({mode}: Props) {
     e.preventDefault()
     const newForm: Partial<Form> = form
 
-    if (mode === 'user') {
-      delete newForm.companyName
-      delete newForm.address
-      delete newForm.detailAddress
-    }
-
     const {email, password, passwordCheck, name, phone} = newForm
 
     if (!email || !password || !passwordCheck || !name || !phone) {
@@ -124,10 +116,33 @@ function UserForm({mode}: Props) {
       return toast.error('필수 약관에 동의해주세요')
     }
 
-    const result = await axios.post('http://localhost:3000/api/auth/signup', newForm)
+    let request
 
-    if (result.status === 200) {
-      router.push('/')
+    if (mode === 'user') {
+      request = {
+        email,
+        password,
+        username: name,
+        phone,
+      }
+    } else {
+      request = {
+        email,
+        password,
+        username: name,
+        ceo: name,
+        phone,
+        companyName,
+        address,
+        detailAddress,
+      }
+    }
+
+    const result = await authService.signUp(request, mode)
+    console.log(result)
+
+    if (result?.status === 201) {
+      router.push('/login')
       toast.success('회원가입이 완료되었습니다.')
     } else {
       toast.error('회원가입에 실패했습니다.')

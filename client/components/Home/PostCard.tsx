@@ -2,34 +2,34 @@ import React from 'react'
 import styled from 'styled-components'
 import CardImage from '../CardImage/CardImage'
 import {GoLocation} from 'react-icons/go'
-import {dummyPosts} from '@/utils/dummy/dummy'
 import {colors} from '@/styles/colors'
 import {toLocalScale} from '@/utils/util'
 import {AiFillStar} from 'react-icons/ai'
-
-type Post = typeof dummyPosts[0]
+import {Post} from '@/types/post'
+import {useRouter} from 'next/router'
 
 interface Props {
   post: Post
 }
 
 function PostCard({post}: Props) {
-  const address = `${post.address[0].split(' ')[0]} ${post.address[0].split(' ')[1]}`
+  const router = useRouter()
+  // const address = `${post.address[0].split(' ')[0]} ${post.address[0].split(' ')[1]}`
   return (
-    <Container>
+    <Container onClick={() => router.push(`/detail/${post.id}`)}>
       <ImgBox>
-        <CardImage mode="post" imgUrl={post.companyPostsImgList[0].imgUrl} />
+        <CardImage mode="post" imgUrl={post.img.url} />
       </ImgBox>
       <Content>
         <Location>
           <GoLocation />
-          <span>{address}</span>
+          <span>{post.address}</span>
         </Location>
         <Title>{post.title}</Title>
-        <Price>{toLocalScale(post.price)}원 / 박</Price>
+        <Price>{toLocalScale(post.minPrice)}원 / 박</Price>
         <Rating>
           <AiFillStar />
-          <span>{post.rating}</span>
+          <span>{post.avgScore}</span>
         </Rating>
       </Content>
     </Container>

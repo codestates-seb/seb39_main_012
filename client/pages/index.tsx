@@ -7,14 +7,54 @@ import CategoryTag from '@/components/Home/CategoryTag'
 import {colors} from '@/styles/colors'
 import {categoryTags} from '@/utils/options/options'
 import PostCard from '@/components/Home/PostCard'
-import {dummyPosts} from '@/utils/dummy/dummy'
 import SearchBar from '@/components/Home/SearchBar'
+import {postService} from '@/apis/postAPI'
+import {useState} from 'react'
+import useIntersect from '@/hooks/useIntersect'
+import {Post} from '@/types/post'
+import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner'
+import {flexCenter} from '@/styles/css'
 
-function Home() {
+import {GetStaticProps, InferGetStaticPropsType} from 'next'
+export const getStaticProps: GetStaticProps = async () => {
+  const res1 = await postService.getPosts(1)
+  const res2 = await postService.getPosts(2)
+  return {
+    props: {
+      posts1: res1.data,
+      posts2: res2.data,
+      pageInfo: res2.pageInfo,
+    },
+    revalidate: 14400, // 4시간
+  }
+}
+
+function Home({posts1, posts2, pageInfo}: InferGetStaticPropsType<typeof getStaticProps>) {
+  const [page, setPage] = useState(3)
+  const [posts, setPosts] = useState<Post[]>(posts2)
+  const [totalPage, setTotalPage] = useState(pageInfo.totalPages)
+  const [isLoading, setIsLoading] = useState(false)
+
+  const fetchMore = async () => {
+    setIsLoading(true)
+    const res = await postService.getPosts(page)
+    setPosts([...posts, ...res.data])
+    setPage(page + 1)
+    setTotalPage(res.pageInfo.totalPages)
+    setIsLoading(false)
+  }
+
+  const callback = async () => {
+    if (page > totalPage) return
+    fetchMore()
+  }
+
+  const ref = useIntersect(callback)
+
   return (
     <Container>
       <MainBanner>
-        <Image src={mainBanner} />
+        <Image src={mainBanner} sizes={'100%'} alt={'MainBannerImg'} />
       </MainBanner>
       <MainSearchBar>
         <SearchBar />
@@ -25,18 +65,27 @@ function Home() {
         ))}
       </CategoryBox>
       <PostCardBox>
-        {Array.from({length: 8}).map((_, idx) => (
-          <PostCard key={idx} post={dummyPosts[0]}></PostCard>
+        {posts1.map((post: Post) => (
+          <PostCard post={post} key={post.id} />
         ))}
       </PostCardBox>
       <SubBanner>
-        <Image src={subBanner} />
+        <Image src={subBanner} alt={'SubBannerImg'} />
       </SubBanner>
       <PostCardBox>
-        {Array.from({length: 8}).map((_, idx) => (
-          <PostCard key={idx} post={dummyPosts[0]}></PostCard>
+        {posts.map((post: Post, idx) => (
+          <PostCard post={post} key={idx} />
         ))}
       </PostCardBox>
+      {page > totalPage ? (
+        <div></div>
+      ) : isLoading ? (
+        <SpinnerBox>
+          <LoadingSpinner />
+        </SpinnerBox>
+      ) : (
+        <Intersection ref={ref}></Intersection>
+      )}
       <ToastContainer />
     </Container>
   )
@@ -46,10 +95,22 @@ export default Home
 
 const Container = styled.div`
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `
 
 const MainBanner = styled.div`
   margin-bottom: 40px;
+  width: 100%;
+
+  @media (min-width: 1920px) {
+    width: 150%;
+  }
+
+  @media (max-width: 1280px) {
+    width: 100%;
+  }
 `
 
 const MainSearchBar = styled.div`
@@ -93,8 +154,19 @@ const PostCardBox = styled.div`
   justify-content: space-around;
   flex-wrap: wrap;
   gap: 15px;
+  min-height: 815px;
 `
 
 const SubBanner = styled.div`
   margin-bottom: 50px;
+`
+
+const SpinnerBox = styled.div`
+  ${flexCenter}
+  width: 100%;
+`
+
+const Intersection = styled.div`
+  height: 5px;
+  width: 100%;
 `

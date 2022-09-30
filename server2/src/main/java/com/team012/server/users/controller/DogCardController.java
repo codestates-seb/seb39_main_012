@@ -43,7 +43,7 @@ public class DogCardController {
     @PatchMapping("/{dog-card-id}")
     public ResponseEntity patchCard(@PathVariable("dog-card-id") long dogCardId,
                                     @RequestPart(value = "dogCardDto") DogCardDto.Post dogCardDto,
-                                    @RequestPart(value = "file") MultipartFile file,
+                                    @RequestPart(value = "file", required = false) MultipartFile file,
                                     @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
         DogCard dogCard = mapper.dogDtoToDogCard(dogCardDto);

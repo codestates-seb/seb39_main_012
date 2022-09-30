@@ -1,7 +1,7 @@
 import React from 'react'
 import ReservedCard from '@/components/Mypage/ReservedCard'
 import {Swiper, SwiperSlide} from 'swiper/react'
-import {Pagination, Navigation} from 'swiper'
+import {Navigation} from 'swiper'
 
 function ReservationSwiper() {
   return (

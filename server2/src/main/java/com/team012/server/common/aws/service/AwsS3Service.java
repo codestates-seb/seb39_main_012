@@ -45,7 +45,7 @@ public class AwsS3Service {
 
     public String singleUploadFile(MultipartFile multipartFile) {
 
-        validateFileExists(multipartFile);
+//        validateFileExists(multipartFile); --> 업로드 강제를 하지않기 위해서 주석
 
         String fileName = originalFileName(multipartFile);
 
@@ -67,7 +67,7 @@ public class AwsS3Service {
     //s3로 파일 업로드 하고 url 리턴하는 메서드
 
     public String uploadFile(MultipartFile multipartFile) throws IOException {
-        validateFileExists(multipartFile);
+//        validateFileExists(multipartFile); --> 업로드 강제를 하지않기 위해서 주석
 
         String fileName = originalFileName(multipartFile);
 
