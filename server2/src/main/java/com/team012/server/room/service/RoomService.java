@@ -1,9 +1,11 @@
-package com.team012.server.company.room.service;
+package com.team012.server.room.service;
 
-import com.team012.server.company.room.dto.RoomCreateDto;
-import com.team012.server.company.room.dto.RoomUpdateDto;
-import com.team012.server.company.room.entity.Room;
-import com.team012.server.company.room.repository.RoomRepository;
+import com.team012.server.room.converter.RoomConverter;
+import com.team012.server.room.dto.RoomCreateDto;
+import com.team012.server.room.dto.RoomDto;
+import com.team012.server.room.dto.RoomUpdateDto;
+import com.team012.server.room.entity.Room;
+import com.team012.server.room.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +19,7 @@ import java.util.Optional;
 public class RoomService {
 
     private final RoomRepository roomRepository;
+    private final RoomConverter roomConverter;
 
     public List<Room> saveList(List<RoomCreateDto> list, Long postsId) {
         List<Room> roomList = new ArrayList<>();
@@ -33,7 +36,7 @@ public class RoomService {
         return list1;
     }
 
-    public Room update(RoomUpdateDto roomUpdateDto) {
+    public RoomDto update(RoomUpdateDto roomUpdateDto) {
 
         Optional<Room> room = roomRepository.findById(roomUpdateDto.getRoomId());
         Room findRoom = room.orElseThrow(() -> new RuntimeException("room not exist"));
@@ -41,12 +44,9 @@ public class RoomService {
         Optional.ofNullable(roomUpdateDto.getSize()).ifPresent(findRoom::setSize);
         Optional.of(roomUpdateDto.getPrice()).ifPresent(findRoom::setPrice);
 
-        return roomRepository.save(findRoom);
+        return roomConverter.toDTO(roomRepository.save(findRoom));
     }
-    @Transactional(readOnly = true)
-    public Room findRoom(Long roomId) {
-        return roomRepository.findById(roomId).orElseThrow(() -> new RuntimeException("room not exist"));
-    }
+
     @Transactional(readOnly = true)
     public Room findRoomByPostsIdAndSize(Long postsId, String size) {
         return roomRepository.findByPostsIdAndSize(postsId, size)

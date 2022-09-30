@@ -1,6 +1,6 @@
 package com.team012.server.posts.dto;
 
-import com.team012.server.company.room.dto.RoomResponseDto;
+import com.team012.server.room.dto.RoomDto;
 import com.team012.server.posts.Tag.HashTag.dto.HashTagResponseDto;
 import com.team012.server.posts.Tag.ServiceTag.dto.ServiceResponseDto;
 import com.team012.server.posts.img.dto.ImgDto;
@@ -30,7 +30,7 @@ public class PostsResponseDto {
     private List<ImgDto> postsImgList;
     private List<HashTagResponseDto> hashTag;
     private List<ServiceResponseDto> serviceTag;
-    private List<RoomResponseDto> roomResponseDtos;
+    private List<RoomDto> roomDtos;
 
     private List<Review> reviewList;
 
@@ -43,7 +43,7 @@ public class PostsResponseDto {
     }
 
     @Builder(builderClassName = "builder", builderMethodName = "builder")
-    public PostsResponseDto(Long id, String title, String content, String latitude, String longitude, String address, String detailAddress, Long companyId, Double avgScore, Integer likesCount, String checkIn, String checkOut, List<ImgDto> postsImgList, List<HashTagResponseDto> hashTag, List<ServiceResponseDto> serviceTag, List<RoomResponseDto> roomResponseDtos, List<Review> reviewList) {
+    public PostsResponseDto(Long id, String title, String content, String latitude, String longitude, String address, String detailAddress, Long companyId, Double avgScore, Integer likesCount, String checkIn, String checkOut, List<ImgDto> postsImgList, List<HashTagResponseDto> hashTag, List<ServiceResponseDto> serviceTag, List<RoomDto> roomDtos, List<Review> reviewList) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -59,7 +59,7 @@ public class PostsResponseDto {
         this.postsImgList = postsImgList;
         this.hashTag = hashTag;
         this.serviceTag = serviceTag;
-        this.roomResponseDtos = roomResponseDtos;
+        this.roomDtos = roomDtos;
         this.reviewList = reviewList;
     }
 

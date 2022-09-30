@@ -1,4 +1,4 @@
-package com.team012.server.company.room.dto;
+package com.team012.server.room.dto;
 
 import lombok.Getter;
 

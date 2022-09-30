@@ -1,8 +1,8 @@
 package com.team012.server.reservation.service;
 
 
-import com.team012.server.company.room.entity.Room;
-import com.team012.server.company.room.service.RoomService;
+import com.team012.server.room.entity.Room;
+import com.team012.server.room.service.RoomService;
 import com.team012.server.posts.entity.Posts;
 import com.team012.server.posts.service.PostsService;
 import com.team012.server.reservation.entity.ReservList;

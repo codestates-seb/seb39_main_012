@@ -1,8 +1,8 @@
 package com.team012.server.posts.controller;
 
-import com.team012.server.company.room.entity.Room;
-import com.team012.server.company.room.service.RoomService;
-import com.team012.server.posts.converter.ConvertToPostsResponseDto;
+import com.team012.server.room.entity.Room;
+import com.team012.server.room.service.RoomService;
+import com.team012.server.posts.service.PostsCombineService;
 import com.team012.server.posts.dto.PostsResponseDto;
 import com.team012.server.posts.dto.PostsResponseListDto;
 import com.team012.server.posts.entity.Posts;
@@ -30,7 +30,7 @@ public class PostsPageController {
     private final RoomService roomService;
     private final ReviewService reviewService;
     private final PostListService postListService;
-    private final ConvertToPostsResponseDto convertToPostsResponseDto;
+    private final PostsCombineService postsCombineService;
 
     // 메인페이지 조회 (별점 순으로 기준해서 정렬)
     @GetMapping
@@ -89,7 +89,7 @@ public class PostsPageController {
         List<Review> reviewPage = reviewService.findByPage(page - 1, size).getContent();
         List<Room> roomList = roomService.findAllRoom(id);
 
-        PostsResponseDto postsResponseDto = convertToPostsResponseDto.postsResponseDto(response, reviewPage, roomList);
+        PostsResponseDto postsResponseDto = postsCombineService.combine(response, reviewPage, roomList);
 
         return new ResponseEntity<>(postsResponseDto, HttpStatus.OK);
     }
