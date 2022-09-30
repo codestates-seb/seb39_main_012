@@ -2,7 +2,7 @@ package com.team012.server.posts.img.service;
 
 import com.team012.server.posts.img.entity.PostsImg;
 import com.team012.server.posts.img.repository.PostsImgRepository;
-import com.team012.server.utils.aws.service.AwsS3Service;
+import com.team012.server.common.aws.service.AwsS3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

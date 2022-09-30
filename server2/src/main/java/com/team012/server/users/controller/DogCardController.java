@@ -1,8 +1,8 @@
 package com.team012.server.users.controller;
 
 import com.team012.server.users.entity.DogCard;
-import com.team012.server.utils.config.userDetails.PrincipalDetails;
-import com.team012.server.utils.response.SingleResponseDto;
+import com.team012.server.common.config.userDetails.PrincipalDetails;
+import com.team012.server.common.response.SingleResponseDto;
 import com.team012.server.users.dto.DogCardDto;
 import com.team012.server.users.mapper.DogCardMapper;
 import com.team012.server.users.service.DogCardService;

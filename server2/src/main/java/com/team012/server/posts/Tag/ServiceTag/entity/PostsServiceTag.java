@@ -25,6 +25,10 @@ public class PostsServiceTag {
     @JoinColumn(name = "posts_id")
     private Posts posts;
 
+    public void setServiceTag(ServiceTag serviceTag) {
+        this.serviceTag = serviceTag;
+    }
+
     @Builder
     public PostsServiceTag(ServiceTag serviceTag, Posts posts) {
         this.serviceTag = serviceTag;

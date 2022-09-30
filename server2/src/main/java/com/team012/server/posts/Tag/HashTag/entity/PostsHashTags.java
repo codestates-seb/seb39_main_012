@@ -30,4 +30,8 @@ public class PostsHashTags {
         this.hashTag = hashTag;
         this.posts = posts;
     }
+
+    public void setHashTag(HashTag hashTag) {
+        this.hashTag = hashTag;
+    }
 }

@@ -8,12 +8,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class PostsSearchService {
 
     private final PostsRepository postsRepository;
+
 
     //주소로 검색한 결과 페이지로 리턴
     public Page<Posts> findPostsByAddress(String address, int page, int size) {

@@ -1,5 +1,6 @@
 package com.team012.server.posts.Tag.HashTag.service;
 
+import com.team012.server.posts.Tag.HashTag.dto.HashTagUpdateDto;
 import com.team012.server.posts.Tag.HashTag.entity.HashTag;
 import com.team012.server.posts.Tag.HashTag.entity.PostsHashTags;
 import com.team012.server.posts.entity.Posts;
@@ -22,17 +23,12 @@ public class TagService {
     private final PostsHashTagRepository postsHashTagRepository;
 
     public List<HashTag> saveOrFind(List<String> postsTags) {
-        return postsTags.stream().map(tag -> {
-            Optional<HashTag> tags = hashTagRepository.findByTag(tag);
-            if(tags.isPresent()) {
-                return tags.get();
-            } else {
-                HashTag hashTag1 = HashTag.builder()
-                        .tag(tag)
-                        .build();
-                return hashTagRepository.save(hashTag1);
-            }
+        List<HashTag> hashTags =  postsTags.stream().map(tag -> {
+            return HashTag.builder()
+                    .tag(tag)
+                    .build();
         }).collect(Collectors.toList());
+        return hashTagRepository.saveAll(hashTags);
     }
 
     public List<PostsHashTags> saveCompanyPostsTags(List<HashTag> postsTags, Posts posts) {
@@ -48,8 +44,26 @@ public class TagService {
         return postsHashTagRepository.saveAll(postsHashTags);
     }
 
+    public HashTag updateHashTag(HashTagUpdateDto hashTag) {
+        Optional<HashTag> hashTag1 = hashTagRepository.findById(hashTag.getHashTagId());
+        HashTag findTag = hashTag1.orElseThrow(() -> new RuntimeException("hashtag not found"));
 
-    public void deleteCompanyPostsTags(Long postsId) {
+        Optional.ofNullable(hashTag.getTag()).ifPresent(findTag::setTag);
+        hashTagRepository.save(findTag);
+
+        return  findTag;
+    }
+
+
+    public void deleteHashTag(Long hashTagId) {
+        Optional<HashTag> hashTag1 = hashTagRepository.findById(hashTagId);
+        HashTag findTag = hashTag1.orElseThrow(() -> new RuntimeException("hashtag not found"));
+
+        hashTagRepository.delete(findTag);
+    }
+
+
+    public void deletePostsTags(Long postsId) {
         List<PostsHashTags> postsHashTags = postsHashTagRepository.findByPostsId(postsId);
 
         if(!postsHashTags.isEmpty()) postsHashTagRepository.deleteAll(postsHashTags);

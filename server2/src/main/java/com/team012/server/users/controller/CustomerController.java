@@ -6,7 +6,7 @@ import com.team012.server.review.entity.Review;
 import com.team012.server.users.dto.CustomerUpdateRequestDto;
 import com.team012.server.users.dto.UsersMessageResponseDto;
 import com.team012.server.users.entity.DogCard;
-import com.team012.server.utils.config.userDetails.PrincipalDetails;
+import com.team012.server.common.config.userDetails.PrincipalDetails;
 import com.team012.server.users.dto.CustomerProfileViewResponseDto;
 import com.team012.server.users.entity.Users;
 import com.team012.server.users.service.DogCardService;

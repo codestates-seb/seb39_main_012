@@ -1,22 +1,21 @@
 package com.team012.server.posts.service;
 
+import com.team012.server.posts.dto.PostsCreateDto;
+import com.team012.server.posts.dto.PostsUpdateDto;
 import com.team012.server.posts.entity.Posts;
-import com.team012.server.posts.dto.PostsDto;
 import com.team012.server.posts.img.entity.PostsImg;
 import com.team012.server.posts.img.repository.PostsImgRepository;
 import com.team012.server.posts.repository.PostsRepository;
-import com.team012.server.utils.aws.service.AwsS3Service;
+import com.team012.server.common.aws.service.AwsS3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -32,7 +31,7 @@ public class PostsService {
     private final PostsImgRepository imgRepository;
     private final AwsS3Service awsS3Service;
 
-    public Posts save(PostsDto.PostDto post, List<MultipartFile> files, Long companyId) {
+    public Posts save(PostsCreateDto post, List<MultipartFile> files, Long companyId) {
 
         LocalTime checkIn = convertCheckInToTime(post.getCheckIn());
         LocalTime checkOut = convertCheckOutToTime(post.getCheckOut());
@@ -42,10 +41,10 @@ public class PostsService {
                 .title(post.getTitle())
                 .content(post.getContent())
                 .companyId(companyId)
-                .latitude(post.getCoordinate().get(0))
-                .longitude(post.getCoordinate().get(1))
-                .address(post.getCoordinate().get(2))
-                .detailAddress(post.getCoordinate().get(3))
+                .latitude(post.getLatitude())
+                .longitude(post.getLongitude())
+                .address(post.getAddress())
+                .detailAddress(post.getDetailAddress())
                 .roomCount(post.getRoomCount())//add
                 .avgScore(0.0) // --> 처음 평균값은 0.0;
                 .likesCount(0)
@@ -64,16 +63,16 @@ public class PostsService {
 
     }
 
-    public Posts update(PostsDto.PatchDto post, List<MultipartFile> multipartFile, Long companyId) {
+    public Posts update(PostsUpdateDto post, List<MultipartFile> multipartFile, Long companyId) {
         Long postsId = post.getId();
         Posts findPosts = findById(postsId);
 
         if (!Objects.equals(findPosts.getCompanyId(), companyId)) throw new RuntimeException("companyId 일치하지 않음");
 
-        Optional.ofNullable(post.getCoordinate().get(0)).ifPresent(findPosts::setLatitude);
-        Optional.ofNullable(post.getCoordinate().get(1)).ifPresent(findPosts::setLongitude);
-        Optional.ofNullable(post.getCoordinate().get(2)).ifPresent(findPosts::setAddress);
-        Optional.ofNullable(post.getCoordinate().get(3)).ifPresent(findPosts::setDetailAddress);
+        Optional.ofNullable(post.getLatitude()).ifPresent(findPosts::setLatitude);
+        Optional.ofNullable(post.getLongitude()).ifPresent(findPosts::setLongitude);
+        Optional.ofNullable(post.getAddress()).ifPresent(findPosts::setAddress);
+        Optional.ofNullable(post.getDetailAddress()).ifPresent(findPosts::setDetailAddress);
         Optional.ofNullable(post.getTitle()).ifPresent(findPosts::setTitle);
         Optional.ofNullable(post.getContent()).ifPresent(findPosts::setContent);
         Optional.ofNullable(post.getRoomCount()).ifPresent(findPosts::setRoomCount); //add
