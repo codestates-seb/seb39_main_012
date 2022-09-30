@@ -1,17 +1,18 @@
-package com.team012.server.posts.converter;
+package com.team012.server.posts.service;
 
-import com.team012.server.company.room.converter.RoomConvert;
-import com.team012.server.company.room.dto.RoomResponseDto;
-import com.team012.server.company.room.entity.Room;
+import com.team012.server.posts.Tag.HashTag.converter.HashTagConverter;
+import com.team012.server.posts.Tag.ServiceTag.converter.ServiceTagConverter;
+import com.team012.server.room.converter.RoomConverter;
+import com.team012.server.room.dto.RoomDto;
+import com.team012.server.room.entity.Room;
 import com.team012.server.posts.Tag.HashTag.dto.HashTagResponseDto;
 import com.team012.server.posts.Tag.HashTag.entity.PostsHashTags;
 import com.team012.server.posts.Tag.ServiceTag.dto.ServiceResponseDto;
 import com.team012.server.posts.Tag.ServiceTag.entity.PostsServiceTag;
-import com.team012.server.posts.Tag.converter.TagConverter;
 import com.team012.server.posts.dto.PostsResponseDto;
 import com.team012.server.posts.dto.PostsResponseListDto;
 import com.team012.server.posts.entity.Posts;
-import com.team012.server.posts.img.converter.ConvertToImgDto;
+import com.team012.server.posts.img.converter.PostsImgConverter;
 import com.team012.server.posts.img.dto.ImgDto;
 import com.team012.server.review.entity.Review;
 import lombok.RequiredArgsConstructor;
@@ -22,17 +23,18 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Component
-public class ConvertToPostsResponseDto {
+public class PostsCombineService {
 
-    private final ConvertToImgDto convertToImgDto;
-    private final TagConverter tagConverter;
-    private final RoomConvert roomConvert;
+    private final PostsImgConverter postsImgConverter;
+    private final HashTagConverter hashTagConverter;
+    private final ServiceTagConverter serviceTagConverter;
+    private final RoomConverter roomConverter;
 
-    public PostsResponseDto createToDto(Long companyId, Posts posts, List<Room> roomList1, List<PostsHashTags> postsHashTags, List<PostsServiceTag>  postsServiceTags) {
-        List<ImgDto> imgDtos = convertToImgDto.convertToImgDtos(posts.getPostsImgList());
-        List<HashTagResponseDto> hashTags = tagConverter.toHashTagDto(postsHashTags);
-        List<ServiceResponseDto> serviceTags = tagConverter.toServiceTagDto(postsServiceTags);
-        List<RoomResponseDto> roomResponseDtos = roomConvert.roomDtoList(roomList1);
+    public PostsResponseDto combine(Long companyId, Posts posts, List<Room> roomList1, List<PostsHashTags> postsHashTags, List<PostsServiceTag>  postsServiceTags) {
+        List<ImgDto> imgDtos = postsImgConverter.toListDTO(posts.getPostsImgList());
+        List<HashTagResponseDto> hashTags = hashTagConverter.toListDTO(postsHashTags);
+        List<ServiceResponseDto> serviceTags = serviceTagConverter.toListDTO(postsServiceTags);
+        List<RoomDto> roomDtos = roomConverter.toListDTO(roomList1);
 
         return PostsResponseDto.builder()
                 .id(posts.getId())
@@ -50,12 +52,12 @@ public class ConvertToPostsResponseDto {
                 .postsImgList(imgDtos)
                 .hashTag(hashTags)
                 .serviceTag(serviceTags)
-                .roomResponseDtos(roomResponseDtos)
+                .roomDtos(roomDtos)
                 .build();
     }
 
 
-    public PostsResponseListDto postsResponseListDto(Posts post, Integer minPrice, ImgDto imgDto) {
+    public PostsResponseListDto combine(Posts post, Integer minPrice, ImgDto imgDto) {
         return PostsResponseListDto.builder()
         .id(post.getId())
         .title(post.getTitle())
@@ -67,11 +69,11 @@ public class ConvertToPostsResponseDto {
         .build();
     }
 
-    public PostsResponseDto postsResponseDto(Posts posts, List<Review> reviewList, List<Room> roomList) {
-        List<ImgDto> imgDtos = convertToImgDto.convertToImgDtos(posts.getPostsImgList());
-        List<HashTagResponseDto> hashTagResponseDtos = tagConverter.toHashTagDto(posts.getPostsHashTags());
-        List<ServiceResponseDto> serviceResponseDtos = tagConverter.toServiceTagDto(posts.getPostAvailableTags());
-        List<RoomResponseDto> roomResponseDtos = roomConvert.roomDtoList(roomList);
+    public PostsResponseDto combine(Posts posts, List<Review> reviewList, List<Room> roomList) {
+        List<ImgDto> imgDtos = postsImgConverter.toListDTO(posts.getPostsImgList());
+        List<HashTagResponseDto> hashTagResponseDtos = hashTagConverter.toListDTO(posts.getPostsHashTags());
+        List<ServiceResponseDto> serviceResponseDtos = serviceTagConverter.toListDTO(posts.getPostAvailableTags());
+        List<RoomDto> roomDtos = roomConverter.toListDTO(roomList);
 
         return PostsResponseDto.builder()
                 .id(posts.getId())
@@ -89,7 +91,7 @@ public class ConvertToPostsResponseDto {
                 .postsImgList(imgDtos)
                 .hashTag(hashTagResponseDtos)
                 .serviceTag(serviceResponseDtos)
-                .roomResponseDtos(roomResponseDtos)
+                .roomDtos(roomDtos)
                 .reviewList(reviewList)
                 .build();
     }
