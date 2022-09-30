@@ -37,24 +37,24 @@ public class PostsImgService {
         return imgRepository.findById(imgId).orElseThrow(()-> new NoSuchElementException("img not found"));
     }
 
-    public ImgDto updateImg(Long imgId, MultipartFile multipartFile) throws FileUploadException {
-        PostsImg postsImg = findById(imgId);
-        awsS3Service.deleteFile(postsImg);
-        String filename = awsS3Service.originalFileName(multipartFile);
-        String url = awsS3Service.singleUploadFile(multipartFile);
-
-        postsImg.setImgUrl(url);
-        postsImg.setFileName(filename);
-        postsImg =  imgRepository.save(postsImg);
-        return postsImgConverter.toDTO(postsImg);
-
-    }
-
-    public void delete(Long imgId) {
-        PostsImg postsImg= findById(imgId);
-        awsS3Service.deleteFile(postsImg);
-        imgRepository.delete(postsImg);
-    }
+//    public ImgDto updateImg(Long imgId, MultipartFile multipartFile) throws FileUploadException {
+//        PostsImg postsImg = findById(imgId);
+//        awsS3Service.deleteFile(postsImg);
+//        String filename = awsS3Service.originalFileName(multipartFile);
+//        String url = awsS3Service.singleUploadFile(multipartFile);
+//
+//        postsImg.setImgUrl(url);
+//        postsImg.setFileName(filename);
+//        postsImg =  imgRepository.save(postsImg);
+//        return postsImgConverter.toDTO(postsImg);
+//
+//    }
+//
+//    public void delete(Long imgId) {
+//        PostsImg postsImg= findById(imgId);
+//        awsS3Service.deleteFile(postsImg);
+//        imgRepository.delete(postsImg);
+//    }
 
 
 }
