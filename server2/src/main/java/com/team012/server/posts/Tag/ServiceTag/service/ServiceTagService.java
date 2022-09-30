@@ -1,5 +1,6 @@
 package com.team012.server.posts.Tag.ServiceTag.service;
 
+import com.team012.server.posts.Tag.ServiceTag.dto.ServiceTagUpdateDto;
 import com.team012.server.posts.Tag.ServiceTag.entity.PostsServiceTag;
 import com.team012.server.posts.Tag.ServiceTag.entity.ServiceTag;
 import com.team012.server.posts.entity.Posts;
@@ -22,17 +23,12 @@ public class ServiceTagService {
     private final serviceTagRepository serviceTagRepository;
     private final PostsServiceTagRepository postsServiceTagRepository;
 
-    public List<ServiceTag> saveOrFind(List<String> postsTags) {
+    public List<ServiceTag> saveServiceTags(List<String> postsTags) {
         List<ServiceTag> list =  postsTags.stream().map(tag -> {
-            Optional<ServiceTag> tags = serviceTagRepository.findByTag(tag);
-            if(tags.isPresent()) {
-                return tags.get();
-            } else {
                 ServiceTag serviceTag = ServiceTag.builder()
                         .tag(tag)
                         .build();
                 return serviceTag;
-            }
         }).collect(Collectors.toList());
         return serviceTagRepository.saveAll(list);
     }
@@ -50,12 +46,29 @@ public class ServiceTagService {
         return postsServiceTagRepository.saveAll(postsAvailableTags);
     }
 
+    public ServiceTag updateServiceTag(ServiceTagUpdateDto serviceTagUpdateDto) {
+        Optional<ServiceTag> serviceTag = serviceTagRepository.findById(serviceTagUpdateDto.getServiceTagId());
+        ServiceTag findTag = serviceTag.orElseThrow(() -> new RuntimeException("serviceTag not found"));
+
+        Optional.ofNullable(serviceTagUpdateDto.getTag()).ifPresent(findTag::setTag);
+        serviceTagRepository.save(findTag);
+
+        return  findTag;
+    }
+
+    public void deleteServiceTag(Long serviceTagId) {
+        Optional<ServiceTag> serviceTag = serviceTagRepository.findById(serviceTagId);
+        ServiceTag findTag = serviceTag.orElseThrow(() -> new RuntimeException("serviceTag not found"));
+
+        serviceTagRepository.delete(findTag);
+    }
 
     public void deletePostAvailableTags(Long posts) {
         List<PostsServiceTag> postsTags = postsServiceTagRepository.findByPostsId(posts);
 
         if(!postsTags.isEmpty()) postsServiceTagRepository.deleteAll(postsTags);
         //else throw new RuntimeException("companyPostsTags not exist");
-
     }
+
+
 }

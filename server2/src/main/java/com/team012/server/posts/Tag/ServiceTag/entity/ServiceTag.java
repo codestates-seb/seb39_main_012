@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -16,6 +18,13 @@ public class ServiceTag {
 
     @Column(name = "tag")
     private String tag;
+
+    @OneToMany(mappedBy = "serviceTag", cascade = CascadeType.REMOVE)
+    private List<PostsServiceTag> postsServiceTagList = new ArrayList<>();
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
 
     @Builder
     public ServiceTag(String tag) {

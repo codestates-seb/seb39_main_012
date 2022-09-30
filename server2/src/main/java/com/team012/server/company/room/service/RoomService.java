@@ -1,6 +1,7 @@
 package com.team012.server.company.room.service;
 
-import com.team012.server.company.room.dto.RoomDto;
+import com.team012.server.company.room.dto.RoomCreateDto;
+import com.team012.server.company.room.dto.RoomUpdateDto;
 import com.team012.server.company.room.entity.Room;
 import com.team012.server.company.room.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +18,9 @@ public class RoomService {
 
     private final RoomRepository roomRepository;
 
-    public List<Room> saveList(List<RoomDto.PostDto> list, Long postsId) {
+    public List<Room> saveList(List<RoomCreateDto> list, Long postsId) {
         List<Room> roomList = new ArrayList<>();
-        for(RoomDto.PostDto room : list) {
+        for(RoomCreateDto room : list) {
             Room room1 = Room.builder()
                     .size(room.getSize())
                     .price(room.getPrice())
@@ -32,13 +33,13 @@ public class RoomService {
         return list1;
     }
 
-    public Room update(Room room) {
+    public Room update(RoomUpdateDto roomUpdateDto) {
 
-        Optional<Room> c = roomRepository.findById(room.getId());
-        Room findRoom = c.orElseThrow(() -> new RuntimeException("room not exist"));
+        Optional<Room> room = roomRepository.findById(roomUpdateDto.getRoomId());
+        Room findRoom = room.orElseThrow(() -> new RuntimeException("room not exist"));
 
-        Optional.ofNullable(room.getSize()).ifPresent(findRoom::setSize);
-        Optional.of(room.getPrice()).ifPresent(findRoom::setPrice);
+        Optional.ofNullable(roomUpdateDto.getSize()).ifPresent(findRoom::setSize);
+        Optional.of(roomUpdateDto.getPrice()).ifPresent(findRoom::setPrice);
 
         return roomRepository.save(findRoom);
     }

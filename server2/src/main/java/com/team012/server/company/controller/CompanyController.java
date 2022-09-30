@@ -7,7 +7,7 @@ import com.team012.server.company.entity.Company;
 import com.team012.server.company.service.CompanyInfoService;
 import com.team012.server.company.service.CompanyService;
 import com.team012.server.users.entity.Users;
-import com.team012.server.utils.config.userDetails.PrincipalDetails;
+import com.team012.server.common.config.userDetails.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
