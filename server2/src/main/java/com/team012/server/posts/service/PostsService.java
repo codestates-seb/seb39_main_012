@@ -5,6 +5,7 @@ import com.team012.server.posts.dto.PostsUpdateDto;
 import com.team012.server.posts.entity.Posts;
 import com.team012.server.posts.img.entity.PostsImg;
 import com.team012.server.posts.img.repository.PostsImgRepository;
+import com.team012.server.posts.img.service.PostsImgService;
 import com.team012.server.posts.repository.PostsRepository;
 import com.team012.server.common.aws.service.AwsS3Service;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalTime;
@@ -29,6 +31,7 @@ public class PostsService {
 
     private final PostsRepository postsRepository;
     private final PostsImgRepository imgRepository;
+    private final PostsImgService postsImgService;
     private final AwsS3Service awsS3Service;
 
     public Posts save(PostsCreateDto post, List<MultipartFile> files, Long companyId) {
@@ -52,7 +55,7 @@ public class PostsService {
                 .checkOut(checkOut)
                 .build();
 
-        List<PostsImg> lists = awsS3Service.convertPostImg(files);
+        List<PostsImg> lists = postsImgService.saveImgList(files);
 
         posts.setPostsImgList(lists);
         for (PostsImg c : lists) {
@@ -63,7 +66,7 @@ public class PostsService {
 
     }
 
-    public Posts update(PostsUpdateDto post, List<MultipartFile> multipartFile, Long companyId) {
+    public Posts update(PostsUpdateDto post, Long companyId) {
         Long postsId = post.getId();
         Posts findPosts = findById(postsId);
 
@@ -77,26 +80,25 @@ public class PostsService {
         Optional.ofNullable(post.getContent()).ifPresent(findPosts::setContent);
         Optional.ofNullable(post.getRoomCount()).ifPresent(findPosts::setRoomCount); //add
 
-        if (post.getCheckIn() != null) {
+        if (StringUtils.hasText(post.getCheckIn())) {
             LocalTime checkIn = convertCheckInToTime(post.getCheckIn());
             findPosts.setCheckIn(checkIn);
         }
-        if (post.getCheckOut() != null) {
+        if (StringUtils.hasText(post.getCheckOut())) {
             LocalTime checkOut = convertCheckOutToTime(post.getCheckOut());
             findPosts.setCheckOut(checkOut);
         }
         validateCheckInCheckOut(findPosts.getCheckIn(), findPosts.getCheckOut());
 
-        if (multipartFile != null) {
-
-            List<PostsImg> postsImgList = imgRepository.findAllByPostsId(postsId);
-            List<PostsImg> postsImgs1 = awsS3Service.reviseFileV1(postsImgList, multipartFile);
-            for (PostsImg c : postsImgs1) {
-                c.setPosts(findPosts);
-            }
-            findPosts.setPostsImgList(postsImgs1);
-            imgRepository.deleteAll(postsImgList);
-        }
+//        if (multipartFile != null) {
+//
+//            List<PostsImg> postsImgList = postsImgService.findAllByPostsId(postsId);
+//            List<PostsImg> postsImgs1 = awsS3Service.deleteUploadedFile(postsImgList, multipartFile);
+//            for (PostsImg c : postsImgs1) {
+//                c.setPosts(findPosts);
+//            }
+//            findPosts.setPostsImgList(postsImgs1);
+//        }
         Posts posts1 = postsRepository.save(findPosts);
         return posts1;
 

@@ -1,4 +1,4 @@
-package com.team012.server.company.room.entity;
+package com.team012.server.room.entity;
 
 import lombok.*;
 
