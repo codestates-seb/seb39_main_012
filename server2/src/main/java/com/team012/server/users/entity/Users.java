@@ -1,9 +1,8 @@
 package com.team012.server.users.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.team012.server.utils.baseEntity.BaseEntity;
+import com.team012.server.common.baseEntity.BaseEntity;
 import lombok.*;
-import org.hibernate.annotations.Fetch;
 
 import javax.persistence.*;
 import java.util.ArrayList;

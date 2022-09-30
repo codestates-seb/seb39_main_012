@@ -1,8 +1,8 @@
 package com.team012.server.reservation.controller;
 
 import com.team012.server.reservation.entity.ReservList;
-import com.team012.server.utils.config.userDetails.PrincipalDetails;
-import com.team012.server.utils.response.MultiResponseDto;
+import com.team012.server.common.config.userDetails.PrincipalDetails;
+import com.team012.server.common.response.MultiResponseDto;
 import com.team012.server.company.service.CompanyService;
 import com.team012.server.reservation.dto.ReservationDto;
 import com.team012.server.reservation.service.ReservationService;
