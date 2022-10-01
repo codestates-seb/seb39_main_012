@@ -8,32 +8,50 @@ import LabelInput from '../LabelInput/LabelInput'
 import LabelRadioButton from './LabelRadioButton'
 import {toast} from 'react-toastify'
 import {userService} from '@/apis/MyPageAPI'
+import {useRecoilValue} from 'recoil'
+import {dogIdState} from '@/recoil/mypage'
+import {EditDogCard} from '@/types/mypage'
 
 interface Props {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-function AddDogModal({setIsOpen}: Props) {
+function EditDogModal({setIsOpen}: Props) {
+  const dogId = useRecoilValue(dogIdState)
+
   const [selectedFile, setSelectedFile] = useState<any>()
   const [fileDataURL, setFileDataURL] = useState<any>(null)
 
-  const [dogInfo, setDogInfo] = useState({
-    name: '',
-    type: '',
-    age: '',
-    gender: false,
-    weight: '',
-    surgery: false,
-    bowel_trained: false,
-    snack_method: false,
-    etc: false,
-    bark: false,
-  })
+  const [dogInfo, setDogInfo] = useState<EditDogCard>()
 
   const [extraInfo, setExtraInfo] = useState({
     _etc: '',
     _bark: '',
   })
+
+  useEffect(() => {
+    if (dogId) {
+      userService.getMyDogById(dogId).then((res) => {
+        setDogInfo({
+          name: res.dogName,
+          type: res.type,
+          age: res.age + '',
+          weight: res.weight + '',
+          gender: res.gender === '수컷' ? true : false,
+          surgery: res.surgery === '완료' ? true : false,
+          bowel_trained: res.bowelTrained === '실내' ? true : false,
+          snack_method: res.snackMethod === '급여' ? true : false,
+          etc: res.etc === '없음' ? false : true,
+          bark: res.bark === '없음' ? false : true,
+        })
+        setExtraInfo({
+          _etc: res.etc === '없음' ? '' : res.etc,
+          _bark: res.bark === '없음' ? '' : res.bark,
+        })
+        setFileDataURL(res.photoImgUrl)
+      })
+    }
+  }, [dogId])
 
   useEffect(() => {
     let fileReader: FileReader,
@@ -56,6 +74,8 @@ function AddDogModal({setIsOpen}: Props) {
     }
   }, [selectedFile])
 
+  if (dogInfo === undefined || fileDataURL === null) return <div>로딩중</div>
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.currentTarget.files?.[0]
     if (!file) return alert('파일이 없습니다.')
@@ -71,7 +91,6 @@ function AddDogModal({setIsOpen}: Props) {
   }
 
   const onClick = (name: string, value: boolean) => {
-    console.log(name, value)
     setDogInfo({
       ...dogInfo,
       [name]: value,
@@ -94,8 +113,6 @@ function AddDogModal({setIsOpen}: Props) {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-
-    // const response = await axios.post('http://localhost:3000/api/file/upload', formData)
 
     if (!dogInfo.name || !dogInfo.age || !dogInfo.weight || !dogInfo.type) {
       return toast.error('모든 항목을 입력해주세요.')
@@ -123,16 +140,20 @@ function AddDogModal({setIsOpen}: Props) {
       bark: dogInfo.bark ? extraInfo._bark : '없음',
     }
 
+    console.log(requestForm)
+
     const formData = new FormData()
 
     // https://shrewd.tistory.com/43
-    formData.append('file', selectedFile)
+    if (selectedFile) {
+      formData.append('file', selectedFile)
+    }
     formData.append(
       'dogCardDto',
       new Blob([JSON.stringify(requestForm)], {type: 'application/json'})
     )
 
-    const result = await userService.createDogCard(formData)
+    const result = await userService.editMyDogById(formData, dogId)
 
     if (result?.status === 201) {
       toast.success('등록되었습니다.')
@@ -145,10 +166,10 @@ function AddDogModal({setIsOpen}: Props) {
       <Modal onClick={(e) => e.stopPropagation()} onSubmit={handleSubmit}>
         <Title>반려견 정보</Title>
         <DogInfoBox>
-          <DogImgBox imgUrl={fileDataURL}>
+          <DogImgBox>
             <label htmlFor="dogImg">
               <BsPlusCircleFill />
-              {selectedFile && <img src={fileDataURL} alt="preview" />}
+              <img src={fileDataURL} alt="preview" />
             </label>
             <input
               type="file"
@@ -278,7 +299,7 @@ function AddDogModal({setIsOpen}: Props) {
   )
 }
 
-export default AddDogModal
+export default EditDogModal
 
 const AddDogModalContainer = styled.div`
   position: fixed;
@@ -309,7 +330,7 @@ const DogInfoBox = styled.div`
   margin-top: 20px;
 `
 
-const DogImgBox = styled.div<{imgUrl: string}>`
+const DogImgBox = styled.div`
   width: 25%;
 
   label {

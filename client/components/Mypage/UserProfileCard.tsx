@@ -5,35 +5,31 @@ import {RiEditBoxLine} from 'react-icons/ri'
 import {flexCenter} from '@/styles/css'
 import {useRecoilState} from 'recoil'
 import {addOpenState} from '@/recoil/editOpen'
-
-interface User {
-  profileImg: string
-  username: string
-  phone: string
-  email: string
-}
+import {Users} from '@/types/mypage'
 
 interface Props {
-  user: User
+  user: Users
 }
 
 function UserProfileCard({user}: Props) {
-  const {profileImg, username, phone, email} = user
   const [, setAddOpen] = useRecoilState(addOpenState)
   return (
     <Container>
       <UserInfoBoxs>
         <UserImgBox>
-          <img src={profileImg} alt="UserprofillImg" />
+          <img
+            src={'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png'}
+            alt="UserprofillImg"
+          />
         </UserImgBox>
       </UserInfoBoxs>
       <UserInfoBox>
         <UserName>
           <span>견주</span>
-          <p>{username}</p>
+          <p>{user.username}</p>
         </UserName>
-        <UserTell>{phone}</UserTell>
-        <UserEmail>{email}</UserEmail>
+        <UserTell>{user.phone}</UserTell>
+        <UserEmail>{user.email}</UserEmail>
         <AddDogButton onClick={() => setAddOpen(true)}>
           <p>반려견 추가하기</p>
           <RiEditBoxLine />
@@ -99,6 +95,7 @@ const UserInfoBoxs = styled.div`
 const UserInfoBox = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
   font-size: 15px;
   margin-top: 10px;
   gap: 8px;

@@ -1,1 +1,2 @@
-export const SERVER_URL = `http://52.79.115.169:8080`
+export const SERVER_URL = `http://13.124.248.247:8080`
+export const TOKEN = `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MTIzNEB0ZXN0LmNvbSIsImlkIjoxLCJleHAiOjE2NjUxMjM1MTIsImVtYWlsIjoidGVzdDEyMzRAdGVzdC5jb20iLCJ1c2VybmFtZSI6Iuq5gOqyrOyjvCJ9.B-OOfZ0PV_sDB6g3QGcblqwk6cnyJ9pXstKYC0YZh907lu7uW9m-tiJSu2HgIaqycTyBTvB8U1cyS8KTT5k4ng`
