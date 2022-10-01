@@ -13,10 +13,10 @@ public class PostsUpdateDto {
 
     private String content;
 
-    @Pattern(regexp = "(([01]?[0-9]|2[0-3]):[0-5][0-9])*$|")
+    @Pattern(regexp = "(오전|오후) ([0]?[0-9]|1[0-2]):[0-5][0-9]")
     private String checkIn;
 
-    @Pattern(regexp = "(([01]?[0-9]|2[0-3]):[0-5][0-9])*$|")
+    @Pattern(regexp = "(오전|오후) ([0]?[0-9]|1[0-2]):[0-5][0-9]")
     private String checkOut; //추가
 
     private String latitude;
@@ -26,6 +26,8 @@ public class PostsUpdateDto {
     private String address;
 
     private String detailAddress;
+
+    private String phone;
 
     private Integer roomCount;
 
