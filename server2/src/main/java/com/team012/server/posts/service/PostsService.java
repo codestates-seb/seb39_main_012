@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -150,13 +151,13 @@ public class PostsService {
     private LocalTime convertCheckInToTime(String strCheckIn) {
         strCheckIn = strCheckIn.trim();
 
-        return LocalTime.parse(strCheckIn, DateTimeFormatter.ofPattern("a hh:mm"));
+        return LocalTime.parse(strCheckIn, DateTimeFormatter.ofPattern("a hh:mm").withLocale(Locale.KOREA));
     }
 
     private LocalTime convertCheckOutToTime(String strCheckOut) {
         strCheckOut = strCheckOut.trim();
 
-        return LocalTime.parse(strCheckOut, DateTimeFormatter.ofPattern("a hh:mm"));
+        return LocalTime.parse(strCheckOut, DateTimeFormatter.ofPattern("a hh:mm").withLocale(Locale.KOREA));
     }
 
     private void validateCheckInCheckOut(LocalTime checkIn, LocalTime checkOut) {
