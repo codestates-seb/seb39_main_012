@@ -51,6 +51,9 @@ public class Posts {
     @Column(name = "detail_address")
     private String detailAddress;
 
+    @Column(name = "phone_number")
+    private String phone;
+
     @Column(name = "company_id")
     private Long companyId;
 
@@ -87,7 +90,7 @@ public class Posts {
     @Builder
     public Posts(String title, String content,
                  String latitude, String longitude,
-                 String address, String detailAddress, Integer roomCount,
+                 String address, String detailAddress, String phone,Integer roomCount,
                  Long companyId, Double avgScore,Integer likesCount, LocalTime checkIn, LocalTime checkOut) {
         this.title = title;
         this.content = content;
@@ -95,6 +98,7 @@ public class Posts {
         this.longitude = longitude;
         this.address = address;
         this.detailAddress = detailAddress;
+        this.phone = phone;
         this.roomCount = roomCount; // add
         this.companyId = companyId;
         this.avgScore = avgScore; // add

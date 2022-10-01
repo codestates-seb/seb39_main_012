@@ -24,15 +24,19 @@ public class PostsCreateDto {
     private String address;
 
     @NotBlank
+    @Pattern(regexp = "(0(2|3(1|2|3)|4(1|2|3)|5(1|2|3|4|5)|6(1|2|3|4)|10))-[^0][0-9]{2,3}-[0-9]{3,4}")
+    private String phone;
+
+    @NotBlank
     private String detailAddress;
     //0번째는 위도, 1번째는 경도, 2번째는 주소, 3번째는 상세 주소
 
     @NotBlank
-    @Pattern(regexp = "([01]?[0-9]|2[0-3]):[0-5][0-9]")
+    @Pattern(regexp = "(오전|오후) ([0]?[0-9]|1[0-2]):[0-5][0-9]")
     private String checkIn;
 
     @NotBlank
-    @Pattern(regexp = "([01]?[0-9]|2[0-3]):[0-5][0-9]")
+    @Pattern(regexp = "(오전|오후) ([0]?[0-9]|1[0-2]):[0-5][0-9]")
     private String checkOut; //추가
 
     @NotNull

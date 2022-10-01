@@ -21,6 +21,7 @@ public class PostsResponseDto {
     private String longitude;
     private String address;
     private String detailAddress;
+    private String phone;
     private Long companyId;
     private Double avgScore; // 평균 별점
     private Integer likesCount;
@@ -43,7 +44,7 @@ public class PostsResponseDto {
     }
 
     @Builder(builderClassName = "builder", builderMethodName = "builder")
-    public PostsResponseDto(Long id, String title, String content, String latitude, String longitude, String address, String detailAddress, Long companyId, Double avgScore, Integer likesCount, String checkIn, String checkOut, List<ImgDto> postsImgList, List<HashTagResponseDto> hashTag, List<ServiceResponseDto> serviceTag, List<RoomDto> roomDtos, List<Review> reviewList) {
+    public PostsResponseDto(Long id, String title, String content, String latitude, String longitude, String address, String detailAddress, String phone,Long companyId, Double avgScore, Integer likesCount, String checkIn, String checkOut, List<ImgDto> postsImgList, List<HashTagResponseDto> hashTag, List<ServiceResponseDto> serviceTag, List<RoomDto> roomDtos, List<Review> reviewList) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -51,6 +52,7 @@ public class PostsResponseDto {
         this.longitude = longitude;
         this.address = address;
         this.detailAddress = detailAddress;
+        this.phone = phone;
         this.companyId = companyId;
         this.avgScore = avgScore;
         this.likesCount = likesCount;
@@ -64,7 +66,7 @@ public class PostsResponseDto {
     }
 
     @Builder(builderClassName = "updateBuilder", builderMethodName = "update")
-    public PostsResponseDto(Long id, String title, String content, String latitude, String longitude, String address, String detailAddress,Long companyId, Double avgScore, Integer likesCount, String checkIn, String checkOut, List<ImgDto> postsImgList, List<Review> reviewList) {
+    public PostsResponseDto(Long id, String title, String content, String latitude, String longitude, String address, String detailAddress, String phone,Long companyId, Double avgScore, Integer likesCount, String checkIn, String checkOut, List<ImgDto> postsImgList, List<Review> reviewList) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -72,6 +74,7 @@ public class PostsResponseDto {
         this.longitude = longitude;
         this.address = address;
         this.detailAddress = detailAddress;
+        this.phone = phone;
         this.companyId = companyId;
         this.avgScore = avgScore;
         this.likesCount = likesCount;
