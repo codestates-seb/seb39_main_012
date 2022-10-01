@@ -43,7 +43,7 @@ public class PostsCreateService {
 
         List<RoomCreateDto> roomList = request.getRoomCreateDtoList();
 
-        Posts posts = postsService.save(request, file, usersId);
+        Posts posts = postsService.save(request, file, companyId);
 
         Long postsId = posts.getId();
 
