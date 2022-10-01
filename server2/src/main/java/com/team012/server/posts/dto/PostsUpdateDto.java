@@ -33,6 +33,9 @@ public class PostsUpdateDto {
 //    private List<String> serviceTag;
 //    private List<RoomCreateDto> roomCreateDtoList;
 
+
+
+
     public void setId(Long id) {
         this.id = id;
     }

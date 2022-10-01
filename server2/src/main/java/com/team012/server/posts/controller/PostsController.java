@@ -16,6 +16,7 @@ import com.team012.server.posts.service.PostsUpdateService;
 import com.team012.server.review.entity.Review;
 import com.team012.server.review.service.ReviewService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -28,6 +29,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/v1/company/posts")
 @RestController
+@Slf4j
 public class PostsController {
 
     private final CompanyService companyService;
@@ -56,13 +58,14 @@ public class PostsController {
                                  @RequestPart(value = "file", required = false) List<MultipartFile> file,
                                  @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-        Long userId = principalDetails.getUsers().getId();
-        request.setId(id);
+        Long userId = principalDetails.getUsers().getId(); // -> id : 2
+        request.setId(id); // -> id : 1
 
         PostsResponseDto postsResponseDto = postsUpdateService.updatePostResponse(request, file, userId);
 
         return new ResponseEntity<>(postsResponseDto, HttpStatus.OK);
     }
+
     @GetMapping("/{id}")
     public ResponseEntity get(@PathVariable("id") Long id,
                               @RequestParam Integer page,
