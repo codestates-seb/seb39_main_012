@@ -9,7 +9,6 @@ import com.team012.server.posts.img.service.PostsImgService;
 import com.team012.server.posts.repository.PostsRepository;
 import com.team012.server.common.aws.service.AwsS3Service;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -49,6 +48,7 @@ public class PostsService {
                 .longitude(post.getLongitude())
                 .address(post.getAddress())
                 .detailAddress(post.getDetailAddress())
+                .phone(post.getPhone())
                 .roomCount(post.getRoomCount())//add
                 .avgScore(0.0) // --> 처음 평균값은 0.0;
                 .likesCount(0)
@@ -77,6 +77,7 @@ public class PostsService {
         Optional.ofNullable(post.getLongitude()).ifPresent(findPosts::setLongitude);
         Optional.ofNullable(post.getAddress()).ifPresent(findPosts::setAddress);
         Optional.ofNullable(post.getDetailAddress()).ifPresent(findPosts::setDetailAddress);
+        Optional.ofNullable(post.getPhone()).ifPresent(findPosts::setPhone);
         Optional.ofNullable(post.getTitle()).ifPresent(findPosts::setTitle);
         Optional.ofNullable(post.getContent()).ifPresent(findPosts::setContent);
         Optional.ofNullable(post.getRoomCount()).ifPresent(findPosts::setRoomCount); //add
@@ -149,13 +150,13 @@ public class PostsService {
     private LocalTime convertCheckInToTime(String strCheckIn) {
         strCheckIn = strCheckIn.trim();
 
-        return LocalTime.parse(strCheckIn, DateTimeFormatter.ofPattern("HH:mm"));
+        return LocalTime.parse(strCheckIn, DateTimeFormatter.ofPattern("a hh:mm"));
     }
 
     private LocalTime convertCheckOutToTime(String strCheckOut) {
         strCheckOut = strCheckOut.trim();
 
-        return LocalTime.parse(strCheckOut, DateTimeFormatter.ofPattern("HH:mm"));
+        return LocalTime.parse(strCheckOut, DateTimeFormatter.ofPattern("a hh:mm"));
     }
 
     private void validateCheckInCheckOut(LocalTime checkIn, LocalTime checkOut) {
