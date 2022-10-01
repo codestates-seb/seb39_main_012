@@ -43,10 +43,5 @@ public class PostsSearchService {
         return posts;
     }
 
-//    public Page<Posts> findPostsByCheckInCheckOut(String strCheckIn, String strCheckOut, int page, int size) {
-//        LocalDate checkIn = LocalDate.parse(strCheckIn, DateTimeFormatter.ISO_LOCAL_DATE);
-//        LocalDate checkOut = LocalDate.parse(strCheckOut, DateTimeFormatter.ISO_LOCAL_DATE);
-//    }
-
 
 }

@@ -23,7 +23,9 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Transactional
@@ -45,7 +47,6 @@ public class AwsS3Service {
 
     public String singleUploadFile(MultipartFile multipartFile) {
 
-//        validateFileExists(multipartFile); --> 업로드 강제를 하지않기 위해서 주석
 
         String fileName = originalFileName(multipartFile);
 
@@ -67,7 +68,6 @@ public class AwsS3Service {
     //s3로 파일 업로드 하고 url 리턴하는 메서드
 
     public String uploadFile(MultipartFile multipartFile) throws IOException {
-//        validateFileExists(multipartFile); --> 업로드 강제를 하지않기 위해서 주석
 
         String fileName = originalFileName(multipartFile);
 
@@ -88,6 +88,7 @@ public class AwsS3Service {
         return url;
     }
 
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     //파일 이름 추출하는 메서드
     public String originalFileName(MultipartFile multipartFile) {
         try {
@@ -177,21 +178,22 @@ public class AwsS3Service {
     }
 
     //List<PostsImg> 수정 메서드(기존 s3에 있는 파일 삭제 후 추가) s3에 기존 파일이 삭제되지 않는 에러가 있음 추후 수정 예정
-    public List<PostsImg> reviseFileV1(List<PostsImg> imgList, List<MultipartFile> multipartFileList) {
+    public List<PostsImg> replaceUploadedFile(List<PostsImg> imgList, List<MultipartFile> files) {
         List<String> list = imgList.stream().map(PostsImg::getFileName).collect(Collectors.toList());
         for (int i = 0; i < list.size(); i++) { //기존 파일 삭제
-            String currentFilePath = list.get(i);
-            if (!"".equals(currentFilePath) && currentFilePath != null) {
-                boolean isExistObject = amazonS3Client.doesObjectExist(bucketName, currentFilePath);
+            String fileName = list.get(i);
+            if (!"".equals(fileName) && fileName != null) {
+                boolean isExistObject = amazonS3Client.doesObjectExist(bucketName, fileName);
 
                 if (isExistObject) {
-                    amazonS3Client.deleteObject(bucketName, currentFilePath);
+                    amazonS3Client.deleteObject(bucketName, fileName);
                 }
             }
         }
-        return convertPostImg(multipartFileList);
+        return convertPostImg(files);
 
     }
+
 
     //s3에 업로드된 파일 삭제 메서드
     @Transactional(propagation = Propagation.REQUIRED)
@@ -203,10 +205,8 @@ public class AwsS3Service {
 
     }
 
-    //s3에 업로드 할 사진 validation 메서드
-    private void validateFileExists(MultipartFile multipartFile) {
-        if (multipartFile.isEmpty()) {
-            throw new RuntimeException("EmptyFileException()");
-        }
+    public void deleteFile(PostsImg postsImg) {
+        amazonS3Client.deleteObject(bucketName, postsImg.getFileName());
     }
+
 }
