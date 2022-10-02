@@ -8,7 +8,7 @@ import com.team012.server.room.service.RoomService;
 import com.team012.server.posts.entity.Posts;
 import com.team012.server.posts.service.PostsService;
 import com.team012.server.reservation.entity.Reservation;
-import com.team012.server.reservation.repository.ReservListRepository;
+import com.team012.server.reservation.repository.ReservationListRepository;
 import com.team012.server.reservation.repository.ReservationRepository;
 import com.team012.server.users.entity.DogCard;
 
@@ -41,7 +41,7 @@ public class CustomerReservationService {
      * */
 
     private final ReservationRepository reservationRepository;
-    private final ReservListRepository reservListRepository;
+    private final ReservationListRepository reservationListRepository;
     private final UsersService usersService;
     private final RoomService roomService;
     private final PostsService postsService;
@@ -87,7 +87,6 @@ public class CustomerReservationService {
                 .checkOut(checkOut)
                 .totalDogCount(totalDogCount)
                 .totalPrice(totalPrice)
-                .reservationCode(str)
                 .build();
 
         return reservList;
@@ -162,11 +161,10 @@ public class CustomerReservationService {
                 .userInfo(userInfoDto.getUserInfo())
                 .dogCount(dto.getTotalDogCount())
                 .totalPrice(dto.getTotalPrice())
-                .reservationCode(dto.getReservationCode())
                 .reservations(dto.getReservationList())
                 .build();
 
-        ReservationList reservationList1 = reservListRepository.save(reservationList);
+        ReservationList reservationList1 = reservationListRepository.save(reservationList);
         for(Reservation r : reservationList1.getReservations()) {
             r.setReservationList(reservationList1);
         }
@@ -197,7 +195,6 @@ public class CustomerReservationService {
                 .checkOut(reservationList1.getCheckOut().format(DateTimeFormatter.ISO_LOCAL_DATE))
                 .dogcard(dogCards)
                 .totalPrice(reservationList1.getTotalPrice())
-                .reservationCode(reservationList1.getReservationCode())
                 .build();
 
         return responseReservationDto;
@@ -208,9 +205,9 @@ public class CustomerReservationService {
     public Page<ReservationList> findReservationList(Long userId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "checkOut");
 
-        Page<ReservationList> reservLists =  reservListRepository.findByUsersId(userId,LocalDate.now(), pageable);
+        Page<ReservationList> reservation =  reservationListRepository.findByUsersId(userId,LocalDate.now(), pageable);
 
-        return reservLists;
+        return reservation;
     }
 
     @Transactional(readOnly = true)
@@ -226,16 +223,16 @@ public class CustomerReservationService {
     public Page<ReservationList> findReservationAfterCheckOutList(Long userId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "checkOut");
 
-        Page<ReservationList> reservLists =  reservListRepository.findByUsersIdAndWent(userId, LocalDate.now(), pageable);
-        return reservLists;
+        Page<ReservationList> reservationLists =  reservationListRepository.findByUsersIdAndWent(userId, LocalDate.now(), pageable);
+        return reservationLists;
 
     }
 
     //예약 취
     public void deleteReservation(Long userId, Long reservedId) {
 
-        Optional<ReservationList> reservList= reservListRepository.findByUsersIdAndReservedId(userId, reservedId);
-        ReservationList findReservationList = reservList.orElseThrow(NoSuchElementException::new);
+        Optional<ReservationList> reservationList= reservationListRepository.findByUsersIdAndReservedId(userId, reservedId);
+        ReservationList findReservationList = reservationList.orElseThrow(NoSuchElementException::new);
 
         List<Reservation> reservation = findReservationList.getReservations();
 
@@ -246,6 +243,6 @@ public class CustomerReservationService {
         }
 
         reservationRepository.deleteAll(reservation);
-        reservListRepository.delete(findReservationList);
+        reservationListRepository.delete(findReservationList);
     }
 }

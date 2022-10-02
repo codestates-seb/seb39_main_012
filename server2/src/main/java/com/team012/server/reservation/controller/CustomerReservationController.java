@@ -1,10 +1,12 @@
 package com.team012.server.reservation.controller;
 
+import com.team012.server.common.response.SingleResponseDto;
 import com.team012.server.reservation.dto.*;
 import com.team012.server.reservation.entity.ReservationList;
 import com.team012.server.reservation.service.CustomerReservationService;
 import com.team012.server.common.config.userDetails.PrincipalDetails;
 import com.team012.server.common.response.MultiResponseDto;
+import com.team012.server.reservation.service.ReservationConfirmService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,8 @@ import java.util.List;
 public class CustomerReservationController {
 
     private final CustomerReservationService customerReservationService;
+
+    private final ReservationConfirmService reservationConfirmService;
 
     //posts 상세 페이지 ---> 예약 상세 페이지로 이동
     @PostMapping("/{postsId}")
@@ -50,6 +54,17 @@ public class CustomerReservationController {
         ResponseReservationDto responseReservationDto
                 = customerReservationService.createReservation(reservationCreateDto, userId, postsId, reservationUserInfoDto);
         return new ResponseEntity<>(responseReservationDto, HttpStatus.CREATED);
+    }
+
+    //예약 확인 페이지
+    @GetMapping("/{reservationId}/final")
+    public ResponseEntity finalReservation(@PathVariable("reservationId") Long reservationId,
+                                           @AuthenticationPrincipal PrincipalDetails principalDetails
+    ) {
+
+        List<TotalReservationDto> totalReservationDtos = reservationConfirmService.confirmReservation(principalDetails,reservationId);
+
+        return new ResponseEntity(new SingleResponseDto<>(totalReservationDtos),HttpStatus.OK);
     }
 
     //가기 전 호텔리스트(체크아웃 최신날짜 순)
