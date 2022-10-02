@@ -1,6 +1,5 @@
 package com.team012.server.reservation.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -16,7 +15,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ReservList {
+public class ReservationList {
 
     @PrePersist
     public void prePersist() {
@@ -54,8 +53,8 @@ public class ReservList {
     @Column(name = "dog_count")
     private Integer dogCount; //예약된 강아지 수
 
+    @Column(name = "reservationCode")
     private String reservationCode;
-
 
     @ElementCollection(fetch = FetchType.LAZY)
     private List<Long> dogIdList = new ArrayList<>(); //강아지 카드 아이디 리스트
@@ -63,7 +62,7 @@ public class ReservList {
     @Embedded
     private UserInfo userInfo; //예약 상세 페이지에 이름, 전화번호, 이메일을 적는 칸이 있어서 넣었습니다.
 
-    @OneToMany(mappedBy = "reservList")
+    @OneToMany(mappedBy = "reservationList")
     @JsonManagedReference
     private List<Reservation> reservations;
 
@@ -72,7 +71,7 @@ public class ReservList {
     }
 
     @Builder
-    public ReservList(LocalDate checkIn, LocalDate checkOut, String status, Long usersId, Long postsId, Integer totalPrice, Long companyId, Integer dogCount, String reservationCode, List<Long> dogIdList, UserInfo userInfo, List<Reservation> reservations) {
+    public ReservationList(LocalDate checkIn, LocalDate checkOut, String status, Long usersId, Long postsId, Integer totalPrice, Long companyId, Integer dogCount, String reservationCode,List<Long> dogIdList, UserInfo userInfo, List<Reservation> reservations) {
         this.checkIn = checkIn;
         this.checkOut = checkOut;
         this.status = status;

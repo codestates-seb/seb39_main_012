@@ -3,6 +3,7 @@ package com.team012.server.posts.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 @Getter
@@ -17,7 +18,10 @@ public class PostsAvgScore {
     private Long id;
 
     @Column(name = "score")
-    private Integer score;
+    private Double score;
+
+//    @Column(name = "totalScore")
+//    private BigDecimal totalScore;
 
     @Column(name = "posts_id")
     private Long postsId;

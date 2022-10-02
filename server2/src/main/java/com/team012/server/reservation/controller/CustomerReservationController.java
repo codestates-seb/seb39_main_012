@@ -1,7 +1,7 @@
 package com.team012.server.reservation.controller;
 
 import com.team012.server.reservation.dto.*;
-import com.team012.server.reservation.entity.ReservList;
+import com.team012.server.reservation.entity.ReservationList;
 import com.team012.server.reservation.service.CustomerReservationService;
 import com.team012.server.common.config.userDetails.PrincipalDetails;
 import com.team012.server.common.response.MultiResponseDto;
@@ -57,8 +57,8 @@ public class CustomerReservationController {
     public ResponseEntity findReservationsBeforeCheckIn(@RequestParam int page, int size
             , @AuthenticationPrincipal PrincipalDetails principalDetails) {
         Long userId = principalDetails.getUsers().getId();
-        Page<ReservList> reservationList = customerReservationService.findReservationList(userId, page - 1, size);
-        List<ReservList> reservations = reservationList.getContent();
+        Page<ReservationList> reservationList = customerReservationService.findReservationList(userId, page - 1, size);
+        List<ReservationList> reservations = reservationList.getContent();
 
         return new ResponseEntity<>(new MultiResponseDto<>(reservations, reservationList), HttpStatus.OK);
     }
@@ -68,8 +68,8 @@ public class CustomerReservationController {
     public ResponseEntity findReservationAfterCheckOut(@RequestParam int page, int size
             , @AuthenticationPrincipal PrincipalDetails principalDetails) {
         Long userId = principalDetails.getUsers().getId();
-        Page<ReservList> reservationList = customerReservationService.findReservationAfterCheckOutList(userId, page - 1, size);
-        List<ReservList> reservations = reservationList.getContent();
+        Page<ReservationList> reservationList = customerReservationService.findReservationAfterCheckOutList(userId, page - 1, size);
+        List<ReservationList> reservations = reservationList.getContent();
 
         return new ResponseEntity<>(new MultiResponseDto<>(reservations, reservationList), HttpStatus.OK);
     }

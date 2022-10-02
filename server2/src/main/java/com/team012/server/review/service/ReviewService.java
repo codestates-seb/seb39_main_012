@@ -1,5 +1,7 @@
 package com.team012.server.review.service;
 
+import com.team012.server.posts.entity.PostsAvgScore;
+import com.team012.server.posts.service.PostsAvgScoreService;
 import com.team012.server.review.repository.ReviewRepository;
 import com.team012.server.review.dto.ReviewCreateRequestDto;
 import com.team012.server.review.dto.ReviewPatchRequestDto;
@@ -27,6 +29,7 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final ReviewImgRepository reviewImgRepository;
     private final AwsS3Service awsS3Service;
+
 
     public Review createReview(ReviewCreateRequestDto dto, List<MultipartFile> files, Users writeUsers) {
         List<ReviewImg> lists = awsS3Service.convertReviewImg(files);
