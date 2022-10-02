@@ -26,6 +26,7 @@ public class Posts {
     @PrePersist
     public void prePersist() {
         this.likesCount = this.likesCount == null? 0:this.likesCount;
+        this.avgScore = this.avgScore == null? 0 : this.avgScore;
     }
 
     @Id
@@ -91,7 +92,7 @@ public class Posts {
     public Posts(String title, String content,
                  String latitude, String longitude,
                  String address, String detailAddress, String phone,Integer roomCount,
-                 Long companyId, Double avgScore,Integer likesCount, LocalTime checkIn, LocalTime checkOut) {
+                 Long companyId, LocalTime checkIn, LocalTime checkOut) {
         this.title = title;
         this.content = content;
         this.latitude = latitude;
@@ -101,8 +102,8 @@ public class Posts {
         this.phone = phone;
         this.roomCount = roomCount; // add
         this.companyId = companyId;
-        this.avgScore = avgScore; // add
-        this.likesCount = likesCount;
+//        this.avgScore = avgScore; // add
+//        this.likesCount = likesCount;
         this.checkIn = checkIn;
         this.checkOut = checkOut;
 

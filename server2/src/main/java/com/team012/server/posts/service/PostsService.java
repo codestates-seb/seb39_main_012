@@ -51,8 +51,6 @@ public class PostsService {
                 .detailAddress(post.getDetailAddress())
                 .phone(post.getPhone())
                 .roomCount(post.getRoomCount())//add
-                .avgScore(0.0) // --> 처음 평균값은 0.0;
-                .likesCount(0)
                 .checkIn(checkIn)
                 .checkOut(checkOut)
                 .build();

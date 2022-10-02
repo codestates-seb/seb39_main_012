@@ -43,12 +43,12 @@ public class Reservation implements Comparable<Reservation> {
     @ManyToOne
     @JoinColumn(name = "reservList_id")
     @JsonBackReference
-    private ReservList reservList;
+    private ReservationList reservationList;
 
-    public void setReservList(ReservList reservList) {
-        this.reservList = reservList;
-        if(!reservList.getReservations().contains(this)) {
-            reservList.getReservations().add(this);
+    public void setReservationList(ReservationList reservationList) {
+        this.reservationList = reservationList;
+        if(!reservationList.getReservations().contains(this)) {
+            reservationList.getReservations().add(this);
         }
     }
 

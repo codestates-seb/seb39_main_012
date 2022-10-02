@@ -1,6 +1,6 @@
 package com.team012.server.reservation.service;
 
-import com.team012.server.reservation.entity.ReservList;
+import com.team012.server.reservation.entity.ReservationList;
 import com.team012.server.reservation.repository.ReservListRepository;
 import com.team012.server.reservation.repository.ReservationRepository;
 import com.team012.server.reservation.entity.Reservation;
@@ -25,9 +25,9 @@ public class ReservationService {
 
     // 회사별 예약 조회
     @Transactional(readOnly = true)
-    public Page<ReservList> getReservation(Long companyId, Integer page, Integer size) {
+    public Page<ReservationList> getReservation(Long companyId, Integer page, Integer size) {
         // id 기준으로 내림차순 정렬
-        Page<ReservList> reservation = reservListRepository.findByCompanyId(companyId,
+        Page<ReservationList> reservation = reservListRepository.findByCompanyId(companyId,
                 PageRequest.of(page, size, Sort.by("usersId").descending()));
 
         return reservation;
@@ -35,7 +35,7 @@ public class ReservationService {
 
     // 예약확인 --> 예약상태 수정
     public void confirmReservation(Long reservationId) {
-        ReservList reservation = reservListRepository.findById(reservationId).orElseThrow(() -> new RuntimeException("reservation Not found"));
+        ReservationList reservation = reservListRepository.findById(reservationId).orElseThrow(() -> new RuntimeException("reservation Not found"));
 
         if (reservation != null) {
             reservation.setStatus("확정");
@@ -46,8 +46,8 @@ public class ReservationService {
 
     // 예약취소 API
     public void cancelReservation(Long id) {
-        ReservList reservList = reservListRepository.findById(id).orElseThrow(NoSuchElementException::new);
-        List<Reservation> reservations = reservList.getReservations();
+        ReservationList reservationList = reservListRepository.findById(id).orElseThrow(NoSuchElementException::new);
+        List<Reservation> reservations = reservationList.getReservations();
 
         reservationRepository.deleteAll(reservations);
         reservListRepository.deleteById(id);

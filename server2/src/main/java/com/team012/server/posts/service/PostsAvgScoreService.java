@@ -6,6 +6,7 @@ import com.team012.server.posts.repository.PostsAvgScoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -17,17 +18,16 @@ public class PostsAvgScoreService {
     private final PostsService postsService;
 
     // postsAvgScore 모델에 저장
-    public PostsAvgScore savedPostsScore(Integer score, Long postsId) {
+    public void savedPostsScore(Double score, Long postsId) {
+
         PostsAvgScore avg = PostsAvgScore
                 .builder()
                 .score(score)
                 .postsId(postsId)
                 .build();
-
+        postsAvgScoreRepository.save(avg);
         // 별점 최신화
         averageCompanyScore(postsId);
-
-        return postsAvgScoreRepository.save(avg);
     }
 
     // 리뷰 점수 평균 만들기(메인 화면에 보여주는 부분)
@@ -40,7 +40,8 @@ public class PostsAvgScoreService {
             totalScore += postsAvgScore.getScore();
         }
 
-        Double avg = totalScore / scoreList.size();
+        double avg = totalScore / scoreList.size();
+        avg = Math.round(avg * 10) / 10.0;
 
         Posts updated = postsService.findById(postsId);
         updated.setAvgScore(avg);

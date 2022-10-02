@@ -36,7 +36,7 @@ public class ReviewController {
         Review savedReview = reviewService.createReview(dto, multipartFile, writeUser);
 
         // 리뷰가 작성될 때 마다 리뷰 별점들이 postsAvgScore에 따로 저장된다
-        PostsAvgScore postsAvgScore = postsAvgScoreService.savedPostsScore(dto.getScore(), dto.getPostsId());
+        postsAvgScoreService.savedPostsScore(dto.getScore(), dto.getPostsId());
 
                 // 응답객체
                 ReviewResponseDto response = ReviewResponseDto

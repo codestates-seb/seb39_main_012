@@ -1,6 +1,6 @@
 package com.team012.server.users.controller;
 
-import com.team012.server.reservation.entity.ReservList;
+import com.team012.server.reservation.entity.ReservationList;
 import com.team012.server.reservation.service.ReservationService;
 import com.team012.server.review.entity.Review;
 import com.team012.server.users.dto.CustomerUpdateRequestDto;
@@ -40,7 +40,7 @@ public class CustomerController {
         Users findUser = usersService.findUsersById(userId);
         List<DogCard> dogCardList = dogCardService.getListDogCard(userId);
         List<Review> reviewList = usersReviewManageReviewService.getListReview(userId);
-        List<ReservList> reservationList = reservationService.getReservation(userId, 0, 6).getContent();
+        List<ReservationList> reservationList = reservationService.getReservation(userId, 0, 6).getContent();
 
         CustomerProfileViewResponseDto response
                 = CustomerProfileViewResponseDto

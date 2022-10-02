@@ -28,6 +28,7 @@ public class PostsResponseDto {
     private String checkIn;
     private String checkOut; //추가
 //    private List<Review> reviewList; // 리뷰 리스트 최신 아이디 순
+    private Integer roomCount;
     private List<ImgDto> postsImgList;
     private List<HashTagResponseDto> hashTag;
     private List<ServiceResponseDto> serviceTag;
@@ -44,7 +45,7 @@ public class PostsResponseDto {
     }
 
     @Builder(builderClassName = "builder", builderMethodName = "builder")
-    public PostsResponseDto(Long id, String title, String content, String latitude, String longitude, String address, String detailAddress, String phone,Long companyId, Double avgScore, Integer likesCount, String checkIn, String checkOut, List<ImgDto> postsImgList, List<HashTagResponseDto> hashTag, List<ServiceResponseDto> serviceTag, List<RoomDto> roomDtos, List<Review> reviewList) {
+    public PostsResponseDto(Long id, String title, String content, String latitude, String longitude, String address, String detailAddress, String phone,Long companyId, Double avgScore, Integer likesCount, String checkIn, String checkOut, Integer roomCount,List<ImgDto> postsImgList, List<HashTagResponseDto> hashTag, List<ServiceResponseDto> serviceTag, List<RoomDto> roomDtos, List<Review> reviewList) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -58,6 +59,7 @@ public class PostsResponseDto {
         this.likesCount = likesCount;
         this.checkIn = checkIn;
         this.checkOut = checkOut;
+        this.roomCount = roomCount;
         this.postsImgList = postsImgList;
         this.hashTag = hashTag;
         this.serviceTag = serviceTag;
@@ -66,7 +68,7 @@ public class PostsResponseDto {
     }
 
     @Builder(builderClassName = "updateBuilder", builderMethodName = "update")
-    public PostsResponseDto(Long id, String title, String content, String latitude, String longitude, String address, String detailAddress, String phone,Long companyId, Double avgScore, Integer likesCount, String checkIn, String checkOut, List<ImgDto> postsImgList, List<Review> reviewList) {
+    public PostsResponseDto(Long id, String title, String content, String latitude, String longitude, String address, String detailAddress, String phone,Long companyId, Double avgScore, Integer likesCount, String checkIn, String checkOut, Integer roomCount,List<ImgDto> postsImgList, List<Review> reviewList) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -80,6 +82,7 @@ public class PostsResponseDto {
         this.likesCount = likesCount;
         this.checkIn = checkIn;
         this.checkOut = checkOut;
+        this.roomCount = roomCount;
         this.postsImgList = postsImgList;
         this.reviewList = reviewList;
     }
