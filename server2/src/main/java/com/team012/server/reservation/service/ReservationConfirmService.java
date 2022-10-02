@@ -34,6 +34,8 @@ public class ReservationConfirmService {
 
         ReservationList findReservation = byUsersIdAndReservedId.orElse(null);
 
+
+
         // 예약한 강아지 한마리 마다 확인.
         for (int i = 0; i < findReservation.getDogIdList().size(); i++) {
             Long aLong = findReservation.getDogIdList().get(i);
@@ -43,7 +45,7 @@ public class ReservationConfirmService {
             Company companyByCompanyId = companyService.getCompanyByCompanyId(findReservation.getCompanyId());
 
 
-            TotalReservationDto t = TotalReservationDto.builder()
+            TotalReservationDto reservationDogCard = TotalReservationDto.builder()
                     .dogName(findDogCard.getDogName())
                     .photoImgUrl(findDogCard.getPhotoImgUrl())
                     .type(findDogCard.getType())
@@ -55,15 +57,15 @@ public class ReservationConfirmService {
                     .surgery(findDogCard.getSurgery())
                     .bowelTrained(findDogCard.getBowelTrained())
                     .etc(findDogCard.getEtc())
-                    .username(findReservation.getReservationUsername())
-                    .phone(findReservation.getReservationPhone())
+                    .name(findReservation.getUserInfo().getName())
+                    .phone(findReservation.getUserInfo().getPhone())
                     .address(companyByCompanyId.getAddress())
                     .checkIn(findReservation.getCheckIn())
                     .checkOut(findReservation.getCheckOut())
                     .totalPrice(findReservation.getTotalPrice())
                     .build();
 
-            confirmReservationList.add(t);
+            confirmReservationList.add(reservationDogCard);
 
         }
         return confirmReservationList;
