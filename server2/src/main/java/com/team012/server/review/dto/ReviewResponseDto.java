@@ -15,14 +15,14 @@ public class ReviewResponseDto {
 
     private Long id;
     private String content;
-    private Integer score;
+    private Double score;
     private List<ReviewImg> reviewImgList;
     private String message;
 
     @Builder
     public ReviewResponseDto(Long id,
                              String content,
-                             Integer score,
+                             Double score,
                              List<ReviewImg> reviewImgList,
                              String message) {
         this.id = id;

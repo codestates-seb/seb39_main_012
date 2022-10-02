@@ -10,10 +10,10 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ReviewPatchRequestDto {
     private String content;
-    private Integer score;
+    private Double score;
 
     @Builder
-    public ReviewPatchRequestDto(String content, Integer score) {
+    public ReviewPatchRequestDto(String content, Double score) {
         this.content = content;
         this.score = score;
     }

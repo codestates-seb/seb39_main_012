@@ -1,18 +1,16 @@
 package com.team012.server.reservation.service;
 
 
+import com.team012.server.reservation.dto.*;
+import com.team012.server.reservation.entity.ReservationList;
 import com.team012.server.room.entity.Room;
 import com.team012.server.room.service.RoomService;
 import com.team012.server.posts.entity.Posts;
 import com.team012.server.posts.service.PostsService;
-import com.team012.server.reservation.entity.ReservList;
 import com.team012.server.reservation.entity.Reservation;
 import com.team012.server.reservation.repository.ReservListRepository;
 import com.team012.server.reservation.repository.ReservationRepository;
 import com.team012.server.users.entity.DogCard;
-import com.team012.server.reservation.dto.RegisterReservationDto;
-import com.team012.server.reservation.dto.ReservationUserInfoDto;
-import com.team012.server.reservation.dto.ResponseReservationDto;
 
 import com.team012.server.users.entity.Users;
 import com.team012.server.users.service.DogCardService;
@@ -25,7 +23,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.team012.server.reservation.dto.ReservationCreateDto;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -154,7 +151,7 @@ public class CustomerReservationService {
 
         Long companyId = posts.getCompanyId();
 
-        ReservList reservList = ReservList.builder()
+        ReservationList reservationList = ReservationList.builder()
                 .checkIn(dto.getCheckIn())
                 .checkOut(dto.getCheckOut())
                 .status("미정")
@@ -165,13 +162,13 @@ public class CustomerReservationService {
                 .userInfo(userInfoDto.getUserInfo())
                 .dogCount(dto.getTotalDogCount())
                 .totalPrice(dto.getTotalPrice())
-                .reservations(dto.getReservationList())
                 .reservationCode(dto.getReservationCode())
+                .reservations(dto.getReservationList())
                 .build();
 
-        ReservList reservList1 = reservListRepository.save(reservList);
-        for(Reservation r : reservList1.getReservations()) {
-            r.setReservList(reservList1);
+        ReservationList reservationList1 = reservListRepository.save(reservationList);
+        for(Reservation r : reservationList1.getReservations()) {
+            r.setReservationList(reservationList1);
         }
 
         reservationRepository.saveAll(dto.getReservationList());
@@ -194,12 +191,13 @@ public class CustomerReservationService {
         //예약 완료 화면에 띄울 response
         ResponseReservationDto responseReservationDto = ResponseReservationDto.builder()
                 .address(posts.getAddress() + " "+ posts.getDetailAddress())
-                .username(reservList1.getUserInfo().getName())
-                .phone(reservList1.getUserInfo().getPhone())
-                .checkIn(reservList1.getCheckIn().format(DateTimeFormatter.ISO_LOCAL_DATE))
-                .checkOut(reservList1.getCheckOut().format(DateTimeFormatter.ISO_LOCAL_DATE))
+                .username(reservationList1.getUserInfo().getName())
+                .phone(reservationList1.getUserInfo().getPhone())
+                .checkIn(reservationList1.getCheckIn().format(DateTimeFormatter.ISO_LOCAL_DATE))
+                .checkOut(reservationList1.getCheckOut().format(DateTimeFormatter.ISO_LOCAL_DATE))
                 .dogcard(dogCards)
-                .totalPrice(reservList1.getTotalPrice())
+                .totalPrice(reservationList1.getTotalPrice())
+                .reservationCode(reservationList1.getReservationCode())
                 .build();
 
         return responseReservationDto;
@@ -207,10 +205,11 @@ public class CustomerReservationService {
 
     //예약 전체 조회(미래 예약 날짜)
     @Transactional(readOnly = true)
-    public Page<ReservList> findReservationList(Long userId, int page, int size) {
+    public Page<ReservationList> findReservationList(Long userId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "checkOut");
 
-        Page<ReservList> reservLists =  reservListRepository.findByUsersId(userId,LocalDate.now(), pageable);
+        Page<ReservationList> reservLists =  reservListRepository.findByUsersId(userId,LocalDate.now(), pageable);
+
         return reservLists;
     }
 
@@ -224,10 +223,10 @@ public class CustomerReservationService {
 
     //갔다 온 호텔 전체 조회
     @Transactional(readOnly = true)
-    public Page<ReservList> findReservationAfterCheckOutList(Long userId, int page, int size) {
+    public Page<ReservationList> findReservationAfterCheckOutList(Long userId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "checkOut");
 
-        Page<ReservList> reservLists =  reservListRepository.findByUsersIdAndWent(userId, LocalDate.now(), pageable);
+        Page<ReservationList> reservLists =  reservListRepository.findByUsersIdAndWent(userId, LocalDate.now(), pageable);
         return reservLists;
 
     }
@@ -235,18 +234,18 @@ public class CustomerReservationService {
     //예약 취
     public void deleteReservation(Long userId, Long reservedId) {
 
-        Optional<ReservList> reservList= reservListRepository.findByUsersIdAndReservedId(userId, reservedId);
-        ReservList findReservList = reservList.orElseThrow(NoSuchElementException::new);
+        Optional<ReservationList> reservList= reservListRepository.findByUsersIdAndReservedId(userId, reservedId);
+        ReservationList findReservationList = reservList.orElseThrow(NoSuchElementException::new);
 
-        List<Reservation> reservation = findReservList.getReservations();
+        List<Reservation> reservation = findReservationList.getReservations();
 
-        if(LocalDate.now().until(findReservList.getCheckIn(),ChronoUnit.DAYS) < 1) {
-            log.info("{}",findReservList.getCheckIn().until(LocalDate.now(),ChronoUnit.DAYS));
+        if(LocalDate.now().until(findReservationList.getCheckIn(),ChronoUnit.DAYS) < 1) {
+            log.info("{}", findReservationList.getCheckIn().until(LocalDate.now(),ChronoUnit.DAYS));
 
             throw new RuntimeException("예약 취소는 하루 전에만 가능합니다");
         }
 
         reservationRepository.deleteAll(reservation);
-        reservListRepository.delete(findReservList);
+        reservListRepository.delete(findReservationList);
     }
 }
