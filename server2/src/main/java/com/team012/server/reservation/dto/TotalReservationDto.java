@@ -33,9 +33,9 @@ public class TotalReservationDto {
         private String etc;
 
         // 예약자 정보
-        private String username;
-
         private String phone;
+
+        private String name;
 
 
         // 예약 정보

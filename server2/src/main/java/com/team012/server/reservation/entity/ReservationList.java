@@ -53,12 +53,6 @@ public class ReservationList {
     @Column(name = "dog_count")
     private Integer dogCount; //예약된 강아지 수
 
-    @Column(name ="reservationPhone")
-    private String reservationPhone;
-
-    @Column(name = "reservationUsername")
-    private String reservationUsername;
-
     @ElementCollection(fetch = FetchType.LAZY)
     private List<Long> dogIdList = new ArrayList<>(); //강아지 카드 아이디 리스트
 
