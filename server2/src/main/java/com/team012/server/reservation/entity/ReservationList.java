@@ -53,9 +53,6 @@ public class ReservationList {
     @Column(name = "dog_count")
     private Integer dogCount; //예약된 강아지 수
 
-    @Column(name = "reservationCode")
-    private String reservationCode;
-
     @ElementCollection(fetch = FetchType.LAZY)
     private List<Long> dogIdList = new ArrayList<>(); //강아지 카드 아이디 리스트
 
@@ -71,7 +68,7 @@ public class ReservationList {
     }
 
     @Builder
-    public ReservationList(LocalDate checkIn, LocalDate checkOut, String status, Long usersId, Long postsId, Integer totalPrice, Long companyId, Integer dogCount, String reservationCode,List<Long> dogIdList, UserInfo userInfo, List<Reservation> reservations) {
+    public ReservationList(LocalDate checkIn, LocalDate checkOut, String status, Long usersId, Long postsId, Integer totalPrice, Long companyId, Integer dogCount,List<Long> dogIdList, UserInfo userInfo, List<Reservation> reservations) {
         this.checkIn = checkIn;
         this.checkOut = checkOut;
         this.status = status;
@@ -80,7 +77,6 @@ public class ReservationList {
         this.totalPrice = totalPrice;
         this.companyId = companyId;
         this.dogCount = dogCount;
-        this.reservationCode = reservationCode;
         this.dogIdList = dogIdList;
         this.userInfo = userInfo;
         this.reservations = reservations;

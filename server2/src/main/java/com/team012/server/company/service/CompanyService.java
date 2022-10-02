@@ -37,6 +37,10 @@ public class CompanyService {
         return findCompany;
     }
 
+    public Company getCompanyByCompanyId(Long companyId) {
+        return companyRepository.findById(companyId).orElseThrow(()-> new RuntimeException("company가 없습니다."));
+    }
+
     public Company updateCompany(Long userId, CompanyUpdateRequestDto dto) {
         Company company = companyRepository.findByUserId(userId);
         company.setCompanyName(dto.getCompanyName());
