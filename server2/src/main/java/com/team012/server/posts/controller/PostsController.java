@@ -69,22 +69,23 @@ public class PostsController {
         return new ResponseEntity<>(postsResponseDto, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity get(@PathVariable("id") Long id,
-                              @RequestParam Integer page,
-                              @RequestParam Integer size) {
-        Posts response = postsService.findById(id);
-
-        // 작성된 리뷰 리스트 페이징처리 해서 넣어주기
-        List<Review> reviewPage = reviewService.findByPage(page - 1, size).getContent();
-        List<Room> roomList = roomService.findAllRoom(id);
-
-        PostsResponseDto postsResponseDto = postsCombineService.combine(response, reviewPage, roomList);
-        // 현재날짜를 기준으로 체크아웃이 현재날짜를 지나면 roomCount 값을 예약한 강아지수 만큼 DB에 올려준다.
-//        postsReservationService.checkRoomCount(id);
-
-        return new ResponseEntity<>(postsResponseDto, HttpStatus.OK);
-    }
+    // ###########################  이거는 어디 쓰는지 몰라서 주석을 처리했습니다..  #############################
+//    @GetMapping("/{id}")
+//    public ResponseEntity get(@PathVariable("id") Long id,
+//                              @RequestParam Integer page,
+//                              @RequestParam Integer size) {
+//        Posts response = postsService.findById(id);
+//
+//        // 작성된 리뷰 리스트 페이징처리 해서 넣어주기
+//        List<Review> reviewPage = reviewService.findByPage(page - 1, size).getContent();
+//        List<Room> roomList = roomService.findAllRoom(id);
+//
+//        PostsResponseDto postsResponseDto = postsCombineService.combine(response, reviewPage, roomList);
+//        // 현재날짜를 기준으로 체크아웃이 현재날짜를 지나면 roomCount 값을 예약한 강아지수 만큼 DB에 올려준다.
+////        postsReservationService.checkRoomCount(id);
+//
+//        return new ResponseEntity<>(postsResponseDto, HttpStatus.OK);
+//    }
 
 
     @DeleteMapping("/{id}")
