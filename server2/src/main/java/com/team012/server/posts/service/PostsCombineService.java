@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 
 @RequiredArgsConstructor
 @Component
@@ -49,8 +50,8 @@ public class PostsCombineService {
                 .companyId(companyId)
                 .avgScore(posts.getAvgScore())
                 .likesCount(posts.getLikesCount())
-                .checkIn(posts.getCheckIn().format(DateTimeFormatter.ofPattern("a hh:mm")))
-                .checkOut(posts.getCheckOut().format(DateTimeFormatter.ofPattern("a hh:mm")))
+                .checkIn(posts.getCheckIn().format(DateTimeFormatter.ofPattern("a hh:mm").withLocale(Locale.KOREA)))
+                .checkOut(posts.getCheckOut().format(DateTimeFormatter.ofPattern("a hh:mm").withLocale(Locale.KOREA)))
                 .postsImgList(imgDtos)
                 .hashTag(hashTags)
                 .serviceTag(serviceTags)
