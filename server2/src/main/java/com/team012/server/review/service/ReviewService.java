@@ -1,7 +1,5 @@
 package com.team012.server.review.service;
 
-import com.team012.server.posts.entity.PostsAvgScore;
-import com.team012.server.posts.service.PostsAvgScoreService;
 import com.team012.server.review.repository.ReviewRepository;
 import com.team012.server.review.dto.ReviewCreateRequestDto;
 import com.team012.server.review.dto.ReviewPatchRequestDto;
@@ -21,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+
 @Transactional
 @Slf4j
 @RequiredArgsConstructor
@@ -38,6 +37,7 @@ public class ReviewService {
         // json 으로 받은 데이터 추가
         Review review = Review
                 .builder()
+                .title(dto.getTitle())
                 .content(dto.getContent())
                 .score(dto.getScore())
                 .postsId(dto.getPostsId())

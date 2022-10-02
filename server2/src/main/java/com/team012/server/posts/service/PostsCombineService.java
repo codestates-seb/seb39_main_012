@@ -2,6 +2,7 @@ package com.team012.server.posts.service;
 
 import com.team012.server.posts.Tag.HashTag.converter.HashTagConverter;
 import com.team012.server.posts.Tag.ServiceTag.converter.ServiceTagConverter;
+import com.team012.server.review.service.ReviewService;
 import com.team012.server.room.converter.RoomConverter;
 import com.team012.server.room.dto.RoomDto;
 import com.team012.server.room.entity.Room;

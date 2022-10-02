@@ -14,6 +14,7 @@ import javax.validation.constraints.Min;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReviewCreateRequestDto {
+    private String title;
     private String content;
 
     @Min(0) @Max(5)
