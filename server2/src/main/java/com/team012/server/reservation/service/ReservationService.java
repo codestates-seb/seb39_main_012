@@ -1,7 +1,7 @@
 package com.team012.server.reservation.service;
 
 import com.team012.server.reservation.entity.ReservationList;
-import com.team012.server.reservation.repository.ReservListRepository;
+import com.team012.server.reservation.repository.ReservationListRepository;
 import com.team012.server.reservation.repository.ReservationRepository;
 import com.team012.server.reservation.entity.Reservation;
 import lombok.RequiredArgsConstructor;
@@ -21,13 +21,13 @@ import java.util.NoSuchElementException;
 public class ReservationService {
 
     private final ReservationRepository reservationRepository;
-    private final ReservListRepository reservListRepository;
+    private final ReservationListRepository reservationListRepository;
 
     // 회사별 예약 조회
     @Transactional(readOnly = true)
     public Page<ReservationList> getReservation(Long companyId, Integer page, Integer size) {
         // id 기준으로 내림차순 정렬
-        Page<ReservationList> reservation = reservListRepository.findByCompanyId(companyId,
+        Page<ReservationList> reservation = reservationListRepository.findByCompanyId(companyId,
                 PageRequest.of(page, size, Sort.by("usersId").descending()));
 
         return reservation;
@@ -35,21 +35,21 @@ public class ReservationService {
 
     // 예약확인 --> 예약상태 수정
     public void confirmReservation(Long reservationId) {
-        ReservationList reservation = reservListRepository.findById(reservationId).orElseThrow(() -> new RuntimeException("reservation Not found"));
+        ReservationList reservation = reservationListRepository.findById(reservationId).orElseThrow(() -> new RuntimeException("reservation Not found"));
 
         if (reservation != null) {
             reservation.setStatus("확정");
-            reservListRepository.save(reservation);
+            reservationListRepository.save(reservation);
         }
 
     }
 
     // 예약취소 API
     public void cancelReservation(Long id) {
-        ReservationList reservationList = reservListRepository.findById(id).orElseThrow(NoSuchElementException::new);
+        ReservationList reservationList = reservationListRepository.findById(id).orElseThrow(NoSuchElementException::new);
         List<Reservation> reservations = reservationList.getReservations();
 
         reservationRepository.deleteAll(reservations);
-        reservListRepository.deleteById(id);
+        reservationListRepository.deleteById(id);
     }
 }
