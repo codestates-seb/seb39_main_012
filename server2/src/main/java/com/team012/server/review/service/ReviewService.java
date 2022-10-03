@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Transactional
 @Slf4j
@@ -98,22 +99,26 @@ public class ReviewService {
         return reviewRepository.findAll(pageable);
     }
 
-    public List<ReviewPostsResponse> getByPage(int page, int size, List<Review> reviewList) {
+    public List<ReviewPostsResponse> getByPage(int page, int size, List<Review> reviewList,Long postsId) {
         List<Review> reviewPage = findByPage(page - 1, size).getContent(); // 리뷰 리스트가 나온다
+
+        List<Review> collect = reviewPage.stream().filter(n -> n.getPostsId().equals(postsId)).collect(Collectors.toList());
 
         // 새로운 배열을 만들어준다.
         List<ReviewPostsResponse> responses = new ArrayList<>();
 
-        for (int i = 0; i < reviewList.size(); i++) {
+
+
+        for (int i = 0; i < collect.size(); i++) {
             // 작성자 이름 찾기
             ReviewPostsResponse response = ReviewPostsResponse
                     .builder()
-                    .id(reviewPage.get(i).getId())
-                    .createdAt(reviewPage.get(i).getCreatedAt().format(DateTimeFormatter.ISO_DATE))
-                    .modifiedAt(reviewPage.get(i).getModifiedAt().format(DateTimeFormatter.ISO_DATE))
-                    .title(reviewPage.get(i).getTitle())
-                    .content(reviewPage.get(i).getContent())
-                    .score(reviewPage.get(i).getScore())
+                    .id(collect.get(i).getId())
+                    .createdAt(collect.get(i).getCreatedAt().format(DateTimeFormatter.ISO_DATE))
+                    .modifiedAt(collect.get(i).getModifiedAt().format(DateTimeFormatter.ISO_DATE))
+                    .title(collect.get(i).getTitle())
+                    .content(collect.get(i).getContent())
+                    .score(collect.get(i).getScore())
                     .writer(usersService.findUsersById(reviewList.get(i).getUserId()).getUsername())
                     .reviewImgList(reviewImgRepository.findByReview_Id(reviewList.get(i).getId()))
                     .build();
