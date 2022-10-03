@@ -79,6 +79,7 @@ public class PostsCombineService {
         List<ServiceResponseDto> serviceResponseDtos = serviceTagConverter.toListDTO(posts.getPostAvailableTags());
         List<RoomDto> roomDtos = roomConverter.toListDTO(roomList);
 
+
         return PostsResponseDto.builder()
                 .id(posts.getId())
                 .title(posts.getTitle())

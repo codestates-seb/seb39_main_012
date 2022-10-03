@@ -19,5 +19,6 @@ public class ReviewCreateRequestDto {
 
     @Min(0) @Max(5)
     private Double score;
+
     private Long postsId;
 }
