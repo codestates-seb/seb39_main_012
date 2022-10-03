@@ -1,5 +1,6 @@
 package com.team012.server.room.service;
 
+import com.team012.server.posts.repository.RoomPriceDto;
 import com.team012.server.room.converter.RoomConverter;
 import com.team012.server.room.dto.RoomCreateDto;
 import com.team012.server.room.dto.RoomDto;
@@ -7,6 +8,8 @@ import com.team012.server.room.dto.RoomUpdateDto;
 import com.team012.server.room.entity.Room;
 import com.team012.server.room.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -71,6 +74,8 @@ public class RoomService {
     public Integer findMinPrice(Long postId) {
         return roomRepository.findMinPrice(postId);
     }
+
+
 
 
 }

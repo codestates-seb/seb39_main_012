@@ -9,8 +9,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Entity
 @Getter
@@ -28,11 +30,19 @@ public class ReservationList {
 
     @Column(name = "check_in")
     @DateTimeFormat(pattern = "yyyy-mm-dd")
-    private LocalDate checkIn;
+    private LocalDate checkInDate;
 
     @Column(name = "check_out")
     @DateTimeFormat(pattern = "yyyy-mm-dd")
-    private LocalDate checkOut;
+    private LocalDate checkOutDate;
+
+    @Column(name = "check_in_time")
+    @DateTimeFormat(pattern = "HH:mm")
+    private LocalTime checkInTime;
+
+    @Column(name = "check_out_time")
+    @DateTimeFormat(pattern = "HH:mm")
+    private LocalTime checkOutTime;
 
     // 예약 확정인지 아닌지 판별 -->
     @Column(name = "status")
@@ -59,7 +69,7 @@ public class ReservationList {
     @Embedded
     private UserInfo userInfo; //예약 상세 페이지에 이름, 전화번호, 이메일을 적는 칸이 있어서 넣었습니다.
 
-    @OneToMany(mappedBy = "reservationList")
+    @OneToMany(mappedBy = "reservationList", cascade = CascadeType.REMOVE)
     @JsonManagedReference
     private List<Reservation> reservations;
 
@@ -68,9 +78,20 @@ public class ReservationList {
     }
 
     @Builder
-    public ReservationList(LocalDate checkIn, LocalDate checkOut, String status, Long usersId, Long postsId, Integer totalPrice, Long companyId, Integer dogCount,List<Long> dogIdList, UserInfo userInfo, List<Reservation> reservations) {
-        this.checkIn = checkIn;
-        this.checkOut = checkOut;
+    public ReservationList(LocalDate checkInDate,
+                           LocalDate checkOutDate,
+                           LocalTime checkInTime,
+                           LocalTime checkOutTime,
+                           String status,
+                           Long usersId, Long postsId,
+                           Integer totalPrice, Long companyId,
+                           Integer dogCount,List<Long> dogIdList,
+                           UserInfo userInfo,
+                           List<Reservation> reservations) {
+        this.checkInDate = checkInDate;
+        this.checkOutDate = checkOutDate;
+        this.checkInTime = checkInTime;
+        this.checkOutTime = checkOutTime;
         this.status = status;
         this.usersId = usersId;
         this.postsId = postsId;

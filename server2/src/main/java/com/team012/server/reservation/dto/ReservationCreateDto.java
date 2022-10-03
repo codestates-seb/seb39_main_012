@@ -4,6 +4,7 @@ import com.team012.server.reservation.entity.Reservation;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Getter
@@ -14,8 +15,10 @@ import java.util.List;
 public class ReservationCreateDto {
     List<Reservation> reservationList;
     RegisterReservationDto dto;
-    LocalDate checkIn;
-    LocalDate checkOut;
+    LocalDate checkInDate;
+    LocalDate checkOutDate;
+    LocalTime checkInTime;
+    LocalTime checkOutTime;
     Integer totalDogCount;
     Integer totalPrice;
 

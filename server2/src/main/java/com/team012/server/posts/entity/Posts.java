@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.BatchSize;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -67,23 +68,25 @@ public class Posts {
     @Column(name = "avg_score")
     private Double avgScore;
 
-    @Column(name = "check_in")
+    @Column(name = "check_in_time")
     @DateTimeFormat(pattern = "HH:mm")
-    private LocalTime checkIn;
+    private LocalTime checkInTime;
 
     @Column(name = "check_out")
     @DateTimeFormat(pattern = "HH:mm")
-    private LocalTime checkOut;
+    private LocalTime checkOutTime;
 
     // 이미지 업로드 테이블
-    @OneToMany(mappedBy = "posts", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "posts", cascade = CascadeType.ALL,fetch = FetchType.EAGER)// ----> 이거 질문 N+1문제는 해결이 되었으나 괜찮은 것인가....
     @JsonManagedReference  // 순환참조 방지(...)
     private List<PostsImg> postsImgList = new ArrayList<>();
 
+    @BatchSize(size = 100)
     @OneToMany(mappedBy = "posts", cascade = {CascadeType.REMOVE, CascadeType.MERGE})
     @JsonIgnore
     private List<PostsServiceTag> postAvailableTags = new ArrayList<>();
 
+    @BatchSize(size = 100)
     @OneToMany(mappedBy = "posts", cascade = {CascadeType.REMOVE, CascadeType.MERGE})
     @JsonIgnore
     private List<PostsHashTags> postsHashTags = new ArrayList<>();
@@ -91,8 +94,8 @@ public class Posts {
     @Builder
     public Posts(String title, String content,
                  String latitude, String longitude,
-                 String address, String detailAddress, String phone,Integer roomCount,
-                 Long companyId, LocalTime checkIn, LocalTime checkOut) {
+                 String address, String detailAddress, String phone, Integer roomCount,
+                 Long companyId, LocalTime checkInTime, LocalTime checkOutTime) {
         this.title = title;
         this.content = content;
         this.latitude = latitude;
@@ -104,8 +107,8 @@ public class Posts {
         this.companyId = companyId;
 //        this.avgScore = avgScore; // add
 //        this.likesCount = likesCount;
-        this.checkIn = checkIn;
-        this.checkOut = checkOut;
+        this.checkInTime = checkInTime;
+        this.checkOutTime = checkOutTime;
 
     }
 }

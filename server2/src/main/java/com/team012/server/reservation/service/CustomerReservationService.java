@@ -10,7 +10,6 @@ import com.team012.server.posts.service.PostsService;
 import com.team012.server.reservation.entity.Reservation;
 import com.team012.server.reservation.repository.ReservationListRepository;
 import com.team012.server.reservation.repository.ReservationRepository;
-import com.team012.server.users.entity.DogCard;
 
 import com.team012.server.users.entity.Users;
 import com.team012.server.users.service.DogCardService;
@@ -25,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -54,26 +54,28 @@ public class CustomerReservationService {
         usersService.findUsersById(userId); //validation check
         Long companyId = postsService.findById(postsId).getCompanyId();
 
-        validateDate(dto.getCheckIn(), dto.getCheckOut());
+        validateDate(dto.getCheckInDate(), dto.getCheckOutDate());
 
         Integer totalDogCount = calculatePriceAndAvailableBooking(dto, postsId).get(0);
         Integer totalPrice = calculatePriceAndAvailableBooking(dto, postsId).get(1);
 
 
-        LocalDate checkIn = LocalDate.parse(dto.getCheckIn(),DateTimeFormatter.ISO_LOCAL_DATE);
-        LocalDate checkOut = LocalDate.parse(dto.getCheckOut(),DateTimeFormatter.ISO_LOCAL_DATE);
+        LocalDate checkInDate = LocalDate.parse(dto.getCheckInDate(),DateTimeFormatter.ISO_LOCAL_DATE);
+        LocalDate checkOutDate = LocalDate.parse(dto.getCheckOutDate(),DateTimeFormatter.ISO_LOCAL_DATE);
+        LocalTime checkInTime = LocalTime.parse(dto.getCheckInTime(), DateTimeFormatter.ofPattern("a hh:mm").withLocale(Locale.KOREA));
+        LocalTime checkOutTime = LocalTime.parse(dto.getCheckOutTime(), DateTimeFormatter.ofPattern("a hh:mm").withLocale(Locale.KOREA));
         //2022-11-102022-11-10
-        String str = dto.getCheckIn() + dto.getCheckOut();
+        String str = dto.getCheckInDate() + dto.getCheckOutDate();
         str = str.replaceAll("-","");
 
-        Long period = checkIn.until(checkOut, ChronoUnit.DAYS);
+        Long period = checkInDate.until(checkOutDate, ChronoUnit.DAYS);
 
         List<Reservation> reservations = new ArrayList<>();
 
 
         for(int i = 0; i< period;i ++) {
             Reservation reservation = Reservation.builder()
-                    .reservationDate(checkIn.plusDays(i))
+                    .reservationDate(checkInDate.plusDays(i))
                     .companyId(companyId)
                     .dogCount(totalDogCount)
                     .build();
@@ -83,8 +85,10 @@ public class CustomerReservationService {
         ReservationCreateDto reservList = ReservationCreateDto.builder()
                 .reservationList(reservations)
                 .dto(dto)
-                .checkIn(checkIn)
-                .checkOut(checkOut)
+                .checkInDate(checkInDate)
+                .checkOutDate(checkOutDate)
+                .checkInTime(checkInTime)
+                .checkOutTime(checkOutTime)
                 .totalDogCount(totalDogCount)
                 .totalPrice(totalPrice)
                 .build();
@@ -92,6 +96,7 @@ public class CustomerReservationService {
         return reservList;
     }
 
+    @Transactional(readOnly = true)
     private void validateDate(String strCheckIn, String strCheckOut) {
         LocalDate checkIn = LocalDate.parse(strCheckIn, DateTimeFormatter.ISO_DATE);
         LocalDate checkOut = LocalDate.parse(strCheckOut, DateTimeFormatter.ISO_DATE);
@@ -106,8 +111,8 @@ public class CustomerReservationService {
     @Transactional(readOnly = true)
     public List<Integer> calculatePriceAndAvailableBooking(RegisterReservationDto dto, Long postsId) {
 
-        LocalDate checkIn = LocalDate.parse(dto.getCheckIn(), DateTimeFormatter.ISO_DATE);
-        LocalDate checkOut = LocalDate.parse(dto.getCheckOut(), DateTimeFormatter.ISO_DATE).minusDays(1);
+        LocalDate checkInDate = LocalDate.parse(dto.getCheckInDate(), DateTimeFormatter.ISO_DATE);
+        LocalDate checkOutDate = LocalDate.parse(dto.getCheckOutDate(), DateTimeFormatter.ISO_DATE).minusDays(1);
 
         int price = 0;
         Integer totalCount = 0;
@@ -123,7 +128,7 @@ public class CustomerReservationService {
         System.out.println("count = " + count);
 
         Long companyId = postsService.findById(postsId).getCompanyId();
-        List<Integer> bookedCount = reservationRepository.findByCheckInCheckOut(checkIn, checkOut, companyId); //예약 되어있는 총 강아지 수
+        List<Integer> bookedCount = reservationRepository.findByCheckInCheckOut(checkInDate, checkOutDate, companyId); //예약 되어있는 총 강아지 수
         Integer maxCount = bookedCount.isEmpty() ? 0 : Collections.max(bookedCount);
 
         Integer roomCount = postsService.findById(postsId).getRoomCount();
@@ -135,7 +140,7 @@ public class CustomerReservationService {
         if(roomCount < (maxCount + count)) throw new RuntimeException("예약 가능한 마리 수 : " + (roomCount - maxCount));
         //수용가능 마리수보다 기존에 예약되어있던 마리수 + 예약하려는 마리수가 더 크면 예약 불가라고 예외 처리
 
-        Long period = checkIn.until(checkOut, ChronoUnit.DAYS); //checkOut - checkIn 날짜 수 계산
+        Long period = checkInDate.until(checkOutDate, ChronoUnit.DAYS); //checkOut - checkIn 날짜 수 계산
         Integer totalPrice = Math.toIntExact(price * period);
 
 
@@ -143,7 +148,7 @@ public class CustomerReservationService {
     }
 
     //예약 페이지 , 결제 페이지(예약 상세 페이지 ---> 예약 완료 페이지)
-    public ResponseReservationDto createReservation(ReservationCreateDto dto, Long userId, Long postsId, ReservationUserInfoDto userInfoDto) {
+    public String createReservation(ReservationCreateDto dto, Long userId, Long postsId, ReservationUserInfoDto userInfoDto) {
 
         Users users = usersService.findUsersById(userId); //validation check
         Posts posts = postsService.findById(postsId);
@@ -151,8 +156,10 @@ public class CustomerReservationService {
         Long companyId = posts.getCompanyId();
 
         ReservationList reservationList = ReservationList.builder()
-                .checkIn(dto.getCheckIn())
-                .checkOut(dto.getCheckOut())
+                .checkInDate(dto.getCheckInDate())
+                .checkOutDate(dto.getCheckOutDate())
+                .checkInTime(dto.getCheckInTime())
+                .checkOutTime(dto.getCheckOutTime())
                 .status("미정")
                 .usersId(userId)
                 .postsId(postsId)
@@ -178,26 +185,7 @@ public class CustomerReservationService {
 //        postsService.save(posts);
 
 
-        //개 카드 찾기
-        List<Long> dogId = userInfoDto.getDogCardsId();
-        List<DogCard> dogCards = new ArrayList<>();
-        for (Long i : dogId) {
-            DogCard dogCard = dogCardService.findById(i);
-            dogCards.add(dogCard);
-        }
-
-        //예약 완료 화면에 띄울 response
-        ResponseReservationDto responseReservationDto = ResponseReservationDto.builder()
-                .address(posts.getAddress() + " "+ posts.getDetailAddress())
-                .username(reservationList1.getUserInfo().getName())
-                .phone(reservationList1.getUserInfo().getPhone())
-                .checkIn(reservationList1.getCheckIn().format(DateTimeFormatter.ISO_LOCAL_DATE))
-                .checkOut(reservationList1.getCheckOut().format(DateTimeFormatter.ISO_LOCAL_DATE))
-                .dogcard(dogCards)
-                .totalPrice(reservationList1.getTotalPrice())
-                .build();
-
-        return responseReservationDto;
+        return "reservation complete";
     }
 
     //예약 전체 조회(미래 예약 날짜)
@@ -205,7 +193,7 @@ public class CustomerReservationService {
     public Page<ReservationList> findReservationList(Long userId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "checkOut");
 
-        Page<ReservationList> reservation =  reservationListRepository.findByUsersId(userId,LocalDate.now(), pageable);
+        Page<ReservationList> reservation =  reservationListRepository.findByUsersIdBooked(userId,LocalDate.now(), pageable);
 
         return reservation;
     }
@@ -223,7 +211,7 @@ public class CustomerReservationService {
     public Page<ReservationList> findReservationAfterCheckOutList(Long userId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "checkOut");
 
-        Page<ReservationList> reservationLists =  reservationListRepository.findByUsersIdAndWent(userId, LocalDate.now(), pageable);
+        Page<ReservationList> reservationLists =  reservationListRepository.findByUsersIdVisited(userId, LocalDate.now(), pageable);
         return reservationLists;
 
     }
@@ -234,15 +222,12 @@ public class CustomerReservationService {
         Optional<ReservationList> reservationList= reservationListRepository.findByUsersIdAndReservedId(userId, reservedId);
         ReservationList findReservationList = reservationList.orElseThrow(NoSuchElementException::new);
 
-        List<Reservation> reservation = findReservationList.getReservations();
-
-        if(LocalDate.now().until(findReservationList.getCheckIn(),ChronoUnit.DAYS) < 1) {
-            log.info("{}", findReservationList.getCheckIn().until(LocalDate.now(),ChronoUnit.DAYS));
+        if(LocalDate.now().until(findReservationList.getCheckInDate(),ChronoUnit.DAYS) < 1) {
+            log.info("{}", findReservationList.getCheckInDate().until(LocalDate.now(),ChronoUnit.DAYS));
 
             throw new RuntimeException("예약 취소는 하루 전에만 가능합니다");
         }
 
-        reservationRepository.deleteAll(reservation);
         reservationListRepository.delete(findReservationList);
     }
 }

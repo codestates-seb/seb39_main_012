@@ -20,9 +20,6 @@ public class PostsAvgScore {
     @Column(name = "score")
     private Double score;
 
-//    @Column(name = "totalScore")
-//    private BigDecimal totalScore;
-
     @Column(name = "posts_id")
     private Long postsId;
 }

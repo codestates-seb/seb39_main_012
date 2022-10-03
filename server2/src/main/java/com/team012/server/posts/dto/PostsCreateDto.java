@@ -33,11 +33,11 @@ public class PostsCreateDto {
 
     @NotBlank
     @Pattern(regexp = "(오전|오후) ([0]?[0-9]|1[0-2]):[0-5][0-9]")
-    private String checkIn;
+    private String checkInTime;
 
     @NotBlank
     @Pattern(regexp = "(오전|오후) ([0]?[0-9]|1[0-2]):[0-5][0-9]")
-    private String checkOut; //추가
+    private String checkOutTime; //추가
 
     @NotNull
     private List<String> hashTag;
