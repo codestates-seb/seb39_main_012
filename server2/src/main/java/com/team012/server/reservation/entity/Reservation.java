@@ -41,7 +41,7 @@ public class Reservation implements Comparable<Reservation> {
     private Integer dogCount;
 
     @ManyToOne
-    @JoinColumn(name = "reservList_id")
+    @JoinColumn(name = "reservationList_id")
     @JsonBackReference
     private ReservationList reservationList;
 
