@@ -11,11 +11,13 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-public interface ReservListRepository extends JpaRepository<ReservationList, Long> {
+public interface ReservationListRepository extends JpaRepository<ReservationList, Long> {
 
     Page<ReservationList> findByCompanyId(Long companyId, Pageable pageable);
 
     Optional<ReservationList> findByUsersIdAndReservedId(Long usersId, Long reservedId);
+
+    List<ReservationList> findByUsersId(Long usersId);
 
     @Query(value = "select distinct r from ReservationList r where r.usersId = :id and r.checkOut >= :date")
     Page<ReservationList> findByUsersId(@Param("id") Long id, @Param("date") LocalDate date, Pageable pageable);

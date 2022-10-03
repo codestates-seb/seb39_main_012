@@ -19,6 +19,6 @@ public class ResponseReservationDto {
     private String checkIn;
     private String checkOut;
     private Integer totalPrice;
-    private String reservationCode;
+
 
 }

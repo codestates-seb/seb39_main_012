@@ -1,5 +1,6 @@
 package com.team012.server.posts.controller;
 
+import com.team012.server.review.dto.ReviewPostsResponse;
 import com.team012.server.room.entity.Room;
 import com.team012.server.room.service.RoomService;
 import com.team012.server.posts.service.PostsCombineService;
@@ -49,33 +50,33 @@ public class PostsPageController {
     public ResponseEntity searchByAddress(@RequestParam int page,
                                           @RequestParam int size,
                                           @RequestParam String address) {
-        Page<Posts> postsPage = postsSearchService.findPostsByAddress(address, page-1, size);
+        Page<Posts> postsPage = postsSearchService.findPostsByAddress(address, page - 1, size);
         List<Posts> postsList = postsPage.getContent();
 
         List<PostsResponseListDto> postsResponseListDtos = postListService.postsResponseListDtos(postsList);
-        return new ResponseEntity<>(new MultiResponseDto<>(postsResponseListDtos,postsPage), HttpStatus.OK);
+        return new ResponseEntity<>(new MultiResponseDto<>(postsResponseListDtos, postsPage), HttpStatus.OK);
     }
 
     @GetMapping("/search-title")
     public ResponseEntity searchByTitle(@RequestParam int page,
                                         @RequestParam int size,
                                         @RequestParam String title) {
-        Page<Posts> postsPage = postsSearchService.findPostsByTitle(title, page-1, size);
+        Page<Posts> postsPage = postsSearchService.findPostsByTitle(title, page - 1, size);
         List<Posts> postsList = postsPage.getContent();
 
         List<PostsResponseListDto> postsResponseListDtos = postListService.postsResponseListDtos(postsList);
-        return new ResponseEntity<>(new MultiResponseDto<>(postsResponseListDtos,postsPage), HttpStatus.OK);
+        return new ResponseEntity<>(new MultiResponseDto<>(postsResponseListDtos, postsPage), HttpStatus.OK);
     }
 
     @GetMapping("/search-tag")
     public ResponseEntity searchByTag(@RequestParam int page,
                                       @RequestParam int size,
                                       @RequestParam String tag) {
-        Page<Posts> postsPage = postsSearchService.findByTag(tag, page-1, size);
+        Page<Posts> postsPage = postsSearchService.findByTag(tag, page - 1, size);
         List<Posts> postsList = postsPage.getContent();
 
         List<PostsResponseListDto> postsResponseListDtos = postListService.postsResponseListDtos(postsList);
-        return new ResponseEntity<>(new MultiResponseDto<>(postsResponseListDtos,postsPage), HttpStatus.OK);
+        return new ResponseEntity<>(new MultiResponseDto<>(postsResponseListDtos, postsPage), HttpStatus.OK);
     }
 
     //로그인 없이도 조회 가능
@@ -87,9 +88,12 @@ public class PostsPageController {
 
         // 작성된 리뷰 리스트 페이징처리 해서 넣어주기
         List<Review> reviewPage = reviewService.findByPage(page - 1, size).getContent();
+
+        List<ReviewPostsResponse> reviewPostsResponses = reviewService.getByPage(page, size, reviewPage);
         List<Room> roomList = roomService.findAllRoom(id);
 
-        PostsResponseDto postsResponseDto = postsCombineService.combine(response, reviewPage, roomList);
+
+        PostsResponseDto postsResponseDto = postsCombineService.combine(response, reviewPostsResponses, roomList);
 
         return new ResponseEntity<>(postsResponseDto, HttpStatus.OK);
     }

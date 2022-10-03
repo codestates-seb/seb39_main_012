@@ -18,5 +18,5 @@ public class ReservationCreateDto {
     LocalDate checkOut;
     Integer totalDogCount;
     Integer totalPrice;
-    String reservationCode;
+
 }
