@@ -16,8 +16,10 @@ public class ResponseReservationDto {
     private String username;
     private String phone;
     private String address;
-    private String checkIn;
-    private String checkOut;
+    private String checkInDate;
+    private String checkOutDate;
+    private String checkInTime;
+    private String checkOutTime;
     private Integer totalPrice;
 
 

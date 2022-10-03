@@ -10,11 +10,15 @@ import com.team012.server.users.entity.DogCard;
 import com.team012.server.users.service.DogCardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
+@Transactional
 @Service
 @RequiredArgsConstructor
 public class ReservationConfirmService {
@@ -23,7 +27,7 @@ public class ReservationConfirmService {
     private final ReservationListRepository reservationListRepository;
     private final DogCardService dogCardService;
 
-
+    @Transactional(readOnly = true)
     public List<TotalReservationDto> confirmReservation(PrincipalDetails principalDetails, Long reservationId) {
 
         List<TotalReservationDto> confirmReservationList = new ArrayList<>();
@@ -60,8 +64,10 @@ public class ReservationConfirmService {
                     .name(findReservation.getUserInfo().getName())
                     .phone(findReservation.getUserInfo().getPhone())
                     .address(companyByCompanyId.getAddress())
-                    .checkIn(findReservation.getCheckIn())
-                    .checkOut(findReservation.getCheckOut())
+                    .checkInDate(findReservation.getCheckInDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                    .checkOutDate(findReservation.getCheckOutDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                    .checkInTime(findReservation.getCheckInTime().format(DateTimeFormatter.ofPattern("a hh:mm").withLocale(Locale.KOREAN)))
+                    .checkOutTime(findReservation.getCheckOutTime().format(DateTimeFormatter.ofPattern("a hh:mm").withLocale(Locale.KOREAN)))
                     .totalPrice(findReservation.getTotalPrice())
                     .build();
 

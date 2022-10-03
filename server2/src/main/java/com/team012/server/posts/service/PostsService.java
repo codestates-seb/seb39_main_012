@@ -37,8 +37,8 @@ public class PostsService {
 
     public Posts save(PostsCreateDto post, List<MultipartFile> files, Long companyId) {
 
-        LocalTime checkIn = convertCheckInToTime(post.getCheckIn());
-        LocalTime checkOut = convertCheckOutToTime(post.getCheckOut());
+        LocalTime checkIn = convertCheckInToTime(post.getCheckInTime());
+        LocalTime checkOut = convertCheckOutToTime(post.getCheckOutTime());
         validateCheckInCheckOut(checkIn, checkOut);
 
         Posts posts = Posts.builder()
@@ -51,8 +51,8 @@ public class PostsService {
                 .detailAddress(post.getDetailAddress())
                 .phone(post.getPhone())
                 .roomCount(post.getRoomCount())//add
-                .checkIn(checkIn)
-                .checkOut(checkOut)
+                .checkInTime(checkIn)
+                .checkOutTime(checkOut)
                 .build();
 
         List<PostsImg> lists = awsS3Service.convertPostImg(files);
@@ -81,15 +81,15 @@ public class PostsService {
         Optional.ofNullable(post.getContent()).ifPresent(findPosts::setContent);
         Optional.ofNullable(post.getRoomCount()).ifPresent(findPosts::setRoomCount); //add
 
-        if (StringUtils.hasText(post.getCheckIn())) {
-            LocalTime checkIn = convertCheckInToTime(post.getCheckIn());
-            findPosts.setCheckIn(checkIn);
+        if (StringUtils.hasText(post.getCheckInTime())) {
+            LocalTime checkIn = convertCheckInToTime(post.getCheckInTime());
+            findPosts.setCheckInTime(checkIn);
         }
-        if (StringUtils.hasText(post.getCheckOut())) {
-            LocalTime checkOut = convertCheckOutToTime(post.getCheckOut());
-            findPosts.setCheckOut(checkOut);
+        if (StringUtils.hasText(post.getCheckOutTime())) {
+            LocalTime checkOut = convertCheckOutToTime(post.getCheckOutTime());
+            findPosts.setCheckOutTime(checkOut);
         }
-        validateCheckInCheckOut(findPosts.getCheckIn(), findPosts.getCheckOut());
+        validateCheckInCheckOut(findPosts.getCheckInTime(), findPosts.getCheckOutTime());
 
         if (multipartFile != null) {
 
@@ -114,13 +114,6 @@ public class PostsService {
         return findCompanyPosts.orElseThrow(() -> new RuntimeException("Posts Not Found"));
     }
 
-    @Transactional(readOnly = true)
-    public Page<Posts> findByPage(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "id");
-
-        return postsRepository.findAll(pageable);
-    }
-
     public void delete(Long postsId, Long companyId) {
         Posts posts = findById(postsId);
         if (posts.getCompanyId() != companyId) throw new RuntimeException("companyId가 일치하지 않음");
@@ -130,11 +123,6 @@ public class PostsService {
 
     public void savedLikesCount(Posts posts) {
         postsRepository.save(posts);
-    }
-
-    public Page<Posts> mainPageAvgScoreView(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "avgScore");
-        return postsRepository.findAll(pageable);
     }
 
     public void save(Posts posts) {

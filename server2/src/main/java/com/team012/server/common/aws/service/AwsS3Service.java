@@ -1,6 +1,11 @@
 package com.team012.server.common.aws.service;
 
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -19,6 +24,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.PostConstruct;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -139,7 +145,11 @@ public class AwsS3Service {
                 boolean isExistObject = amazonS3Client.doesObjectExist(bucketName, file);
 
                 // 파일이 있으면 삭제
-                if (isExistObject) amazonS3Client.deleteObject(bucketName, file);
+                if (isExistObject)  {
+                    DeleteObjectRequest request = new DeleteObjectRequest(bucketName, file);
+                    amazonS3Client.deleteObject(request);
+                }
+
             }
         }
 
