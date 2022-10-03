@@ -22,7 +22,6 @@ public class DogCardService {
 
     public DogCard savedDogCard(DogCard dogCard, MultipartFile file, Users users) {
 
-
         String url = awsS3Service.singleUploadFile(file);
 
         dogCard.setPhotoImgUrl(url);
@@ -40,7 +39,32 @@ public class DogCardService {
         DogCard findDogCard = f2indDogCard.orElseThrow(RuntimeException::new);
 
         String url = awsS3Service.singleUploadFile(file);
+        updateDogCard(dogCard, findDogCard, url);
 
+        return dogCardRepository.save(findDogCard);
+    }
+
+
+    @Transactional(readOnly = true)
+    public DogCard findById(Long dogCardId) {
+
+        Optional<DogCard> findDogCard = dogCardRepository.findById(dogCardId);
+
+        return findDogCard.orElseThrow(() -> new RuntimeException("DogCard Not Found"));
+
+    }
+
+    public void deleteDogCard(Long dogCardId) {
+        dogCardRepository.deleteById(dogCardId);
+    }
+
+    // 강아지 큐카드 유저 아이디를 통한 조회
+    @Transactional(readOnly = true)
+    public List<DogCard> getListDogCard(Long userId) {
+        return dogCardRepository.findByUsers_Id(userId);
+    }
+
+    private static void updateDogCard(DogCard dogCard, DogCard findDogCard, String url) {
         Optional.ofNullable(dogCard.getDogName())
                 .ifPresent(findDogCard::setDogName);
         Optional.ofNullable(dogCard.getType())
@@ -61,27 +85,5 @@ public class DogCardService {
                 .ifPresent(findDogCard::setBowelTrained);
         Optional.ofNullable(url)
                 .ifPresent(findDogCard::setPhotoImgUrl);
-
-
-        return dogCardRepository.save(findDogCard);
-    }
-
-    @Transactional(readOnly = true)
-    public DogCard findById(Long dogCardId) {
-
-        Optional<DogCard> findDogCard = dogCardRepository.findById(dogCardId);
-
-        return findDogCard.orElseThrow(() -> new RuntimeException("DogCard Not Found"));
-
-    }
-
-    public void deleteDogCard(Long dogCardId) {
-        dogCardRepository.deleteById(dogCardId);
-    }
-
-    // 강아지 큐카드 유저 아이디를 통한 조회
-    @Transactional(readOnly = true)
-    public List<DogCard> getListDogCard(Long userId) {
-        return dogCardRepository.findByUsers_Id(userId);
     }
 }

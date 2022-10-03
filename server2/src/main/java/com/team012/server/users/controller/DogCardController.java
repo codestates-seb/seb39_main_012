@@ -1,9 +1,10 @@
 package com.team012.server.users.controller;
 
+import com.team012.server.users.dto.DogCardCreateDto;
 import com.team012.server.users.entity.DogCard;
 import com.team012.server.common.config.userDetails.PrincipalDetails;
 import com.team012.server.common.response.SingleResponseDto;
-import com.team012.server.users.dto.DogCardDto;
+import com.team012.server.users.dto.DogCardResponseDto;
 import com.team012.server.users.mapper.DogCardMapper;
 import com.team012.server.users.service.DogCardService;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ public class DogCardController {
 
     // 강아지 큐카드 생성
     @PostMapping("/create")
-    public ResponseEntity createCard(@RequestPart(value = "dogCardDto") DogCardDto.Post dogCardDto,
+    public ResponseEntity createCard(@RequestPart(value = "dogCardDto") DogCardCreateDto dogCardDto,
                                      @RequestPart(value = "file") MultipartFile file,
                                      @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
@@ -42,7 +43,7 @@ public class DogCardController {
     // 강아지 큐카드 수정
     @PatchMapping("/{dog-card-id}")
     public ResponseEntity patchCard(@PathVariable("dog-card-id") long dogCardId,
-                                    @RequestPart(value = "dogCardDto") DogCardDto.Post dogCardDto,
+                                    @RequestPart(value = "dogCardDto") DogCardCreateDto dogCardDto,
                                     @RequestPart(value = "file", required = false) MultipartFile file,
                                     @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
@@ -58,7 +59,7 @@ public class DogCardController {
     @GetMapping("/{dog-card-id}")
     public ResponseEntity findCard(@PathVariable("dog-card-id") long dogCardId) {
 
-        DogCardDto.Response response = mapper.dogCardToDtoResponse(dogCardService.findById(dogCardId));
+        DogCardResponseDto response = mapper.dogCardToDtoResponse(dogCardService.findById(dogCardId));
         return new ResponseEntity<>(new SingleResponseDto(response), HttpStatus.OK);
     }
 
@@ -68,11 +69,6 @@ public class DogCardController {
 
         dogCardService.deleteDogCard(dogCardId);
 
-        DogCardDto.Message response = DogCardDto.Message
-                .builder()
-                .message("삭제완료..!")
-                .build();
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>("삭제 완료", HttpStatus.OK);
     }
 }

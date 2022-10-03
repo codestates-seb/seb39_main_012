@@ -94,17 +94,17 @@ public class PostsPageController {
     }
 
     //로그인 없이도 조회 가능
-    @GetMapping("/{id}")
-    public ResponseEntity get(@PathVariable("id") Long id,
+    @GetMapping("/{postsId}")
+    public ResponseEntity get(@PathVariable("postsId") Long postsId,
                               @RequestParam Integer page,
                               @RequestParam Integer size) {
-        Posts response = postsService.findById(id);
+        Posts response = postsService.findById(postsId);
 
         // 작성된 리뷰 리스트 페이징처리 해서 넣어주기
         List<Review> reviewPage = reviewService.findByPage(page - 1, size).getContent();
 
-        List<ReviewPostsResponse> reviewPostsResponses = reviewService.getByPage(page, size, reviewPage);
-        List<Room> roomList = roomService.findAllRoom(id);
+        List<ReviewPostsResponse> reviewPostsResponses = reviewService.getByPage(page, size, reviewPage,postsId);
+        List<Room> roomList = roomService.findAllRoom(postsId);
 
 
         PostsResponseDto postsResponseDto = postsCombineService.combine(response, reviewPostsResponses, roomList);

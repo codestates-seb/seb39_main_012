@@ -22,6 +22,7 @@ public class PostListService { //어...이건 컨버터로 가야 하나요 아�
     private final PostsCombineService postsCombineService;
 
     public List<PostsResponseListDto> postsResponseListDtos(List<Posts> posts) {
+
         List<PostsResponseListDto> postsResponseListDtos = new ArrayList<>();
 
         for (Posts post : posts) {

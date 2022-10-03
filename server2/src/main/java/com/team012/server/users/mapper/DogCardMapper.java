@@ -1,17 +1,18 @@
 package com.team012.server.users.mapper;
 
+import com.team012.server.users.dto.DogCardCreateDto;
 import com.team012.server.users.entity.DogCard;
-import com.team012.server.users.dto.DogCardDto;
+import com.team012.server.users.dto.DogCardResponseDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface DogCardMapper {
-    DogCard dogDtoToDogCard(DogCardDto.Post dogCardDto);
+    DogCard dogDtoToDogCard(DogCardCreateDto dogCardDto);
 
-    default DogCardDto.Response dogCardToDtoResponse(DogCard dogCard) {
+    default DogCardResponseDto dogCardToDtoResponse(DogCard dogCard) {
 
-        return DogCardDto.Response.builder()
+        return DogCardResponseDto.builder()
 
                 .id(dogCard.getId())
                 .photoImgUrl(dogCard.getPhotoImgUrl())
