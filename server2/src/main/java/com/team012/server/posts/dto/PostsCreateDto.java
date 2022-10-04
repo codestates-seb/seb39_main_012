@@ -51,3 +51,6 @@ public class PostsCreateDto {
     @NotEmpty
     private List<RoomCreateDto> roomCreateDtoList;
 }
+
+
+

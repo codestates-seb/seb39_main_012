@@ -29,7 +29,6 @@ public class CustomerController {
 
     private final UsersService usersService;
     private final DogCardService dogCardService;
-    private final ReservationService reservationService;
     private final UsersManageReviewService usersReviewManageReviewService;
 
     // 고객 상세페이지
@@ -40,15 +39,13 @@ public class CustomerController {
         Users findUser = usersService.findUsersById(userId);
         List<DogCard> dogCardList = dogCardService.getListDogCard(userId);
         List<Review> reviewList = usersReviewManageReviewService.getListReview(userId);
-        List<ReservationList> reservationList = reservationService.getReservation(userId, 0, 6).getContent();
 
+        // 예약 전 / 후는
         CustomerProfileViewResponseDto response
                 = CustomerProfileViewResponseDto
                 .builder()
                 .users(findUser)
-                .dogCardList(dogCardList)
                 .reviewList(reviewList)
-                .reservationList(reservationList)
                 .build();
 
         return new ResponseEntity<>(response, HttpStatus.OK);

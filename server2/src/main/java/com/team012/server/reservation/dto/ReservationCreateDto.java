@@ -21,5 +21,4 @@ public class ReservationCreateDto {
     LocalTime checkOutTime;
     Integer totalDogCount;
     Integer totalPrice;
-
 }

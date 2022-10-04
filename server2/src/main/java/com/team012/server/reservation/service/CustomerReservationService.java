@@ -59,7 +59,6 @@ public class CustomerReservationService {
         Integer totalDogCount = calculatePriceAndAvailableBooking(dto, postsId).get(0);
         Integer totalPrice = calculatePriceAndAvailableBooking(dto, postsId).get(1);
 
-
         LocalDate checkInDate = LocalDate.parse(dto.getCheckInDate(),DateTimeFormatter.ISO_LOCAL_DATE);
         LocalDate checkOutDate = LocalDate.parse(dto.getCheckOutDate(),DateTimeFormatter.ISO_LOCAL_DATE);
         LocalTime checkInTime = LocalTime.parse(dto.getCheckInTime(), DateTimeFormatter.ofPattern("a hh:mm").withLocale(Locale.KOREA));
@@ -71,7 +70,6 @@ public class CustomerReservationService {
         Long period = checkInDate.until(checkOutDate, ChronoUnit.DAYS);
 
         List<Reservation> reservations = new ArrayList<>();
-
 
         for(int i = 0; i< period;i ++) {
             Reservation reservation = Reservation.builder()
@@ -191,7 +189,7 @@ public class CustomerReservationService {
     //예약 전체 조회(미래 예약 날짜)
     @Transactional(readOnly = true)
     public Page<ReservationList> findReservationList(Long userId, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "checkOut");
+        Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "checkOutDate");
 
         Page<ReservationList> reservation =  reservationListRepository.findByUsersIdBooked(userId,LocalDate.now(), pageable);
 
@@ -209,7 +207,7 @@ public class CustomerReservationService {
     //갔다 온 호텔 전체 조회
     @Transactional(readOnly = true)
     public Page<ReservationList> findReservationAfterCheckOutList(Long userId, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "checkOut");
+        Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "checkOutDate");
 
         Page<ReservationList> reservationLists =  reservationListRepository.findByUsersIdVisited(userId, LocalDate.now(), pageable);
         return reservationLists;

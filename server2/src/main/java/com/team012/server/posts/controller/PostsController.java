@@ -2,19 +2,14 @@ package com.team012.server.posts.controller;
 
 import com.team012.server.common.config.userDetails.PrincipalDetails;
 import com.team012.server.company.entity.Company;
-import com.team012.server.room.entity.Room;
 import com.team012.server.room.service.RoomService;
 import com.team012.server.company.service.CompanyService;
-import com.team012.server.posts.service.PostsCombineService;
 import com.team012.server.posts.dto.PostsCreateDto;
 import com.team012.server.posts.dto.PostsResponseDto;
 import com.team012.server.posts.dto.PostsUpdateDto;
-import com.team012.server.posts.entity.Posts;
 import com.team012.server.posts.service.PostsCreateService;
 import com.team012.server.posts.service.PostsService;
 import com.team012.server.posts.service.PostsUpdateService;
-import com.team012.server.review.entity.Review;
-import com.team012.server.review.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
@@ -38,10 +33,8 @@ public class PostsController {
     private final CompanyService companyService;
     private final PostsService postsService;
     private final RoomService roomService;
-    private final ReviewService reviewService;
     public final PostsCreateService postsCreateService;
     public final PostsUpdateService postsUpdateService;
-    private final PostsCombineService postsCombineService;
 
     @PostMapping("/create") //@AuthenticationPrincipal PrincipalDetails principal가 없으므로 일단 dto에 companyId 포함시킴
     public ResponseEntity create(@RequestPart(value = "request") @Valid PostsCreateDto request,
@@ -68,25 +61,6 @@ public class PostsController {
 
         return new ResponseEntity<>(postsResponseDto, HttpStatus.OK);
     }
-
-    // ###########################  이거는 어디 쓰는지 몰라서 주석을 처리했습니다..  #############################
-//    @GetMapping("/{id}")
-//    public ResponseEntity get(@PathVariable("id") Long id,
-//                              @RequestParam Integer page,
-//                              @RequestParam Integer size) {
-//        Posts response = postsService.findById(id);
-//
-//        // 작성된 리뷰 리스트 페이징처리 해서 넣어주기
-//        List<Review> reviewPage = reviewService.findByPage(page - 1, size).getContent();
-//        List<Room> roomList = roomService.findAllRoom(id);
-//
-//        PostsResponseDto postsResponseDto = postsCombineService.combine(response, reviewPage, roomList);
-//        // 현재날짜를 기준으로 체크아웃이 현재날짜를 지나면 roomCount 값을 예약한 강아지수 만큼 DB에 올려준다.
-////        postsReservationService.checkRoomCount(id);
-//
-//        return new ResponseEntity<>(postsResponseDto, HttpStatus.OK);
-//    }
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable("id") Long id,

@@ -27,7 +27,7 @@ public class CompanyInfoService {
         Posts posts = postsService.findByCompanyId(companyId);
 
         // 2. 예약현황 (예약번호 / 점포명 / 체크인 / 체크아웃 / 예약자)
-        Page<ReservationList> reservationList = reservationService.getReservation(companyId, page, size);
+        Page<ReservationList> reservationList = reservationService.getReservation(companyId, page - 1, size);
 
         CompanyProfileResponseDto dto =
                 CompanyProfileResponseDto
