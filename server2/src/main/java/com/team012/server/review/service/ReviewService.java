@@ -102,6 +102,8 @@ public class ReviewService {
     public List<ReviewPostsResponse> getByPage(int page, int size, List<Review> reviewList,Long postsId) {
         List<Review> reviewPage = findByPage(page - 1, size).getContent(); // 리뷰 리스트가 나온다
 
+        //궁금한 점 : findAllBy~가 더 성능상으로 더 나은가 아니면 findAll이후 stream이 더 나은가??
+
         List<Review> collect = reviewPage.stream().filter(n -> n.getPostsId().equals(postsId)).collect(Collectors.toList());
 
         // 새로운 배열을 만들어준다.

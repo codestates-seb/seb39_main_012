@@ -8,6 +8,7 @@ import com.team012.server.posts.Tag.ServiceTag.repository.PostsServiceTagReposit
 import com.team012.server.posts.Tag.ServiceTag.repository.serviceTagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ public class ServiceTagService {
     private final serviceTagRepository serviceTagRepository;
     private final PostsServiceTagRepository postsServiceTagRepository;
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public List<ServiceTag> saveServiceTags(List<String> postsTags) {
         List<ServiceTag> list =  postsTags.stream().map(tag -> {
                 ServiceTag serviceTag = ServiceTag.builder()
@@ -33,6 +35,7 @@ public class ServiceTagService {
         return serviceTagRepository.saveAll(list);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public List<PostsServiceTag> saveCompanyPostsTags(List<ServiceTag> serviceTags, Posts posts) {
         List<PostsServiceTag> postsAvailableTags = new ArrayList<>();
         for(ServiceTag a : serviceTags) {
@@ -62,13 +65,5 @@ public class ServiceTagService {
 
         serviceTagRepository.delete(findTag);
     }
-
-    public void deletePostAvailableTags(Long posts) {
-        List<PostsServiceTag> postsTags = postsServiceTagRepository.findByPostsId(posts);
-
-        if(!postsTags.isEmpty()) postsServiceTagRepository.deleteAll(postsTags);
-        //else throw new RuntimeException("companyPostsTags not exist");
-    }
-
 
 }

@@ -1,4 +1,4 @@
-package com.team012.server.users.posts;
+package com.team012.server.posts.repository;
 
 import com.team012.server.posts.entity.Posts;
 import com.team012.server.posts.img.entity.PostsImg;
@@ -22,7 +22,7 @@ import java.util.List;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
-public class PostsJoinDtoTest {
+public class RoomCountDtoTest {
 
     @Autowired
     private PostsRepository postsRepository;

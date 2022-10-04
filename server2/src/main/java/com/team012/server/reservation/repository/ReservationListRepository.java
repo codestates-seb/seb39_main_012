@@ -17,12 +17,18 @@ public interface ReservationListRepository extends JpaRepository<ReservationList
 
     Optional<ReservationList> findByUsersIdAndReservedId(Long usersId, Long reservedId);
 
-    @Query(value = "select distinct r from ReservationList r where r.usersId = :id and r.checkOutDate >= :date")
+    @Query(value = "select " +
+            " distinct r from ReservationList " +
+            " r where r.usersId = :id and r.checkOutDate >= :date")
     Page<ReservationList> findByUsersIdBooked(@Param("id") Long id, @Param("date") LocalDate date, Pageable pageable);
 
-    @Query(value = "select r from ReservationList r where r.usersId = :id and r.checkOutDate < :date")
+    @Query(value = "select " +
+            " r from ReservationList r " +
+            " where r.usersId = :id and r.checkOutDate < :date")
     Page<ReservationList> findByUsersIdVisited(@Param("id") Long id, @Param("date") LocalDate date, Pageable pageable);
 
-//    @Query("select * from ReservationList r where r.checkIn < :checkOut and r.checkOut > :checkIn")
-//    List<ReservationList> findByCheckInCheckOut(LocalDate checkIn, LocalDate checkOut);
+    @Query("select " +
+            " r from ReservationList r " +
+            " where r.companyId = :companyId")
+    List<ReservationList> findByCheckInCheckOut(Long companyId);
 }

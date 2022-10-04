@@ -62,15 +62,4 @@ public class TagService {
         hashTagRepository.delete(findTag);
     }
 
-
-    public void deletePostsTags(Long postsId) {
-        List<PostsHashTags> postsHashTags = postsHashTagRepository.findByPostsId(postsId);
-
-        if(!postsHashTags.isEmpty()) postsHashTagRepository.deleteAll(postsHashTags);
-        //else throw new RuntimeException("postsHashTags not exist");
-
-    }
-
-
-
 }

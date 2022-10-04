@@ -3,6 +3,7 @@ package com.team012.server.posts.dto;
 import lombok.Getter;
 
 import javax.validation.constraints.Pattern;
+import java.util.List;
 
 @Getter
 public class PostsUpdateDto {
@@ -30,6 +31,7 @@ public class PostsUpdateDto {
     private String phone;
 
     private Integer roomCount;
+    private List<Long> imgId;
 
     public void setId(Long id) {
         this.id = id;

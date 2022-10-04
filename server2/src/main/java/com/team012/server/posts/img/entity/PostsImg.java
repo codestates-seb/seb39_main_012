@@ -2,17 +2,15 @@ package com.team012.server.posts.img.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.team012.server.posts.entity.Posts;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostsImg {
 
     @Id
@@ -26,7 +24,7 @@ public class PostsImg {
     @Lob
     private String imgUrl;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "posts_id")
     @JsonBackReference
     private Posts posts;

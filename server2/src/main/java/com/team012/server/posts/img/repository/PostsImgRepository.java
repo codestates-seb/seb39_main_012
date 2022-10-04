@@ -10,4 +10,6 @@ import java.util.List;
 public interface PostsImgRepository extends JpaRepository<PostsImg, Long> {
     @Query("select i from PostsImg i where i.posts.id = :id")
     List<PostsImg> findAllByPostsId(@Param("id")Long id);
+
+
 }

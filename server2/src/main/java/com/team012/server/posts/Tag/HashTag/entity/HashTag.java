@@ -1,5 +1,6 @@
 package com.team012.server.posts.Tag.HashTag.entity;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +11,7 @@ import java.util.List;
 
 @Getter
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class HashTag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
