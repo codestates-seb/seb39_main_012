@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface DogCardRepository extends JpaRepository<DogCard, Long> {
     List<DogCard> findByUsers_Id(Long id);
+    DogCard findDogCardById(Long id);
 }
