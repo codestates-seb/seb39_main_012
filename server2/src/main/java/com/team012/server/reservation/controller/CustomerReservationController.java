@@ -58,12 +58,12 @@ public class CustomerReservationController {
     //예약 확인 페이지
     @GetMapping("/{reservationId}/final")
     public ResponseEntity finalReservation(@PathVariable("reservationId") Long reservationId,
-                                           @AuthenticationPrincipal PrincipalDetails principalDetails
-    ) {
+                                           @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-        List<TotalReservationDto> totalReservationDtos = reservationConfirmService.confirmReservation(principalDetails,reservationId);
+        List<TotalReservationDto> totalReservationDtos =
+                reservationConfirmService.confirmReservation(principalDetails, reservationId);
 
-        return new ResponseEntity(new SingleResponseDto<>(totalReservationDtos),HttpStatus.OK);
+        return new ResponseEntity(new SingleResponseDto<>(totalReservationDtos), HttpStatus.OK);
     }
 
     //가기 전 호텔리스트(체크아웃 최신날짜 순)

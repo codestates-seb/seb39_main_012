@@ -1,0 +1,208 @@
+고객 프로필 조회
+
+{
+    "users": {
+        "createdAt": "2022-10-04T06:40:22.749275",
+        "modifiedAt": "2022-10-04T06:40:22.749275",
+        "id": 2,
+        "email": "testCustomer@test.com",
+        "password": "$2a$10$24BRpCMBd1WnN2EjVOXD1uR5njQXZ3iyXnQ2uRaj1GlVQ/oot02um",
+        "username": "testCustomerUser",
+        "phone": "010-1111-1111",
+        "roles": "ROLE_CUSTOMER",
+        "dogCardList": [
+            {
+                "id": 1,
+                "photoImgUrl": "https://moongtel-imgs.s3.ap-northeast-2.amazonaws.com/1024px-Binary_tree.svg_1664833460432.png",
+                "dogName": "testDog",
+                "type": "testType",
+                "gender": "testGender",
+                "age": 3,
+                "weight": 15.0,
+                "snackMethod": "testSnackMethod",
+                "bark": "testBark",
+                "surgery": "testSurgery",
+                "bowelTrained": "testBowelTrained",
+                "etc": "testEtc"
+            },
+            {
+                "id": 2,
+                "photoImgUrl": "https://moongtel-imgs.s3.ap-northeast-2.amazonaws.com/1024px-Binary_tree.svg_1664833461998.png",
+                "dogName": "testDog",
+                "type": "testType",
+                "gender": "testGender",
+                "age": 3,
+                "weight": 15.0,
+                "snackMethod": "testSnackMethod",
+                "bark": "testBark",
+                "surgery": "testSurgery",
+                "bowelTrained": "testBowelTrained",
+                "etc": "testEtc"
+            },
+            {
+                "id": 3,
+                "photoImgUrl": "https://moongtel-imgs.s3.ap-northeast-2.amazonaws.com/1024px-Binary_tree.svg_1664833462727.png",
+                "dogName": "testDog",
+                "type": "testType",
+                "gender": "testGender",
+                "age": 3,
+                "weight": 15.0,
+                "snackMethod": "testSnackMethod",
+                "bark": "testBark",
+                "surgery": "testSurgery",
+                "bowelTrained": "testBowelTrained",
+                "etc": "testEtc"
+            }
+        ],
+        "roleList": [
+            "ROLE_CUSTOMER"
+        ]
+    },
+    "dogCardList": [
+        {
+            "id": 1,
+            "photoImgUrl": "https://moongtel-imgs.s3.ap-northeast-2.amazonaws.com/1024px-Binary_tree.svg_1664833460432.png",
+            "dogName": "testDog",
+            "type": "testType",
+            "gender": "testGender",
+            "age": 3,
+            "weight": 15.0,
+            "snackMethod": "testSnackMethod",
+            "bark": "testBark",
+            "surgery": "testSurgery",
+            "bowelTrained": "testBowelTrained",
+            "etc": "testEtc"
+        },
+        {
+            "id": 2,
+            "photoImgUrl": "https://moongtel-imgs.s3.ap-northeast-2.amazonaws.com/1024px-Binary_tree.svg_1664833461998.png",
+            "dogName": "testDog",
+            "type": "testType",
+            "gender": "testGender",
+            "age": 3,
+            "weight": 15.0,
+            "snackMethod": "testSnackMethod",
+            "bark": "testBark",
+            "surgery": "testSurgery",
+            "bowelTrained": "testBowelTrained",
+            "etc": "testEtc"
+        },
+        {
+            "id": 3,
+            "photoImgUrl": "https://moongtel-imgs.s3.ap-northeast-2.amazonaws.com/1024px-Binary_tree.svg_1664833462727.png",
+            "dogName": "testDog",
+            "type": "testType",
+            "gender": "testGender",
+            "age": 3,
+            "weight": 15.0,
+            "snackMethod": "testSnackMethod",
+            "bark": "testBark",
+            "surgery": "testSurgery",
+            "bowelTrained": "testBowelTrained",
+            "etc": "testEtc"
+        }
+    ],
+    "reservationList": [],
+    "reviewList": [
+        {
+            "createdAt": "2022-10-04T06:44:48.59688",
+            "modifiedAt": "2022-10-04T06:44:48.59688",
+            "id": 1,
+            "title": null,
+            "content": "리뷰 내용",
+            "score": 1.0,
+            "userId": 2,
+            "postsId": 1
+        },
+        {
+            "createdAt": "2022-10-04T06:44:49.488455",
+            "modifiedAt": "2022-10-04T06:44:49.488455",
+            "id": 2,
+            "title": null,
+            "content": "리뷰 내용",
+            "score": 1.0,
+            "userId": 2,
+            "postsId": 1
+        },
+        {
+            "createdAt": "2022-10-04T06:44:50.257791",
+            "modifiedAt": "2022-10-04T06:44:50.257791",
+            "id": 3,
+            "title": null,
+            "content": "리뷰 내용",
+            "score": 1.0,
+            "userId": 2,
+            "postsId": 1
+        },
+        {
+            "createdAt": "2022-10-04T06:44:51.023596",
+            "modifiedAt": "2022-10-04T06:44:51.023596",
+            "id": 4,
+            "title": null,
+            "content": "리뷰 내용",
+            "score": 1.0,
+            "userId": 2,
+            "postsId": 1
+        }
+    ]
+}
+
+업체 프로필 조회
+
+{
+    "username": "testCompanyUser",
+    "email": "testCompany@test.com",
+    "phone": "010-0000-0000",
+    "companyInfo": {
+        "id": 1,
+        "companyName": "testCompany",
+        "ceo": "testCEO",
+        "address": "주소에 맞는 양식",
+        "detailAddress": "상세주소에 맞는 양식",
+        "userId": 1
+    },
+    "postsInfo": {
+        "id": 1,
+        "title": "이을 애견 호텔 ",
+        "content": "이을반려동물케어센터에서반려견들에게 품격있고 쾌적한 호텔 서비스를 시작합니다. 가족분들의 사랑하는 마음을 담아 이을 반려동물 호텔이 정성껏 보살피겠습니다.",
+        "latitude": "127.024554",
+        "longitude": "37.4967012",
+        "address": "서울특별시 서초구 106-13 ",
+        "detailAddress": "신화빌딩 1층 ",
+        "phone": "02-1232-0123",
+        "companyId": 1,
+        "roomCount": 10,
+        "likesCount": 0,
+        "avgScore": 1.0,
+        "checkInTime": "11:00:00",
+        "checkOutTime": "23:00:00",
+        "postsImgList": [
+            {
+                "id": 1,
+                "fileName": "1024px-Binary_tree.svg_1664833428907.png",
+                "imgUrl": "https://moongtel-imgs.s3.ap-northeast-2.amazonaws.com/1024px-Binary_tree.svg_1664833428325.png"
+            },
+            {
+                "id": 2,
+                "fileName": "53699_104194_3139_1664833429100.jpeg",
+                "imgUrl": "https://moongtel-imgs.s3.ap-northeast-2.amazonaws.com/53699_104194_3139_1664833428907.jpeg"
+            },
+            {
+                "id": 3,
+                "fileName": "2006480_2005601_5154_1664833429216.jpeg",
+                "imgUrl": "https://moongtel-imgs.s3.ap-northeast-2.amazonaws.com/2006480_2005601_5154_1664833429100.jpeg"
+            },
+            {
+                "id": 4,
+                "fileName": "1634512012_Android-12-Minimum-Requirements-Cell-Phones-Smartphone_1664833429281.jpeg",
+                "imgUrl": "https://moongtel-imgs.s3.ap-northeast-2.amazonaws.com/1634512012_Android-12-Minimum-Requirements-Cell-Phones-Smartphone_1664833429216.jpeg"
+            },
+            {
+                "id": 5,
+                "fileName": "난 할수_1664833429360.jpeg",
+                "imgUrl": "https://moongtel-imgs.s3.ap-northeast-2.amazonaws.com/%E1%84%82%E1%85%A1%E1%86%AB%20%E1%84%92%E1%85%A1%E1%86%AF%E1%84%89%E1%85%AE_1664833429282.jpeg"
+            }
+        ]
+    },
+    "reservationListPage": []
+}
