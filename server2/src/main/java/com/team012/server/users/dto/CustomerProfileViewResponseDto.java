@@ -17,14 +17,7 @@ public class CustomerProfileViewResponseDto {
     // 고객유저 정보
     private Users users;
 
-    // 강아지 큐카드 정보
-    private List<DogCard> dogCardList;
-
-    // 예약 호캉스 내역
-    private List<ReservationList> reservationList;
-
     // 다녀온 호캉스 내역??? 상태가 다른 호텔값을 따로 뽑아서 하는지????
-
 
     // review 관리
     private List<Review> reviewList;

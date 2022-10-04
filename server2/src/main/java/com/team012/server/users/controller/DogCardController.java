@@ -15,6 +15,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RequestMapping("/v1/customer/dogCard")
 @RestController
 @RequiredArgsConstructor
@@ -57,11 +59,13 @@ public class DogCardController {
 
     // 강아지 카드 상세 조회
     @GetMapping("/{dog-card-id}")
-    public ResponseEntity findCard(@PathVariable("dog-card-id") long dogCardId) {
+    public ResponseEntity findCard(@PathVariable("dog-card-id") long dogCardId,
+                                   @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-        DogCardResponseDto response = mapper.dogCardToDtoResponse(dogCardService.findById(dogCardId));
+        DogCardResponseDto response = mapper.dogCardToDtoResponse(dogCardService.findMyDogCardById(dogCardId,principalDetails));
         return new ResponseEntity<>(new SingleResponseDto(response), HttpStatus.OK);
     }
+
 
     // 강아지 카드 삭제
     @DeleteMapping("/{dogCardId}")

@@ -3,6 +3,8 @@ package com.team012.server.users.service;
 import com.team012.server.company.service.CompanyService;
 import com.team012.server.users.dto.CustomerSignUpRequestDto;
 import com.team012.server.users.dto.CustomerUpdateRequestDto;
+import com.team012.server.users.entity.UsersImg;
+import com.team012.server.users.repository.UsersImgRepository;
 import com.team012.server.users.repository.UsersRepository;
 import com.team012.server.users.dto.CompanySignUpRequestDto;
 import com.team012.server.users.entity.Users;
@@ -18,6 +20,8 @@ public class UsersService {
     private final UsersRepository usersRepository;
 
     private final CompanyService companyService;
+
+    private final UsersImgRepository usersImgRepository;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -78,12 +82,14 @@ public class UsersService {
                 .orElseThrow(() -> new RuntimeException("member Not found"));
     }
 
-    public Users updateCustomer(Long id, CustomerUpdateRequestDto dto) {
+    public Users updateCustomer(Long id, CustomerUpdateRequestDto dto, String imgUrl) {
         Users findUsers = usersRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("찾는 유저가 없습니다."));
 
         findUsers.setUsername(dto.getUserName());
         findUsers.setPhone(dto.getPhone());
+
+        savedUsersImg(id, imgUrl);
 
         return usersRepository.save(findUsers);
     }
@@ -100,6 +106,16 @@ public class UsersService {
     // 임시비밀번호 저장
     public void setExPassword(Users users) {
         usersRepository.save(users);
+    }
+
+    // 유저 이미지 업로드
+    public UsersImg savedUsersImg(Long id, String imgUrl) {
+        UsersImg usersImg = UsersImg
+                .builder()
+                .usersId(id)
+                .imgUrl(imgUrl)
+                .build();
+        return usersImgRepository.save(usersImg);
     }
 
 }

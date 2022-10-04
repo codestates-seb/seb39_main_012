@@ -23,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Transactional
 @Slf4j
@@ -93,36 +92,31 @@ public class ReviewService {
     }
 
     // 페이징 처리
-    public Page<Review> findByPage(int page, int size) {
+    public Page<Review> findByPage(int page, int size, Long postsId) {
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "id");
-
-        return reviewRepository.findAll(pageable);
+        return reviewRepository.findAllByPostsId(pageable, postsId);
     }
 
-    public List<ReviewPostsResponse> getByPage(int page, int size, List<Review> reviewList,Long postsId) {
-        List<Review> reviewPage = findByPage(page - 1, size).getContent(); // 리뷰 리스트가 나온다
 
-        //궁금한 점 : findAllBy~가 더 성능상으로 더 나은가 아니면 findAll이후 stream이 더 나은가??
+    public List<ReviewPostsResponse> getByPage(int page, int size, Long postsId) {
+        List<Review> reviewPage = findByPage(page - 1, size, postsId).getContent(); // 리뷰 리스트가 나온다
 
-        List<Review> collect = reviewPage.stream().filter(n -> n.getPostsId().equals(postsId)).collect(Collectors.toList());
 
         // 새로운 배열을 만들어준다.
         List<ReviewPostsResponse> responses = new ArrayList<>();
 
-
-
-        for (int i = 0; i < collect.size(); i++) {
+        for (Review review : reviewPage) {
             // 작성자 이름 찾기
             ReviewPostsResponse response = ReviewPostsResponse
                     .builder()
-                    .id(collect.get(i).getId())
-                    .createdAt(collect.get(i).getCreatedAt().format(DateTimeFormatter.ISO_DATE))
-                    .modifiedAt(collect.get(i).getModifiedAt().format(DateTimeFormatter.ISO_DATE))
-                    .title(collect.get(i).getTitle())
-                    .content(collect.get(i).getContent())
-                    .score(collect.get(i).getScore())
-                    .writer(usersService.findUsersById(reviewList.get(i).getUserId()).getUsername())
-                    .reviewImgList(reviewImgRepository.findByReview_Id(reviewList.get(i).getId()))
+                    .id(review.getId())
+                    .createdAt(review.getCreatedAt().format(DateTimeFormatter.ISO_DATE))
+                    .modifiedAt(review.getModifiedAt().format(DateTimeFormatter.ISO_DATE))
+                    .title(review.getTitle())
+                    .content(review.getContent())
+                    .score(review.getScore())
+                    .writer(usersService.findUsersById(review.getUserId()).getUsername())
+                    .reviewImgList(reviewImgRepository.findByReview_Id(review.getId()))
                     .build();
 
             responses.add(response);

@@ -34,7 +34,7 @@ public class PostsPageController {
     private final PostListService postListService;
     private final PostsCombineService postsCombineService;
 
-//     메인페이지 조회 (별점 순으로 기준해서 정렬)
+    //     메인페이지 조회 (별점 순으로 기준해서 정렬)
     @GetMapping
     public ResponseEntity gets(@RequestParam int page,
                                @RequestParam int size) {
@@ -94,18 +94,17 @@ public class PostsPageController {
     }
 
     //로그인 없이도 조회 가능
-    @GetMapping("/{postsId}")
-    public ResponseEntity get(@PathVariable("postsId") Long postsId,
+    @GetMapping("/{id}")
+    public ResponseEntity get(@PathVariable("id") Long id,
                               @RequestParam Integer page,
                               @RequestParam Integer size) {
-        Posts response = postsService.findById(postsId);
+        Posts response = postsService.findById(id);
 
         // 작성된 리뷰 리스트 페이징처리 해서 넣어주기
-        List<Review> reviewPage = reviewService.findByPage(page - 1, size).getContent();
+//        List<Review> reviewPage = reviewService.findByPage(page - 1, size, id).getContent();
 
-        List<ReviewPostsResponse> reviewPostsResponses = reviewService.getByPage(page, size, reviewPage,postsId);
-        List<Room> roomList = roomService.findAllRoom(postsId);
-
+        List<ReviewPostsResponse> reviewPostsResponses = reviewService.getByPage(page, size, id);
+        List<Room> roomList = roomService.findAllRoom(id);
 
         PostsResponseDto postsResponseDto = postsCombineService.combine(response, reviewPostsResponses, roomList);
 
