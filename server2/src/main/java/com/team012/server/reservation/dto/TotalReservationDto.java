@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Getter
 @Builder
@@ -41,9 +42,13 @@ public class TotalReservationDto {
         // 예약 정보
         private String address;
 
-        private LocalDate checkIn;
+        private String checkInDate;
 
-        private LocalDate checkOut;
+        private String checkOutDate;
+
+        private String checkInTime;
+
+        private String checkOutTime;
 
         private Integer totalPrice;
 

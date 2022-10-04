@@ -51,9 +51,8 @@ public class CustomerReservationController {
         ReservationCreateDto reservationCreateDto = dto.getReservationCreateDto();
         ReservationUserInfoDto reservationUserInfoDto = dto.getReservationUserInfoDto();
 
-        ResponseReservationDto responseReservationDto
-                = customerReservationService.createReservation(reservationCreateDto, userId, postsId, reservationUserInfoDto);
-        return new ResponseEntity<>(responseReservationDto, HttpStatus.CREATED);
+        String message = customerReservationService.createReservation(reservationCreateDto, userId, postsId, reservationUserInfoDto);
+        return new ResponseEntity<>(message, HttpStatus.CREATED);
     }
 
     //예약 확인 페이지
