@@ -21,7 +21,7 @@ public class PostsServiceTag {
     @JoinColumn(name = "serviceTags_id")
     private ServiceTag serviceTag;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     @JoinColumn(name = "posts_id")
     private Posts posts;
 

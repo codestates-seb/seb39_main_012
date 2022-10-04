@@ -1,9 +1,7 @@
 package com.team012.server.room.controller;
 
-import com.team012.server.room.converter.RoomConverter;
 import com.team012.server.room.dto.RoomDto;
 import com.team012.server.room.dto.RoomUpdateDto;
-import com.team012.server.room.entity.Room;
 import com.team012.server.room.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

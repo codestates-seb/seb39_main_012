@@ -6,6 +6,7 @@ import com.team012.server.company.repository.CompanyRepository;
 import com.team012.server.users.dto.CompanySignUpRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -29,7 +30,7 @@ public class CompanyService {
     }
 
     // companyRepository 에 findByUserId(Long userId) 메서드 추가
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
     public Company getCompany(Long userId) {
         Company findCompany = companyRepository.findByUserId(userId);
         if (findCompany == null) throw new RuntimeException("Company가 없습니다.");
@@ -37,6 +38,7 @@ public class CompanyService {
         return findCompany;
     }
 
+    @Transactional(readOnly = true)
     public Company getCompanyByCompanyId(Long companyId) {
         return companyRepository.findById(companyId).orElseThrow(()-> new RuntimeException("company가 없습니다."));
     }

@@ -1,20 +1,19 @@
 package com.team012.server.posts.service;
 
+import com.team012.server.common.aws.service.AwsS3Service;
 import com.team012.server.posts.dto.PostsCreateDto;
 import com.team012.server.posts.dto.PostsUpdateDto;
 import com.team012.server.posts.entity.Posts;
+import com.team012.server.posts.img.dto.ImgUpdateDto;
 import com.team012.server.posts.img.entity.PostsImg;
-import com.team012.server.posts.img.repository.PostsImgRepository;
 import com.team012.server.posts.img.service.PostsImgService;
 import com.team012.server.posts.repository.PostsRepository;
-import com.team012.server.common.aws.service.AwsS3Service;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,14 +26,15 @@ import java.util.Optional;
 
 @Transactional
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class PostsService {
 
     private final PostsRepository postsRepository;
-    private final PostsImgRepository imgRepository;
     private final PostsImgService postsImgService;
     private final AwsS3Service awsS3Service;
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public Posts save(PostsCreateDto post, List<MultipartFile> files, Long companyId) {
 
         LocalTime checkIn = convertCheckInToTime(post.getCheckInTime());
@@ -66,9 +66,11 @@ public class PostsService {
 
     }
 
-    public Posts update(PostsUpdateDto post, List<MultipartFile> multipartFile, Long companyId) {
+    @Transactional(propagation = Propagation.REQUIRED)
+    public Posts update(PostsUpdateDto post, List<ImgUpdateDto> imgUpdateDtos, Long companyId) {
         Long postsId = post.getId();
         Posts findPosts = findById(postsId);
+        log.info(findPosts.getTitle() ,"{}");
 
         if (!Objects.equals(findPosts.getCompanyId(), companyId)) throw new RuntimeException("companyId 일치하지 않음");
 
@@ -91,16 +93,10 @@ public class PostsService {
         }
         validateCheckInCheckOut(findPosts.getCheckInTime(), findPosts.getCheckOutTime());
 
-        if (multipartFile != null) {
-
-            List<PostsImg> postsImgList = postsImgService.findAllByPostsId(postsId);
-            List<PostsImg> postsImgs1 = awsS3Service.replaceUploadedFile(postsImgList, multipartFile);
-            for (PostsImg c : postsImgs1) {
-                c.setPosts(findPosts);
-            }
-            findPosts.setPostsImgList(postsImgs1);
-            imgRepository.deleteAll(postsImgList);
+        if (!CollectionUtils.isEmpty(imgUpdateDtos)) {
+            postsImgService.updatePostsImg(imgUpdateDtos);
         }
+
         Posts posts1 = postsRepository.save(findPosts);
         return posts1;
 
@@ -109,7 +105,7 @@ public class PostsService {
     @Transactional(readOnly = true)
     public Posts findById(Long postsId) {
         Optional<Posts> findCompanyPosts
-                = postsRepository.findById(postsId);
+                = postsRepository.findByIdFetch(postsId);
 
         return findCompanyPosts.orElseThrow(() -> new RuntimeException("Posts Not Found"));
     }

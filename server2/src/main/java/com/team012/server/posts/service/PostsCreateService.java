@@ -17,6 +17,7 @@ import com.team012.server.posts.entity.Posts;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,6 +35,7 @@ public class PostsCreateService {
     private final ServiceTagService serviceTagService;
     private final PostsCombineService postsCombineService;
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public PostsResponseDto createPostsResponse(PostsCreateDto request, List<MultipartFile> file, Long usersId){
         Company company = companyService.getCompany(usersId);
         Long companyId = company.getId();

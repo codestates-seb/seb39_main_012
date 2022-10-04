@@ -1,6 +1,5 @@
 package com.team012.server.room.service;
 
-import com.team012.server.posts.repository.RoomPriceDto;
 import com.team012.server.room.converter.RoomConverter;
 import com.team012.server.room.dto.RoomCreateDto;
 import com.team012.server.room.dto.RoomDto;
@@ -8,9 +7,8 @@ import com.team012.server.room.dto.RoomUpdateDto;
 import com.team012.server.room.entity.Room;
 import com.team012.server.room.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -24,6 +22,7 @@ public class RoomService {
     private final RoomRepository roomRepository;
     private final RoomConverter roomConverter;
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public List<Room> saveList(List<RoomCreateDto> list, Long postsId) {
         List<Room> roomList = new ArrayList<>();
         for(RoomCreateDto room : list) {
@@ -55,7 +54,7 @@ public class RoomService {
         return roomRepository.findByPostsIdAndSize(postsId, size)
                 .orElseThrow(() -> new RuntimeException("room not found"));
     }
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
     public List<Room> findAllRoom(Long postsId) {
         List<Room> roomList = roomRepository.findAllByPostsId(postsId);
         return roomList;

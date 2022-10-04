@@ -69,9 +69,9 @@ public class ReservationList {
     @Embedded
     private UserInfo userInfo; //예약 상세 페이지에 이름, 전화번호, 이메일을 적는 칸이 있어서 넣었습니다.
 
-    @OneToMany(mappedBy = "reservationList", cascade = CascadeType.REMOVE)
-    @JsonManagedReference
-    private List<Reservation> reservations;
+//    @OneToMany(mappedBy = "reservationList", cascade = CascadeType.REMOVE)
+//    @JsonManagedReference
+//    private List<Reservation> reservations;
 
     public void setStatus(String status) {
         this.status = status;
@@ -86,8 +86,7 @@ public class ReservationList {
                            Long usersId, Long postsId,
                            Integer totalPrice, Long companyId,
                            Integer dogCount,List<Long> dogIdList,
-                           UserInfo userInfo,
-                           List<Reservation> reservations) {
+                           UserInfo userInfo) {
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;
         this.checkInTime = checkInTime;
@@ -100,10 +99,10 @@ public class ReservationList {
         this.dogCount = dogCount;
         this.dogIdList = dogIdList;
         this.userInfo = userInfo;
-        this.reservations = reservations;
+//        this.reservations = reservations;
     }
 
-    public void setReservations(List<Reservation> reservations) {
-        this.reservations = reservations;
-    }
+//    public void setReservations(List<Reservation> reservations) {
+//        this.reservations = reservations;
+//    }
 }

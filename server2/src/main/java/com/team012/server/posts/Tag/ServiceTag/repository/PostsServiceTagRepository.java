@@ -12,10 +12,4 @@ import java.util.Optional;
 public interface PostsServiceTagRepository extends JpaRepository<PostsServiceTag, Long> {
     @Query("select a from PostsServiceTag a where a.posts.id = :id")
     List<PostsServiceTag> findByPostsId(@Param("id") Long id);
-
-//    @Query("select a.hashTag from PostsServiceTag a where a.posts.id = :id")
-//    List<ServiceTag> findServiceTagByPostsId(@Param("id") Long id);
-
-//    @Query("select p from PostsServiceTag p where p.serviceTag.id = :id")
-//    Optional<PostsServiceTag> findByPostsServiceTagId(@Param("id") Long id);
 }

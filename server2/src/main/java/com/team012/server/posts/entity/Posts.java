@@ -5,10 +5,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.team012.server.posts.Tag.HashTag.entity.PostsHashTags;
 import com.team012.server.posts.Tag.ServiceTag.entity.PostsServiceTag;
 import com.team012.server.posts.img.entity.PostsImg;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.BatchSize;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -20,8 +17,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
-// @DynamicUpdate --> 서버의 부하를 줄여준다 ?????
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Posts {
 
     @PrePersist
@@ -81,13 +77,11 @@ public class Posts {
     @JsonManagedReference  // 순환참조 방지(...)
     private List<PostsImg> postsImgList = new ArrayList<>();
 
-    @BatchSize(size = 100)
-    @OneToMany(mappedBy = "posts", cascade = {CascadeType.REMOVE, CascadeType.MERGE})
+    @OneToMany(mappedBy = "posts", cascade = {CascadeType.REMOVE})
     @JsonIgnore
     private List<PostsServiceTag> postAvailableTags = new ArrayList<>();
 
-    @BatchSize(size = 100)
-    @OneToMany(mappedBy = "posts", cascade = {CascadeType.REMOVE, CascadeType.MERGE})
+    @OneToMany(mappedBy = "posts", cascade = {CascadeType.REMOVE})
     @JsonIgnore
     private List<PostsHashTags> postsHashTags = new ArrayList<>();
 

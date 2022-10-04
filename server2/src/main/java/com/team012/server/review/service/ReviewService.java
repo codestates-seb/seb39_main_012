@@ -97,8 +97,10 @@ public class ReviewService {
         return reviewRepository.findAllByPostsId(pageable, postsId);
     }
 
+
     public List<ReviewPostsResponse> getByPage(int page, int size, Long postsId) {
         List<Review> reviewPage = findByPage(page - 1, size, postsId).getContent(); // 리뷰 리스트가 나온다
+
 
         // 새로운 배열을 만들어준다.
         List<ReviewPostsResponse> responses = new ArrayList<>();

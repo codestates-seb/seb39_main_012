@@ -94,6 +94,7 @@ public class PostsCombineService {
                 .checkInTime(posts.getCheckInTime().format(DateTimeFormatter.ofPattern("a hh:mm")))
                 .checkOutTime(posts.getCheckOutTime().format(DateTimeFormatter.ofPattern("a hh:mm")))
                 .likesCount(posts.getLikesCount())
+                .roomCount(posts.getRoomCount())
                 .postsImgList(imgDtos)
                 .hashTag(hashTagResponseDtos)
                 .serviceTag(serviceResponseDtos)

@@ -1,6 +1,7 @@
 package com.team012.server.users.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

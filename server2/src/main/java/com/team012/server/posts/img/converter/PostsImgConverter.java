@@ -20,6 +20,7 @@ public class PostsImgConverter implements Converter<PostsImg,ImgDto> {
     @Override
     public ImgDto toDTO(PostsImg postsImg) {
         return ImgDto.builder()
+                .id(postsImg.getId())
                 .url(postsImg.getImgUrl())
                 .fileName(postsImg.getFileName())
                 .build();
