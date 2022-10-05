@@ -19,6 +19,7 @@ import java.util.Locale;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReservationList {
 
+
     @PrePersist
     public void prePersist() {
         this.dogCount = this.dogCount == null? 0:this.dogCount;
@@ -78,7 +79,8 @@ public class ReservationList {
     }
 
     @Builder
-    public ReservationList(LocalDate checkInDate,
+    public ReservationList(Long reservedId,
+                           LocalDate checkInDate,
                            LocalDate checkOutDate,
                            LocalTime checkInTime,
                            LocalTime checkOutTime,
@@ -87,6 +89,7 @@ public class ReservationList {
                            Integer totalPrice, Long companyId,
                            Integer dogCount,List<Long> dogIdList,
                            UserInfo userInfo) {
+        this.reservedId = reservedId;
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;
         this.checkInTime = checkInTime;
