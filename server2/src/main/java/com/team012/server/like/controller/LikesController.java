@@ -31,7 +31,7 @@ public class LikesController {
         }
 
         return result ?
-                new ResponseEntity<>("좋아요 추가", HttpStatus.OK) :
-                new ResponseEntity<>("좋아요 삭제", HttpStatus.BAD_REQUEST);
+                new ResponseEntity<>("좋아요 추가", HttpStatus.CREATED) :
+                new ResponseEntity<>("좋아요 삭제", HttpStatus.OK);
     }
 }

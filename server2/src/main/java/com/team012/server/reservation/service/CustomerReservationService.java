@@ -52,7 +52,6 @@ public class CustomerReservationService {
         Integer totalDogCount = calculatePriceAndAvailableBooking(dto, postsId).get(0);
         Integer totalPrice = calculatePriceAndAvailableBooking(dto, postsId).get(1);
 
-
         LocalDate checkInDate = LocalDate.parse(dto.getCheckInDate(),DateTimeFormatter.ISO_LOCAL_DATE);
         LocalDate checkOutDate = LocalDate.parse(dto.getCheckOutDate(),DateTimeFormatter.ISO_LOCAL_DATE);
         LocalTime checkInTime = LocalTime.parse(dto.getCheckInTime(), DateTimeFormatter.ofPattern("a hh:mm").withLocale(Locale.KOREA));

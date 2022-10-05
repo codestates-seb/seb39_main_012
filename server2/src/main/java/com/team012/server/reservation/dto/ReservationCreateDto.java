@@ -11,5 +11,4 @@ public class ReservationCreateDto {
     RegisterReservationDto dto;
     Integer totalDogCount;
     Integer totalPrice;
-
 }
