@@ -23,7 +23,7 @@ public class PostsHashTags {
     private HashTag hashTag;
 
     @ManyToOne
-    @JoinColumn(name = "CompanyPosts_ID")
+    @JoinColumn(name = "Posts_ID")
     private Posts posts;
 
     @Builder

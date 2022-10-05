@@ -36,34 +36,30 @@ public class PostsImgService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public void updatePostsImg(List<ImgUpdateDto> updateDtos) {
+    public List<PostsImg> updatePostsImg(List<MultipartFile> files, Long postsId) throws FileUploadException {
         log.info("updatePostImg");
 
-        List<PostsImg> updatePostsImgList = new ArrayList<>();
-        List<PostsImg> oldPostsImgList = new ArrayList<>();
+        List<PostsImg> postsImgs = imgRepository.findAllByPostsId(postsId);
 
-        for (ImgUpdateDto updateDto : updateDtos) {
-            PostsImg postsImg = imgRepository.findById(updateDto.getPostsImgId())
-                    .orElseThrow(() -> new RuntimeException("img not found"));
-            oldPostsImgList.add(postsImg);
+        awsS3Service.deleteFile(postsImgs);
 
-            Optional.ofNullable(updateDto.getMultipartFile()).ifPresent(file -> {
-                try {
-                    List<String> getFilenameAndUrl = awsS3Service.getImgUrlAndFilename(updateDto.getMultipartFile());
-                    String filename = getFilenameAndUrl.get(0);
-                    String url = getFilenameAndUrl.get(1);
+        Map<String, String> filenameAndUrl = awsS3Service.getImgUrlAndFilename(files);
 
-                    postsImg.setFileName(filename);
-                    postsImg.setImgUrl(url);
-                } catch (FileUploadException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            updatePostsImgList.add(postsImg);
+        Set<String> set = filenameAndUrl.keySet();
+        List<String> filenames = new ArrayList<>(set);
 
+        for (int i = 0; i<postsImgs.size();i++) {
+            PostsImg postsImg = postsImgs.get(i);
+            String filename = filenames.get(i);
+
+            postsImg.setImgUrl(filenameAndUrl.get(filename));
+            postsImg.setFileName(filename);
         }
-        awsS3Service.deleteUploadedFileAtS3(oldPostsImgList);
-        imgRepository.saveAll(updatePostsImgList);
+
+        return imgRepository.saveAll(postsImgs);
+
+
+
     }
 
 

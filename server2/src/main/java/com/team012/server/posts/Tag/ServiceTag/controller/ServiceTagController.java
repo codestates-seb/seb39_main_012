@@ -16,19 +16,19 @@ public class ServiceTagController {
 
     private final ServiceTagService serviceTagService;
 
-    @PatchMapping("/{servicetag-id}")
-    public ResponseEntity updateServiceTag(@PathVariable("servicetag-id") Long serviceTagId,
-                                           @RequestBody ServiceTagUpdateDto serviceTagUpdateDto) {
-        serviceTagUpdateDto.setServiceTagId(serviceTagId);
-        ServiceTag serviceTag = serviceTagService.updateServiceTag(serviceTagUpdateDto);
-
-        ServiceResponseDto responseDto = ServiceResponseDto.builder()
-                .serviceTagId(serviceTag.getId())
-                .tag(serviceTag.getTag())
-                .build();
-
-        return new ResponseEntity<>(responseDto, HttpStatus.OK);
-    }
+//    @PatchMapping("/{servicetag-id}")
+//    public ResponseEntity updateServiceTag(@PathVariable("servicetag-id") Long serviceTagId,
+//                                           @RequestBody ServiceTagUpdateDto serviceTagUpdateDto) {
+//        serviceTagUpdateDto.setServiceTagId(serviceTagId);
+//        ServiceTag serviceTag = serviceTagService.updateServiceTag(serviceTagUpdateDto);
+//
+//        ServiceResponseDto responseDto = ServiceResponseDto.builder()
+//                .serviceTagId(serviceTag.getId())
+//                .tag(serviceTag.getTag())
+//                .build();
+//
+//        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+//    }
 
     @DeleteMapping("/{servicetag-id}")
     public ResponseEntity updateServiceTag(@PathVariable("servicetag-id") Long serviceTagId) {

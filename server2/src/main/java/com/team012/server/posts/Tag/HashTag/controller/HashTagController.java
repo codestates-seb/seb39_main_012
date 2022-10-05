@@ -17,19 +17,19 @@ public class HashTagController {
 
     private final TagService tagService;
 
-    @PatchMapping("/{hashtag-id}")
-    public ResponseEntity<HashTagResponseDto> updateHashTag(@PathVariable("hashtag-id") Long hashtagId,
-                                        @RequestBody HashTagUpdateDto hashTagUpdateDto) {
-        hashTagUpdateDto.setHashTagId(hashtagId);
-        HashTag hashTag = tagService.updateHashTag(hashTagUpdateDto);
-
-        HashTagResponseDto hashTagResponseDto = HashTagResponseDto.builder()
-                .hashTagId(hashTag.getId())
-                .tag(hashTag.getTag())
-                .build();
-
-        return new ResponseEntity<>(hashTagResponseDto, HttpStatus.OK);
-    }
+//    @PatchMapping("/{hashtag-id}")
+//    public ResponseEntity<HashTagResponseDto> updateHashTag(@PathVariable("hashtag-id") Long hashtagId,
+//                                        @RequestBody HashTagUpdateDto hashTagUpdateDto) {
+//        hashTagUpdateDto.setHashTagId(hashtagId);
+//        HashTag hashTag = tagService.updateHashTag(hashTagUpdateDto);
+//
+//        HashTagResponseDto hashTagResponseDto = HashTagResponseDto.builder()
+//                .hashTagId(hashTag.getId())
+//                .tag(hashTag.getTag())
+//                .build();
+//
+//        return new ResponseEntity<>(hashTagResponseDto, HttpStatus.OK);
+//    }
 
     @DeleteMapping("/{hashtag-id}")
     public ResponseEntity<Void> deleteHashTag(@PathVariable("hashtag-id")Long hashtagId

@@ -11,10 +11,6 @@ import java.util.Optional;
 
 public interface PostsRepository extends JpaRepository<Posts, Long> {
 
-    @Query("select p from Posts p join fetch p.postsImgList where p.id = :id")
-    Optional<Posts> findByIdFetch(Long id);
-
-
     Page<Posts> findByAddressContaining(String address, Pageable pageable);
 
     Page<Posts> findByTitleContaining(String title, Pageable pageable);
