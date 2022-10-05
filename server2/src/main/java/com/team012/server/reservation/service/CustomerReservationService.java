@@ -72,7 +72,7 @@ public class CustomerReservationService {
     }
 
     @Transactional(readOnly = true)
-    private void validateDate(String strCheckIn, String strCheckOut) {
+    public void validateDate(String strCheckIn, String strCheckOut) {
         LocalDate checkIn = LocalDate.parse(strCheckIn, DateTimeFormatter.ISO_DATE);
         LocalDate checkOut = LocalDate.parse(strCheckOut, DateTimeFormatter.ISO_DATE);
 
