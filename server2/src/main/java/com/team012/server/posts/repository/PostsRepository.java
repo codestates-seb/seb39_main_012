@@ -16,7 +16,7 @@ public interface PostsRepository extends JpaRepository<Posts, Long> {
     Page<Posts> findByTitleContaining(String title, Pageable pageable);
 
     @Query("select distinct(p) from Posts p join p.postsHashTags h " +
-            "where h.hashTag.tag Like %:tag%")
+            "where h.hashTag.tag = :tag")
     Page<Posts> findByHashTag(@Param("tag") String tag, Pageable pageable);
 
     Posts findByCompanyId(Long companyId);

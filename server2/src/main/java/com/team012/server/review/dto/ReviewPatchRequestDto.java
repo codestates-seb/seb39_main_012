@@ -9,11 +9,14 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class ReviewPatchRequestDto {
+
+    private String title;
     private String content;
     private Double score;
 
     @Builder
-    public ReviewPatchRequestDto(String content, Double score) {
+    public ReviewPatchRequestDto(String title, String content, Double score) {
+        this.title = title;
         this.content = content;
         this.score = score;
     }
