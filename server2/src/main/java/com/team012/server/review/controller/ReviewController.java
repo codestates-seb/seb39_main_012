@@ -42,6 +42,7 @@ public class ReviewController {
                 ReviewResponseDto response = ReviewResponseDto
                 .builder()
                 .id(savedReview.getId())
+                .title(savedReview.getTitle())
                 .content(savedReview.getContent())
                 .score(savedReview.getScore())
                 .reviewImgList(savedReview.getReviewImgList())
@@ -54,15 +55,24 @@ public class ReviewController {
 
     // 고객이 업체 리뷰수정 API (고객 마이페이지에서 수정)
     @PatchMapping("/update/{reviewId}")
-    public ResponseEntity updateReview(@PathVariable("reviewId") Long id,
+    public ResponseEntity updateReview(@PathVariable("reviewId") Long reviewId,
                                        @RequestPart(value = "dto") ReviewPatchRequestDto dto,
-                                       @RequestPart(value = "multipartFile") List<MultipartFile> multipartFile) {
-        Review updateReview = reviewService.updateReview(id, dto, multipartFile);
+                                       @RequestPart(value = "multipartFile") List<MultipartFile> multipartFile,
+                                       @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        Users users = principalDetails.getUsers();
+        Review review = reviewService.findByReviewId(reviewId);
+
+        if(review.getUserId() != users.getId()) {
+            return new ResponseEntity<>("본인의 리뷰 이외에는 수정 불가능 합니다.",HttpStatus.FORBIDDEN);
+        }
+
+        Review updateReview = reviewService.updateReview(reviewId, dto, multipartFile);
 
         // 응답객체
         ReviewResponseDto response = ReviewResponseDto
                 .builder()
                 .id(updateReview.getId())
+                .title(updateReview.getTitle())
                 .content(updateReview.getContent())
                 .score(updateReview.getScore())
                 .reviewImgList(updateReview.getReviewImgList())
@@ -74,7 +84,15 @@ public class ReviewController {
 
     // 고객이 업체 리뷰삭제 API
     @DeleteMapping("/delete/{reviewId}")
-    public ResponseEntity deleteReview(@PathVariable("reviewId") Long reviewId) {
+    public ResponseEntity deleteReview(@PathVariable("reviewId") Long reviewId,
+                                       @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        Users users = principalDetails.getUsers();
+        Review review = reviewService.findByReviewId(reviewId);
+
+        if(review.getUserId() != users.getId()) {
+            return new ResponseEntity<>("본인의 리뷰 이외에는 삭제 불가능 합니다.",HttpStatus.FORBIDDEN);
+        }
+
         reviewService.deleteReview(reviewId);
         ReviewResponseDto response = ReviewResponseDto
                 .builder()

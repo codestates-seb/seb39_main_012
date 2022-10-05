@@ -14,6 +14,7 @@ import java.util.List;
 public class ReviewResponseDto {
 
     private Long id;
+    private String title;
     private String content;
     private Double score;
     private List<ReviewImg> reviewImgList;
@@ -21,11 +22,13 @@ public class ReviewResponseDto {
 
     @Builder
     public ReviewResponseDto(Long id,
+                             String title,
                              String content,
                              Double score,
                              List<ReviewImg> reviewImgList,
                              String message) {
         this.id = id;
+        this.title = title;
         this.content = content;
         this.score = score;
         this.reviewImgList = reviewImgList;

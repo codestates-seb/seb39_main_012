@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Transactional
 @Slf4j
@@ -64,6 +65,7 @@ public class ReviewService {
         if (findReview == null) throw new NullPointerException("리뷰가 없습니다.");
 
         // 데이터 수정
+        findReview.setTitle(dto.getTitle());
         findReview.setContent(dto.getContent());
         findReview.setScore(dto.getScore());
 
@@ -123,6 +125,11 @@ public class ReviewService {
         }
 
         return responses;
+    }
+
+    public Review findByReviewId(Long reviewId) {
+        return reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 리뷰입니다."));
     }
 
     public List<ReviewImg> findByImg(Long reviewId) {

@@ -53,7 +53,7 @@ public class CustomerReservationController {
 
         ReservationList reservationList = customerReservationService.createReservation(reservationCreateDto, userId, postsId, reservationUserInfoDto);
         Long reservationId = reservationList.getReservedId();
-        return new ResponseEntity<>(reservationId, HttpStatus.CREATED);
+        return new ResponseEntity<>(reservationList, HttpStatus.CREATED);
     }
 
     //예약 확인 페이지
