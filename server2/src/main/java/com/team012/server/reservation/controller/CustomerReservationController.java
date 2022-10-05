@@ -3,6 +3,9 @@ package com.team012.server.reservation.controller;
 import com.team012.server.common.config.userDetails.PrincipalDetails;
 import com.team012.server.common.response.MultiResponseDto;
 import com.team012.server.common.response.SingleResponseDto;
+import com.team012.server.posts.dto.PostsReservationListDto;
+import com.team012.server.posts.service.PostsReservedListService;
+import com.team012.server.posts.service.PostsService;
 import com.team012.server.reservation.dto.*;
 import com.team012.server.reservation.entity.ReservationList;
 import com.team012.server.reservation.service.CustomerReservationService;
@@ -22,7 +25,7 @@ import java.util.List;
 public class CustomerReservationController {
 
     private final CustomerReservationService customerReservationService;
-
+    private final PostsReservedListService postsReservedListService;
     private final ReservationConfirmService reservationConfirmService;
 
     //posts 상세 페이지 ---> 예약 상세 페이지로 이동
@@ -75,7 +78,9 @@ public class CustomerReservationController {
         Page<ReservationList> reservationList = customerReservationService.findReservationList(userId, page - 1, size);
         List<ReservationList> reservations = reservationList.getContent();
 
-        return new ResponseEntity<>(new MultiResponseDto<>(reservations, reservationList), HttpStatus.OK);
+        List<PostsReservationListDto> reservationListDtos = postsReservedListService.findReservedHotels(reservations);
+
+        return new ResponseEntity<>(new MultiResponseDto<>(reservationListDtos, reservationList), HttpStatus.OK);
     }
 
     //갔다온 호텔 리스트 (체크아웃 최신날짜 순)
@@ -86,7 +91,9 @@ public class CustomerReservationController {
         Page<ReservationList> reservationList = customerReservationService.findReservationAfterCheckOutList(userId, page - 1, size);
         List<ReservationList> reservations = reservationList.getContent();
 
-        return new ResponseEntity<>(new MultiResponseDto<>(reservations, reservationList), HttpStatus.OK);
+        List<PostsReservationListDto> reservationListDtos = postsReservedListService.findReservedHotels(reservations);
+
+        return new ResponseEntity<>(new MultiResponseDto<>(reservationListDtos, reservationList), HttpStatus.OK);
     }
 
     //reservListId 로 삭제
