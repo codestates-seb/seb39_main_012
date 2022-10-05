@@ -121,7 +121,7 @@ public class CustomerReservationService {
     }
 
     //예약 페이지 , 결제 페이지(예약 상세 페이지 ---> 예약 완료 페이지)
-    public String createReservation(ReservationCreateDto dto, Long userId, Long postsId, ReservationUserInfoDto userInfoDto) {
+    public ReservationList createReservation(ReservationCreateDto dto, Long userId, Long postsId, ReservationUserInfoDto userInfoDto) {
 
         Users users = usersService.findUsersById(userId); //validation check
         Posts posts = postsService.findById(postsId);
@@ -149,9 +149,9 @@ public class CustomerReservationService {
                 .totalPrice(dto.getTotalPrice())
                 .build();
 
-        reservationListRepository.save(reservationList);
+        reservationList = reservationListRepository.save(reservationList);
 
-        return "reservation complete";
+        return reservationList;
     }
 
     //예약 전체 조회(미래 예약 날짜)
