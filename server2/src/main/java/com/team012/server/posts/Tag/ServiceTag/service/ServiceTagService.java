@@ -49,21 +49,27 @@ public class ServiceTagService {
         return postsServiceTagRepository.saveAll(postsAvailableTags);
     }
 
-    public ServiceTag updateServiceTag(ServiceTagUpdateDto serviceTagUpdateDto) {
-        Optional<ServiceTag> serviceTag = serviceTagRepository.findById(serviceTagUpdateDto.getServiceTagId());
-        ServiceTag findTag = serviceTag.orElseThrow(() -> new RuntimeException("serviceTag not found"));
-
-        Optional.ofNullable(serviceTagUpdateDto.getTag()).ifPresent(findTag::setTag);
-        serviceTagRepository.save(findTag);
-
-        return  findTag;
-    }
+//    public ServiceTag updateServiceTag(ServiceTagUpdateDto serviceTagUpdateDto) {
+//        Optional<ServiceTag> serviceTag = serviceTagRepository.findById(serviceTagUpdateDto.getServiceTagId());
+//        ServiceTag findTag = serviceTag.orElseThrow(() -> new RuntimeException("serviceTag not found"));
+//
+//        Optional.ofNullable(serviceTagUpdateDto.getTag()).ifPresent(findTag::setTag);
+//        serviceTagRepository.save(findTag);
+//
+//        return  findTag;
+//    }
 
     public void deleteServiceTag(Long serviceTagId) {
         Optional<ServiceTag> serviceTag = serviceTagRepository.findById(serviceTagId);
         ServiceTag findTag = serviceTag.orElseThrow(() -> new RuntimeException("serviceTag not found"));
 
         serviceTagRepository.delete(findTag);
+    }
+
+    public void deleteAllServiceTag(Long postsId) {
+        List<PostsServiceTag> postsTags = postsServiceTagRepository.findByPostsId(postsId);
+
+        if(!postsTags.isEmpty()) postsServiceTagRepository.deleteAll(postsTags);
     }
 
 }

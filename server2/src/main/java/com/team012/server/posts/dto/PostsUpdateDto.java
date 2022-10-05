@@ -1,5 +1,8 @@
 package com.team012.server.posts.dto;
 
+import com.team012.server.room.dto.RoomCreateDto;
+import com.team012.server.room.dto.RoomDto;
+import com.team012.server.room.dto.RoomUpdateDto;
 import lombok.Getter;
 
 import javax.validation.constraints.Pattern;
@@ -31,7 +34,9 @@ public class PostsUpdateDto {
     private String phone;
 
     private Integer roomCount;
-    private List<Long> imgId;
+    private List<String> hashTag;
+    private List<String> serviceTag;
+    private List<RoomCreateDto> roomDtoList;
 
     public void setId(Long id) {
         this.id = id;

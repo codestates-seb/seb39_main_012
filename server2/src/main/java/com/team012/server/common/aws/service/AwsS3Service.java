@@ -29,7 +29,9 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Transactional
@@ -186,22 +188,6 @@ public class AwsS3Service {
         return fileList;
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
-    //List<PostsImg> 수정 메서드(기존 s3에 있는 파일 삭제 후 추가) s3에 기존 파일이 삭제되지 않는 에러가 있음 추후 수정 예정
-    public void deleteUploadedFileAtS3(List<PostsImg> imgList) {
-        List<String> list = imgList.stream().map(PostsImg::getFileName).collect(Collectors.toList());
-        for (int i = 0; i < list.size(); i++) { //기존 파일 삭제
-            String fileName = list.get(i);
-            if (!"".equals(fileName) && fileName != null) {
-                boolean isExistObject = amazonS3Client.doesObjectExist(bucketName, fileName);
-
-                if (isExistObject) {
-                    DeleteObjectRequest request = new DeleteObjectRequest(bucketName, fileName);
-                    amazonS3Client.deleteObject(request);
-                }
-            }
-        }
-    }
 
 
     //s3에 업로드된 파일 삭제 메서드
@@ -215,23 +201,29 @@ public class AwsS3Service {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public List<String> getImgUrlAndFilename(MultipartFile multipartFile) throws FileUploadException {
-        String fileName = originalFileName(multipartFile);
+    public Map<String, String> getImgUrlAndFilename(List<MultipartFile> multipartFile) throws FileUploadException {
+        Map<String, String> filenameAndUrl  = new HashMap<>();
 
-        ObjectMetadata objectMetadata = new ObjectMetadata();
-        objectMetadata.setContentType(multipartFile.getContentType());
-        try (InputStream inputStream = multipartFile.getInputStream()) {
-            byte[] bytes = IOUtils.toByteArray(inputStream);
-            objectMetadata.setContentLength(bytes.length);
-            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
-            amazonS3Client.putObject(new PutObjectRequest(bucketName, fileName, byteArrayInputStream, objectMetadata)
-                    .withCannedAcl(CannedAccessControlList.PublicRead));
-        } catch (Exception e) {
-            log.error("Can not upload image, ", e);
-            throw new FileUploadException();
+        for (MultipartFile file : multipartFile) {
+            String fileName = originalFileName(file);
+
+            ObjectMetadata objectMetadata = new ObjectMetadata();
+            objectMetadata.setContentType(file.getContentType());
+            try (InputStream inputStream = file.getInputStream()) {
+                byte[] bytes = IOUtils.toByteArray(inputStream);
+                objectMetadata.setContentLength(bytes.length);
+                ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+                amazonS3Client.putObject(new PutObjectRequest(bucketName, fileName, byteArrayInputStream, objectMetadata)
+                        .withCannedAcl(CannedAccessControlList.PublicRead));
+            } catch (Exception e) {
+                log.error("Can not upload image, ", e);
+                throw new FileUploadException();
+            }
+            String url = amazonS3Client.getUrl(bucketName, fileName).toString();
+            filenameAndUrl.put(fileName, url);
         }
-        String url = amazonS3Client.getUrl(bucketName, fileName).toString();
+        return filenameAndUrl;
 
-        return List.of(fileName, url);
+
     }
 }

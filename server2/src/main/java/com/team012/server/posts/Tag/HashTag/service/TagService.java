@@ -44,15 +44,15 @@ public class TagService {
         return postsHashTagRepository.saveAll(postsHashTags);
     }
 
-    public HashTag updateHashTag(HashTagUpdateDto hashTag) {
-        Optional<HashTag> hashTag1 = hashTagRepository.findById(hashTag.getHashTagId());
-        HashTag findTag = hashTag1.orElseThrow(() -> new RuntimeException("hashtag not found"));
-
-        Optional.ofNullable(hashTag.getTag()).ifPresent(findTag::setTag);
-        hashTagRepository.save(findTag);
-
-        return  findTag;
-    }
+//    public HashTag updateHashTag(HashTagUpdateDto hashTag) {
+//        Optional<HashTag> hashTag1 = hashTagRepository.findById(hashTag.getHashTagId());
+//        HashTag findTag = hashTag1.orElseThrow(() -> new RuntimeException("hashtag not found"));
+//
+//        Optional.ofNullable(hashTag.getTag()).ifPresent(findTag::setTag);
+//        hashTagRepository.save(findTag);
+//
+//        return  findTag;
+//    }
 
 
     public void deleteHashTag(Long hashTagId) {
@@ -60,6 +60,11 @@ public class TagService {
         HashTag findTag = hashTag1.orElseThrow(() -> new RuntimeException("hashtag not found"));
 
         hashTagRepository.delete(findTag);
+    }
+
+    public void deleteAllHashTag(Long postsId) {
+        List<PostsHashTags> postsHashTags = postsHashTagRepository.findByPostsId(postsId);
+        if(!postsHashTags.isEmpty()) postsHashTagRepository.deleteAll(postsHashTags);
     }
 
 }

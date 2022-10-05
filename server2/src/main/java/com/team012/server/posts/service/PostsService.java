@@ -10,6 +10,7 @@ import com.team012.server.posts.img.service.PostsImgService;
 import com.team012.server.posts.repository.PostsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,7 +68,7 @@ public class PostsService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public Posts update(PostsUpdateDto post, List<ImgUpdateDto> imgUpdateDtos, Long companyId) {
+    public Posts update(PostsUpdateDto post, List<MultipartFile> files, Long companyId) throws FileUploadException {
         Long postsId = post.getId();
         Posts findPosts = findById(postsId);
         log.info(findPosts.getTitle() ,"{}");
@@ -93,8 +94,12 @@ public class PostsService {
         }
         validateCheckInCheckOut(findPosts.getCheckInTime(), findPosts.getCheckOutTime());
 
-        if (!CollectionUtils.isEmpty(imgUpdateDtos)) {
-            postsImgService.updatePostsImg(imgUpdateDtos);
+        if (!CollectionUtils.isEmpty(files)) {
+            List<PostsImg> postsImgList = postsImgService.updatePostsImg(files, postsId);
+            findPosts.setPostsImgList(postsImgList);
+            for (PostsImg postsImg : postsImgList) {
+                postsImg.setPosts(findPosts);
+            }
         }
 
         Posts posts1 = postsRepository.save(findPosts);
@@ -105,7 +110,7 @@ public class PostsService {
     @Transactional(readOnly = true)
     public Posts findById(Long postsId) {
         Optional<Posts> findCompanyPosts
-                = postsRepository.findByIdFetch(postsId);
+                = postsRepository.findById(postsId);
 
         return findCompanyPosts.orElseThrow(() -> new RuntimeException("Posts Not Found"));
     }

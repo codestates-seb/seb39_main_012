@@ -63,9 +63,8 @@ public class PostsController {
 
         Long userId = principalDetails.getUsers().getId(); // -> id : 2
         request.setId(postsId); // -> id : 1
-        List<ImgUpdateDto> imgUpdateDtos = combineIdAndMultipartFile(file, request.getImgId());
 
-        PostsResponseDto postsResponseDto = postsUpdateService.updatePostResponse(request, imgUpdateDtos, userId);
+        PostsResponseDto postsResponseDto = postsUpdateService.updatePostResponse(request, file, userId);
 
         return new ResponseEntity<>(postsResponseDto, HttpStatus.OK);
     }
@@ -84,17 +83,4 @@ public class PostsController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    private List<ImgUpdateDto> combineIdAndMultipartFile(List<MultipartFile> multipartFile , List<Long> imgId) {
-        if (multipartFile.size() != imgId.size() || multipartFile.size() == 0) return null;
-
-        List<ImgUpdateDto> imgUpdateDtos = new ArrayList<>();
-        for(int i = 0; i< multipartFile.size(); i++) {
-            ImgUpdateDto imgUpdateDto = ImgUpdateDto.builder()
-                    .PostsImgId(imgId.get(i))
-                    .multipartFile(multipartFile.get(i))
-                    .build();
-            imgUpdateDtos.add(imgUpdateDto);
-        }
-        return imgUpdateDtos;
-    }
 }

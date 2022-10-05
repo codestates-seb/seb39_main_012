@@ -38,15 +38,25 @@ public class RoomService {
         return list1;
     }
 
-    public RoomDto update(RoomUpdateDto roomUpdateDto) {
+//    public RoomDto update(RoomUpdateDto roomUpdateDto) {
+//
+//        Optional<Room> room = roomRepository.findById(roomUpdateDto.getRoomId());
+//        Room findRoom = room.orElseThrow(() -> new RuntimeException("room not exist"));
+//
+//        Optional.ofNullable(roomUpdateDto.getSize()).ifPresent(findRoom::setSize);
+//        Optional.of(roomUpdateDto.getPrice()).ifPresent(findRoom::setPrice);
+//
+//        return roomConverter.toDTO(roomRepository.save(findRoom));
+//    }
 
-        Optional<Room> room = roomRepository.findById(roomUpdateDto.getRoomId());
-        Room findRoom = room.orElseThrow(() -> new RuntimeException("room not exist"));
-
-        Optional.ofNullable(roomUpdateDto.getSize()).ifPresent(findRoom::setSize);
-        Optional.of(roomUpdateDto.getPrice()).ifPresent(findRoom::setPrice);
-
-        return roomConverter.toDTO(roomRepository.save(findRoom));
+    public List<Room> updateRoomList(List<RoomCreateDto> roomDto, Long postsId) {
+        List<Room> rooms = roomRepository.findAllByPostsId(postsId);
+        if(rooms.size() != 3) throw new IllegalArgumentException("3개");
+        for(int i = 0; i< roomDto.size(); i++) {
+            Room room = rooms.get(i);
+            room.setPrice(roomDto.get(i).getPrice());
+        }
+        return roomRepository.saveAll(rooms);
     }
 
     @Transactional(readOnly = true)
