@@ -13,6 +13,8 @@ import java.util.Optional;
 
 public interface ReservationListRepository extends JpaRepository<ReservationList, Long> {
 
+    ReservationList findByCompanyId(Long companyId);
+
     Page<ReservationList> findByCompanyId(Long companyId, Pageable pageable);
 
     Optional<ReservationList> findByUsersIdAndReservedId(Long usersId, Long reservedId);
