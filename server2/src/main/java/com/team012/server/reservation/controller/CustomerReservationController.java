@@ -78,7 +78,7 @@ public class CustomerReservationController {
         Page<ReservationList> reservationList = customerReservationService.findReservationList(userId, page - 1, size);
         List<ReservationList> reservations = reservationList.getContent();
 
-        List<PostsReservationListDto> reservationListDtos = postsReservedListService.findReservedHotels(reservations);
+        List<PostsReservationListDto.BookedList> reservationListDtos = postsReservedListService.findReservedHotels(reservations);
 
         return new ResponseEntity<>(new MultiResponseDto<>(reservationListDtos, reservationList), HttpStatus.OK);
     }
@@ -91,7 +91,7 @@ public class CustomerReservationController {
         Page<ReservationList> reservationList = customerReservationService.findReservationAfterCheckOutList(userId, page - 1, size);
         List<ReservationList> reservations = reservationList.getContent();
 
-        List<PostsReservationListDto> reservationListDtos = postsReservedListService.findReservedHotels(reservations);
+        List<PostsReservationListDto.BookedListAfterCheckOut> reservationListDtos = postsReservedListService.findReservedHotelsAfterCheckOut(reservations);
 
         return new ResponseEntity<>(new MultiResponseDto<>(reservationListDtos, reservationList), HttpStatus.OK);
     }
