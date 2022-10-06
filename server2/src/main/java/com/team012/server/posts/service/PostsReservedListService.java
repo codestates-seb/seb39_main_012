@@ -23,17 +23,17 @@ public class PostsReservedListService {
 
     private final CustomerReservationService customerReservationService;
 
-    public List<PostsReservationListDto> findReservedHotels(List<ReservationList> reservationLists) {
+    public List<PostsReservationListDto.BookedList> findReservedHotels(List<ReservationList> reservationLists) {
         List<Long> postsIdList = reservationLists.stream().map(ReservationList::getPostsId).collect(Collectors.toList());
 
-        List<PostsReservationListDto> bookedList = new ArrayList<>();
+        List<PostsReservationListDto.BookedList> bookedList = new ArrayList<>();
         for (Long postsId : postsIdList) {
             Posts findPosts = postsRepository.findById(postsId).orElse(null);
             String url = findPosts.getPostsImgList().get(0).getImgUrl();
             Integer roomPrice = roomService.findMinPrice(postsId);
 
-            PostsReservationListDto postsReservationListDto
-                    = PostsReservationListDto.builder()
+            PostsReservationListDto.BookedList postsReservationListDto
+                    = PostsReservationListDto.BookedList.builder()
                     .title(findPosts.getTitle())
                     .roomPrice(roomPrice)
                     .url(url)
@@ -42,6 +42,29 @@ public class PostsReservedListService {
         }
         return bookedList;
     }
+
+    public List<PostsReservationListDto.BookedListAfterCheckOut> findReservedHotelsAfterCheckOut(List<ReservationList> reservationLists) {
+        List<Long> postsIdList = reservationLists.stream().map(ReservationList::getPostsId).collect(Collectors.toList());
+
+        List<PostsReservationListDto.BookedListAfterCheckOut> bookedList = new ArrayList<>();
+        for (Long postsId : postsIdList) {
+            Posts findPosts = postsRepository.findById(postsId).orElse(null);
+            String url = findPosts.getPostsImgList().get(0).getImgUrl();
+            Integer roomPrice = roomService.findMinPrice(postsId);
+
+            PostsReservationListDto.BookedListAfterCheckOut postsReservationListDto
+                    = PostsReservationListDto.BookedListAfterCheckOut.builder()
+                    .postsId(findPosts.getId())
+                    .title(findPosts.getTitle())
+                    .roomPrice(roomPrice)
+                    .url(url)
+                    .build();
+            bookedList.add(postsReservationListDto);
+        }
+        return bookedList;
+    }
+
+
 
 
 }
