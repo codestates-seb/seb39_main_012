@@ -66,7 +66,6 @@ public class DogCardService {
         DogCard dogCardById = dogCardRepository.findDogCardById(dogCardId);
         Users users = principalDetails.getUsers();
 
-
         try {
             if (dogCardById.getUsers().getId().equals(users.getId())) {
             } else {
@@ -113,4 +112,5 @@ public class DogCardService {
         Optional.ofNullable(url)
                 .ifPresent(findDogCard::setPhotoImgUrl);
     }
+
 }

@@ -32,4 +32,5 @@ public class RoomController {
         roomService.deleteRoom(roomId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 }

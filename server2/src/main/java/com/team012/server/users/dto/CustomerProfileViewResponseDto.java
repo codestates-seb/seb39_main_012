@@ -1,8 +1,6 @@
 package com.team012.server.users.dto;
 
-import com.team012.server.reservation.entity.ReservationList;
-import com.team012.server.review.entity.Review;
-import com.team012.server.users.entity.DogCard;
+import com.team012.server.review.dto.ReviewInfoDto;
 import com.team012.server.users.entity.Users;
 import lombok.*;
 
@@ -20,5 +18,5 @@ public class CustomerProfileViewResponseDto {
     // 다녀온 호캉스 내역??? 상태가 다른 호텔값을 따로 뽑아서 하는지????
 
     // review 관리
-    private List<Review> reviewList;
+    private List<ReviewInfoDto> reviewList;
 }

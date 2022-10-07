@@ -1,6 +1,7 @@
 package com.team012.server.reservation.service;
 
 
+import com.team012.server.company.repository.CompanyRepository;
 import com.team012.server.posts.entity.Posts;
 import com.team012.server.posts.service.PostsService;
 import com.team012.server.reservation.dto.RegisterReservationDto;
@@ -40,33 +41,34 @@ public class CustomerReservationService {
     private final PostsService postsService;
     private final AvailableReservationHelper availableReservationHelper;
 
+    private final CompanyRepository companyRepository;
 
     // 상세 페이지에서 예약 내역 적는 부분(posts 상세 페이지 ---> 예약 상세 페이지)
     @Transactional(readOnly = true)
     public ReservationCreateDto registerReservation(RegisterReservationDto dto, Long userId, Long postsId) {
         usersService.findUsersById(userId); //validation check
         Long companyId = postsService.findById(postsId).getCompanyId();
-
+        String companyName = companyRepository.findById(companyId).get().getCompanyName();
         validateDate(dto.getCheckInDate(), dto.getCheckOutDate());
 
         Integer totalDogCount = calculatePriceAndAvailableBooking(dto, postsId).get(0);
         Integer totalPrice = calculatePriceAndAvailableBooking(dto, postsId).get(1);
 
-        LocalDate checkInDate = LocalDate.parse(dto.getCheckInDate(),DateTimeFormatter.ISO_LOCAL_DATE);
-        LocalDate checkOutDate = LocalDate.parse(dto.getCheckOutDate(),DateTimeFormatter.ISO_LOCAL_DATE);
+        LocalDate checkInDate = LocalDate.parse(dto.getCheckInDate(), DateTimeFormatter.ISO_LOCAL_DATE);
+        LocalDate checkOutDate = LocalDate.parse(dto.getCheckOutDate(), DateTimeFormatter.ISO_LOCAL_DATE);
         LocalTime checkInTime = LocalTime.parse(dto.getCheckInTime(), DateTimeFormatter.ofPattern("a hh:mm").withLocale(Locale.KOREA));
         LocalTime checkOutTime = LocalTime.parse(dto.getCheckOutTime(), DateTimeFormatter.ofPattern("a hh:mm").withLocale(Locale.KOREA));
 
         String str = dto.getCheckInDate() + dto.getCheckOutDate();
-        str = str.replaceAll("-","");
+        str = str.replaceAll("-", "");
 
         Long period = checkInDate.until(checkOutDate, ChronoUnit.DAYS);
-
 
         return ReservationCreateDto.builder()
                 .dto(dto)
                 .totalDogCount(totalDogCount)
                 .totalPrice(totalPrice)
+                .companyName(companyName)
                 .build();
 
     }
@@ -108,9 +110,10 @@ public class CustomerReservationService {
         Long companyId = posts.getCompanyId();
 
         List<ReservationList> reservationLists = reservationListRepository.findByCheckInCheckOut(companyId);
-        Integer occupiedRoomCount= availableReservationHelper.occupiedRoomCount(reservationLists, checkInDate, checkOutDate);
+        Integer occupiedRoomCount = availableReservationHelper.occupiedRoomCount(reservationLists, checkInDate, checkOutDate);
         System.out.println("예약 가능한 마리 수 : " + (posts.getRoomCount() - occupiedRoomCount));
-        if(posts.getRoomCount() - occupiedRoomCount < totalCount) throw new RuntimeException("예약 가능한 마리 수 : " + (posts.getRoomCount() - occupiedRoomCount));
+        if (posts.getRoomCount() - occupiedRoomCount < totalCount)
+            throw new RuntimeException("예약 가능한 마리 수 : " + (posts.getRoomCount() - occupiedRoomCount));
 
 
         Long period = checkInDate.until(checkOutDate, ChronoUnit.DAYS); //checkOut - checkIn 날짜 수 계산
@@ -126,11 +129,11 @@ public class CustomerReservationService {
         Users users = usersService.findUsersById(userId); //validation check
         Posts posts = postsService.findById(postsId);
 
-        LocalDate checkInDate = LocalDate.parse(dto.getDto().getCheckInDate(),DateTimeFormatter.ISO_LOCAL_DATE);
-        LocalDate checkOutDate = LocalDate.parse(dto.getDto().getCheckOutDate(),DateTimeFormatter.ISO_LOCAL_DATE);
+        LocalDate checkInDate = LocalDate.parse(dto.getDto().getCheckInDate(), DateTimeFormatter.ISO_LOCAL_DATE);
+        LocalDate checkOutDate = LocalDate.parse(dto.getDto().getCheckOutDate(), DateTimeFormatter.ISO_LOCAL_DATE);
 
-        LocalTime checkInTime = LocalTime.parse(dto.getDto().getCheckInTime(),DateTimeFormatter.ofPattern("a hh:mm").withLocale(Locale.KOREAN));
-        LocalTime checkInOut = LocalTime.parse(dto.getDto().getCheckOutTime(),DateTimeFormatter.ofPattern("a hh:mm").withLocale(Locale.KOREAN));
+        LocalTime checkInTime = LocalTime.parse(dto.getDto().getCheckInTime(), DateTimeFormatter.ofPattern("a hh:mm").withLocale(Locale.KOREAN));
+        LocalTime checkInOut = LocalTime.parse(dto.getDto().getCheckOutTime(), DateTimeFormatter.ofPattern("a hh:mm").withLocale(Locale.KOREAN));
 
         Long companyId = posts.getCompanyId();
 
@@ -159,7 +162,7 @@ public class CustomerReservationService {
     public Page<ReservationList> findReservationList(Long userId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "checkOutDate");
 
-        return reservationListRepository.findByUsersIdBooked(userId,LocalDate.now(), pageable);
+        return reservationListRepository.findByUsersIdBooked(userId, LocalDate.now(), pageable);
     }
 
 
@@ -168,7 +171,7 @@ public class CustomerReservationService {
     public Page<ReservationList> findReservationAfterCheckOutList(Long userId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "checkOutDate");
 
-        Page<ReservationList> reservationLists =  reservationListRepository.findByUsersIdVisited(userId, LocalDate.now(), pageable);
+        Page<ReservationList> reservationLists = reservationListRepository.findByUsersIdVisited(userId, LocalDate.now(), pageable);
         return reservationLists;
 
     }
@@ -176,11 +179,11 @@ public class CustomerReservationService {
     //예약 취
     public void deleteReservation(Long userId, Long reservedId) {
 
-        Optional<ReservationList> reservationList= reservationListRepository.findByUsersIdAndReservedId(userId, reservedId);
+        Optional<ReservationList> reservationList = reservationListRepository.findByUsersIdAndReservedId(userId, reservedId);
         ReservationList findReservationList = reservationList.orElseThrow(NoSuchElementException::new);
 
-        if(LocalDate.now().until(findReservationList.getCheckInDate(),ChronoUnit.DAYS) < 1) {
-            log.info("{}", findReservationList.getCheckInDate().until(LocalDate.now(),ChronoUnit.DAYS));
+        if (LocalDate.now().until(findReservationList.getCheckInDate(), ChronoUnit.DAYS) < 1) {
+            log.info("{}", findReservationList.getCheckInDate().until(LocalDate.now(), ChronoUnit.DAYS));
 
             throw new RuntimeException("예약 취소는 하루 전에만 가능합니다");
         }

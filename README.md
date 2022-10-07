@@ -47,7 +47,7 @@
 정환민|지수정|홍성주|황병수|이동주
 :-:|:-:|:-:|:-:|:-:
 ![JHM](https://avatars.githubusercontent.com/u/65848374?s=150&v=4)|![JSJ](https://avatars.githubusercontent.com/u/55401378?s=150&v=4)|![HSJ](https://avatars.githubusercontent.com/u/96187152?s=150&v=4)|![HBS](https://avatars.githubusercontent.com/u/101438447?s=150&v=4)| ![LDJ](https://avatars.githubusercontent.com/u/81212210?s=150&v=4)
-[JEONGHWANMIN](https://github.com/JEONGHWANMIN)|[bruadarach](https://github.com/bruadarach)|[penrose15](https://github.com/penrose15)|[moodeary](https://github.com/moodeary)|[이동주](https://github.com/DZOOOOO)
+[JEONGHWANMIN](https://github.com/JEONGHWANMIN)|[bruadarach](https://github.com/bruadarach)|[penrose15](https://github.com/penrose15)|[moodeary](https://github.com/moodeary)|[DZOOOOO](https://github.com/DZOOOOO)
 ghksals09041@gmail.com|suji.sujeongji@gmail.com|hsj99215@gmail.com|moodeary@gmail.com|dzpro0327@naver.com
 프론트엔드|프론트엔드|백엔드|백엔드|팀장, 백엔드
 

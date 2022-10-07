@@ -3,7 +3,9 @@ package com.team012.server.users.controller;
 import com.team012.server.common.aws.service.AwsS3Service;
 import com.team012.server.reservation.entity.ReservationList;
 import com.team012.server.reservation.service.ReservationService;
+import com.team012.server.review.dto.ReviewInfoDto;
 import com.team012.server.review.entity.Review;
+import com.team012.server.review.entity.ReviewImg;
 import com.team012.server.users.dto.CustomerUpdateRequestDto;
 import com.team012.server.users.dto.UsersMessageResponseDto;
 import com.team012.server.users.entity.DogCard;
@@ -41,36 +43,18 @@ public class CustomerController {
         Long userId = principalDetails.getUsers().getId();
         log.info("userId : {}", userId);
         Users findUser = usersService.findUsersById(userId);
-        List<DogCard> dogCardList = dogCardService.getListDogCard(userId);
-        List<Review> reviewList = usersReviewManageReviewService.getListReview(userId);
+//        List<DogCard> dogCardList = dogCardService.getListDogCard(userId);
+//        List<Review> reviewList = usersReviewManageReviewService.getListReview(userId);
+        List<ReviewInfoDto> reviewInfoDtoList = usersReviewManageReviewService.getListReviewInfoList(userId);
+
 
         // 예약 전 / 후는
         CustomerProfileViewResponseDto response
                 = CustomerProfileViewResponseDto
                 .builder()
                 .users(findUser)
-                .reviewList(reviewList)
+                .reviewList(reviewInfoDtoList)
                 .build();
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    // 고객 정보 수정 API
-    @PatchMapping("/update")
-    public ResponseEntity updateCustomer(@AuthenticationPrincipal PrincipalDetails principalDetails,
-                                         @RequestPart(value = "dto") CustomerUpdateRequestDto dto,
-                                         @RequestPart(value = "file") MultipartFile file) {
-        Long userId = principalDetails.getUsers().getId();
-
-        String imgUrl = awsS3Service.singleUploadFile(file);
-
-        usersService.updateCustomer(userId, dto, imgUrl);
-
-        UsersMessageResponseDto response =
-                UsersMessageResponseDto
-                        .builder()
-                        .message("수정 완료..!")
-                        .build();
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
