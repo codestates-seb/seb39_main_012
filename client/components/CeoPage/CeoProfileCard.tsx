@@ -2,6 +2,9 @@
 import React from 'react'
 import styled from 'styled-components'
 import {RiEditBoxLine} from 'react-icons/ri'
+import {useRouter} from 'next/router'
+import {Ceo, CeoInfo} from '@/types/ceopage'
+import {flexCenter} from '@/styles/css'
 
 interface User {
   profileImg: string
@@ -11,28 +14,32 @@ interface User {
 }
 
 interface Props {
-  user: User
+  ceo: CeoInfo
 }
 
-function CeoProfileCard({user}: Props) {
-  const {profileImg, username, phone, email} = user
-
+function CeoProfileCard({ceo}: Props) {
+  const router = useRouter()
   return (
     <Container>
-      <UserImgBox>
-        <img src={profileImg} alt="UserprofillImg" />
-      </UserImgBox>
+      <UserInfoBoxs>
+        <UserImgBox>
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"
+            alt="UserprofillImg"
+          />
+        </UserImgBox>
+      </UserInfoBoxs>
       <UserInfoBox>
         <UserName>
-          <span>견주</span>
-          <p>{username}</p>
+          <span>CEO</span>
+          <p>{ceo.ceoName}</p>
         </UserName>
-        <UserTell>{phone}</UserTell>
-        <UserEmail>{email}</UserEmail>
-        <AddDogButton>
+        <UserTell>{ceo.ceoPhone}</UserTell>
+        <UserEmail>{ceo.ceoEmail}</UserEmail>
+        <AddCompanyButton onClick={() => router.push('/write')}>
           <p>업체 등록하기</p>
           <RiEditBoxLine />
-        </AddDogButton>
+        </AddCompanyButton>
       </UserInfoBox>
     </Container>
   )
@@ -54,6 +61,21 @@ const Container = styled.div`
 `
 
 const UserImgBox = styled.div`
+  &:hover::after {
+    content: '프로필 수정';
+    position: absolute;
+    ${flexCenter}
+    top: 0;
+    left: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #fff;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    cursor: pointer;
+  }
   img {
     width: 180px;
     height: 180px;
@@ -72,9 +94,14 @@ const UserImgBox = styled.div`
   }
 `
 
+const UserInfoBoxs = styled.div`
+  position: relative;
+`
+
 const UserInfoBox = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
   font-size: 15px;
   margin-top: 10px;
   gap: 8px;
@@ -112,7 +139,7 @@ const UserEmail = styled.p`
   line-height: 18px;
 `
 
-const AddDogButton = styled.button`
+const AddCompanyButton = styled.button`
   display: flex;
   align-items: center;
   color: gray;
