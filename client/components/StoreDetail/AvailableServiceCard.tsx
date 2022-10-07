@@ -9,8 +9,8 @@ interface AvailableServiceCardProps {
   serviceContent: string
   iconImageSrc: string
   alt: string
-  // width: number
-  // height: number
+  width: number
+  height: number
 }
 
 const AvailableServiceCard = ({
@@ -18,16 +18,16 @@ const AvailableServiceCard = ({
   serviceContent,
   iconImageSrc,
   alt,
-}: // width,
-// height,
-AvailableServiceCardProps) => {
+  width,
+  height,
+}: AvailableServiceCardProps) => {
   return (
     <AvailableServiceBg>
       <AvailableServiceIcon>
         <AvailableServiceIconBg>
           <AvailableServiceIconWrapper>
-            <FaDog size={40} color={colors.grey2} />
-            {/* <Image src={iconImageSrc} alt={alt} width={width} height={height} /> */}
+            {/* <FaDog size={40} color={colors.grey2} /> */}
+            <Image src={iconImageSrc} alt={alt} width={width} height={height} />
           </AvailableServiceIconWrapper>
         </AvailableServiceIconBg>
       </AvailableServiceIcon>
@@ -54,13 +54,15 @@ const AvailableServiceIconBg = styled.div`
   height: 6rem;
   background-color: rgb(255, 255, 255);
   border-radius: 50%;
-  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `
 
 const AvailableServiceIconWrapper = styled.div`
-  position: absolute;
-  top: 7px;
-  left: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `
 
 const AvailableServiceIcon = styled.div`

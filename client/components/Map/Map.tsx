@@ -1,12 +1,12 @@
-import react, {useEffect} from 'react'
+import {FC, useEffect} from 'react'
 import styled from 'styled-components'
 
-interface MapProps {
+interface Props {
   address: string
   companyName: string
 }
 
-const Map = ({address, companyName}: MapProps) => {
+const Map = ({address, companyName}: Props) => {
   useEffect(() => {
     const onLoadKakaoMap = () => {
       window.kakao.maps.load(() => {
@@ -14,10 +14,10 @@ const Map = ({address, companyName}: MapProps) => {
         geocoder.addressSearch(address, (result: any, status: any) => {
           if (status === window.kakao.maps.services.Status.OK) {
             const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x)
-            const container = document.getElementById('map') as HTMLElement
+            const container = document.getElementById('map')!
             const options = {
               center: coords,
-              level: 4,
+              level: 3,
             }
             const map = new window.kakao.maps.Map(container, options)
             const marker = new window.kakao.maps.Marker({
@@ -30,7 +30,7 @@ const Map = ({address, companyName}: MapProps) => {
             infowindow.open(map, marker)
           } else {
             const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x)
-            const container = document.getElementById('map') as HTMLElement
+            const container = document.getElementById('map')!
             const options = {
               center: new window.kakao.maps.LatLng(33.450701, 126.570667),
               level: 3,
@@ -54,6 +54,6 @@ export default Map
 
 const MapContainer = styled.div`
   width: 100%;
-  height: 350px;
+  height: 400px;
   border-radius: 1rem;
 `

@@ -15,14 +15,11 @@ import {authPostService} from '@/apis/authPostAPI'
 import {availableServices} from '@/utils/options/options'
 import {IPostWrite} from '@/apis/type/types'
 import Footer from '@/components/Layout/Footer/Footer'
+import {postService} from '@/apis/postAPI'
 
-const Write = () => {
-  // const [CEOInfo, setCEOInfo] = useState({})
-  // useEffect(() => {
-  //   authPostService.authGetCeoPage().then((res) => {
-  //     setCEOInfo(res)
-  //   })
-  // }, [])
+const Edit = () => {
+  const router = useRouter()
+  const {postId} = router.query
 
   const [form, setForm] = useState<IPostWrite>({
     title: '',
@@ -52,6 +49,17 @@ const Write = () => {
       },
     ],
   })
+
+  useEffect(() => {
+    if (!postId) {
+      return
+    }
+
+    postService.getPostById(Number(postId)).then((result) => {
+      // setPost(result)
+      console.log(result)
+    })
+  }, [postId])
 
   const [selectedImage, setSelectedImage] = useState([])
   const [clickedService1, setClickedService1] = useState(false)
@@ -285,7 +293,6 @@ const Write = () => {
     <>
       <CreatePostForm onSubmit={onSubmit}>
         {/* <CreatePostForm> */}
-        <ToastContainer />
         <Container>
           <CompanyInfo>
             <SectionTitle title={'애견호텔 소개'} />
@@ -648,9 +655,10 @@ const Write = () => {
               />
             )}
           </MapDisplay>
-          <SectionWrapper>
-            <AuthButton title={'저장하기'} />
-          </SectionWrapper>
+          <ButtonSectionWrapper>
+            <AuthButton title={'수정하기'} />
+            <AuthButton title={'취소하기'} />
+          </ButtonSectionWrapper>
         </Container>
       </CreatePostForm>
       <Footer />
@@ -658,7 +666,7 @@ const Write = () => {
   )
 }
 
-export default Write
+export default Edit
 
 const CreatePostForm = styled.form`
   width: 100%;
@@ -968,8 +976,9 @@ const MapDisplay = styled.div`
   margin: 2rem 0 0 1rem;
 `
 
-const SectionWrapper = styled.div`
+const ButtonSectionWrapper = styled.div`
   display: flex;
+  width: 90%;
   justify-content: center;
   align-items: center;
   margin: 7rem 0 10rem 0;
