@@ -9,9 +9,18 @@ interface Props {
   backgroundColor?: string
   marginTop?: string
   hoverFontColor?: string
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
 }
 
-function AuthButton({title, width, height, backgroundColor, marginTop, hoverFontColor}: Props) {
+function AuthButton({
+  title,
+  width,
+  height,
+  backgroundColor,
+  marginTop,
+  hoverFontColor,
+  onClick,
+}: Props) {
   return (
     <Button
       title={title}
@@ -20,6 +29,7 @@ function AuthButton({title, width, height, backgroundColor, marginTop, hoverFont
       backgroundColor={backgroundColor}
       marginTop={marginTop}
       hoverFontColor={hoverFontColor}
+      onClick={onClick}
     >
       {title}
     </Button>

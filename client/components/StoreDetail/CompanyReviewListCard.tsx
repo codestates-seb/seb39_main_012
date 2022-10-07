@@ -36,37 +36,43 @@ const CompanyReviewListCard = ({
       <CompanyReviewsListContent>{reviewContent}</CompanyReviewsListContent>
       <CompanyReviewsListImages>
         <CompanyReviewListImagesBox>
-          {reviewImageSrc1 && reviewImageSrc2 && reviewImageSrc3 && (
-            <>
-              <CompanyReviewsListImage>
-                <Image
-                  src={reviewImageSrc1}
-                  alt="review-image4"
-                  width={180}
-                  height={180}
-                  objectFit="fill"
-                />
-              </CompanyReviewsListImage>
-              <CompanyReviewsListImage>
-                <Image
-                  src={reviewImageSrc2}
-                  alt="review-image5"
-                  width={180}
-                  height={180}
-                  objectFit="fill"
-                />
-              </CompanyReviewsListImage>
-              <CompanyReviewsListImage>
-                <Image
-                  src={reviewImageSrc3}
-                  alt="review-image6"
-                  width={180}
-                  height={180}
-                  objectFit="fill"
-                />
-              </CompanyReviewsListImage>
-            </>
-          )}
+          {reviewImageSrc1 !== undefined ? (
+            <CompanyReviewsListImage>
+              <Image
+                src={reviewImageSrc1}
+                alt="review-image"
+                width={180}
+                height={180}
+                objectFit="fill"
+                unoptimized={true}
+              />
+            </CompanyReviewsListImage>
+          ) : null}
+
+          {reviewImageSrc2 !== undefined ? (
+            <CompanyReviewsListImage>
+              <Image
+                src={reviewImageSrc2}
+                alt="review-image"
+                width={180}
+                height={180}
+                objectFit="fill"
+                unoptimized={true}
+              />
+            </CompanyReviewsListImage>
+          ) : null}
+          {reviewImageSrc3 !== undefined ? (
+            <CompanyReviewsListImage>
+              <Image
+                src={reviewImageSrc3}
+                alt="review-image"
+                width={180}
+                height={180}
+                objectFit="fill"
+                unoptimized={true}
+              />
+            </CompanyReviewsListImage>
+          ) : null}
         </CompanyReviewListImagesBox>
       </CompanyReviewsListImages>
     </CompanyReviewListCardContainer>

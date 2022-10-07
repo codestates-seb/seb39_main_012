@@ -9,7 +9,19 @@ interface Props {
 
 function CategoryTag({title}: Props) {
   const router = useRouter()
-  return <Container onClick={() => router.push(`/search?tag=${title}`)}>{title}</Container>
+  return (
+    <Container
+      onClick={() => {
+        if (title === '전체') {
+          router.push(`/`)
+          return
+        }
+        router.push(`/search?tag=${title}`)
+      }}
+    >
+      {title}
+    </Container>
+  )
 }
 
 export default CategoryTag

@@ -12,6 +12,8 @@ interface Props {
   reviewContent: string
   reviewDate: string
   reviewerName: string
+  reviewClicked: boolean
+  setReviewClicked: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const CompanyReviewCard = ({
@@ -22,11 +24,20 @@ const CompanyReviewCard = ({
   reviewContent,
   reviewDate,
   reviewerName,
+  reviewClicked,
+  setReviewClicked,
 }: Props) => {
   return (
-    <CompanyReviewsCard>
+    <CompanyReviewsCard onClick={() => setReviewClicked(!reviewClicked)}>
       <CompanyReviewsCardTop>
-        <Image src={reviewImageSrc} alt={alt} width={300} height={250} objectFit="cover" />
+        <Image
+          src={reviewImageSrc}
+          alt={alt}
+          width={300}
+          height={250}
+          objectFit="cover"
+          unoptimized={true}
+        />
       </CompanyReviewsCardTop>
       <CompanyReviewsCardBottom>
         <CompanyReviewsCardTitle>{reviewTitle}</CompanyReviewsCardTitle>
@@ -44,11 +55,19 @@ const CompanyReviewCard = ({
 export default CompanyReviewCard
 
 const CompanyReviewsCard = styled.div`
-  flex: 1 1 30%;
+  /* flex: 1 1 30%; */
   width: 30%;
   border-radius: 3rem;
   overflow: hidden;
   box-shadow: 1px 1px 8px 2px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 4px 4px 8px 0 rgba(0, 0, 0, 0.2);
+
+  :hover {
+    transition: 0.3s;
+    box-shadow: 3px 3px 3px 3px rgba(0, 0, 0, 0.2), -3px -3px 3px -3px rgba(0, 0, 0, 0.2);
+  }
 `
 
 const CompanyReviewsCardTop = styled.div``
@@ -67,6 +86,7 @@ const CompanyReviewsCardTitle = styled.div`
 `
 
 const CompanyReviewsCardContent = styled.p`
+  height: 8rem;
   margin: 0.6rem 0 2rem 0;
   font-size: 1.3rem;
   color: rgb(102, 102, 102);
@@ -75,7 +95,7 @@ const CompanyReviewsCardContent = styled.p`
   white-space: normal;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   word-break: keep-all;
 `

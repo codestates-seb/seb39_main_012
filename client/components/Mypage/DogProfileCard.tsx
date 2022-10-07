@@ -6,61 +6,88 @@ import {RiEditBoxLine} from 'react-icons/ri'
 import {IoMdRemoveCircle} from 'react-icons/io'
 import {useRecoilState} from 'recoil'
 import {editOpenState} from '@/recoil/editOpen'
-const imgUrl = 'https://dimg.donga.com/wps/NEWS/IMAGE/2022/01/28/111500268.2.jpg'
+import {DogCard} from '@/types/mypage'
+import {dataState, dogIdState} from '@/recoil/mypage'
+import {userService} from '@/apis/MyPageAPI'
+import {toast} from 'react-toastify'
 
-function DogProfileCard() {
+interface Props {
+  dog: DogCard
+}
+
+function DogProfileCard({dog}: Props) {
+  const [isChange, setIsChange] = useRecoilState(dataState)
   const [, setEditOpen] = useRecoilState(editOpenState)
+  const [, setDogId] = useRecoilState(dogIdState)
   return (
     <Container>
+      <Buttons>
+        <DeleteButton
+          onClick={async () => {
+            if (window.confirm('정말 삭제하시겠습니까?')) {
+              const result = await userService.deleteMyDogById(dog.id)
+              console.log(result)
+              if (result.status === 200) {
+                setIsChange(!isChange)
+                toast.success('삭제되었습니다.')
+                return
+              }
+              toast.error('삭제에 실패했습니다.')
+            }
+          }}
+        >
+          <IoMdRemoveCircle />
+        </DeleteButton>
+        <EditButton
+          onClick={() => {
+            setEditOpen(true)
+            setDogId(dog.id)
+          }}
+        >
+          <RiEditBoxLine />
+        </EditButton>
+      </Buttons>
       <ImgBox>
-        <CardImage imgUrl={imgUrl} mode="my"></CardImage>
+        <CardImage imgUrl={dog.photoImgUrl} mode="my"></CardImage>
       </ImgBox>
       <ImageTextBox>
         <DogInfoBox>
           <div>
-            <DogName>뽀삐</DogName>
-            <DogGender>
-              <BsGenderMale />
-            </DogGender>
+            <DogName>{dog.dogName}</DogName>
+            <DogGender>{dog.gender === '수컷' ? <BsGenderMale /> : <BsGenderFemale />}</DogGender>
           </div>
           <div>
-            <DogAge>10살</DogAge>
-            <DogWeight>7.5kg</DogWeight>
+            <DogAge>{dog.age}살</DogAge>
+            <DogWeight>{dog.weight}kg</DogWeight>
           </div>
         </DogInfoBox>
-        <DogBreed>불독</DogBreed>
+        <DogBreed>{dog.type}</DogBreed>
       </ImageTextBox>
       <DogBottomInfoBox>
         <InfoBox>
           <div>
             <InfoTitle>중성화</InfoTitle>
-            <InfoContent>완료</InfoContent>
+            <InfoContent>{dog.surgery}</InfoContent>
           </div>
           <div>
             <InfoTitle>입질&짖음</InfoTitle>
-            <InfoContent>약간 짖음</InfoContent>
+            <InfoContent>{dog.bark}</InfoContent>
           </div>
           <div>
             <InfoTitle>특이사항</InfoTitle>
-            <InfoContent>없음</InfoContent>
+            <InfoContent>{dog.etc}</InfoContent>
           </div>
         </InfoBox>
         <InfoBox>
           <div>
             <InfoTitle>배변방식</InfoTitle>
-            <InfoContent>실내</InfoContent>
+            <InfoContent>{dog.bowelTrained}</InfoContent>
           </div>
           <div>
             <InfoTitle>간식급여</InfoTitle>
-            <InfoContent>미급여</InfoContent>
+            <InfoContent>{dog.snackMethod}</InfoContent>
           </div>
         </InfoBox>
-        <DeleteButton onClick={() => console.log('삭제')}>
-          <IoMdRemoveCircle />
-        </DeleteButton>
-        <EditButton onClick={() => setEditOpen(true)}>
-          <RiEditBoxLine />
-        </EditButton>
       </DogBottomInfoBox>
     </Container>
   )
@@ -203,20 +230,24 @@ const InfoContent = styled.p`
   }
 `
 
-const EditButton = styled.span`
-  font-size: 20px;
+const Buttons = styled.div`
+  display: flex;
   position: absolute;
   bottom: 0;
-  right: 0;
+  right: 20px;
+`
+
+const EditButton = styled.div`
+  z-index: 20;
+  font-size: 20px;
   color: gray;
   cursor: pointer;
 `
 
-const DeleteButton = styled.span`
+const DeleteButton = styled.div`
+  z-index: 20;
+  right: 40px;
   font-size: 20px;
-  position: absolute;
-  bottom: 0;
-  right: 25px;
   color: #f25757;
   cursor: pointer;
 `

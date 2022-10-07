@@ -1,21 +1,19 @@
-import Image from 'next/image'
-import {ToastContainer} from 'react-toastify'
 import styled from 'styled-components'
-import mainBanner from '@/public/images/mainBanner.png'
-import subBanner from '@/public/images/subBanner.jpg'
 import CategoryTag from '@/components/Home/CategoryTag'
 import {colors} from '@/styles/colors'
 import {categoryTags} from '@/utils/options/options'
 import PostCard from '@/components/Home/PostCard'
 import SearchBar from '@/components/Home/SearchBar'
-import {postService} from '@/apis/postAPI'
+import {postService} from '@/apis/PostAndSearchAPI'
 import {useState} from 'react'
 import useIntersect from '@/hooks/useIntersect'
 import {Post} from '@/types/post'
 import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner'
 import {flexCenter} from '@/styles/css'
-
 import {GetStaticProps, InferGetStaticPropsType} from 'next'
+import BannerSwiper from '@/components/Home/BannerSwiper'
+import {bannerImages} from '@/public/images'
+
 export const getStaticProps: GetStaticProps = async () => {
   const res1 = await postService.getPosts(1)
   const res2 = await postService.getPosts(2)
@@ -54,7 +52,9 @@ function Home({posts1, posts2, pageInfo}: InferGetStaticPropsType<typeof getStat
   return (
     <Container>
       <MainBanner>
-        <Image src={mainBanner} sizes={'100%'} alt={'MainBannerImg'} />
+        <BannerSwiper
+          banners={[bannerImages.mainBanner, bannerImages.mainBanner2, bannerImages.mainBanner3]}
+        />
       </MainBanner>
       <MainSearchBar>
         <SearchBar />
@@ -70,7 +70,7 @@ function Home({posts1, posts2, pageInfo}: InferGetStaticPropsType<typeof getStat
         ))}
       </PostCardBox>
       <SubBanner>
-        <Image src={subBanner} alt={'SubBannerImg'} />
+        <BannerSwiper banners={[bannerImages.subBanner, bannerImages.subBanner2]} />
       </SubBanner>
       <PostCardBox>
         {posts.map((post: Post, idx) => (
@@ -86,7 +86,6 @@ function Home({posts1, posts2, pageInfo}: InferGetStaticPropsType<typeof getStat
       ) : (
         <Intersection ref={ref}></Intersection>
       )}
-      <ToastContainer />
     </Container>
   )
 }
@@ -151,14 +150,22 @@ const CategoryBox = styled.div`
 const PostCardBox = styled.div`
   width: 100%;
   display: flex;
-  justify-content: space-around;
   flex-wrap: wrap;
   gap: 15px;
   min-height: 815px;
 `
 
 const SubBanner = styled.div`
-  margin-bottom: 50px;
+  margin-bottom: 40px;
+  width: 100%;
+
+  /* @media (min-width: 1920px) {
+    width: 150%;
+  }
+
+  @media (max-width: 1280px) {
+    width: 100%;
+  } */
 `
 
 const SpinnerBox = styled.div`

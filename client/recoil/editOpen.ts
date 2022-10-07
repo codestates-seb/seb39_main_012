@@ -9,3 +9,8 @@ export const addOpenState = atom({
   key: 'addOpenState',
   default: false,
 })
+
+export const addReviewState = atom({
+  key: 'addReviewState',
+  default: false,
+})

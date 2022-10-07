@@ -1,4 +1,4 @@
-import {PageInfo, Post} from '@/types/post'
+import {PageInfo, Post, PostById} from '@/types/post'
 import axios from 'axios'
 import {SERVER_URL} from '.'
 
@@ -27,7 +27,7 @@ const getPosts = async (page: number) => {
 const getPostsTitle = async (page: number, title: string) => {
   try {
     const result = await postInstance.get<PostsRespose>(
-      `/v1/posts/title?page=${page}&size=12&title=${encodeURI(title)}`
+      `/v1/posts/search-title?page=${page}&size=12&title=${encodeURI(title)}`
     )
     return result.data
   } catch (e) {
@@ -41,7 +41,7 @@ const getPostsTitle = async (page: number, title: string) => {
 const getPostsTag = async (page: number, tag: string) => {
   try {
     const result = await postInstance.get<PostsRespose>(
-      `v1/posts/tag?page=${page}&size=12&tag=${encodeURI(tag)}`
+      `/v1/posts/search-tag?page=${page}&size=12&tag=${encodeURI(tag)}`
     )
     return result.data
   } catch (e) {
@@ -55,7 +55,7 @@ const getPostsTag = async (page: number, tag: string) => {
 const getPostsAddress = async (page: number, address: string) => {
   try {
     const result = await postInstance.get<PostsRespose>(
-      `/v1/posts/address?page=${page}&size=12&address=${address}`
+      `/v1/posts/search-address?page=${page}&size=12&address=${address}`
     )
     return result.data
   } catch (e) {
@@ -66,9 +66,22 @@ const getPostsAddress = async (page: number, address: string) => {
   }
 }
 
+const getPostById = async (id: number) => {
+  try {
+    const result = await postInstance.get<PostById>(`/v1/posts/${id}?page=1&size=10`)
+    return result.data
+  } catch (e) {
+    if (e instanceof Error) {
+      throw new Error(e.message + '_' + '상세 포스트 조회 실패')
+    }
+    throw new Error('상세 포스트 조회 실패')
+  }
+}
+
 export const postService = {
   getPosts,
   getPostsTitle,
   getPostsTag,
   getPostsAddress,
+  getPostById,
 }
