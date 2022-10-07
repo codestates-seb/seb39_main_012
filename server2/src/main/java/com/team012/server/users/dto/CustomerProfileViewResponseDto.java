@@ -14,9 +14,11 @@ import java.util.List;
 public class CustomerProfileViewResponseDto {
     // 고객유저 정보
     private Users users;
-
+    
+    private String usersImg;
     // 다녀온 호캉스 내역??? 상태가 다른 호텔값을 따로 뽑아서 하는지????
 
     // review 관리
     private List<ReviewInfoDto> reviewList;
+
 }
