@@ -6,6 +6,9 @@ import com.team012.server.users.dto.DogCardResponseDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface DogCardMapper {
     DogCard dogDtoToDogCard(DogCardCreateDto dogCardDto);
@@ -28,5 +31,15 @@ public interface DogCardMapper {
                 .username(dogCard.getUsers().getUsername())
                 .weight(dogCard.getWeight())   // weight 추가
                 .build();
+    }
+
+
+    default List<DogCardResponseDto> dogCardToDtoResponse(List<DogCard> dogCards) {
+
+        List<DogCardResponseDto> dogCardResponseDtos = new ArrayList<>();
+        for (DogCard dogCard : dogCards) {
+            dogCardResponseDtos.add(dogCardToDtoResponse(dogCard));
+        }
+        return dogCardResponseDtos;
     }
 }

@@ -1,5 +1,6 @@
 package com.team012.server.reservation.entity;
 
+import lombok.Builder;
 import lombok.Getter;
 
 import javax.persistence.Column;
@@ -17,4 +18,5 @@ public class UserInfo {
 
     @Column(name = "email")
     private String email;
+
 }

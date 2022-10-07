@@ -168,8 +168,7 @@ public class AwsS3Service {
         }
         List<PostsImg> fileList = new ArrayList<>();
 
-        multipartFileList.forEach(file -> {
-
+        for(MultipartFile file: multipartFileList) {
             String url;
             try {
                 url = uploadFile(file);
@@ -184,7 +183,7 @@ public class AwsS3Service {
                     .imgUrl(url)
                     .build();
             fileList.add(postsImg);
-        });
+        }
         return fileList;
     }
 
