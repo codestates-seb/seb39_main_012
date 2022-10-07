@@ -5,10 +5,19 @@ import TapMenu from '@/components/Login/TapMenu'
 import LoginForm from '@/components/Login/LoginForm'
 import {useRouter} from 'next/router'
 import {toast} from 'react-toastify'
-import {authService} from '@/apis/AuthAPI'
+import {authService} from '@/apis/authAPI'
+import {useRecoilState} from 'recoil'
+import {loginState} from '@/recoil/loginState'
+// import {useRecoilState, useRecoilValue, useSetRecoilState} from 'recoil'
+// import {bookingWishlist} from '@/recoil/bookingWishlist'
 
-const index = () => {
+const Login = () => {
+  // const [bookingWish, setBookingWish] = useRecoilState(bookingWishlist)
+  const [isLogin, setIsLogin] = useRecoilState(loginState)
+
   const [error, setError] = useState(false)
+  const [saveId, setSaveId] = useState(false)
+
   const router = useRouter()
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -19,6 +28,12 @@ const index = () => {
       email,
       password,
     }
+
+    // if (saveId) {
+    //   localStorage.setItem('email', email)
+    // } else {
+    //   localStorage.removeItem('email')
+    // }
 
     const [result, jwt] = await authService.Login(form)
     if (result === 200) {
@@ -34,13 +49,13 @@ const index = () => {
       <Wrapper>
         <Title>로그인</Title>
         <TapMenu />
-        <LoginForm onSubmit={onSubmit} />
+        <LoginForm onSubmit={onSubmit} setSaveId={setSaveId} saveId={saveId} />
       </Wrapper>
     </Container>
   )
 }
 
-export default index
+export default Login
 
 const Container = styled.div`
   display: flex;
