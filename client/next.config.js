@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  images: {
+    domains: ['moongtel-imgs.s3.ap-northeast-2.amazonaws.com'],
+  },
   reactStrictMode: true,
   swcMinify: true,
   compiler: {
@@ -11,7 +14,6 @@ const nextConfig = {
       issuer: /\.[jt]sx?$/,
       use: ['@svgr/webpack'],
     })
-
     return config
   },
 }
