@@ -1,5 +1,7 @@
-import React from 'react'
+import React, {useState} from 'react'
+import {ToastContainer} from 'react-toastify'
 import styled from 'styled-components'
+import Adversting from '../\bAdversting/Adversting'
 import Header from './Header/Header'
 
 interface Props {
@@ -7,13 +9,18 @@ interface Props {
 }
 
 function Layout({children}: Props) {
+  const [AddOpen, setAddOpen] = useState(true)
   return (
-    <LayOutContainer>
-      <Box>
-        <Header />
-        {children}
-      </Box>
-    </LayOutContainer>
+    <>
+      {AddOpen && <Adversting setAddOpen={setAddOpen} />}
+      <LayOutContainer>
+        <Box>
+          <Header />
+          {children}
+        </Box>
+      </LayOutContainer>
+      <ToastContainer />
+    </>
   )
 }
 

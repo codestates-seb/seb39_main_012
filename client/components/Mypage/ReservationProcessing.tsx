@@ -3,7 +3,11 @@ import React from 'react'
 import styled from 'styled-components'
 import {MdKeyboardArrowRight} from 'react-icons/md'
 
-function ReservationProcessing() {
+interface Props {
+  count: number
+}
+
+function ReservationProcessing({count}: Props) {
   return (
     <Container>
       <Content>
@@ -28,7 +32,7 @@ function ReservationProcessing() {
         <MdKeyboardArrowRight />
       </IconBox>
       <Content>
-        <Count>0</Count>
+        <Count>{count}</Count>
         <Title>예약완료</Title>
       </Content>
     </Container>
@@ -44,6 +48,7 @@ const Container = styled.div`
   width: 100%;
   height: 100%;
   background-color: ${colors.grey1};
+  padding: 10px 0;
 `
 
 const Content = styled.div`

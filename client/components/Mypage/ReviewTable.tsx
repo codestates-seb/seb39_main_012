@@ -1,13 +1,29 @@
+import {reviewService} from '@/apis/ReviewAPI'
+import {dataState} from '@/recoil/mypage'
 import {colors} from '@/styles/colors'
+import {flexCenter} from '@/styles/css'
+import {Review} from '@/types/mypage'
 import React, {useState} from 'react'
+import {toast} from 'react-toastify'
+import {useRecoilState} from 'recoil'
 import styled from 'styled-components'
-import AddReviewModal from './AddReviewModal'
+import Pagination from '../CeoPage/Pagination'
+import EditReviewModal from './EditReviewModal'
 
-function ReviewTable() {
+interface Props {
+  reviews: Review[]
+  username: string
+}
+
+function ReviewTable({reviews, username}: Props) {
+  const [isChange, setIsChange] = useRecoilState(dataState)
   const [isOpen, setIsOpen] = useState(false)
+  const [limit, setLimit] = useState(5)
+  const [page, setPage] = useState(1)
+  const offset = (page - 1) * limit // offset = 시작점
   return (
     <ReviewTableBox>
-      {isOpen && <AddReviewModal setIsOpen={setIsOpen} />}
+      {isOpen && <EditReviewModal setIsOpen={setIsOpen} />}
       <TableHead>
         <TableHeadNum>번호</TableHeadNum>
         <TableHeadClassfic>분류</TableHeadClassfic>
@@ -16,18 +32,44 @@ function ReviewTable() {
         <TableHeadDate>작성일</TableHeadDate>
       </TableHead>
       <TableBody>
-        <TableTr>
-          <TableBodyNum>1</TableBodyNum>
-          <TableBodyClassfic>호텔</TableBodyClassfic>
-          <TableBodyTitle>호텔이 너무 좋아서 편안하게 여행 갔다가 왔어요</TableBodyTitle>
-          <TableBodyWrite>김견주</TableBodyWrite>
-          <TableBodyDate>2021.08.01</TableBodyDate>
-          <TableButtonBox>
-            <button onClick={() => setIsOpen(true)}>수정</button>
-            <button>삭제</button>
-          </TableButtonBox>
-        </TableTr>
+        {reviews.length === 0 ? (
+          <NoContent>작성된 리뷰가 없습니다.</NoContent>
+        ) : (
+          reviews.slice(offset, offset + limit).map((review: Review, idx: number) => (
+            <TableTr key={review.id}>
+              <TableBodyNum>{idx + 1}</TableBodyNum>
+              <TableBodyClassfic>호텔</TableBodyClassfic>
+              <TableBodyTitle>{review.title}</TableBodyTitle>
+              <TableBodyWrite>{username}</TableBodyWrite>
+              <TableBodyDate>{String(review.createdAt).slice(0, 10)}</TableBodyDate>
+              <TableButtonBox>
+                <button
+                  onClick={() => {
+                    console.log(review)
+                    setIsOpen(true)
+                  }}
+                >
+                  수정
+                </button>
+                <button
+                  onClick={async () => {
+                    if (window.confirm('정말 삭제하시겠습니까?')) {
+                      const result = await reviewService.deleteReview(review.id)
+                      if (result.status === 200) {
+                        toast.success('리뷰가 삭제되었습니다.')
+                        setIsChange(!isChange)
+                      }
+                    }
+                  }}
+                >
+                  삭제
+                </button>
+              </TableButtonBox>
+            </TableTr>
+          ))
+        )}
       </TableBody>
+      <Pagination total={reviews.length} limit={limit} page={page} setPage={setPage} />
     </ReviewTableBox>
   )
 }
@@ -135,4 +177,13 @@ const TableButtonBox = styled.div`
   @media (max-width: 768px) {
     width: 25%;
   }
+`
+
+const NoContent = styled.div`
+  ${flexCenter};
+  margin-top: 25px;
+  width: 90%;
+  font-size: 20px;
+  color: gray;
+  height: 50px;
 `

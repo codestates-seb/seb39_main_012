@@ -1,1 +1,2 @@
-export const SERVER_URL = `http://52.79.115.169:8080`
+export const SERVER_URL = `https://moontel-api.shop:8080`
+export const TOKEN = `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkenBybzAzMjdAdGVzdC5jb20iLCJpZCI6MzEsImV4cCI6MTY2NTcxODY0MiwiZW1haWwiOiJkenBybzAzMjdAdGVzdC5jb20iLCJ1c2VybmFtZSI6InRlc3RDdXN0b21lclVzZXIifQ.Y3vbTnxNcauIobMMMO39wUQf9xiLV165aneUf7PyOGsJJiVpbH6wPlupVr1m_0heetRjOiafOSg6COGNltzTeA`
