@@ -58,24 +58,4 @@ public class CustomerController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
-    // 고객 정보 수정 API
-    @PatchMapping("/update")
-    public ResponseEntity updateCustomer(@AuthenticationPrincipal PrincipalDetails principalDetails,
-                                         @RequestPart(value = "dto") CustomerUpdateRequestDto dto,
-                                         @RequestPart(value = "file") MultipartFile file) {
-        Long userId = principalDetails.getUsers().getId();
-
-        String imgUrl = awsS3Service.singleUploadFile(file);
-
-        usersService.updateCustomer(userId, dto, imgUrl);
-
-        UsersMessageResponseDto response =
-                UsersMessageResponseDto
-                        .builder()
-                        .message("수정 완료..!")
-                        .build();
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
 }

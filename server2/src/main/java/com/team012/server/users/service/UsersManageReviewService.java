@@ -54,8 +54,8 @@ public class UsersManageReviewService {
 
         List<ReviewInfoDto> response = new ArrayList<>();
 
-        for (int i = 0; i < reviewList.size(); i++) {
-            Posts posts = postsRepository.findById(reviewList.get(i).getPostsId()).orElse(null);
+        for (Review review : reviewList) {
+            Posts posts = postsRepository.findById(review.getPostsId()).orElse(null);
             Company company = companyRepository.findById(Objects.requireNonNull(posts).getCompanyId()).orElse(null);
             ReservationList reservation = reservationListRepository.findByCompanyId(Objects.requireNonNull(company).getId());
 
@@ -66,17 +66,16 @@ public class UsersManageReviewService {
                     .totalPrice(reservation.getTotalPrice())
                     .build();
 
-
             ReviewInfoDto reviewInfoDto = ReviewInfoDto
                     .builder()
-                    .createdAt(reviewList.get(i).getCreatedAt().format(DateTimeFormatter.ISO_DATE))
-                    .modifiedAt(reviewList.get(i).getModifiedAt().format(DateTimeFormatter.ISO_DATE))
-                    .id(reviewList.get(i).getId())
-                    .title(reviewList.get(i).getTitle())
-                    .content(reviewList.get(i).getContent())
-                    .score(reviewList.get(i).getScore())
-                    .userId(reviewList.get(i).getUserId())
-                    .reviewImg(getListReviewImgList(reviewList.get(i).getId()))
+                    .createdAt(review.getCreatedAt().format(DateTimeFormatter.ISO_DATE))
+                    .modifiedAt(review.getModifiedAt().format(DateTimeFormatter.ISO_DATE))
+                    .id(review.getId())
+                    .title(review.getTitle())
+                    .content(review.getContent())
+                    .score(review.getScore())
+                    .userId(review.getUserId())
+                    .reviewImg(getListReviewImgList(review.getId()))
                     .companyInfo(postsReviewInfo)
                     .build();
 

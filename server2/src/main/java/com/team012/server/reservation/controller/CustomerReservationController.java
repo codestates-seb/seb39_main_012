@@ -10,6 +10,7 @@ import com.team012.server.reservation.dto.*;
 import com.team012.server.reservation.entity.ReservationList;
 import com.team012.server.reservation.service.CustomerReservationService;
 import com.team012.server.reservation.service.ReservationConfirmService;
+import com.team012.server.users.service.DogCardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,8 @@ public class CustomerReservationController {
     private final CustomerReservationService customerReservationService;
     private final PostsReservedListService postsReservedListService;
     private final ReservationConfirmService reservationConfirmService;
+
+    private final DogCardService dogCardService;
 
     //posts 상세 페이지 ---> 예약 상세 페이지로 이동
     @PostMapping("/{postsId}")

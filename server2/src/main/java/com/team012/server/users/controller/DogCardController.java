@@ -62,7 +62,7 @@ public class DogCardController {
     public ResponseEntity findCard(@PathVariable("dog-card-id") long dogCardId,
                                    @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-        DogCardResponseDto response = mapper.dogCardToDtoResponse(dogCardService.findMyDogCardById(dogCardId,principalDetails));
+        DogCardResponseDto response = mapper.dogCardToDtoResponse(dogCardService.findMyDogCardById(dogCardId, principalDetails));
         return new ResponseEntity<>(new SingleResponseDto(response), HttpStatus.OK);
     }
 
@@ -75,4 +75,13 @@ public class DogCardController {
 
         return new ResponseEntity<>("삭제 완료", HttpStatus.OK);
     }
+
+    // 유저가 가지고 있는 강아지 전체 조회
+    @GetMapping
+    public ResponseEntity findByUsersIdDogCard(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        Long userId = principalDetails.getUsers().getId();
+        List<DogCard> dogCardList = dogCardService.getListDogCard(userId);
+        return new ResponseEntity<>(dogCardList, HttpStatus.OK);
+    }
+
 }
