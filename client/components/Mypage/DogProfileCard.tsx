@@ -7,19 +7,35 @@ import {IoMdRemoveCircle} from 'react-icons/io'
 import {useRecoilState} from 'recoil'
 import {editOpenState} from '@/recoil/editOpen'
 import {DogCard} from '@/types/mypage'
-import {dogIdState} from '@/recoil/mypage'
+import {dataState, dogIdState} from '@/recoil/mypage'
+import {userService} from '@/apis/MyPageAPI'
+import {toast} from 'react-toastify'
 
 interface Props {
   dog: DogCard
 }
 
 function DogProfileCard({dog}: Props) {
+  const [isChange, setIsChange] = useRecoilState(dataState)
   const [, setEditOpen] = useRecoilState(editOpenState)
   const [, setDogId] = useRecoilState(dogIdState)
   return (
     <Container>
       <Buttons>
-        <DeleteButton onClick={() => console.log('삭제')}>
+        <DeleteButton
+          onClick={async () => {
+            if (window.confirm('정말 삭제하시겠습니까?')) {
+              const result = await userService.deleteMyDogById(dog.id)
+              console.log(result)
+              if (result.status === 200) {
+                setIsChange(!isChange)
+                toast.success('삭제되었습니다.')
+                return
+              }
+              toast.error('삭제에 실패했습니다.')
+            }
+          }}
+        >
           <IoMdRemoveCircle />
         </DeleteButton>
         <EditButton
@@ -222,6 +238,7 @@ const Buttons = styled.div`
 `
 
 const EditButton = styled.div`
+  z-index: 20;
   font-size: 20px;
   color: gray;
   cursor: pointer;

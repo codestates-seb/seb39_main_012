@@ -1,7 +1,7 @@
+// 반복문 돌 때 필요한 인자 타입
+
 export interface Mypage {
   users: Users
-  dogCardList: DogCard[]
-  reservationList: any[]
   reviewList: Review[]
 }
 
@@ -48,9 +48,46 @@ export interface EditDogCard {
 }
 
 export interface Review {
+  createdAt: Date
+  modifiedAt: Date
   id: number
+  title: string
   content: string
   score: number
   userId: number
   postsId: number
+}
+
+export interface Reservation {
+  reservedId: number
+  checkIn: Date
+  checkOut: Date
+  status: string
+  usersId: number
+  postsId: number
+  totalPrice: number
+  companyId: number
+  dogCount: number
+  reservationCode: string
+  dogIdList: number[]
+  userInfo: UserInfo
+}
+
+export interface UserInfo {
+  name: string
+  phone: string
+  email: string
+}
+
+export interface BeforeReservation {
+  roomPrice: number
+  title: string
+  url: string
+}
+
+export interface afterReservation {
+  postsId: number
+  roomPrice: number
+  title: string
+  url: string
 }

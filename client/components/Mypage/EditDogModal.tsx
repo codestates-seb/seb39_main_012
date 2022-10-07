@@ -8,8 +8,8 @@ import LabelInput from '../LabelInput/LabelInput'
 import LabelRadioButton from './LabelRadioButton'
 import {toast} from 'react-toastify'
 import {userService} from '@/apis/MyPageAPI'
-import {useRecoilValue} from 'recoil'
-import {dogIdState} from '@/recoil/mypage'
+import {useRecoilState, useRecoilValue} from 'recoil'
+import {dataState, dogIdState} from '@/recoil/mypage'
 import {EditDogCard} from '@/types/mypage'
 
 interface Props {
@@ -18,7 +18,7 @@ interface Props {
 
 function EditDogModal({setIsOpen}: Props) {
   const dogId = useRecoilValue(dogIdState)
-
+  const [isChange, setIsChange] = useRecoilState(dataState)
   const [selectedFile, setSelectedFile] = useState<any>()
   const [fileDataURL, setFileDataURL] = useState<any>(null)
 
@@ -158,6 +158,7 @@ function EditDogModal({setIsOpen}: Props) {
     if (result?.status === 201) {
       toast.success('등록되었습니다.')
       setIsOpen(false)
+      setIsChange(!isChange)
     }
   }
 

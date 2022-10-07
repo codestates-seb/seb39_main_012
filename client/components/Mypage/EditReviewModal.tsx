@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @next/next/no-img-element */
 import {colors} from '@/styles/colors'
@@ -10,16 +9,16 @@ import styled from 'styled-components'
 import {AiOutlineCamera} from 'react-icons/ai'
 import {toast} from 'react-toastify'
 import {reviewService} from '@/apis/ReviewAPI'
-import {dataState, postIdState} from '@/recoil/mypage'
-import {useRecoilState, useRecoilValue} from 'recoil'
+import {useRecoilState} from 'recoil'
+import {dataState} from '@/recoil/mypage'
 
 interface Props {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
+const imgUrl = 'https://www.qplace.kr/content/images/2021/09/9-14.jpg'
+
 function AddReviewModal({setIsOpen}: Props) {
-  const post = useRecoilValue(postIdState)
-  console.log(post)
   const [isChange, setIsChange] = useRecoilState(dataState)
   const [ratingValue, setRatingValue] = useState(2.5)
   const [selectedFile, setSelectedFile] = useState<any>([])
@@ -30,6 +29,7 @@ function AddReviewModal({setIsOpen}: Props) {
   })
 
   useEffect(() => {
+    console.log(selectedFile)
     let fileReader: FileReader,
       isCancel = false
     if (selectedFile.length > 0) {
@@ -40,7 +40,9 @@ function AddReviewModal({setIsOpen}: Props) {
           setFileDataURL([...fileDataURL, result])
         }
       }
-
+      // selectedFile.forEach((file: any) => {
+      //   fileReader.readAsDataURL(file)
+      // })
       fileReader.readAsDataURL(selectedFile[selectedFile.length - 1])
     }
     return () => {
@@ -86,12 +88,12 @@ function AddReviewModal({setIsOpen}: Props) {
       score: ratingCalc(ratingValue),
       title: form.title,
       content: form.content,
-      postsId: post.postsId,
+      // postsId: post.postsId,
     }
 
     formData.append('dto', new Blob([JSON.stringify(request)], {type: 'application/json'}))
 
-    const result = await reviewService.createReview(formData)
+    const result = await reviewService.editReview(formData, 1)
     console.log(result)
 
     if (result.status === 201) {
@@ -103,15 +105,11 @@ function AddReviewModal({setIsOpen}: Props) {
 
   return (
     <ModalContainer onClick={() => setIsOpen(false)}>
-      <Modal
-        onClick={(e) => e.stopPropagation()}
-        onSubmit={handleSubmit}
-        encType="multipart/form-data"
-      >
+      <Modal onClick={(e) => e.stopPropagation()} onSubmit={handleSubmit}>
         <Title>상품 후기</Title>
         <ProductInfo>
           <ImgBox>
-            <img src={post.url} alt="" />
+            <img src={imgUrl} alt="" />
           </ImgBox>
           <ContentBox>
             <Rating
@@ -119,8 +117,8 @@ function AddReviewModal({setIsOpen}: Props) {
               ratingValue={ratingValue}
               fillColor={colors.mainColor}
             />
-            <ProductName>{post.title}</ProductName>
-            <ProductPrice>{toLocalScale(post.roomPrice)}원 / 2박</ProductPrice>
+            <ProductName>JW메리어트 멍멍스퀘어, 서울</ProductName>
+            <ProductPrice>{toLocalScale(30000)}원 / 2박</ProductPrice>
           </ContentBox>
         </ProductInfo>
         <TextAreaBox>

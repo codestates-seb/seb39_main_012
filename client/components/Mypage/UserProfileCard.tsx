@@ -6,16 +6,18 @@ import {flexCenter} from '@/styles/css'
 import {useRecoilState} from 'recoil'
 import {addOpenState} from '@/recoil/editOpen'
 import {Users} from '@/types/mypage'
+import {useRouter} from 'next/router'
 
 interface Props {
   user: Users
 }
 
 function UserProfileCard({user}: Props) {
+  const router = useRouter()
   const [, setAddOpen] = useRecoilState(addOpenState)
   return (
     <Container>
-      <UserInfoBoxs>
+      <UserInfoBoxs onClick={() => router.push('profile_edit')}>
         <UserImgBox>
           <img
             src={'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png'}
@@ -107,6 +109,7 @@ const UserName = styled.div`
   gap: 3px;
 
   span {
+    white-space: nowrap;
     font-weight: lighter;
     font-size: 15px;
   }

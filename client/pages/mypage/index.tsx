@@ -6,45 +6,73 @@ import DogCardSwiper from '@/components/Mypage/DogCardSwiper'
 import ReservationProcessing from '@/components/Mypage/ReservationProcessing'
 import ReservationSwiper from '@/components/Mypage/ReservationSwiper'
 import ReviewTable from '@/components/Mypage/ReviewTable'
-import {ToastContainer} from 'react-toastify'
 import {useRecoilState} from 'recoil'
-import {addOpenState, editOpenState} from '@/recoil/editOpen'
+import {addOpenState, addReviewState, editOpenState} from '@/recoil/editOpen'
 import AddDogModal from '@/components/Mypage/AddDogModal'
 import {userService} from '@/apis/MyPageAPI'
-import {DogCard, Users} from '@/types/mypage'
+import {
+  afterReservation,
+  BeforeReservation,
+  DogCard,
+  Reservation,
+  Review,
+  Users,
+} from '@/types/mypage'
 import EditDogModal from '@/components/Mypage/EditDogModal'
 import {flexCenter} from '@/styles/css'
-import Dialog from '@/components/Dialog/Dialog'
+import {dataState, userInfoState} from '@/recoil/mypage'
+import ReservedSwiper from '@/components/Mypage/ReservedSwiper'
+import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner'
+import AddReviewModal from '@/components/Mypage/AddReviewModal'
 
 function MyPage() {
+  const [isChange] = useRecoilState(dataState)
   const [editOpen, setEditOpen] = useRecoilState(editOpenState)
   const [addOpen, setAddOpen] = useRecoilState(addOpenState)
+  const [addReview, setAddReview] = useRecoilState(addReviewState)
   const [userInfo, setUserInfo] = useState<Users>()
+  const [userInfo2, setUserInfo2] = useRecoilState(userInfoState)
+
   const [dogs, setDogs] = useState<DogCard[]>()
-  // const [dogs, setDogs] = useState<DogCard[]>()
+  const [reviews, setReviews] = useState<Review[]>()
+  const [beforeReservations, setBeforeReservations] = useState<BeforeReservation[]>()
+  const [afterReservations, setAfterReservations] = useState<afterReservation[]>()
 
   useEffect(() => {
-    userService.getMyPage().then((res) => {
-      setUserInfo(res.users)
-      setDogs(res.dogCardList)
-      console.log(res.dogCardList)
-    })
-  }, [editOpen, addOpen])
+    ;(async () => {
+      const userInfoPromise = userService.getMyPage()
+      const beforeReviewPromise = userService.beforeReservations()
+      const afterReviewPromise = userService.afterReservations()
 
-  if (!userInfo || !dogs) {
-    return <div>로딩중</div>
-  }
+      const [userInfo, beforeReview, afterReview] = await Promise.all([
+        userInfoPromise,
+        beforeReviewPromise,
+        afterReviewPromise,
+      ])
+      console.log('userInfo', userInfo)
+      setUserInfo(userInfo.data.users)
+      setUserInfo2({
+        name: userInfo.data.users.username,
+        email: userInfo.data.users.email,
+        phone: userInfo.data.users.phone,
+      })
+      setDogs(userInfo.data.users.dogCardList)
+      setReviews(userInfo.data.reviewList)
+      setBeforeReservations(beforeReview.data.data)
+      setAfterReservations(afterReview.data.data)
+      console.info(beforeReview.data.data)
+      console.info(afterReview.data.data)
+    })()
+  }, [isChange])
+
+  if (!userInfo || !dogs || !reviews || !beforeReservations || !afterReservations)
+    return <LoadingSpinner />
 
   return (
     <Container>
-      <ToastContainer />
       {editOpen && <EditDogModal setIsOpen={setEditOpen} />}
       {addOpen && <AddDogModal setIsOpen={setAddOpen} />}
-      {/* <Dialog
-        title="정말 삭제하시겠습니까?"
-        confirm={() => console.log('삭제')}
-        cancel={() => console.log('취소')}
-      /> */}
+      {addReview && <AddReviewModal setIsOpen={setAddReview} />}
       <Title>마이페이지</Title>
       <SectionTitle title={'견주님 & 반려견 정보'} />
       <UserAndDogBox>
@@ -59,18 +87,18 @@ function MyPage() {
       </UserAndDogBox>
       <SectionTitle title={'예약처리 현황'} />
       <ReservationBox>
-        <ReservationProcessing />
+        <ReservationProcessing count={beforeReservations.length} />
       </ReservationBox>
       <SectionTitle title={'예약된 호캉스 내역'} />
       <ReservatedBox>
-        <ReservationSwiper />
+        <ReservationSwiper beforeReservations={beforeReservations} />
       </ReservatedBox>
       <SectionTitle title={'다녀온 호캉스 내역'} />
       <WentToBox>
-        <ReservationSwiper />
+        <ReservedSwiper afterReservations={afterReservations} />
       </WentToBox>
       <SectionTitle title={'리뷰관리'} />
-      <ReviewTable />
+      <ReviewTable reviews={reviews} username={userInfo.username} />
     </Container>
   )
 }

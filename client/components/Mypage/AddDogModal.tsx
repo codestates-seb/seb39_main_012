@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @next/next/no-img-element */
 import {colors} from '@/styles/colors'
 import {flexCenter} from '@/styles/css'
@@ -8,12 +9,15 @@ import LabelInput from '../LabelInput/LabelInput'
 import LabelRadioButton from './LabelRadioButton'
 import {toast} from 'react-toastify'
 import {userService} from '@/apis/MyPageAPI'
+import {useRecoilState} from 'recoil'
+import {dataState} from '@/recoil/mypage'
 
 interface Props {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 function AddDogModal({setIsOpen}: Props) {
+  const [isChange, setIsChange] = useRecoilState(dataState)
   const [selectedFile, setSelectedFile] = useState<any>()
   const [fileDataURL, setFileDataURL] = useState<any>(null)
 
@@ -95,8 +99,6 @@ function AddDogModal({setIsOpen}: Props) {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    // const response = await axios.post('http://localhost:3000/api/file/upload', formData)
-
     if (!dogInfo.name || !dogInfo.age || !dogInfo.weight || !dogInfo.type) {
       return toast.error('모든 항목을 입력해주세요.')
     }
@@ -137,6 +139,7 @@ function AddDogModal({setIsOpen}: Props) {
     if (result?.status === 201) {
       toast.success('등록되었습니다.')
       setIsOpen(false)
+      setIsChange(!isChange)
     }
   }
 

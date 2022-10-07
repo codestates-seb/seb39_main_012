@@ -1,35 +1,28 @@
-import {addReviewState} from '@/recoil/editOpen'
-import {afterReservation, BeforeReservation} from '@/types/mypage'
+import {BeforeReservation} from '@/types/mypage'
 import {toLocalScale} from '@/utils/util'
 import React from 'react'
-import {useRecoilState} from 'recoil'
 import styled from 'styled-components'
 import CardImage from '../CardImage/CardImage'
-import AddReviewModal from './AddReviewModal'
 import ReservedTag from './ReservedTag'
 
-const imgUrl = 'https://cdn.imweb.me/upload/S201807025b39d1981b0b0/1fc55d055098b.jpg'
-
 interface Props {
-  reservation: afterReservation
+  reservation: BeforeReservation
 }
 
-function ReservedCard({reservation}: Props) {
-  const [addReview, setAddReview] = useRecoilState(addReviewState)
+function ReservationCard({reservation}: Props) {
   return (
     <Contaienr>
-      {/* {addReview && <AddReviewModal setIsOpen={setAddReview} />} */}
       <CardImage mode="post" imgUrl={reservation.url}></CardImage>
       <Title>{reservation.title}</Title>
       <Content>
         <Price>{toLocalScale(reservation.roomPrice)}원 / 1박</Price>
-        <ReservedTag title={'리뷰달기'} reservation={reservation} />
+        <ReservedTag title={'예약완료'} />
       </Content>
     </Contaienr>
   )
 }
 
-export default ReservedCard
+export default ReservationCard
 
 const Contaienr = styled.div`
   display: flex;
