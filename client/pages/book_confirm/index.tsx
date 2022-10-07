@@ -1,13 +1,11 @@
 import ConfirmCardSwiper from '@/components/BookConfirm/ConfirmCardSwiper'
 import SectionTitle from '@/components/StoreDetail/SectionTitle'
 import React from 'react'
-import {ToastContainer} from 'react-toastify'
 import styled from 'styled-components'
 
 function BookConfirm() {
   return (
     <Container>
-      <ToastContainer />
       <Title>예약내역</Title>
       <SectionTitle title={'예약자정보'} />
       <DogCardBoxs>
@@ -38,6 +36,7 @@ const DogCardBoxs = styled.div`
   display: flex;
   width: 100%;
   margin-bottom: 30px;
+
   .mySwiper {
     padding-left: 3px;
     padding-top: 3px;

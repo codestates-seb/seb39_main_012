@@ -27,7 +27,7 @@ const getPosts = async (page: number) => {
 const getPostsTitle = async (page: number, title: string) => {
   try {
     const result = await postInstance.get<PostsRespose>(
-      `/v1/posts/title?page=${page}&size=12&title=${encodeURI(title)}`
+      `/v1/posts/search-title?page=${page}&size=12&title=${encodeURI(title)}`
     )
     return result.data
   } catch (e) {
@@ -41,7 +41,7 @@ const getPostsTitle = async (page: number, title: string) => {
 const getPostsTag = async (page: number, tag: string) => {
   try {
     const result = await postInstance.get<PostsRespose>(
-      `v1/posts/tag?page=${page}&size=12&tag=${encodeURI(tag)}`
+      `/v1/posts/search-tag?page=${page}&size=12&tag=${encodeURI(tag)}`
     )
     return result.data
   } catch (e) {
@@ -55,7 +55,7 @@ const getPostsTag = async (page: number, tag: string) => {
 const getPostsAddress = async (page: number, address: string) => {
   try {
     const result = await postInstance.get<PostsRespose>(
-      `/v1/posts/address?page=${page}&size=12&address=${address}`
+      `/v1/posts/search-address?page=${page}&size=12&address=${address}`
     )
     return result.data
   } catch (e) {
