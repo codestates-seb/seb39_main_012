@@ -24,6 +24,11 @@ function SearchBar() {
       return toast.error('모든 항목을 입력해주세요.')
     }
 
+    if (value.local) {
+      route.push(`/search?address=${value.local}`)
+      return
+    }
+
     route.push(
       `/search?local=${value.local}&checkin=${value.checkin}&checkout=${value.checkout}&dogSize=${value.dogSize}`
     )
@@ -43,6 +48,14 @@ function SearchBar() {
         <DateBox>
           <DateDropDown
             onClick={() => {
+              if (value.checkin.length > 5 && value.checkout.length > 5) {
+                setValue({
+                  ...value,
+                  checkin: '체크인',
+                  checkout: '체크아웃',
+                })
+              }
+
               setDropdown((pre) => ({...pre, dateRangeOpen: !pre.dateRangeOpen}))
             }}
           >
@@ -52,6 +65,9 @@ function SearchBar() {
             {dropdown.dateRangeOpen && (
               <DateModal
                 onClick={(e) => {
+                  if (value.checkin.length > 5 || value.checkout.length > 5) {
+                    return
+                  }
                   e.stopPropagation()
                 }}
               >
@@ -128,6 +144,7 @@ const TextBox = styled.div`
   font-size: 15px;
 
   input {
+    text-align: center;
     width: 80%;
     height: 50%;
     border: none;

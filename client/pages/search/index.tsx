@@ -3,7 +3,7 @@ import SearchBar from '@/components/Home/SearchBar'
 import {colors} from '@/styles/colors'
 import React, {useEffect, useState} from 'react'
 import styled from 'styled-components'
-import {postService} from '@/apis/postAPI'
+import {postService} from '@/apis/PostAndSearchAPI'
 import {Post} from '@/types/post'
 import {useRouter} from 'next/router'
 import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner'
@@ -11,6 +11,8 @@ import useIntersect from '@/hooks/useIntersect'
 import {flexCenter} from '@/styles/css'
 import CategoryTag from '@/components/Home/CategoryTag'
 import {categoryTags} from '@/utils/options/options'
+import Image from 'next/image'
+import NoSearchImg from '@/public/images/NoSearch.png'
 
 function Search() {
   const router = useRouter()
@@ -82,10 +84,13 @@ function Search() {
         ))}
       </CategoryBox>
       <PostCardBox>
-        {posts.length === 0 && <div>검색결과가 없습니다.</div>}
-        {posts.map((post: Post) => (
-          <PostCard post={post} key={post.id} />
-        ))}
+        {posts.length === 0 ? (
+          <NoContent>
+            <Image src={NoSearchImg} alt="NoSearchImg" />
+          </NoContent>
+        ) : (
+          posts.map((post: Post) => <PostCard post={post} key={post.id} />)
+        )}
       </PostCardBox>
       {page > totalPage ? (
         <div></div>
@@ -144,7 +149,6 @@ const CategoryBox = styled.div`
 const PostCardBox = styled.div`
   width: 100%;
   display: flex;
-  justify-content: space-around;
   flex-wrap: wrap;
   gap: 15px;
 `
@@ -155,5 +159,10 @@ const SpinnerBox = styled.div`
 
 const Intersection = styled.div`
   height: 5px;
+  width: 100%;
+`
+
+const NoContent = styled.div`
+  ${flexCenter}
   width: 100%;
 `

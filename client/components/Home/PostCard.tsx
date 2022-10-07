@@ -25,7 +25,7 @@ function PostCard({post}: Props) {
           <GoLocation />
           <span>{post.address}</span>
         </Location>
-        <Title>{post.title}</Title>
+        <Title>{post.title.length < 37 ? post.title : post.title.slice(0, 38) + '...'}</Title>
         <Price>{toLocalScale(post.minPrice)}원 / 박</Price>
         <Rating>
           <AiFillStar />
@@ -112,16 +112,15 @@ const Rating = styled.div`
   align-items: center;
   gap: 8px;
   color: ${colors.mainColor};
-  margin-top: 15px;
+  margin-top: 8px;
 
   @media (max-width: 500px) {
-    margin-top: 2px;
+    margin-top: 1px;
   }
 
   span {
     font-family: 'Inter';
     font-style: normal;
-    font-weight: 800;
     font-size: 20px;
     line-height: 24px;
     color: black;
