@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {DogCard, Mypage} from '@/types/mypage'
 import axios from 'axios'
-import {SERVER_URL, TOKEN} from '.'
+import {SERVER_URL} from '.'
+import LocalStorage from '@/utils/util/localStorage'
 
 const authInstance = axios.create({
   baseURL: SERVER_URL,
   headers: {
-    Authorization: `Bearer ${TOKEN}`,
+    Authorization: `Bearer ${LocalStorage.getItem('accessToken')}`,
   },
 })
 

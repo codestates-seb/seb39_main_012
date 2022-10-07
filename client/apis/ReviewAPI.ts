@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import LocalStorage from '@/utils/util/localStorage'
 import axios from 'axios'
-import {SERVER_URL, TOKEN} from '.'
+import {SERVER_URL} from '.'
 
 const authInstance = axios.create({
   baseURL: SERVER_URL,
   headers: {
     'Content-Type': 'multipart/form-data',
-    Authorization: `Bearer ${TOKEN}`,
+    Authorization: `Bearer ${LocalStorage.getItem('accessToken')}`,
   },
 })
 

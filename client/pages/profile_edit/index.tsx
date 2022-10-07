@@ -11,6 +11,7 @@ import {BsPlusCircleFill} from 'react-icons/bs'
 import {toast} from 'react-toastify'
 import {useRecoilState} from 'recoil'
 import styled from 'styled-components'
+import LocalStorage from '@/utils/util/localStorage'
 
 function ProfileEdit() {
   const router = useRouter()
@@ -68,11 +69,12 @@ function ProfileEdit() {
     formData.append('dto', new Blob([JSON.stringify(form)], {type: 'application/json'}))
 
     const result = await userService.userProfileEdit(formData)
-    // const jwt = result.data.etc.split(' ')[1]
+    const jwt = result.data.etc.split(' ')[1]
+    LocalStorage.setItem('accessToken', jwt)
 
     if (result.status === 200) {
       toast.success('프로필 수정이 완료되었습니다.')
-      // router.push('/mypage')
+      router.push('/mypage')
     }
   }
 

@@ -18,7 +18,7 @@ interface Props {
 function ReviewTable({reviews, username}: Props) {
   const [isChange, setIsChange] = useRecoilState(dataState)
   const [isOpen, setIsOpen] = useState(false)
-  const [limit, setLimit] = useState(5)
+  const [limit] = useState(5)
   const [page, setPage] = useState(1)
   const offset = (page - 1) * limit // offset = 시작점
   return (

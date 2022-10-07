@@ -23,8 +23,8 @@ const Book = () => {
 
   useEffect(() => {
     userService.getMyPage().then((result) => {
-      setUserInfo(result.users)
-      setDogsInfo(result.users.dogCardList)
+      setUserInfo(result.data.users)
+      setDogsInfo(result.data.users.dogCardList)
     })
 
     const tempBooking = JSON.parse(LocalStorage.getItem('tempBooking') || (null as any))

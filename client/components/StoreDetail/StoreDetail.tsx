@@ -19,7 +19,7 @@ import {BiPlusCircle} from 'react-icons/bi'
 import {BiMinusCircle} from 'react-icons/bi'
 import AuthButton from '../AuthButton/AuthButton'
 import {toast} from 'react-toastify'
-import {postService} from '@/apis/postAPI'
+
 import {PostById} from '@/types/post'
 import CompanyImageSlider from './CompanyImageSlider'
 import CompanyTitleSection from './CompanyTitleSection'
@@ -27,6 +27,7 @@ import {availableServices} from '@/utils/options/options'
 import LocalStorage from '@/utils/util/localStorage'
 import {bookingService} from '@/apis/bookingAPI'
 import router from 'next/router'
+import {postService} from '@/apis/PostAndSearchAPI'
 
 export const getDayOfDate = (reservationDate: string) => {
   const date = ['일', '월', '화', '수', '목', '금', '토']

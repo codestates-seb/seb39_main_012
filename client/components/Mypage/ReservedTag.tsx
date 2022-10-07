@@ -13,7 +13,7 @@ interface Props {
 
 function ReservedTag({title, reservation}: Props) {
   const [, setPostId] = useRecoilState(postIdState)
-  const [addReview, setAddReview] = useRecoilState(addReviewState)
+  const [, setAddReview] = useRecoilState(addReviewState)
   return (
     <Contaienr
       title={title}

@@ -2,9 +2,6 @@ import React, {useState} from 'react'
 import styled from 'styled-components'
 import StoreDetail from '@/components/StoreDetail/StoreDetail'
 import Footer from '@/components/Layout/Footer/Footer'
-import {GetServerSideProps, InferGetServerSidePropsType} from 'next'
-import {postService} from '@/apis/postAPI'
-import {PostById} from '@/types/post'
 import {useRouter} from 'next/router'
 
 // export const getServerSideProps = async (context: {query: {id: any}}) => {

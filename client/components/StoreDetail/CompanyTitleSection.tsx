@@ -6,7 +6,7 @@ import {AiFillHeart} from 'react-icons/ai'
 import {AiOutlineHeart} from 'react-icons/ai'
 import {FiShare} from 'react-icons/fi'
 import {PostById} from '@/types/post'
-import {authPostService} from '@/apis/authPostAPI'
+import {authPostService} from '@/apis/AuthPostAPI'
 
 interface Props {
   companyAddress: string

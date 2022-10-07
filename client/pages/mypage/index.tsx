@@ -10,14 +10,7 @@ import {useRecoilState} from 'recoil'
 import {addOpenState, addReviewState, editOpenState} from '@/recoil/editOpen'
 import AddDogModal from '@/components/Mypage/AddDogModal'
 import {userService} from '@/apis/MyPageAPI'
-import {
-  afterReservation,
-  BeforeReservation,
-  DogCard,
-  Reservation,
-  Review,
-  Users,
-} from '@/types/mypage'
+import {afterReservation, BeforeReservation, DogCard, Review, Users} from '@/types/mypage'
 import EditDogModal from '@/components/Mypage/EditDogModal'
 import {flexCenter} from '@/styles/css'
 import {dataState, userInfoState} from '@/recoil/mypage'

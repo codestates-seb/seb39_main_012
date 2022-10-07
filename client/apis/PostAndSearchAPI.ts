@@ -1,4 +1,4 @@
-import {PageInfo, Post} from '@/types/post'
+import {PageInfo, Post, PostById} from '@/types/post'
 import axios from 'axios'
 import {SERVER_URL} from '.'
 
@@ -66,9 +66,22 @@ const getPostsAddress = async (page: number, address: string) => {
   }
 }
 
+const getPostById = async (id: number) => {
+  try {
+    const result = await postInstance.get<PostById>(`/v1/posts/${id}?page=1&size=10`)
+    return result.data
+  } catch (e) {
+    if (e instanceof Error) {
+      throw new Error(e.message + '_' + '상세 포스트 조회 실패')
+    }
+    throw new Error('상세 포스트 조회 실패')
+  }
+}
+
 export const postService = {
   getPosts,
   getPostsTitle,
   getPostsTag,
   getPostsAddress,
+  getPostById,
 }
