@@ -8,11 +8,24 @@ import Image from 'next/image'
 import SearchBar from './SearchBar'
 import {GiHamburgerMenu} from 'react-icons/gi'
 import {BsSearch} from 'react-icons/bs'
+import {FaUserCircle} from 'react-icons/fa'
+import {HiOutlineBell} from 'react-icons/hi'
+import {RiHeart3Line} from 'react-icons/ri'
+import {useEffect} from 'react'
+import LocalStorage from '@/utils/util/localStorage'
 
 const Header = () => {
   const router = useRouter()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isLogin, setIsLogin] = useState(false)
+
+  useEffect(() => {
+    if (LocalStorage.getItem('accessToken')) {
+      setIsLogin(true)
+    } else {
+      setIsLogin(false)
+    }
+  }, [])
 
   return (
     <Container>
@@ -44,15 +57,53 @@ const Header = () => {
           </DesktopHeaderWrapper>
         </HeaderSearch>
         <HeaderMenus>
-          <Link href="/login">
-            <HeaderMenu>로그인</HeaderMenu>
-          </Link>
-          <Link href="/signup">
-            <HeaderMenu>회원가입</HeaderMenu>
-          </Link>
-          <Link href="/login">
-            <HeaderMenu>예약내역</HeaderMenu>
-          </Link>
+          {isLogin ? (
+            <Link href="/">
+              <IconWrapper>
+                <FaUserCircle />
+              </IconWrapper>
+            </Link>
+          ) : (
+            <>
+              <Link href="/login">
+                <HeaderMenu>로그인</HeaderMenu>
+              </Link>
+              <MobileMenus>
+                <Link href="/login">
+                  <MobileMenu onClick={() => setIsMenuOpen(!isMenuOpen)}>로그인</MobileMenu>
+                </Link>
+                <Link href="/signup">
+                  <MobileMenu onClick={() => setIsMenuOpen(!isMenuOpen)}>회원가입</MobileMenu>
+                </Link>
+                <Link href="/login">
+                  <MobileMenu onClick={() => setIsMenuOpen(!isMenuOpen)}>예약내역</MobileMenu>
+                </Link>
+              </MobileMenus>
+            </>
+          )}
+          {isLogin ? (
+            <Link href="/">
+              <IconWrapper>
+                <HiOutlineBell />
+              </IconWrapper>
+            </Link>
+          ) : (
+            <Link href="/signup">
+              <HeaderMenu>회원가입</HeaderMenu>
+            </Link>
+          )}
+
+          {isLogin ? (
+            <Link href="/l">
+              <IconWrapper>
+                <RiHeart3Line />
+              </IconWrapper>
+            </Link>
+          ) : (
+            <Link href="/login">
+              <HeaderMenu>예약내역</HeaderMenu>
+            </Link>
+          )}
         </HeaderMenus>
         <HamburgerBox onClick={() => setIsMenuOpen(!isMenuOpen)}>
           <GiHamburgerMenu className="HamburgerMenuIcon" />
@@ -167,6 +218,8 @@ const HeaderMenus = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  /* justify-content: center; */
+  gap: 3rem;
   font-weight: bold;
   cursor: pointer;
 
@@ -247,3 +300,15 @@ const MobileMenu = styled.div`
     border-bottom: none;
   }
 `
+
+const IconWrapper = styled.div`
+  font-size: 3.5rem;
+  color: #9e9e9e;
+  cursor: pointer;
+
+  &:hover {
+    color: ${colors.mainColor};
+  }
+`
+
+const LinkWrapper = styled.div``
