@@ -27,12 +27,22 @@ function CeoMyPage() {
         ceoEmail: res.email,
         ceoPhone: res.phone,
       })
-      setPost({
-        id: res.postsInfo.id,
-        title: res.postsInfo.title,
-        content: res.postsInfo.content,
-        thumbnail: res.postsInfo.postsImgList[0].imgUrl,
-      })
+      if (res.postsInfo) {
+        setPost({
+          id: res.postsInfo.id,
+          title: res.postsInfo.title,
+          content: res.postsInfo.content,
+          thumbnail: res.postsInfo.postsImgList[0].imgUrl,
+        })
+      } else {
+        setPost({
+          id: 0,
+          title: '',
+          content: '',
+          thumbnail: '',
+        })
+      }
+
       setReservations(res.reservationListPage)
       setTotalLen(res.reservationListPage.length)
     })
@@ -49,7 +59,12 @@ function CeoMyPage() {
       </ProfileBox>
       <SectionTitle title={'점포 정보'} />
       <CompanyInfoBox>
-        <CompanyInfoCard post={post} />
+        {post.id === 0 ? (
+          <NoContent>등록된 점포가 없습니다.</NoContent>
+        ) : (
+          <CompanyInfoCard post={post} />
+        )}
+        {/* <CompanyInfoCard post={post} /> */}
       </CompanyInfoBox>
       <SectionTitle title={'예약 현황 내역'} />
       <UserReservationTable title={post.title} reservations={reservations} />
@@ -81,4 +96,11 @@ const ProfileBox = styled.div`
 const CompanyInfoBox = styled.div`
   width: 100%;
   margin-bottom: 30px;
+`
+
+const NoContent = styled.div`
+  width: 100%;
+  ${flexCenter};
+  font-size: 20px;
+  color: gray;
 `

@@ -13,19 +13,14 @@ import {HiOutlineBell} from 'react-icons/hi'
 import {RiHeart3Line} from 'react-icons/ri'
 import {useEffect} from 'react'
 import LocalStorage from '@/utils/util/localStorage'
+import {useRecoilState, useResetRecoilState} from 'recoil'
+import {loginState} from '@/recoil/loginState'
 
 const Header = () => {
   const router = useRouter()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isLogin, setIsLogin] = useState(false)
-
-  useEffect(() => {
-    if (LocalStorage.getItem('accessToken')) {
-      setIsLogin(true)
-    } else {
-      setIsLogin(false)
-    }
-  }, [])
+  const [isLogin, setIsLogin] = useRecoilState(loginState)
+  const logOut = useResetRecoilState(loginState)
 
   return (
     <Container>
@@ -36,7 +31,7 @@ const Header = () => {
           </MobileHeaderWrapper>
           <DesktopHeaderWrapper className="DesktopLogo">
             <Image
-              src="/svg/DesktopLogo.png"
+              src="/svg/logos/DesktopLogo.png"
               width={190}
               height={40}
               onClick={() => router.push('/')}
@@ -46,7 +41,7 @@ const Header = () => {
         <HeaderSearch>
           <MobileHeaderWrapper className="MobileLogo">
             <Image
-              src="/svg/DesktopLogo.png"
+              src="/svg/logos/DesktopLogo.png"
               width={170}
               height={35}
               onClick={() => router.push('/')}
@@ -58,11 +53,13 @@ const Header = () => {
         </HeaderSearch>
         <HeaderMenus>
           {isLogin ? (
-            <Link href="/">
-              <IconWrapper>
-                <FaUserCircle />
-              </IconWrapper>
-            </Link>
+            <IconWrapper
+              onClick={() => {
+                setIsMenuOpen(!isMenuOpen)
+              }}
+            >
+              <FaUserCircle />
+            </IconWrapper>
           ) : (
             <>
               <Link href="/login">
@@ -134,6 +131,34 @@ const Header = () => {
             </Link>
           </MobileMenus>
         )}
+        {isMenuOpen && isLogin && (
+          <LogInMenu>
+            {isLogin?.roles === 'ROLE_CUSTOMER' ? (
+              <Link href="/mypage">
+                <MobileMenu onClick={() => console.log('ss')}>마이페이지</MobileMenu>
+              </Link>
+            ) : (
+              <Link href="/ceopage">
+                <MobileMenu onClick={() => console.log('ss')}>업체페이지</MobileMenu>
+              </Link>
+            )}
+
+            <Link href="/">
+              <MobileMenu onClick={() => setIsMenuOpen(!isMenuOpen)}>예약내역</MobileMenu>
+            </Link>
+            <Link href="/">
+              <MobileMenu
+                onClick={() => {
+                  logOut()
+                  LocalStorage.removeItem('accessToken')
+                  LocalStorage.removeItem('userInfo')
+                }}
+              >
+                로그아웃
+              </MobileMenu>
+            </Link>
+          </LogInMenu>
+        )}
       </Wrapper>
     </Container>
   )
@@ -142,6 +167,7 @@ const Header = () => {
 export default Header
 
 const Container = styled.div`
+  position: relative;
   height: 100px;
   width: 100%;
   display: flex;
@@ -309,6 +335,16 @@ const IconWrapper = styled.div`
   &:hover {
     color: ${colors.mainColor};
   }
+`
+
+const LogInMenu = styled.div`
+  border-radius: 10px;
+  z-index: 20;
+  position: absolute;
+  right: 50px;
+  bottom: -100px;
+  background-color: white;
+  cursor: pointer;
 `
 
 const LinkWrapper = styled.div``
