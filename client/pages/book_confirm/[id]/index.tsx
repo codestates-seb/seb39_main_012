@@ -14,7 +14,7 @@ function BookConfirm() {
   const [dogDatas, setDogDatas] = useState<ConfirmBook[]>()
   useEffect(() => {
     if (id) {
-      bookingService.confirmBooking(Number(id)).then((res) => {
+      bookingService.confirmBooking(id).then((res) => {
         console.log(res)
         setDogDatas(res)
       })

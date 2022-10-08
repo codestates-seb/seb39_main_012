@@ -70,8 +70,9 @@ const Book = () => {
     }
 
     const result = await bookingService.postBooking(Number(postId), requestForm as any)
+    console.log('Result', result)
     if (result.status === 201) {
-      router.push(`/book_confirm/${result.data.id}`)
+      router.push(`/book_confirm/${result.data.reservedId}`)
       LocalStorage.removeItem('tempBooking')
     } else {
       throw new Error('에러 발생!')

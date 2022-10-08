@@ -69,7 +69,7 @@ function ProfileEdit() {
     formData.append('dto', new Blob([JSON.stringify(form)], {type: 'application/json'}))
 
     const result = await userService.userProfileEdit(formData)
-    const jwt = result.data.etc.split(' ')[1]
+    const jwt = result.data.etc
     LocalStorage.setItem('accessToken', jwt)
 
     if (result.status === 200) {
