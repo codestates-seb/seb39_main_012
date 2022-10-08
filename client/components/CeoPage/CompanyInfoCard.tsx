@@ -1,19 +1,36 @@
+import {ceoService} from '@/apis/CeoPageAPI'
+import {PostRecoil} from '@/types/ceopage'
 import React from 'react'
+import {toast} from 'react-toastify'
 import styled from 'styled-components'
 import CardImage from '../CardImage/CardImage'
 import CompanyInfoTag from './CompanyInfoTag'
 
-const imgUrl = 'https://cdn.imweb.me/upload/S201807025b39d1981b0b0/1fc55d055098b.jpg'
+interface Props {
+  post: PostRecoil
+}
 
-function CompanyInfoCard() {
+function CompanyInfoCard({post}: Props) {
   return (
     <Contaienr>
-      <CardImage mode="post" imgUrl={imgUrl}></CardImage>
-      <Title>JW에리어트 멍멍스퀘어 서울</Title>
+      <CardImage mode="post" imgUrl={post.thumbnail}></CardImage>
+      <Title>{post.title}</Title>
       <Content>
-        <Price>30,000원 / 1박</Price>
+        {/* <Price>30,000원 / 1박</Price> */}
         <CompanyInfoTag title={'수정'} onClick={() => console.log('수정')} />
-        <CompanyInfoTag title={'삭제'} onClick={() => console.log('수정')} />
+        <CompanyInfoTag
+          title={'삭제'}
+          onClick={async () => {
+            if (window.confirm('정말 삭제하시겠습니까?')) {
+              const result = await ceoService.deleteMyCompany(post.id)
+              if (result.status === 200) {
+                toast.success('삭제되었습니다.')
+                return
+              }
+              toast.error('삭제에 실패했습니다.')
+            }
+          }}
+        />
       </Content>
     </Contaienr>
   )

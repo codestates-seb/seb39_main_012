@@ -1,11 +1,82 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import styled from 'styled-components'
 import {colors} from '@/styles/colors'
 import AuthButton from '@/components/AuthButton/AuthButton'
+import {DogCard, Users} from '@/types/mypage'
+import {userService} from '@/apis/MyPageAPI'
+import LocalStorage from '@/utils/util/localStorage'
+import {booking} from '@/types/book'
+import {getDayOfDate} from '@/components/StoreDetail/StoreDetail'
+import {bookingService} from '@/apis/bookingAPI'
+import {useRouter} from 'next/router'
+import Footer from '@/components/Layout/Footer/Footer'
+import DogProfile from '@/components/Book/DogProfile'
 
-const index = () => {
+const Book = () => {
+  const router = useRouter()
+  const postId = router.query.postId
+  const [userInfo, setUserInfo] = useState<Users | undefined>()
+  const [dogsInfo, setDogsInfo] = useState<DogCard[] | undefined>()
+  const [tempBookingInfo, setTempBookingInfo] = useState<booking | undefined>()
+  const [clickedDog, setClickedDog] = useState(false)
+  const [dogId, setDogId] = useState(0)
+
+  useEffect(() => {
+    userService.getMyPage().then((result) => {
+      setUserInfo(result.data.users)
+      setDogsInfo(result.data.users.dogCardList)
+    })
+
+    const tempBooking = JSON.parse(LocalStorage.getItem('tempBooking') || (null as any))
+    setTempBookingInfo(tempBooking)
+  }, [])
+
+  if (!userInfo || !dogsInfo) {
+    return <div>로딩중</div>
+  }
+
+  const selectDogHandler = (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault()
+    setClickedDog(!clickedDog)
+  }
+
+  const dayTransformer = (date: string) => {
+    const splitDates = (date || '').split('-')
+    const year = splitDates[0]
+    const month = splitDates[1]
+    const day = splitDates[2]
+    return `${year}년 ${month}월 ${day}일 (${getDayOfDate(date)})`
+  }
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    const requestForm = {
+      reservationCreateDto: {
+        ...tempBookingInfo,
+      },
+      reservationUserInfoDto: {
+        dogCardsId: dogId,
+        userInfo: {
+          name: userInfo?.username,
+          phone: userInfo?.phone,
+          email: userInfo?.email,
+        },
+      },
+    }
+
+    const result = await bookingService.postBooking(Number(postId), requestForm as any)
+    if (result.status === 201) {
+      router.push(`/book_confirm`)
+      // router.push(`/book_confirm/${result.data.id}`)
+      LocalStorage.removeItem('tempBooking')
+    } else {
+      throw new Error('에러 발생!')
+    }
+  }
+
   return (
-    <BookingConfirm>
+    <BookingConfirm onSubmit={onSubmit}>
       <BookingUserTitle>
         <h1>예약자 정보</h1>
       </BookingUserTitle>
@@ -15,25 +86,51 @@ const index = () => {
             <BookingUserInfoCard>
               <BookingUserInfoItem>
                 <Label>이름</Label>
-                <Input type="text" placeholder="실명을 입력하세요." />
+                <Input
+                  type="text"
+                  value={userInfo?.username}
+                  placeholder="실명을 입력하세요."
+                  readOnly
+                />
               </BookingUserInfoItem>
               <BookingUserInfoItem>
                 <Label>휴대전화번호</Label>
-                <Input type="tel" placeholder="-빼고 숫자만 입력하세요" />
+                <Input
+                  type="tel"
+                  value={userInfo?.phone}
+                  placeholder="-빼고 숫자만 입력하세요"
+                  readOnly
+                />
               </BookingUserInfoItem>
               <BookingUserInfoItem>
                 <Label>이메일</Label>
-                <Input type="email" placeholder="예약확정 안내가 전송됩니다." />
+                <Input
+                  type="email"
+                  value={userInfo?.email}
+                  placeholder="예약확정 안내가 전송됩니다."
+                  readOnly
+                />
               </BookingUserInfoItem>
             </BookingUserInfoCard>
           </BookingUserInfo>
           <div>
             <GetDogInfo>
               <span>반려견 정보</span>
-              <button>+ 정보 불러오기</button>
+              <button onClick={selectDogHandler}>+ 정보 불러오기</button>
             </GetDogInfo>
           </div>
-          <div>{/* dog profile card */}</div>
+          <DogProfileField>
+            {clickedDog && (
+              <>
+                <GetDogInfoText>호텔링을 맡길 반려견을 선택해주세요.</GetDogInfoText>
+                <DogCardBox>
+                  {dogsInfo.map((dog) => (
+                    <DogProfile key={dog.id} dog={dog as any} setDogId={setDogId} />
+                  ))}
+                </DogCardBox>
+              </>
+            )}
+          </DogProfileField>
         </BookingConfirmLeft>
         <BookingConfirmRight>
           <BookingConfirmRightContainer>
@@ -43,26 +140,49 @@ const index = () => {
             <BookingHotelDetails>
               <BookingHotelDetail>
                 <h3>애견호텔</h3>
-                <div>경기도 화성시 방교동 도그플래닛</div>
+                <div>{tempBookingInfo?.companyName}</div>
               </BookingHotelDetail>
               <BookingHotelDetail>
                 <h3>반려동물</h3>
-                <div>중형견 1마리</div>
+                <div>
+                  {tempBookingInfo?.dto.map.small
+                    ? `소형견: ${tempBookingInfo?.dto.map.medium}마리`
+                    : ''}
+                  {tempBookingInfo?.dto.map.medium
+                    ? ` / 중형견: ${tempBookingInfo?.dto.map.medium}마리`
+                    : ''}
+                  {tempBookingInfo?.dto.map.big
+                    ? ` / 대형견: ${tempBookingInfo?.dto.map.medium}마리`
+                    : ''}
+                </div>
               </BookingHotelDetail>
               <BookingHotelDetail>
                 <h3>체크인</h3>
-                <div>2022. 09. 22 (목) 오전 09:00</div>
+                <div>
+                  {`${dayTransformer(tempBookingInfo?.dto.checkInDate as string)} ${
+                    tempBookingInfo?.dto.checkInTime
+                  }`}
+                </div>
               </BookingHotelDetail>
               <BookingHotelDetail>
                 <h3>체크아웃</h3>
-                <div>2022. 09. 24 (목) 오후 05:00 </div>
+                <div>
+                  {`${dayTransformer(tempBookingInfo?.dto.checkOutDate as string)} ${
+                    tempBookingInfo?.dto.checkOutTime
+                  } `}
+                </div>
               </BookingHotelDetail>
               <div></div>
             </BookingHotelDetails>
             <BookingHotelPrice>
               <BookingHotelPriceTitle>
                 <h3>총 결제 금액 (VAT포함)</h3>
-                <h1>59,000원</h1>
+                <h1>
+                  {tempBookingInfo?.totalPrice
+                    .toString()
+                    .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')}
+                  원
+                </h1>
               </BookingHotelPriceTitle>
               <BookingHotelPriceInfo>
                 <p>· 해당 예약가는 세금, 봉사료가 포함된 금액입니다.</p>
@@ -75,13 +195,14 @@ const index = () => {
           </BookingConfirmRightContainer>
         </BookingConfirmRight>
       </BookingConfirmContainer>
+      <Footer />
     </BookingConfirm>
   )
 }
 
-export default index
+export default Book
 
-const BookingConfirm = styled.div`
+const BookingConfirm = styled.form`
   width: 100%;
   margin-top: 2rem;
 `
@@ -180,6 +301,19 @@ const GetDogInfo = styled.div`
       background-color: rgba(111, 167, 103, 0.8);
     }
   }
+`
+
+const DogProfileField = styled.div``
+
+const DogCardBox = styled.div`
+  display: flex;
+  gap: 1rem;
+`
+
+const GetDogInfoText = styled.div`
+  margin: 2rem 0;
+  font-size: 1.3rem;
+  color: ${colors.grey4};
 `
 
 const BookingConfirmRight = styled.div`

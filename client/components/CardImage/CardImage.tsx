@@ -33,7 +33,7 @@ export default CardImage
 
 const CardBox = styled.div<{borderRadius: string; height?: string}>`
   width: 100%;
-  height: 100%;
+  height: 230px;
 
   img {
     object-fit: cover;

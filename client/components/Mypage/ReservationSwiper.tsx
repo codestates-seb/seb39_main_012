@@ -1,9 +1,14 @@
 import React from 'react'
-import ReservedCard from '@/components/Mypage/ReservedCard'
+import ReservationCard from '@/components/Mypage/ReservationCard'
 import {Swiper, SwiperSlide} from 'swiper/react'
 import {Navigation} from 'swiper'
+import {BeforeReservation} from '@/types/mypage'
 
-function ReservationSwiper() {
+interface Props {
+  beforeReservations: BeforeReservation[]
+}
+
+function ReservationSwiper({beforeReservations}: Props) {
   return (
     <>
       <Swiper
@@ -33,24 +38,11 @@ function ReservationSwiper() {
           },
         }}
       >
-        <SwiperSlide>
-          <ReservedCard />
-        </SwiperSlide>
-        <SwiperSlide>
-          <ReservedCard />
-        </SwiperSlide>
-        <SwiperSlide>
-          <ReservedCard />
-        </SwiperSlide>
-        <SwiperSlide>
-          <ReservedCard />
-        </SwiperSlide>
-        <SwiperSlide>
-          <ReservedCard />
-        </SwiperSlide>
-        <SwiperSlide>
-          <ReservedCard />
-        </SwiperSlide>
+        {beforeReservations.map((reservation, idx) => (
+          <SwiperSlide key={idx}>
+            <ReservationCard reservation={reservation} />
+          </SwiperSlide>
+        ))}
       </Swiper>
     </>
   )

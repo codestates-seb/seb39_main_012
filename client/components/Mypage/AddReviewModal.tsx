@@ -1,20 +1,26 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @next/next/no-img-element */
 import {colors} from '@/styles/colors'
 import {flexCenter} from '@/styles/css'
-import {toLocalScale} from '@/utils/util'
+import {ratingCalc, toLocalScale} from '@/utils/util'
 import React, {useEffect, useState} from 'react'
 import {Rating} from 'react-simple-star-rating'
 import styled from 'styled-components'
 import {AiOutlineCamera} from 'react-icons/ai'
 import {toast} from 'react-toastify'
+import {reviewService} from '@/apis/ReviewAPI'
+import {dataState, postIdState} from '@/recoil/mypage'
+import {useRecoilState, useRecoilValue} from 'recoil'
 
 interface Props {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const imgUrl = 'https://www.qplace.kr/content/images/2021/09/9-14.jpg'
-
 function AddReviewModal({setIsOpen}: Props) {
+  const post = useRecoilValue(postIdState)
+  console.log(post)
+  const [isChange, setIsChange] = useRecoilState(dataState)
   const [ratingValue, setRatingValue] = useState(2.5)
   const [selectedFile, setSelectedFile] = useState<any>([])
   const [fileDataURL, setFileDataURL] = useState<any>([])
@@ -24,7 +30,6 @@ function AddReviewModal({setIsOpen}: Props) {
   })
 
   useEffect(() => {
-    console.log(selectedFile)
     let fileReader: FileReader,
       isCancel = false
     if (selectedFile.length > 0) {
@@ -35,9 +40,7 @@ function AddReviewModal({setIsOpen}: Props) {
           setFileDataURL([...fileDataURL, result])
         }
       }
-      // selectedFile.forEach((file: any) => {
-      //   fileReader.readAsDataURL(file)
-      // })
+
       fileReader.readAsDataURL(selectedFile[selectedFile.length - 1])
     }
     return () => {
@@ -68,44 +71,56 @@ function AddReviewModal({setIsOpen}: Props) {
     setRatingValue(rate)
   }
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     const formData = new FormData()
 
     if (selectedFile) {
       selectedFile.forEach((file: any) => {
-        formData.append('files', file)
+        formData.append('multipartFile', file)
       })
     }
 
     const request = {
-      rating: ratingValue,
-      ...form,
+      score: ratingCalc(ratingValue),
+      title: form.title,
+      content: form.content,
+      postsId: post.postsId,
     }
 
-    console.log(request)
+    formData.append('dto', new Blob([JSON.stringify(request)], {type: 'application/json'}))
+
+    const result = await reviewService.createReview(formData)
+    console.log(result)
+
+    if (result.status === 201) {
+      setIsOpen(false)
+      toast.success('리뷰가 등록되었습니다.')
+      setIsChange(!isChange)
+    }
   }
 
   return (
     <ModalContainer onClick={() => setIsOpen(false)}>
-      <Modal onClick={(e) => e.stopPropagation()} onSubmit={handleSubmit}>
+      <Modal
+        onClick={(e) => e.stopPropagation()}
+        onSubmit={handleSubmit}
+        encType="multipart/form-data"
+      >
         <Title>상품 후기</Title>
         <ProductInfo>
           <ImgBox>
-            <img src={imgUrl} alt="" />
+            <img src={post.url} alt="" />
           </ImgBox>
           <ContentBox>
             <Rating
               onClick={handleRatingClick}
               ratingValue={ratingValue}
-              initialValue={50}
-              allowHalfIcon
-              size={40}
               fillColor={colors.mainColor}
             />
-            <ProductName>JW메리어트 멍멍스퀘어, 서울</ProductName>
-            <ProductPrice>{toLocalScale(30000)}원 / 2박</ProductPrice>
+            <ProductName>{post.title}</ProductName>
+            <ProductPrice>{toLocalScale(post.roomPrice)}원 / 2박</ProductPrice>
           </ContentBox>
         </ProductInfo>
         <TextAreaBox>

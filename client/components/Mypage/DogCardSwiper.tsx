@@ -2,11 +2,16 @@ import React from 'react'
 import DogProfileCard from '@/components/Mypage/DogProfileCard'
 import {Swiper, SwiperSlide} from 'swiper/react'
 import {FreeMode} from 'swiper'
+import {DogCard} from '@/types/mypage'
 import 'swiper/css'
 import 'swiper/css/pagination'
 import 'swiper/css/navigation'
 
-function DogCardSwiper() {
+interface Props {
+  dogs: DogCard[]
+}
+
+function DogCardSwiper({dogs}: Props) {
   return (
     <Swiper
       slidesPerView={2}
@@ -34,18 +39,11 @@ function DogCardSwiper() {
         },
       }}
     >
-      <SwiperSlide>
-        <DogProfileCard />
-      </SwiperSlide>
-      <SwiperSlide>
-        <DogProfileCard />
-      </SwiperSlide>
-      <SwiperSlide>
-        <DogProfileCard />
-      </SwiperSlide>
-      <SwiperSlide>
-        <DogProfileCard />
-      </SwiperSlide>
+      {dogs.map((dog) => (
+        <SwiperSlide key={dog.id}>
+          <DogProfileCard dog={dog} />
+        </SwiperSlide>
+      ))}
     </Swiper>
   )
 }
