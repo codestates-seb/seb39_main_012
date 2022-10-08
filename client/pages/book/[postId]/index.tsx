@@ -19,7 +19,7 @@ const Book = () => {
   const [dogsInfo, setDogsInfo] = useState<DogCard[] | undefined>()
   const [tempBookingInfo, setTempBookingInfo] = useState<booking | undefined>()
   const [clickedDog, setClickedDog] = useState(false)
-  const [dogId, setDogId] = useState(0)
+  const [dogId, setDogId] = useState<number[]>([])
 
   useEffect(() => {
     userService.getMyPage().then((result) => {
@@ -51,24 +51,27 @@ const Book = () => {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
+    const reservationCreateDto = {
+      ...tempBookingInfo,
+    }
+
+    const reservationUserInfoDto = {
+      dogCardsId: dogId,
+      userInfo: {
+        name: userInfo?.username,
+        phone: userInfo?.phone,
+        email: userInfo?.email,
+      },
+    }
+
     const requestForm = {
-      reservationCreateDto: {
-        ...tempBookingInfo,
-      },
-      reservationUserInfoDto: {
-        dogCardsId: dogId,
-        userInfo: {
-          name: userInfo?.username,
-          phone: userInfo?.phone,
-          email: userInfo?.email,
-        },
-      },
+      reservationCreateDto,
+      reservationUserInfoDto,
     }
 
     const result = await bookingService.postBooking(Number(postId), requestForm as any)
     if (result.status === 201) {
-      router.push(`/book_confirm`)
-      // router.push(`/book_confirm/${result.data.id}`)
+      router.push(`/book_confirm/${result.data.id}`)
       LocalStorage.removeItem('tempBooking')
     } else {
       throw new Error('에러 발생!')
@@ -145,15 +148,21 @@ const Book = () => {
               <BookingHotelDetail>
                 <h3>반려동물</h3>
                 <div>
-                  {tempBookingInfo?.dto.map.small
-                    ? `소형견: ${tempBookingInfo?.dto.map.medium}마리`
-                    : ''}
-                  {tempBookingInfo?.dto.map.medium
-                    ? ` / 중형견: ${tempBookingInfo?.dto.map.medium}마리`
-                    : ''}
-                  {tempBookingInfo?.dto.map.big
-                    ? ` / 대형견: ${tempBookingInfo?.dto.map.medium}마리`
-                    : ''}
+                  <div>
+                    {tempBookingInfo?.dto.map.small
+                      ? `소형견: ${tempBookingInfo?.dto.map.small}마리 \n`
+                      : ''}
+                  </div>
+                  <div>
+                    {tempBookingInfo?.dto.map.medium
+                      ? `중형견: ${tempBookingInfo?.dto.map.medium}마리 \n`
+                      : ''}
+                  </div>
+                  <div>
+                    {tempBookingInfo?.dto.map.big
+                      ? `대형견: ${tempBookingInfo?.dto.map.big}마리 \n`
+                      : ''}
+                  </div>
                 </div>
               </BookingHotelDetail>
               <BookingHotelDetail>

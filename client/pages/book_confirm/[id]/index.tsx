@@ -1,15 +1,34 @@
+import {bookingService} from '@/apis/BookingAPI'
 import ConfirmCardSwiper from '@/components/BookConfirm/ConfirmCardSwiper'
+import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner'
 import SectionTitle from '@/components/StoreDetail/SectionTitle'
-import React from 'react'
+import {ConfirmBook} from '@/types/book'
+import {useRouter} from 'next/router'
+import React, {useEffect, useState} from 'react'
 import styled from 'styled-components'
 
 function BookConfirm() {
+  const router = useRouter()
+  const id = router.query.id
+  console.log(id)
+  const [dogDatas, setDogDatas] = useState<ConfirmBook[]>()
+  useEffect(() => {
+    if (id) {
+      bookingService.confirmBooking(Number(id)).then((res) => {
+        console.log(res)
+        setDogDatas(res)
+      })
+    }
+  }, [id])
+
+  if (!dogDatas) return <LoadingSpinner></LoadingSpinner>
+
   return (
     <Container>
       <Title>예약내역</Title>
       <SectionTitle title={'예약자정보'} />
       <DogCardBoxs>
-        <ConfirmCardSwiper />
+        <ConfirmCardSwiper dogDatas={dogDatas} id={id} />
       </DogCardBoxs>
     </Container>
   )
