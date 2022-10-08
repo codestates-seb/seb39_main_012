@@ -126,6 +126,10 @@ const MainBanner = styled.div`
     width: 150%;
   }
 
+  @media (min-width: 1540px) {
+    width: 150%;
+  }
+
   @media (max-width: 1280px) {
     width: 100%;
   }
