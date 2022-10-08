@@ -15,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,7 +36,6 @@ public class UsersController {
     private final UsersManageCompanyService usersManageCompanyService;
 
     private final AwsS3Service awsS3Service;
-
 
     private final PasswordChangeService passwordChangeService;
 
@@ -81,6 +79,7 @@ public class UsersController {
                 .withClaim("id", principalDetails.getUsers().getId())
                 .withClaim("email", principalDetails.getUsers().getEmail())
                 .withClaim("username", principalDetails.getUsers().getUsername())
+                .withClaim("roles", principalDetails.getUsers().getRoles())
                 .sign(Algorithm.HMAC512(JwtProperties.SECRET));
 
         UsersMessageResponseDto response =

@@ -1,23 +1,15 @@
 package com.team012.server.review.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
-@NoArgsConstructor
+@Builder
+@RequiredArgsConstructor
 public class ReviewPatchRequestDto {
 
-    private String title;
-    private String content;
-    private Double score;
+    private final String title;
+    private final String content;
+    private final Double score;
 
-    @Builder
-    public ReviewPatchRequestDto(String title, String content, Double score) {
-        this.title = title;
-        this.content = content;
-        this.score = score;
-    }
 }
