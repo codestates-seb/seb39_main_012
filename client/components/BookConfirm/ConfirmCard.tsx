@@ -6,7 +6,7 @@ import {toLocalScale} from '@/utils/util'
 import {ConfirmBook} from '@/types/book'
 import {toast} from 'react-toastify'
 import {useRouter} from 'next/router'
-import {bookingService} from '@/apis/BookingAPI'
+import {bookingService} from '@/apis/bookingAPI'
 
 interface Props {
   dogInfo: ConfirmBook

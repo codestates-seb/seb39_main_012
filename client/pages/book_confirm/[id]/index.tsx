@@ -1,4 +1,4 @@
-import {bookingService} from '@/apis/BookingAPI'
+import {bookingService} from '@/apis/bookingAPI'
 import ConfirmCardSwiper from '@/components/BookConfirm/ConfirmCardSwiper'
 import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner'
 import SectionTitle from '@/components/StoreDetail/SectionTitle'
