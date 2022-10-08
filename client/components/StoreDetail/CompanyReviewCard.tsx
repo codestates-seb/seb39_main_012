@@ -36,7 +36,7 @@ const CompanyReviewCard = ({
           width={300}
           height={250}
           objectFit="cover"
-          unoptimized={true}
+          // unoptimized={true}
         />
       </CompanyReviewsCardTop>
       <CompanyReviewsCardBottom>

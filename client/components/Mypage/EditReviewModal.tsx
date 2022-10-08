@@ -11,21 +11,23 @@ import {toast} from 'react-toastify'
 import {reviewService} from '@/apis/ReviewAPI'
 import {useRecoilState} from 'recoil'
 import {dataState} from '@/recoil/mypage'
+import {Review} from '@/types/mypage'
 
 interface Props {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
+  curReview?: Review
 }
 
-const imgUrl = 'https://www.qplace.kr/content/images/2021/09/9-14.jpg'
-
-function AddReviewModal({setIsOpen}: Props) {
+function AddReviewModal({setIsOpen, curReview}: Props) {
   const [isChange, setIsChange] = useRecoilState(dataState)
-  const [ratingValue, setRatingValue] = useState(2.5)
+  const [ratingValue, setRatingValue] = useState(0)
   const [selectedFile, setSelectedFile] = useState<any>([])
   const [fileDataURL, setFileDataURL] = useState<any>([])
+
+  console.log(curReview)
   const [form, setForm] = useState({
-    title: '',
-    content: '',
+    title: curReview?.title,
+    content: curReview?.content,
   })
 
   useEffect(() => {
@@ -40,9 +42,7 @@ function AddReviewModal({setIsOpen}: Props) {
           setFileDataURL([...fileDataURL, result])
         }
       }
-      // selectedFile.forEach((file: any) => {
-      //   fileReader.readAsDataURL(file)
-      // })
+
       fileReader.readAsDataURL(selectedFile[selectedFile.length - 1])
     }
     return () => {
@@ -88,15 +88,14 @@ function AddReviewModal({setIsOpen}: Props) {
       score: ratingCalc(ratingValue),
       title: form.title,
       content: form.content,
-      // postsId: post.postsId,
     }
 
     formData.append('dto', new Blob([JSON.stringify(request)], {type: 'application/json'}))
 
-    const result = await reviewService.editReview(formData, 1)
+    const result = await reviewService.editReview(formData, curReview?.id as number)
     console.log(result)
 
-    if (result.status === 201) {
+    if (result.status === 200) {
       setIsOpen(false)
       toast.success('리뷰가 등록되었습니다.')
       setIsChange(!isChange)
@@ -105,11 +104,15 @@ function AddReviewModal({setIsOpen}: Props) {
 
   return (
     <ModalContainer onClick={() => setIsOpen(false)}>
-      <Modal onClick={(e) => e.stopPropagation()} onSubmit={handleSubmit}>
+      <Modal
+        onClick={(e) => e.stopPropagation()}
+        onSubmit={handleSubmit}
+        encType="multipart/form-data"
+      >
         <Title>상품 후기</Title>
         <ProductInfo>
           <ImgBox>
-            <img src={imgUrl} alt="" />
+            <img src={curReview?.companyInfo.postsImg} alt="" />
           </ImgBox>
           <ContentBox>
             <Rating
@@ -117,8 +120,10 @@ function AddReviewModal({setIsOpen}: Props) {
               ratingValue={ratingValue}
               fillColor={colors.mainColor}
             />
-            <ProductName>JW메리어트 멍멍스퀘어, 서울</ProductName>
-            <ProductPrice>{toLocalScale(30000)}원 / 2박</ProductPrice>
+            <ProductName>{curReview?.companyInfo.postsCompanyName}</ProductName>
+            <ProductPrice>
+              {toLocalScale(curReview?.companyInfo.totalPrice as number)}원 / 1박
+            </ProductPrice>
           </ContentBox>
         </ProductInfo>
         <TextAreaBox>

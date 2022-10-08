@@ -785,6 +785,8 @@ const CompanyImagesBox = styled.div`
   height: 10rem;
   border-radius: 0.3rem;
   display: flex;
+  box-sizing: border-box;
+  width: 90%;
 `
 const AddImages = styled.div`
   flex: 1;

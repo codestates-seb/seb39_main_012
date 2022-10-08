@@ -35,7 +35,9 @@ const Login = () => {
     //   localStorage.removeItem('email')
     // }
 
-    const [result, jwt] = await authService.Login(form)
+    const [result, userInfo] = await authService.Login(form)
+    console.log('Result', userInfo)
+    setIsLogin(userInfo)
     if (result === 200) {
       router.push('/')
       toast.success('로그인 성공')
