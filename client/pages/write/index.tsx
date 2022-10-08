@@ -1,29 +1,59 @@
-import React, {useState, useEffect} from 'react'
-import styled from 'styled-components'
-import {colors} from '@/styles/colors'
-import {useRouter} from 'next/router'
-import {ToastContainer} from 'react-toastify'
-import {toast} from 'react-toastify'
+/* eslint-disable @next/next/no-img-element */
 import {availableTags, categoryTags} from '@/utils/options/options'
 import AuthButton from '@/components/AuthButton/AuthButton'
 import SectionTitle from '@/components/StoreDetail/SectionTitle'
+import {colors} from '@/styles/colors'
+import React, {useState, useEffect} from 'react'
+import styled from 'styled-components'
+import {ToastContainer} from 'react-toastify'
+import {toast} from 'react-toastify'
 import {AiOutlineCamera} from 'react-icons/ai'
 import AvailableServicesAll from '@/components/Write/AvailableServicesAll'
 import Map from '@/components/Map/Map'
 import {useDaumPostcodePopup} from 'react-daum-postcode'
+import router from 'next/router'
 import {authPostService} from '@/apis/AuthPostAPI'
 import {availableServices} from '@/utils/options/options'
 import {IPostWrite} from '@/apis/type/types'
 import Footer from '@/components/Layout/Footer/Footer'
 
 const Write = () => {
-  // const [CEOInfo, setCEOInfo] = useState({})
-  // useEffect(() => {
-  //   authPostService.authGetCeoPage().then((res) => {
-  //     setCEOInfo(res)
-  //   })
-  // }, [])
+  // api1: get 회사 프로필
 
+  // api2: post 글작성
+
+  // const [form, setForm] = useState({
+  //   title: '이을 애견 호텔 12313213',
+  //   content:
+  //     '이을반려동물케어센터에서반려견들에게 품격있고 쾌적한 호텔 서비스3213123를 시작합니다. 가족분들의 사랑하는 마음을 담아 이을 반려동물 호텔이 정성껏 보살피겠습니다.',
+  //   latitude: '127.024554',
+  //   longitude: '37.4967012',
+  //   address: '서울특별시 서초구 106-13 ',
+  //   detailAddress: '신화빌딩 1층 ',
+  //   phone: '02-1232-0123',
+  //   checkInTime: '오전 11:00',
+  //   checkOutTime: '오후 11:00',
+  //   hashTag: ['소형견', '대형견', '미용', '산책', '테스트12'],
+  //   serviceTag: ['소형견 케어', '노견 케어', '산책', '미용', '케어 일지'],
+  //   roomCount: 10,
+  //   roomCreateDtoList: [
+  //     {
+  //       size: 'small',
+  //       price: 40000,
+  //     },
+  //     {
+  //       size: 'medium',
+  //       price: 60000,
+  //     },
+  //     {
+  //       size: 'big',
+  //       price: 80000,
+  //     },
+  //   ],
+  // })
+
+  // const [totalRoomCount, setTotalRoomCount] = useState(0)
+  const [title, setTitle] = useState('')
   const [form, setForm] = useState<IPostWrite>({
     title: '',
     content: '',
@@ -53,7 +83,15 @@ const Write = () => {
     ],
   })
 
+  // useEffect(() => {
+  //   authPostService.authGetCeoPage().then((result) => {
+  //     setForm({...form, title: result.companyInfo.companyName})
+  //     setTitle(result.companyInfo.companyName)
+  //   })
+  // }, [])
+
   const [selectedImage, setSelectedImage] = useState([])
+
   const [clickedService1, setClickedService1] = useState(false)
   const [clickedService2, setClickedService2] = useState(false)
   const [clickedService3, setClickedService3] = useState(false)
@@ -100,20 +138,7 @@ const Write = () => {
     clickedTag7,
   ]
 
-  const [smallDogPrice, setSmallDogPrice] = useState(0)
-  const [mediumDogPrice, setMediumDogPrice] = useState(0)
-  const [bigDogPrice, setBigDogPrice] = useState(0)
-
-  const handlePricePerDog = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const {name, value} = e.target
-    if (name === 'small') {
-      setSmallDogPrice(Number(value))
-    } else if (name === 'medium') {
-      setMediumDogPrice(Number(value))
-    } else if (name === 'big') {
-      setBigDogPrice(Number(value))
-    }
-  }
+  const [files, setFiles] = useState<File[]>([])
 
   // const onLoadFile = (e: React.ChangeEvent<HTMLInputElement>) => {
   //   if (e.target.files) {
@@ -124,14 +149,12 @@ const Write = () => {
   //   }
   // }
 
-  const [files, setFiles] = useState<File[]>([])
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([])
   const imageHandleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       if (Number(e.target.files?.length) > 5 || selectedImage.length >= 5) {
         return toast.error('사진은 최대 5장까지 등록 가능합니다.')
       } else if (Number(e.target.files?.length) <= 5) {
-        setSelectedFiles((prevImages) => prevImages.concat(Array.from(e.target.files as any)))
+        // setSelectedFiles((prevImages) => prevImages.concat(Array.from(e.target.files as any)))
         setFiles((prevImages) => prevImages.concat(Array.from(e.target.files as any)))
         const fileArray = Array.from(e.target.files).map((file) => URL.createObjectURL(file))
         setSelectedImage((prevImages) => prevImages.concat(fileArray as any))
@@ -141,7 +164,9 @@ const Write = () => {
   }
 
   const open = useDaumPostcodePopup()
+
   const [updatedAddress, setUpdatedAddress] = useState('')
+
   const handleComplete = (data: any) => {
     let fullAddress = data.address
     let extraAddress = ''
@@ -155,6 +180,7 @@ const Write = () => {
       }
       fullAddress += extraAddress !== '' ? ` (${extraAddress})` : ''
     }
+
     setUpdatedAddress(fullAddress)
     setForm((prev) => ({...prev, address: fullAddress}))
   }
@@ -164,39 +190,17 @@ const Write = () => {
     open({onComplete: handleComplete})
   }
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const {name, value} = e.target
-    setForm({
-      ...form,
-      [name]: value,
-    })
-  }
-
-  const onChangeTextarea = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    })
-  }
-
-  const roomCountHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({
-      ...form,
-      roomCount: form.roomCount + Number(e.target.value),
-    })
-  }
-
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    clickedServices.forEach((service, idx) => {
+    const finalSelection = clickedServices.forEach((service, idx) => {
       if (service === true) {
         // form.serviceTag.push(availableServices[idx][0])
         setForm((prev) => ({...prev, serviceTag: [...prev.serviceTag, availableServices[idx][0]]}))
       }
     })
 
-    clickedTags.forEach((tag, idx) => {
+    const finalTags = clickedTags.forEach((tag, idx) => {
       if (tag === true) {
         // form.hashTag.push(availableTags[idx])
         // setForm((prev) => ([...prev, hashTag: [...hashtag, availableTags[idx]]))
@@ -218,67 +222,120 @@ const Write = () => {
         price: Number(bigDogPrice),
       },
     ]
-
     setForm((prev) => ({...prev, roomCreateDtoList: finalRoomDto}))
 
-    const request = {
-      title: '이을 애견 호텔',
-      content:
-        '이을반려동물케어센터에서반려견들에게 품격있고 쾌적한 호텔 서비스3213123를 시작합니다. 가족분들의 사랑하는 마음을 담아 이을 반려동물 호텔이 정성껏 보살피겠습니다.',
-      latitude: '127.024554',
-      longitude: '37.4967012',
-      address: '서울 강남구 압구정로 165 ',
-      detailAddress: '푸드코 ',
-      phone: '02-1232-0123',
-      checkInTime: '오전 11:00',
-      checkOutTime: '오후 11:00',
-      hashTag: ['소형견', '중형견', '대형견'],
-      serviceTag: ['미용', '산책'],
-      roomCount: 10,
-      roomCreateDtoList: [
-        {size: 'small', price: 40000},
-        {size: 'medium', price: 60000},
-        {size: 'big', price: 80000},
-      ],
-    }
+    // const {
+    //   title,
+    //   content,
+    //   latitude,
+    //   longitude,
+    //   address,
+    //   detailAddress,
+    //   phone,
+    //   checkInTime,
+    //   checkOutTime,
+    //   hashTag,
+    //   serviceTag,
+    //   roomCount,
+    //   roomCreateDtoList,
+    // } = form
+
+    // const request = {
+    //   title: '이을 애견 호텔 12313213',
+    //   content:
+    //     '이을반려동물케어센터에서반려견들에게 품격있고 쾌적한 호텔 서비스3213123를 시작합니다. 가족분들의 사랑하는 마음을 담아 이을 반려동물 호텔이 정성껏 보살피겠습니다.',
+    //   latitude: '127.024554',
+    //   longitude: '37.4967012',
+    //   address: '서울특별시 서초구 106-13 ',
+    //   detailAddress: '신화빌딩 1층 ',
+    //   phone: '02-1232-0123',
+    //   checkInTime: '오전 11:00',
+    //   checkOutTime: '오후 11:00',
+    //   hashTag: ['소형견', '대형견', '미용', '산책', '테스트12'],
+    //   serviceTag: ['소형견 케어', '노견 케어', '산책', '미용', '케어 일지'],
+    //   roomCount: 10,
+    //   roomCreateDtoList: [
+    //     {
+    //       size: 'small',
+    //       price: 40000,
+    //     },
+    //     {
+    //       size: 'medium',
+    //       price: 60000,
+    //     },
+    //     {
+    //       size: 'big',
+    //       price: 80000,
+    //     },
+    //   ],
+    // }
+
+    // const finalSelection = selectedServices.filter((service, index) => { return service === true})
+    // console.log(finalSelection)
+
+    console.log(form, 'form')
+
+    // const finalImages = selectedImage.map((image) => new File([image], 'image'))
 
     const formData = new FormData()
-    if (selectedFiles) {
-      selectedFiles.forEach((file: any) => {
+    if (files) {
+      files.forEach((file: any) => {
         formData.append('file', file)
       })
     }
 
-    formData.append('request', new Blob([JSON.stringify(request)], {type: 'application/json'}))
+    formData.append(
+      'request',
+      new Blob([JSON.stringify(form)], {
+        type: 'application/json',
+      })
+    )
 
     const result = await authPostService.authPostWriteAPI(formData as any)
     if (result.status === 201) {
-      console.log(result.data.id)
-      // router.push('/')
-      // router.push('/ceopage/1')
-      // router.push(`/posts/${result.data.id}?page=1&size=5`)
+      console.log(result)
       toast.success('새 포스트 등록이 완료되었습니다.')
     } else {
       toast.error('새 포스트 등록에 실패했습니다.')
     }
+  }
 
-    // if (
-    //   !title ||
-    //   !content ||
-    //   !latitude ||
-    //   !longitude ||
-    //   !address ||
-    //   !detailAddress ||
-    //   !phone ||
-    //   !checkInTime ||
-    //   !checkOutTime ||
-    //   !hashTag ||
-    //   !serviceTag ||
-    //   !roomCount ||
-    //   !roomCreateDtoList
-    // ) {
-    //   return toast.error('모든 항목을 입력해주세요')
-    // }
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const {name, value} = e.target
+
+    setForm({
+      ...form,
+      [name]: value,
+    })
+  }
+
+  const onChangeTextarea = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    })
+  }
+
+  const roomCountHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm({
+      ...form,
+      roomCount: form.roomCount + Number(e.target.value),
+    })
+  }
+
+  const [smallDogPrice, setSmallDogPrice] = useState(0)
+  const [mediumDogPrice, setMediumDogPrice] = useState(0)
+  const [bigDogPrice, setBigDogPrice] = useState(0)
+
+  const handlePricePerDog = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const {name, value} = e.target
+    if (name === 'small') {
+      setSmallDogPrice(Number(value))
+    } else if (name === 'medium') {
+      setMediumDogPrice(Number(value))
+    } else if (name === 'big') {
+      setBigDogPrice(Number(value))
+    }
   }
 
   return (
@@ -778,6 +835,7 @@ const CompanyImagesBox = styled.div`
   height: 10rem;
   border-radius: 0.3rem;
   display: flex;
+  width: 90%;
 `
 const AddImages = styled.div`
   flex: 1;
