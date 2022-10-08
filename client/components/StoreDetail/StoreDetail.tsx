@@ -25,7 +25,7 @@ import CompanyImageSlider from './CompanyImageSlider'
 import CompanyTitleSection from './CompanyTitleSection'
 import {availableServices} from '@/utils/options/options'
 import LocalStorage from '@/utils/util/localStorage'
-import {bookingService} from '@/apis/bookingAPI'
+import {bookingService} from '@/apis/BookingAPI'
 import router from 'next/router'
 import {postService} from '@/apis/PostAndSearchAPI'
 
