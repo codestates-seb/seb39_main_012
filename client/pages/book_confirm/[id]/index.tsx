@@ -9,7 +9,7 @@ import styled from 'styled-components'
 
 function BookConfirm() {
   const router = useRouter()
-  const id = router.query.id
+  const id = Number(router.query.id)
   console.log(id)
   const [dogDatas, setDogDatas] = useState<ConfirmBook[]>()
   useEffect(() => {
