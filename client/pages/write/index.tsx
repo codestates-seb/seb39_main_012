@@ -193,20 +193,20 @@ const Write = () => {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    const finalSelection = clickedServices.forEach((service, idx) => {
-      if (service === true) {
-        // form.serviceTag.push(availableServices[idx][0])
-        setForm((prev) => ({...prev, serviceTag: [...prev.serviceTag, availableServices[idx][0]]}))
-      }
-    })
+    // const finalSelection = clickedServices.forEach((service, idx) => {
+    //   if (service === true) {
+    //     // form.serviceTag.push(availableServices[idx][0])
+    //     setForm((prev) => ({...prev, serviceTag: [...prev.serviceTag, availableServices[idx][0]]}))
+    //   }
+    // })
 
-    const finalTags = clickedTags.forEach((tag, idx) => {
-      if (tag === true) {
-        // form.hashTag.push(availableTags[idx])
-        // setForm((prev) => ([...prev, hashTag: [...hashtag, availableTags[idx]]))
-        setForm((prev) => ({...prev, hashTag: [...prev.hashTag, availableTags[idx]]}))
-      }
-    })
+    // const finalTags = clickedTags.forEach((tag, idx) => {
+    //   if (tag === true) {
+    //     // form.hashTag.push(availableTags[idx])
+    //     // setForm((prev) => ([...prev, hashTag: [...hashtag, availableTags[idx]]))
+    //     setForm((prev) => ({...prev, hashTag: [...prev.hashTag, availableTags[idx]]}))
+    //   }
+    // })
 
     const finalRoomDto = [
       {
@@ -293,7 +293,8 @@ const Write = () => {
 
     const result = await authPostService.authPostWriteAPI(formData as any)
     if (result.status === 201) {
-      console.log(result)
+      // router.push(`book_confirm/${result.data.id}`)
+      router.push(`/ceopage`)
       toast.success('새 포스트 등록이 완료되었습니다.')
     } else {
       toast.error('새 포스트 등록에 실패했습니다.')
@@ -462,6 +463,10 @@ const Write = () => {
                     <Tag
                       onClick={() => {
                         setClickedTag1(!clickedTag1)
+                        setForm({
+                          ...form,
+                          hashTag: [...form.hashTag, '소형견'],
+                        })
                       }}
                     >
                       #소형견
@@ -471,6 +476,10 @@ const Write = () => {
                     <Tag
                       onClick={() => {
                         setClickedTag2(!clickedTag2)
+                        setForm({
+                          ...form,
+                          hashTag: [...form.hashTag, '중형견'],
+                        })
                       }}
                     >
                       #중형견
@@ -480,6 +489,10 @@ const Write = () => {
                     <Tag
                       onClick={() => {
                         setClickedTag3(!clickedTag3)
+                        setForm({
+                          ...form,
+                          hashTag: [...form.hashTag, '대형견'],
+                        })
                       }}
                     >
                       #대형견
@@ -489,15 +502,23 @@ const Write = () => {
                     <Tag
                       onClick={() => {
                         setClickedTag4(!clickedTag4)
+                        setForm({
+                          ...form,
+                          hashTag: [...form.hashTag, '노견케어'],
+                        })
                       }}
                     >
-                      #노견 케어
+                      #노견케어
                     </Tag>
                   )}
                   {clickedTag5 === false && (
                     <Tag
                       onClick={() => {
                         setClickedTag5(!clickedTag5)
+                        setForm({
+                          ...form,
+                          hashTag: [...form.hashTag, '미용'],
+                        })
                       }}
                     >
                       #미용
@@ -507,6 +528,10 @@ const Write = () => {
                     <Tag
                       onClick={() => {
                         setClickedTag6(!clickedTag6)
+                        setForm({
+                          ...form,
+                          hashTag: [...form.hashTag, '산책'],
+                        })
                       }}
                     >
                       #산책
@@ -516,6 +541,10 @@ const Write = () => {
                     <Tag
                       onClick={() => {
                         setClickedTag7(!clickedTag7)
+                        setForm({
+                          ...form,
+                          hashTag: [...form.hashTag, '훈련'],
+                        })
                       }}
                     >
                       #훈련
@@ -670,6 +699,7 @@ const Write = () => {
                 setClickedService10={setClickedService10}
                 setClickedService11={setClickedService11}
                 setClickedService12={setClickedService12}
+                setForm={setForm}
               />
             </AvailableServiceChoice>
           </AvailableServices>
