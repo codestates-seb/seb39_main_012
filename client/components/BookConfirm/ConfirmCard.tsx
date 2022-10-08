@@ -4,9 +4,9 @@ import CardImage from '../CardImage/CardImage'
 import {BsGenderMale} from 'react-icons/bs'
 import {toLocalScale} from '@/utils/util'
 import {ConfirmBook} from '@/types/book'
-import {bookingService} from '@/apis/BookingAPI'
 import {toast} from 'react-toastify'
 import {useRouter} from 'next/router'
+import {bookingService} from '@/apis/BookingAPI'
 
 interface Props {
   dogInfo: ConfirmBook
