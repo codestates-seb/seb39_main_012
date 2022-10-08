@@ -84,11 +84,21 @@ function MyPage() {
       </ReservationBox>
       <SectionTitle title={'예약된 호캉스 내역'} />
       <ReservatedBox>
-        <ReservationSwiper beforeReservations={beforeReservations} />
+        {beforeReservations.length === 0 ? (
+          <NoContent>예약된 호캉스가 없습니다.</NoContent>
+        ) : (
+          <ReservationSwiper beforeReservations={beforeReservations} />
+        )}
+        {/* <ReservationSwiper beforeReservations={beforeReservations} /> */}
       </ReservatedBox>
       <SectionTitle title={'다녀온 호캉스 내역'} />
       <WentToBox>
-        <ReservedSwiper afterReservations={afterReservations} />
+        {afterReservations.length === 0 ? (
+          <NoContent>다녀온 호캉스가 없습니다.</NoContent>
+        ) : (
+          <ReservedSwiper afterReservations={afterReservations} />
+        )}
+        {/* <ReservedSwiper afterReservations={afterReservations} /> */}
       </WentToBox>
       <SectionTitle title={'리뷰관리'} />
       <ReviewTable reviews={reviews} username={userInfo.username} />

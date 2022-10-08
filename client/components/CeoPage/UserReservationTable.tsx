@@ -31,6 +31,7 @@ function UserReservationTable({reservations, title}: Props) {
         <TableHeadEtc></TableHeadEtc>
       </TableHead>
       <TableBody>
+        {reservations.length === 0 && <NoContent>예약된 유저가 없습니다.</NoContent>}
         {reservations.slice(offset, offset + limit).map((reservation) => (
           <TableTr key={reservation.reservedId}>
             <TableBodyNum>{reservation.reservedId}</TableBodyNum>

@@ -5,7 +5,7 @@ import {categoryTags} from '@/utils/options/options'
 import PostCard from '@/components/Home/PostCard'
 import SearchBar from '@/components/Home/SearchBar'
 import {postService} from '@/apis/PostAndSearchAPI'
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import useIntersect from '@/hooks/useIntersect'
 import {Post} from '@/types/post'
 import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner'
@@ -13,6 +13,7 @@ import {flexCenter} from '@/styles/css'
 import {GetStaticProps, InferGetStaticPropsType} from 'next'
 import BannerSwiper from '@/components/Home/BannerSwiper'
 import {bannerImages} from '@/public/images'
+import Image from 'next/image'
 
 export const getStaticProps: GetStaticProps = async () => {
   const res1 = await postService.getPosts(1)
@@ -29,7 +30,7 @@ export const getStaticProps: GetStaticProps = async () => {
 
 function Home({posts1, posts2, pageInfo}: InferGetStaticPropsType<typeof getStaticProps>) {
   const [page, setPage] = useState(3)
-  const [posts, setPosts] = useState<Post[]>(posts2)
+  const [posts, setPosts] = useState<Post[]>([])
   const [totalPage, setTotalPage] = useState(pageInfo.totalPages)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -47,7 +48,17 @@ function Home({posts1, posts2, pageInfo}: InferGetStaticPropsType<typeof getStat
     fetchMore()
   }
 
+  // useEffect(() => {
+  //   postService.getPosts(page).then((res) => {
+  //     setPosts(res.data)
+  //     setPage(page + 1)
+  //     setTotalPage(res.pageInfo.totalPages)
+  //   })
+  // }, [])
+
   const ref = useIntersect(callback)
+
+  if (!posts) return <LoadingSpinner></LoadingSpinner>
 
   return (
     <Container>
@@ -70,10 +81,18 @@ function Home({posts1, posts2, pageInfo}: InferGetStaticPropsType<typeof getStat
         ))}
       </PostCardBox>
       <SubBanner>
-        <BannerSwiper banners={[bannerImages.subBanner, bannerImages.subBanner2]} />
+        <Image src={bannerImages.subBanner} sizes={'100%'} alt={'BannerImg'} />
       </SubBanner>
       <PostCardBox>
-        {posts.map((post: Post, idx) => (
+        {posts2.map((post: Post, idx: number) => (
+          <PostCard post={post} key={idx} />
+        ))}
+      </PostCardBox>
+      <SubBanner>
+        <Image src={bannerImages.subBanner2} sizes={'100%'} alt={'BannerImg'} />
+      </SubBanner>
+      <PostCardBox>
+        {posts.map((post: Post, idx: number) => (
           <PostCard post={post} key={idx} />
         ))}
       </PostCardBox>
@@ -152,7 +171,6 @@ const PostCardBox = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 15px;
-  min-height: 815px;
 `
 
 const SubBanner = styled.div`

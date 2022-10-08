@@ -20,3 +20,22 @@ export const ratingCalc = (rating: number) => {
       return 5.0
   }
 }
+
+export const ratingDecodeCal = (rating: number) => {
+  if (rating === 0) {
+    return 0
+  }
+
+  switch (rating) {
+    case 1:
+      return 20
+    case 2:
+      return 40
+    case 3:
+      return 60
+    case 4:
+      return 80
+    case 5:
+      return 100
+  }
+}

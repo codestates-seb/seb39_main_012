@@ -3,7 +3,7 @@ import {dataState} from '@/recoil/mypage'
 import {colors} from '@/styles/colors'
 import {flexCenter} from '@/styles/css'
 import {Review} from '@/types/mypage'
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {toast} from 'react-toastify'
 import {useRecoilState} from 'recoil'
 import styled from 'styled-components'
@@ -21,9 +21,11 @@ function ReviewTable({reviews, username}: Props) {
   const [limit] = useState(5)
   const [page, setPage] = useState(1)
   const offset = (page - 1) * limit // offset = 시작점
+  const [curReview, setCurReview] = useState<Review>()
+
   return (
     <ReviewTableBox>
-      {isOpen && <EditReviewModal setIsOpen={setIsOpen} />}
+      {isOpen && <EditReviewModal setIsOpen={setIsOpen} curReview={curReview} />}
       <TableHead>
         <TableHeadNum>번호</TableHeadNum>
         <TableHeadClassfic>분류</TableHeadClassfic>
@@ -35,9 +37,9 @@ function ReviewTable({reviews, username}: Props) {
         {reviews.length === 0 ? (
           <NoContent>작성된 리뷰가 없습니다.</NoContent>
         ) : (
-          reviews.slice(offset, offset + limit).map((review: Review, idx: number) => (
+          reviews.slice(offset, offset + limit).map((review: Review) => (
             <TableTr key={review.id}>
-              <TableBodyNum>{idx + 1}</TableBodyNum>
+              <TableBodyNum>{review.id}</TableBodyNum>
               <TableBodyClassfic>호텔</TableBodyClassfic>
               <TableBodyTitle>{review.title}</TableBodyTitle>
               <TableBodyWrite>{username}</TableBodyWrite>
@@ -45,8 +47,8 @@ function ReviewTable({reviews, username}: Props) {
               <TableButtonBox>
                 <button
                   onClick={() => {
-                    console.log(review)
                     setIsOpen(true)
+                    setCurReview(review)
                   }}
                 >
                   수정

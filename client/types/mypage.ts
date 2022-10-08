@@ -56,6 +56,20 @@ export interface Review {
   score: number
   userId: number
   postsId: number
+  companyInfo: CompanyInfo
+  reviewImg: ReviewImg[]
+}
+
+interface CompanyInfo {
+  postsCompanyName: string
+  postsImg: string
+  totalPrice: number
+}
+
+interface ReviewImg {
+  fileName: string
+  id: number
+  imgUrl: string
 }
 
 export interface Reservation {
