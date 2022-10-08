@@ -5,6 +5,7 @@ import {FaDog} from 'react-icons/fa'
 import {BsRecordCircle} from 'react-icons/bs'
 import {availableServices} from '@/utils/options/options'
 import Image from 'next/image'
+import {IPostWrite} from '@/apis/type/types'
 
 interface Props {
   clickedService1: boolean
@@ -31,6 +32,7 @@ interface Props {
   setClickedService11: React.Dispatch<React.SetStateAction<boolean>>
   clickedService12: boolean
   setClickedService12: React.Dispatch<React.SetStateAction<boolean>>
+  setForm: React.Dispatch<React.SetStateAction<IPostWrite>>
 }
 
 const AvailableServicesAll = (props: Props) => {
@@ -60,6 +62,10 @@ const AvailableServicesAll = (props: Props) => {
           <ServiceChoiceButton
             onClick={() => {
               props.setClickedService1(!props.clickedService1)
+              props.setForm((prev) => ({
+                ...prev,
+                serviceTag: [...prev.serviceTag, availableServices[0][0]],
+              }))
             }}
           >
             <BsRecordCircle
@@ -93,6 +99,10 @@ const AvailableServicesAll = (props: Props) => {
           <ServiceChoiceButton
             onClick={() => {
               props.setClickedService2(!props.clickedService2)
+              props.setForm((prev) => ({
+                ...prev,
+                serviceTag: [...prev.serviceTag, availableServices[1][0]],
+              }))
             }}
           >
             <BsRecordCircle
@@ -126,6 +136,10 @@ const AvailableServicesAll = (props: Props) => {
           <ServiceChoiceButton
             onClick={() => {
               props.setClickedService3(!props.clickedService3)
+              props.setForm((prev) => ({
+                ...prev,
+                serviceTag: [...prev.serviceTag, availableServices[2][0]],
+              }))
             }}
           >
             <BsRecordCircle
@@ -159,6 +173,10 @@ const AvailableServicesAll = (props: Props) => {
           <ServiceChoiceButton
             onClick={() => {
               props.setClickedService4(!props.clickedService4)
+              props.setForm((prev) => ({
+                ...prev,
+                serviceTag: [...prev.serviceTag, availableServices[3][0]],
+              }))
             }}
           >
             <BsRecordCircle
@@ -192,6 +210,10 @@ const AvailableServicesAll = (props: Props) => {
           <ServiceChoiceButton
             onClick={() => {
               props.setClickedService5(!props.clickedService5)
+              props.setForm((prev) => ({
+                ...prev,
+                serviceTag: [...prev.serviceTag, availableServices[4][0]],
+              }))
             }}
           >
             <BsRecordCircle
@@ -225,6 +247,10 @@ const AvailableServicesAll = (props: Props) => {
           <ServiceChoiceButton
             onClick={() => {
               props.setClickedService6(!props.clickedService6)
+              props.setForm((prev) => ({
+                ...prev,
+                serviceTag: [...prev.serviceTag, availableServices[5][0]],
+              }))
             }}
           >
             <BsRecordCircle
@@ -258,6 +284,10 @@ const AvailableServicesAll = (props: Props) => {
           <ServiceChoiceButton
             onClick={() => {
               props.setClickedService7(!props.clickedService7)
+              props.setForm((prev) => ({
+                ...prev,
+                serviceTag: [...prev.serviceTag, availableServices[6][0]],
+              }))
             }}
           >
             <BsRecordCircle
@@ -291,6 +321,10 @@ const AvailableServicesAll = (props: Props) => {
           <ServiceChoiceButton
             onClick={() => {
               props.setClickedService8(!props.clickedService8)
+              props.setForm((prev) => ({
+                ...prev,
+                serviceTag: [...prev.serviceTag, availableServices[7][0]],
+              }))
             }}
           >
             <BsRecordCircle
@@ -324,6 +358,10 @@ const AvailableServicesAll = (props: Props) => {
           <ServiceChoiceButton
             onClick={() => {
               props.setClickedService9(!props.clickedService9)
+              props.setForm((prev) => ({
+                ...prev,
+                serviceTag: [...prev.serviceTag, availableServices[8][0]],
+              }))
             }}
           >
             <BsRecordCircle
@@ -357,6 +395,10 @@ const AvailableServicesAll = (props: Props) => {
           <ServiceChoiceButton
             onClick={() => {
               props.setClickedService10(!props.clickedService10)
+              props.setForm((prev) => ({
+                ...prev,
+                serviceTag: [...prev.serviceTag, availableServices[9][0]],
+              }))
             }}
           >
             <BsRecordCircle
@@ -390,6 +432,10 @@ const AvailableServicesAll = (props: Props) => {
           <ServiceChoiceButton
             onClick={() => {
               props.setClickedService11(!props.clickedService11)
+              props.setForm((prev) => ({
+                ...prev,
+                serviceTag: [...prev.serviceTag, availableServices[10][0]],
+              }))
             }}
           >
             <BsRecordCircle
@@ -423,6 +469,10 @@ const AvailableServicesAll = (props: Props) => {
           <ServiceChoiceButton
             onClick={() => {
               props.setClickedService12(!props.clickedService12)
+              props.setForm((prev) => ({
+                ...prev,
+                serviceTag: [...prev.serviceTag, availableServices[11][0]],
+              }))
             }}
           >
             <BsRecordCircle

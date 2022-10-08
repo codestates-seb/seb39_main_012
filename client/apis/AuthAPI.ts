@@ -52,6 +52,7 @@ const Login = async (LoginForm: ILogin) => {
     LocalStorage.setItem('userInfo', JSON.stringify(parseUserInfo(accessToken)))
     
     const userInfo = parseUserInfo(accessToken)
+    console.log(userInfo)
     return [result.status, userInfo]
 
   } catch (e) {
