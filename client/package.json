@@ -16,7 +16,7 @@
     "axios": "^0.27.2",
     "date-fns": "^2.29.3",
     "formidable": "^2.0.1",
-    "lightgallery": "^2.6.1",
+    "lightgallery": "^2.6.0",
     "next": "12.3.0",
     "react": "18.2.0",
     "react-date-range": "^1.4.0",

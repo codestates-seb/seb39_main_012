@@ -12,7 +12,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReviewInfoDto {
-
     private String createdAt;
     private String modifiedAt;
     private Long id;
@@ -22,5 +21,4 @@ public class ReviewInfoDto {
     private Long userId;
     private PostsReviewInfo companyInfo;
     private List<ReviewImg> reviewImg;
-
 }

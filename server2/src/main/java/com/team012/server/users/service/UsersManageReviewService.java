@@ -51,21 +51,17 @@ public class UsersManageReviewService {
 
     public List<ReviewInfoDto> getListReviewInfoList(Long userId) {
         List<Review> reviewList = getListReview(userId);
-
         List<ReviewInfoDto> response = new ArrayList<>();
-
         for (Review review : reviewList) {
             Posts posts = postsRepository.findById(review.getPostsId()).orElse(null);
             Company company = companyRepository.findById(Objects.requireNonNull(posts).getCompanyId()).orElse(null);
             ReservationList reservation = reservationListRepository.findByCompanyId(Objects.requireNonNull(company).getId());
-
             PostsReviewInfo postsReviewInfo = PostsReviewInfo
                     .builder()
                     .postsCompanyName(Objects.requireNonNull(company).getCompanyName())
                     .postsImg(posts.getPostsImgList().get(0).getImgUrl())  // 첫번째 이미지만 준다.
                     .totalPrice(reservation.getTotalPrice())
                     .build();
-
             ReviewInfoDto reviewInfoDto = ReviewInfoDto
                     .builder()
                     .createdAt(review.getCreatedAt().format(DateTimeFormatter.ISO_DATE))
@@ -78,10 +74,8 @@ public class UsersManageReviewService {
                     .reviewImg(getListReviewImgList(review.getId()))
                     .companyInfo(postsReviewInfo)
                     .build();
-
             response.add(reviewInfoDto);
         }
-
         return response;
     }
 }

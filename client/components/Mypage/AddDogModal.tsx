@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @next/next/no-img-element */
 import {colors} from '@/styles/colors'
 import {flexCenter} from '@/styles/css'
@@ -7,12 +8,16 @@ import {BsPlusCircleFill} from 'react-icons/bs'
 import LabelInput from '../LabelInput/LabelInput'
 import LabelRadioButton from './LabelRadioButton'
 import {toast} from 'react-toastify'
+import {userService} from '@/apis/MyPageAPI'
+import {useRecoilState} from 'recoil'
+import {dataState} from '@/recoil/mypage'
 
 interface Props {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 function AddDogModal({setIsOpen}: Props) {
+  const [isChange, setIsChange] = useRecoilState(dataState)
   const [selectedFile, setSelectedFile] = useState<any>()
   const [fileDataURL, setFileDataURL] = useState<any>(null)
 
@@ -94,18 +99,6 @@ function AddDogModal({setIsOpen}: Props) {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    // const formData = new FormData()
-
-    // selectedFile.forEach((file: any) => {
-    //   formData.append('file', file)
-    // })
-
-    // for (let pair of formData.entries()) {
-    //   console.log(pair[0] + ', ' + pair[1])
-    // }
-
-    // const response = await axios.post('http://localhost:3000/api/file/upload', formData)
-
     if (!dogInfo.name || !dogInfo.age || !dogInfo.weight || !dogInfo.type) {
       return toast.error('모든 항목을 입력해주세요.')
     }
@@ -120,19 +113,34 @@ function AddDogModal({setIsOpen}: Props) {
     }
 
     const requestForm = {
-      name: dogInfo.name,
+      dogName: dogInfo.name,
       type: dogInfo.type,
       age: dogInfo.age,
       weight: dogInfo.weight,
-      gender: false,
-      surgery: false,
-      bowel_trained: false,
-      snack_method: false,
-      etc: dogInfo.etc ? extraInfo._etc : '',
-      bark: dogInfo.bark ? extraInfo._bark : '',
+      gender: dogInfo.gender ? '수컷' : '암컷',
+      surgery: dogInfo.surgery ? '완료' : '미완료',
+      bowelTrained: dogInfo.bowel_trained ? '실내' : '실외',
+      snackMethod: dogInfo.snack_method ? '급여' : '미급여',
+      etc: dogInfo.etc ? extraInfo._etc : '없음',
+      bark: dogInfo.bark ? extraInfo._bark : '없음',
     }
 
-    console.log(requestForm)
+    const formData = new FormData()
+
+    // https://shrewd.tistory.com/43
+    formData.append('file', selectedFile)
+    formData.append(
+      'dogCardDto',
+      new Blob([JSON.stringify(requestForm)], {type: 'application/json'})
+    )
+
+    const result = await userService.createDogCard(formData)
+
+    if (result?.status === 201) {
+      toast.success('등록되었습니다.')
+      setIsOpen(false)
+      setIsChange(!isChange)
+    }
   }
 
   return (

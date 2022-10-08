@@ -1,17 +1,12 @@
 package com.team012.server.users.controller;
 
 import com.team012.server.common.aws.service.AwsS3Service;
-import com.team012.server.reservation.entity.ReservationList;
-import com.team012.server.reservation.service.ReservationService;
 import com.team012.server.review.dto.ReviewInfoDto;
-import com.team012.server.review.entity.Review;
-import com.team012.server.review.entity.ReviewImg;
-import com.team012.server.users.dto.CustomerUpdateRequestDto;
-import com.team012.server.users.dto.UsersMessageResponseDto;
-import com.team012.server.users.entity.DogCard;
 import com.team012.server.common.config.userDetails.PrincipalDetails;
 import com.team012.server.users.dto.CustomerProfileViewResponseDto;
 import com.team012.server.users.entity.Users;
+import com.team012.server.users.entity.UsersImg;
+import com.team012.server.users.repository.UsersImgRepository;
 import com.team012.server.users.service.DogCardService;
 import com.team012.server.users.service.UsersManageReviewService;
 import com.team012.server.users.service.UsersService;
@@ -21,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -32,10 +26,9 @@ import java.util.List;
 public class CustomerController {
 
     private final UsersService usersService;
-    private final DogCardService dogCardService;
     private final UsersManageReviewService usersReviewManageReviewService;
 
-    private final AwsS3Service awsS3Service;
+    private final UsersImgRepository usersImgRepository;
 
     // 고객 상세페이지
     @GetMapping("/profile")
@@ -43,10 +36,14 @@ public class CustomerController {
         Long userId = principalDetails.getUsers().getId();
         log.info("userId : {}", userId);
         Users findUser = usersService.findUsersById(userId);
-//        List<DogCard> dogCardList = dogCardService.getListDogCard(userId);
-//        List<Review> reviewList = usersReviewManageReviewService.getListReview(userId);
-        List<ReviewInfoDto> reviewInfoDtoList = usersReviewManageReviewService.getListReviewInfoList(userId);
 
+        List<ReviewInfoDto> reviewInfoDtoList = usersReviewManageReviewService.getListReviewInfoList(userId);
+        // 유저 이미지 찾기
+        UsersImg usersImg = usersImgRepository.findByUsersId(userId);
+
+        String userImgUrl = null;
+
+        if (usersImg != null) userImgUrl = usersImg.getImgUrl();
 
         // 예약 전 / 후는
         CustomerProfileViewResponseDto response
@@ -54,6 +51,7 @@ public class CustomerController {
                 .builder()
                 .users(findUser)
                 .reviewList(reviewInfoDtoList)
+                .usersImg(userImgUrl)
                 .build();
 
         return new ResponseEntity<>(response, HttpStatus.OK);

@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import {FaDog} from 'react-icons/fa'
 import {BsRecordCircle} from 'react-icons/bs'
 import {availableServices} from '@/utils/options/options'
+import Image from 'next/image'
 
 interface Props {
   clickedService1: boolean
@@ -42,8 +43,13 @@ const AvailableServicesAll = (props: Props) => {
           <AvailableServiceIcon>
             <AvailableServiceIconBg>
               <AvailableServiceIconWrapper>
-                <FaDog size={40} color={colors.grey2} />
-                {/* <Image src={iconImageSrc} alt={alt} width={width} height={height} /> */}
+                {/* <FaDog size={40} color={colors.grey2} /> */}
+                <Image
+                  src={'/svg/serviceIcons/ServiceIcon1.png'}
+                  alt={'service-icon'}
+                  width={40}
+                  height={40}
+                />
               </AvailableServiceIconWrapper>
             </AvailableServiceIconBg>
           </AvailableServiceIcon>
@@ -70,8 +76,13 @@ const AvailableServicesAll = (props: Props) => {
           <AvailableServiceIcon>
             <AvailableServiceIconBg>
               <AvailableServiceIconWrapper>
-                <FaDog size={40} color={colors.grey2} />
-                {/* <Image src={iconImageSrc} alt={alt} width={width} height={height} /> */}
+                {/* <FaDog size={40} color={colors.grey2} /> */}
+                <Image
+                  src={'/svg/serviceIcons/ServiceIcon2.png'}
+                  alt={'service-icon'}
+                  width={40}
+                  height={40}
+                />
               </AvailableServiceIconWrapper>
             </AvailableServiceIconBg>
           </AvailableServiceIcon>
@@ -98,8 +109,13 @@ const AvailableServicesAll = (props: Props) => {
           <AvailableServiceIcon>
             <AvailableServiceIconBg>
               <AvailableServiceIconWrapper>
-                <FaDog size={40} color={colors.grey2} />
-                {/* <Image src={iconImageSrc} alt={alt} width={width} height={height} /> */}
+                {/* <FaDog size={40} color={colors.grey2} /> */}
+                <Image
+                  src={'/svg/serviceIcons/ServiceIcon3.png'}
+                  alt={'service-icon'}
+                  width={40}
+                  height={40}
+                />
               </AvailableServiceIconWrapper>
             </AvailableServiceIconBg>
           </AvailableServiceIcon>
@@ -126,8 +142,13 @@ const AvailableServicesAll = (props: Props) => {
           <AvailableServiceIcon>
             <AvailableServiceIconBg>
               <AvailableServiceIconWrapper>
-                <FaDog size={40} color={colors.grey2} />
-                {/* <Image src={iconImageSrc} alt={alt} width={width} height={height} /> */}
+                {/* <FaDog size={40} color={colors.grey2} /> */}
+                <Image
+                  src={'/svg/serviceIcons/ServiceIcon4.png'}
+                  alt={'service-icon'}
+                  width={40}
+                  height={40}
+                />
               </AvailableServiceIconWrapper>
             </AvailableServiceIconBg>
           </AvailableServiceIcon>
@@ -154,8 +175,13 @@ const AvailableServicesAll = (props: Props) => {
           <AvailableServiceIcon>
             <AvailableServiceIconBg>
               <AvailableServiceIconWrapper>
-                <FaDog size={40} color={colors.grey2} />
-                {/* <Image src={iconImageSrc} alt={alt} width={width} height={height} /> */}
+                {/* <FaDog size={40} color={colors.grey2} /> */}
+                <Image
+                  src={'/svg/serviceIcons/ServiceIcon5.png'}
+                  alt={'service-icon'}
+                  width={40}
+                  height={40}
+                />
               </AvailableServiceIconWrapper>
             </AvailableServiceIconBg>
           </AvailableServiceIcon>
@@ -182,8 +208,13 @@ const AvailableServicesAll = (props: Props) => {
           <AvailableServiceIcon>
             <AvailableServiceIconBg>
               <AvailableServiceIconWrapper>
-                <FaDog size={40} color={colors.grey2} />
-                {/* <Image src={iconImageSrc} alt={alt} width={width} height={height} /> */}
+                {/* <FaDog size={40} color={colors.grey2} /> */}
+                <Image
+                  src={'/svg/serviceIcons/ServiceIcon6.png'}
+                  alt={'service-icon'}
+                  width={40}
+                  height={40}
+                />
               </AvailableServiceIconWrapper>
             </AvailableServiceIconBg>
           </AvailableServiceIcon>
@@ -210,8 +241,13 @@ const AvailableServicesAll = (props: Props) => {
           <AvailableServiceIcon>
             <AvailableServiceIconBg>
               <AvailableServiceIconWrapper>
-                <FaDog size={40} color={colors.grey2} />
-                {/* <Image src={iconImageSrc} alt={alt} width={width} height={height} /> */}
+                {/* <FaDog size={40} color={colors.grey2} /> */}
+                <Image
+                  src={'/svg/serviceIcons/ServiceIcon7.png'}
+                  alt={'service-icon'}
+                  width={40}
+                  height={40}
+                />
               </AvailableServiceIconWrapper>
             </AvailableServiceIconBg>
           </AvailableServiceIcon>
@@ -238,8 +274,13 @@ const AvailableServicesAll = (props: Props) => {
           <AvailableServiceIcon>
             <AvailableServiceIconBg>
               <AvailableServiceIconWrapper>
-                <FaDog size={40} color={colors.grey2} />
-                {/* <Image src={iconImageSrc} alt={alt} width={width} height={height} /> */}
+                {/* <FaDog size={40} color={colors.grey2} /> */}
+                <Image
+                  src={'/svg/serviceIcons/ServiceIcon8.png'}
+                  alt={'service-icon'}
+                  width={40}
+                  height={40}
+                />
               </AvailableServiceIconWrapper>
             </AvailableServiceIconBg>
           </AvailableServiceIcon>
@@ -266,8 +307,13 @@ const AvailableServicesAll = (props: Props) => {
           <AvailableServiceIcon>
             <AvailableServiceIconBg>
               <AvailableServiceIconWrapper>
-                <FaDog size={40} color={colors.grey2} />
-                {/* <Image src={iconImageSrc} alt={alt} width={width} height={height} /> */}
+                {/* <FaDog size={40} color={colors.grey2} /> */}
+                <Image
+                  src={'/svg/serviceIcons/ServiceIcon9.png'}
+                  alt={'service-icon'}
+                  width={40}
+                  height={40}
+                />
               </AvailableServiceIconWrapper>
             </AvailableServiceIconBg>
           </AvailableServiceIcon>
@@ -294,8 +340,13 @@ const AvailableServicesAll = (props: Props) => {
           <AvailableServiceIcon>
             <AvailableServiceIconBg>
               <AvailableServiceIconWrapper>
-                <FaDog size={40} color={colors.grey2} />
-                {/* <Image src={iconImageSrc} alt={alt} width={width} height={height} /> */}
+                {/* <FaDog size={40} color={colors.grey2} /> */}
+                <Image
+                  src={'/svg/serviceIcons/ServiceIcon9.png'}
+                  alt={'service-icon'}
+                  width={40}
+                  height={40}
+                />
               </AvailableServiceIconWrapper>
             </AvailableServiceIconBg>
           </AvailableServiceIcon>
@@ -322,8 +373,13 @@ const AvailableServicesAll = (props: Props) => {
           <AvailableServiceIcon>
             <AvailableServiceIconBg>
               <AvailableServiceIconWrapper>
-                <FaDog size={40} color={colors.grey2} />
-                {/* <Image src={iconImageSrc} alt={alt} width={width} height={height} /> */}
+                {/* <FaDog size={40} color={colors.grey2} /> */}
+                <Image
+                  src={'/svg/serviceIcons/ServiceIcon10.png'}
+                  alt={'service-icon'}
+                  width={40}
+                  height={40}
+                />
               </AvailableServiceIconWrapper>
             </AvailableServiceIconBg>
           </AvailableServiceIcon>
@@ -350,8 +406,13 @@ const AvailableServicesAll = (props: Props) => {
           <AvailableServiceIcon>
             <AvailableServiceIconBg>
               <AvailableServiceIconWrapper>
-                <FaDog size={40} color={colors.grey2} />
-                {/* <Image src={iconImageSrc} alt={alt} width={width} height={height} /> */}
+                {/* <FaDog size={40} color={colors.grey2} /> */}
+                <Image
+                  src={'/svg/serviceIcons/ServiceIcon11.png'}
+                  alt={'service-icon'}
+                  width={40}
+                  height={40}
+                />
               </AvailableServiceIconWrapper>
             </AvailableServiceIconBg>
           </AvailableServiceIcon>

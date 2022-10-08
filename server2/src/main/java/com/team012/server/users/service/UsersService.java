@@ -56,8 +56,6 @@ public class UsersService {
 
     // Customer 회원가입
     public Users createCustomer(CustomerSignUpRequestDto dto) {
-        // 회원이 있는지 없는지 체크
-
         // 비밀번호 암호화
         String encPassword = bCryptPasswordEncoder.encode(dto.getPassword());
 

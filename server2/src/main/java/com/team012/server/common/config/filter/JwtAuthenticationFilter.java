@@ -61,6 +61,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .withClaim("id", principalDetails.getUsers().getId())
                 .withClaim("email", principalDetails.getUsers().getEmail())
                 .withClaim("username", principalDetails.getUsers().getUsername())
+                .withClaim("roles", principalDetails.getUsers().getRoles())
                 .sign(Algorithm.HMAC512(JwtProperties.SECRET));
         response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + jwtToken);
     }

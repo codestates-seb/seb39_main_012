@@ -1,21 +1,20 @@
-import Image from 'next/image'
-import {ToastContainer} from 'react-toastify'
 import styled from 'styled-components'
-import mainBanner from '@/public/images/mainBanner.png'
-import subBanner from '@/public/images/subBanner.jpg'
 import CategoryTag from '@/components/Home/CategoryTag'
 import {colors} from '@/styles/colors'
 import {categoryTags} from '@/utils/options/options'
 import PostCard from '@/components/Home/PostCard'
 import SearchBar from '@/components/Home/SearchBar'
-import {postService} from '@/apis/postAPI'
-import {useState} from 'react'
+import {postService} from '@/apis/PostAndSearchAPI'
+import {useEffect, useState} from 'react'
 import useIntersect from '@/hooks/useIntersect'
 import {Post} from '@/types/post'
 import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner'
 import {flexCenter} from '@/styles/css'
-
 import {GetStaticProps, InferGetStaticPropsType} from 'next'
+import BannerSwiper from '@/components/Home/BannerSwiper'
+import {bannerImages} from '@/public/images'
+import Image from 'next/image'
+
 export const getStaticProps: GetStaticProps = async () => {
   const res1 = await postService.getPosts(1)
   const res2 = await postService.getPosts(2)
@@ -31,7 +30,7 @@ export const getStaticProps: GetStaticProps = async () => {
 
 function Home({posts1, posts2, pageInfo}: InferGetStaticPropsType<typeof getStaticProps>) {
   const [page, setPage] = useState(3)
-  const [posts, setPosts] = useState<Post[]>(posts2)
+  const [posts, setPosts] = useState<Post[]>([])
   const [totalPage, setTotalPage] = useState(pageInfo.totalPages)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -49,12 +48,24 @@ function Home({posts1, posts2, pageInfo}: InferGetStaticPropsType<typeof getStat
     fetchMore()
   }
 
+  // useEffect(() => {
+  //   postService.getPosts(page).then((res) => {
+  //     setPosts(res.data)
+  //     setPage(page + 1)
+  //     setTotalPage(res.pageInfo.totalPages)
+  //   })
+  // }, [])
+
   const ref = useIntersect(callback)
+
+  if (!posts) return <LoadingSpinner></LoadingSpinner>
 
   return (
     <Container>
       <MainBanner>
-        <Image src={mainBanner} sizes={'100%'} alt={'MainBannerImg'} />
+        <BannerSwiper
+          banners={[bannerImages.mainBanner, bannerImages.mainBanner2, bannerImages.mainBanner3]}
+        />
       </MainBanner>
       <MainSearchBar>
         <SearchBar />
@@ -70,10 +81,18 @@ function Home({posts1, posts2, pageInfo}: InferGetStaticPropsType<typeof getStat
         ))}
       </PostCardBox>
       <SubBanner>
-        <Image src={subBanner} alt={'SubBannerImg'} />
+        <Image src={bannerImages.subBanner} sizes={'100%'} alt={'BannerImg'} />
       </SubBanner>
       <PostCardBox>
-        {posts.map((post: Post, idx) => (
+        {posts2.map((post: Post, idx: number) => (
+          <PostCard post={post} key={idx} />
+        ))}
+      </PostCardBox>
+      <SubBanner>
+        <Image src={bannerImages.subBanner2} sizes={'100%'} alt={'BannerImg'} />
+      </SubBanner>
+      <PostCardBox>
+        {posts.map((post: Post, idx: number) => (
           <PostCard post={post} key={idx} />
         ))}
       </PostCardBox>
@@ -86,7 +105,6 @@ function Home({posts1, posts2, pageInfo}: InferGetStaticPropsType<typeof getStat
       ) : (
         <Intersection ref={ref}></Intersection>
       )}
-      <ToastContainer />
     </Container>
   )
 }
@@ -151,14 +169,21 @@ const CategoryBox = styled.div`
 const PostCardBox = styled.div`
   width: 100%;
   display: flex;
-  justify-content: space-around;
   flex-wrap: wrap;
   gap: 15px;
-  min-height: 815px;
 `
 
 const SubBanner = styled.div`
-  margin-bottom: 50px;
+  margin-bottom: 40px;
+  width: 100%;
+
+  /* @media (min-width: 1920px) {
+    width: 150%;
+  }
+
+  @media (max-width: 1280px) {
+    width: 100%;
+  } */
 `
 
 const SpinnerBox = styled.div`

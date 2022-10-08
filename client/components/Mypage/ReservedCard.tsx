@@ -1,18 +1,29 @@
+import {addReviewState} from '@/recoil/editOpen'
+import {afterReservation, BeforeReservation} from '@/types/mypage'
+import {toLocalScale} from '@/utils/util'
 import React from 'react'
+import {useRecoilState} from 'recoil'
 import styled from 'styled-components'
 import CardImage from '../CardImage/CardImage'
+import AddReviewModal from './AddReviewModal'
 import ReservedTag from './ReservedTag'
 
 const imgUrl = 'https://cdn.imweb.me/upload/S201807025b39d1981b0b0/1fc55d055098b.jpg'
 
-function ReservedCard() {
+interface Props {
+  reservation: afterReservation
+}
+
+function ReservedCard({reservation}: Props) {
+  const [addReview, setAddReview] = useRecoilState(addReviewState)
   return (
     <Contaienr>
-      <CardImage mode="post" imgUrl={imgUrl}></CardImage>
-      <Title>JW에리어트 멍멍스퀘어 서울</Title>
+      {/* {addReview && <AddReviewModal setIsOpen={setAddReview} />} */}
+      <CardImage mode="post" imgUrl={reservation.url}></CardImage>
+      <Title>{reservation.title}</Title>
       <Content>
-        <Price>30,000원 / 1박</Price>
-        <ReservedTag title={'예약완료'} />
+        <Price>{toLocalScale(reservation.roomPrice)}원 / 1박</Price>
+        <ReservedTag title={'리뷰달기'} reservation={reservation} />
       </Content>
     </Contaienr>
   )

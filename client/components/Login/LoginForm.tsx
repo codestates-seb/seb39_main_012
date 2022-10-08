@@ -1,16 +1,65 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import styled from 'styled-components'
 import {colors} from '@/styles/colors'
 import {useRouter} from 'next/router'
 import Input from '../Input/Input'
 import AuthButton, {Button} from '../AuthButton/AuthButton'
+import LocalStorage from '../../utils/util/localStorage'
 
 interface Prop {
+  saveId: boolean
+  setSaveId: React.Dispatch<React.SetStateAction<boolean>>
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void
 }
 
-const LoginForm = ({onSubmit}: Prop) => {
+const LoginForm = ({saveId, setSaveId, onSubmit}: Prop) => {
   const router = useRouter()
+  const [email, setEmail] = React.useState('')
+
+  useEffect(() => {
+    const email = LocalStorage.getItem('email')
+    if (email) {
+      setEmail(email)
+      setSaveId(true)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (saveId) {
+      LocalStorage.setItem('email', email)
+    } else {
+      LocalStorage.removeItem('email')
+    }
+  }, [saveId])
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value)
+  }
+
+  const checkboxHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSaveId(!saveId)
+  }
+
+  // const guestLoginHandler = (e) => {
+  const guestLoginHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    LocalStorage.setItem(
+      'userInfo',
+      JSON.stringify({
+        sub: 'admin@admin.com',
+        id: 28,
+        exp: 1665626072,
+        email: 'admin@admin.com',
+        username: 'admin',
+      })
+    )
+    LocalStorage.setItem(
+      'accessToken',
+      'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBhZG1pbi5jb20iLCJpZCI6MjgsImV4cCI6MTY2NTYyNjMwMiwiZW1haWwiOiJhZG1pbkBhZG1pbi5jb20iLCJ1c2VybmFtZSI6ImFkbWluIn0.rQy4vCw1ftPBw-SIheq1Yw2jPPlyjPk9MT5M_sWvz-NaldhsnapgtuLLIANyl0whntLxjHxAeh--TydiAf1QJA'
+    )
+    router.push('/')
+  }
+
   return (
     <Container onSubmit={onSubmit}>
       <InputWrapper>
@@ -21,6 +70,8 @@ const LoginForm = ({onSubmit}: Prop) => {
           width={'42rem'}
           height={'4.2rem'}
           marginBottom={'2rem'}
+          value={email}
+          onChange={onChange}
         />
         <Input
           type={'password'}
@@ -32,7 +83,14 @@ const LoginForm = ({onSubmit}: Prop) => {
         />
       </InputWrapper>
       <KeepEmail>
-        <input type="checkbox" />
+        <input
+          type="checkbox"
+          onClick={() => {
+            setSaveId(!saveId)
+          }}
+          checked={saveId}
+          onChange={checkboxHandler}
+        />
         <span>이메일 저장</span>
       </KeepEmail>
       <AuthButton
@@ -41,7 +99,7 @@ const LoginForm = ({onSubmit}: Prop) => {
         height={'4.5rem'}
         hoverFontColor={'rgb(229, 249, 239)'}
       />
-      <GuestButton>Guest</GuestButton>
+      <GuestButton onClick={guestLoginHandler}>Guest</GuestButton>
       <HelpLogin>
         <span>아아디 찾기</span>
         <span>비밀번호 찾기</span>

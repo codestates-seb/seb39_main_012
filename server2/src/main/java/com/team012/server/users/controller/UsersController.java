@@ -1,6 +1,9 @@
 package com.team012.server.users.controller;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import com.team012.server.common.aws.service.AwsS3Service;
+import com.team012.server.common.config.filter.JwtProperties;
 import com.team012.server.common.config.userDetails.PrincipalDetails;
 import com.team012.server.users.dto.*;
 import com.team012.server.users.entity.Users;
@@ -12,13 +15,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.nio.charset.StandardCharsets;
+import java.util.Date;
 import java.util.Random;
 
 @RestController
@@ -33,7 +36,6 @@ public class UsersController {
     private final UsersManageCompanyService usersManageCompanyService;
 
     private final AwsS3Service awsS3Service;
-
 
     private final PasswordChangeService passwordChangeService;
 
@@ -70,9 +72,20 @@ public class UsersController {
 
         usersService.updateCustomer(userId, dto, imgUrl);
 
+        // 토큰을 다시 발행
+        String jwtToken = JWT.create()
+                .withSubject(principalDetails.getUsername())
+                .withExpiresAt(new Date(System.currentTimeMillis() + (JwtProperties.EXPIRATION_TIME)))
+                .withClaim("id", principalDetails.getUsers().getId())
+                .withClaim("email", principalDetails.getUsers().getEmail())
+                .withClaim("username", principalDetails.getUsers().getUsername())
+                .withClaim("roles", principalDetails.getUsers().getRoles())
+                .sign(Algorithm.HMAC512(JwtProperties.SECRET));
+
         UsersMessageResponseDto response =
                 UsersMessageResponseDto
                         .builder()
+                        .etc("Bearer " + jwtToken)
                         .message("수정 완료..!")
                         .build();
 

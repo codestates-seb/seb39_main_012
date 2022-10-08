@@ -8,11 +8,19 @@ import Image from 'next/image'
 import SearchBar from './SearchBar'
 import {GiHamburgerMenu} from 'react-icons/gi'
 import {BsSearch} from 'react-icons/bs'
+import {FaUserCircle} from 'react-icons/fa'
+import {HiOutlineBell} from 'react-icons/hi'
+import {RiHeart3Line} from 'react-icons/ri'
+import {useEffect} from 'react'
+import LocalStorage from '@/utils/util/localStorage'
+import {useRecoilState, useResetRecoilState} from 'recoil'
+import {loginState} from '@/recoil/loginState'
 
 const Header = () => {
   const router = useRouter()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isLogin, setIsLogin] = useState(false)
+  const [isLogin, setIsLogin] = useRecoilState(loginState)
+  const logOut = useResetRecoilState(loginState)
 
   return (
     <Container>
@@ -23,7 +31,7 @@ const Header = () => {
           </MobileHeaderWrapper>
           <DesktopHeaderWrapper className="DesktopLogo">
             <Image
-              src="/svg/DesktopLogo.png"
+              src="/svg/logos/DesktopLogo.png"
               width={190}
               height={40}
               onClick={() => router.push('/')}
@@ -33,7 +41,7 @@ const Header = () => {
         <HeaderSearch>
           <MobileHeaderWrapper className="MobileLogo">
             <Image
-              src="/svg/DesktopLogo.png"
+              src="/svg/logos/DesktopLogo.png"
               width={170}
               height={35}
               onClick={() => router.push('/')}
@@ -44,15 +52,55 @@ const Header = () => {
           </DesktopHeaderWrapper>
         </HeaderSearch>
         <HeaderMenus>
-          <Link href="/login">
-            <HeaderMenu>로그인</HeaderMenu>
-          </Link>
-          <Link href="/signup">
-            <HeaderMenu>회원가입</HeaderMenu>
-          </Link>
-          <Link href="/login">
-            <HeaderMenu>예약내역</HeaderMenu>
-          </Link>
+          {isLogin ? (
+            <IconWrapper
+              onClick={() => {
+                setIsMenuOpen(!isMenuOpen)
+              }}
+            >
+              <FaUserCircle />
+            </IconWrapper>
+          ) : (
+            <>
+              <Link href="/login">
+                <HeaderMenu>로그인</HeaderMenu>
+              </Link>
+              <MobileMenus>
+                <Link href="/login">
+                  <MobileMenu onClick={() => setIsMenuOpen(!isMenuOpen)}>로그인</MobileMenu>
+                </Link>
+                <Link href="/signup">
+                  <MobileMenu onClick={() => setIsMenuOpen(!isMenuOpen)}>회원가입</MobileMenu>
+                </Link>
+                <Link href="/login">
+                  <MobileMenu onClick={() => setIsMenuOpen(!isMenuOpen)}>예약내역</MobileMenu>
+                </Link>
+              </MobileMenus>
+            </>
+          )}
+          {isLogin ? (
+            <Link href="/">
+              <IconWrapper>
+                <HiOutlineBell />
+              </IconWrapper>
+            </Link>
+          ) : (
+            <Link href="/signup">
+              <HeaderMenu>회원가입</HeaderMenu>
+            </Link>
+          )}
+
+          {isLogin ? (
+            <Link href="/l">
+              <IconWrapper>
+                <RiHeart3Line />
+              </IconWrapper>
+            </Link>
+          ) : (
+            <Link href="/login">
+              <HeaderMenu>예약내역</HeaderMenu>
+            </Link>
+          )}
         </HeaderMenus>
         <HamburgerBox onClick={() => setIsMenuOpen(!isMenuOpen)}>
           <GiHamburgerMenu className="HamburgerMenuIcon" />
@@ -83,6 +131,34 @@ const Header = () => {
             </Link>
           </MobileMenus>
         )}
+        {isMenuOpen && isLogin && (
+          <LogInMenu>
+            {isLogin?.roles === 'ROLE_CUSTOMER' ? (
+              <Link href="/mypage">
+                <MobileMenu onClick={() => console.log('ss')}>마이페이지</MobileMenu>
+              </Link>
+            ) : (
+              <Link href="/ceopage">
+                <MobileMenu onClick={() => console.log('ss')}>업체페이지</MobileMenu>
+              </Link>
+            )}
+
+            <Link href="/">
+              <MobileMenu onClick={() => setIsMenuOpen(!isMenuOpen)}>예약내역</MobileMenu>
+            </Link>
+            <Link href="/">
+              <MobileMenu
+                onClick={() => {
+                  logOut()
+                  LocalStorage.removeItem('accessToken')
+                  LocalStorage.removeItem('userInfo')
+                }}
+              >
+                로그아웃
+              </MobileMenu>
+            </Link>
+          </LogInMenu>
+        )}
       </Wrapper>
     </Container>
   )
@@ -91,6 +167,7 @@ const Header = () => {
 export default Header
 
 const Container = styled.div`
+  position: relative;
   height: 100px;
   width: 100%;
   display: flex;
@@ -167,6 +244,8 @@ const HeaderMenus = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  /* justify-content: center; */
+  gap: 3rem;
   font-weight: bold;
   cursor: pointer;
 
@@ -247,3 +326,25 @@ const MobileMenu = styled.div`
     border-bottom: none;
   }
 `
+
+const IconWrapper = styled.div`
+  font-size: 3.5rem;
+  color: #9e9e9e;
+  cursor: pointer;
+
+  &:hover {
+    color: ${colors.mainColor};
+  }
+`
+
+const LogInMenu = styled.div`
+  border-radius: 10px;
+  z-index: 20;
+  position: absolute;
+  right: 50px;
+  bottom: -100px;
+  background-color: white;
+  cursor: pointer;
+`
+
+const LinkWrapper = styled.div``

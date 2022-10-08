@@ -38,8 +38,8 @@ public class ReviewController {
         // 리뷰가 작성될 때 마다 리뷰 별점들이 postsAvgScore에 따로 저장된다
         postsAvgScoreService.savedPostsScore(dto.getScore(), dto.getPostsId());
 
-                // 응답객체
-                ReviewResponseDto response = ReviewResponseDto
+        // 응답객체
+        ReviewResponseDto response = ReviewResponseDto
                 .builder()
                 .id(savedReview.getId())
                 .title(savedReview.getTitle())
@@ -62,8 +62,8 @@ public class ReviewController {
         Users users = principalDetails.getUsers();
         Review review = reviewService.findByReviewId(reviewId);
 
-        if(review.getUserId() != users.getId()) {
-            return new ResponseEntity<>("본인의 리뷰 이외에는 수정 불가능 합니다.",HttpStatus.FORBIDDEN);
+        if (review.getUserId() != users.getId()) {
+            return new ResponseEntity<>("본인의 리뷰 이외에는 수정 불가능 합니다.", HttpStatus.FORBIDDEN);
         }
 
         Review updateReview = reviewService.updateReview(reviewId, dto, multipartFile);
@@ -89,8 +89,8 @@ public class ReviewController {
         Users users = principalDetails.getUsers();
         Review review = reviewService.findByReviewId(reviewId);
 
-        if(review.getUserId() != users.getId()) {
-            return new ResponseEntity<>("본인의 리뷰 이외에는 삭제 불가능 합니다.",HttpStatus.FORBIDDEN);
+        if (review.getUserId() != users.getId()) {
+            return new ResponseEntity<>("본인의 리뷰 이외에는 삭제 불가능 합니다.", HttpStatus.FORBIDDEN);
         }
 
         reviewService.deleteReview(reviewId);

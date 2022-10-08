@@ -20,7 +20,6 @@ function SignUp() {
 
   return (
     <Container>
-      <ToastContainer></ToastContainer>
       <Title>회원가입</Title>
       <SignUpTab mode={mode} setMode={setMode} />
       <UserForm mode={mode} />
