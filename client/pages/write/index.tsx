@@ -727,7 +727,7 @@ const Write = () => {
           <MapDisplay>
             {/* <Map latitude={35.976749396987046} longitude={126.99599512792346} /> */}
             {updatedAddress.length > 0 ? (
-              <Map address={updatedAddress} companyName={'도그플래닛'} />
+              <Map address={updatedAddress} companyName={'호텔'} />
             ) : (
               <Map
                 address={'서울특별시 마포구 매봉산로 31 에스플렉스 지하 1층'}
