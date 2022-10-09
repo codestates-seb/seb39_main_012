@@ -34,6 +34,7 @@ const Book = () => {
   if (!userInfo || !dogsInfo) {
     return <div>로딩중</div>
   }
+  console.log('test')
 
   const selectDogHandler = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault()
