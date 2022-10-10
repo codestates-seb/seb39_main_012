@@ -81,7 +81,9 @@ function Home({posts1, posts2, pageInfo}: InferGetStaticPropsType<typeof getStat
         ))}
       </PostCardBox>
       <SubBanner>
-        <Image src={bannerImages.subBanner} sizes={'100%'} alt={'BannerImg'} />
+        <ImageWrapper>
+          <Image src={bannerImages.subBanner} sizes={'100%'} alt={'BannerImg'} />
+        </ImageWrapper>
       </SubBanner>
       <PostCardBox>
         {posts2.map((post: Post, idx: number) => (
@@ -89,7 +91,9 @@ function Home({posts1, posts2, pageInfo}: InferGetStaticPropsType<typeof getStat
         ))}
       </PostCardBox>
       <SubBanner>
-        <Image src={bannerImages.subBanner2} sizes={'100%'} alt={'BannerImg'} />
+        <ImageWrapper>
+          <Image src={bannerImages.subBanner2} sizes={'100%'} alt={'BannerImg'} />
+        </ImageWrapper>
       </SubBanner>
       <PostCardBox>
         {posts.map((post: Post, idx: number) => (
@@ -141,6 +145,9 @@ const MainSearchBar = styled.div`
   padding-top: 2rem;
   padding-bottom: 2rem;
   background-color: ${colors.grey1};
+  border-radius: 10px;
+  overflow: hidden;
+  perspective: 1px;
 `
 
 const CategoryBox = styled.div`
@@ -188,6 +195,10 @@ const SubBanner = styled.div`
   @media (max-width: 1280px) {
     width: 100%;
   } */
+`
+
+const ImageWrapper = styled.div`
+  margin-bottom: 4rem;
 `
 
 const SpinnerBox = styled.div`

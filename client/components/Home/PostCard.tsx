@@ -101,7 +101,8 @@ const Price = styled.div`
   font-style: normal;
   font-weight: 500;
   line-height: 24px;
-  font-size: 17px;
+  font-size: 16px;
+  color: rgb(83, 82, 82);
 
   @media (max-width: 500px) {
     margin-top: 2px;
