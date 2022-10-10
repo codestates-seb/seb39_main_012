@@ -1,25 +1,16 @@
 import {colors} from '@/styles/colors'
-import {useState} from 'react'
 import styled from 'styled-components'
 import {useRecoilState} from 'recoil'
 import {currentTabState} from '@/recoil/login'
 import LoginForm from './LoginForm'
 
-interface Prop {
-  // saveId: boolean
-  // setSaveId: React.Dispatch<React.SetStateAction<boolean>>
-  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void
-}
-
-const TapMenu = ({onSubmit}: Prop) => {
+const TapMenu = () => {
   const [currentTab, setCurrentTab] = useRecoilState(currentTabState)
   const menuArr = [{name: '견주님 로그인'}, {name: '사장님 로그인'}]
 
   const selectMenuHandler = (index: number) => {
     setCurrentTab(index)
   }
-
-  console.log(currentTab)
 
   return (
     <>
@@ -37,7 +28,7 @@ const TapMenu = ({onSubmit}: Prop) => {
         })}
       </TabMenu>
       <Desc>
-        <LoginForm onSubmit={onSubmit} />
+        <LoginForm />
       </Desc>
     </>
   )
@@ -46,8 +37,8 @@ const TapMenu = ({onSubmit}: Prop) => {
 export default TapMenu
 
 const TabMenu = styled.ul`
-  background-color: #fff;
-  color: #9a9a9a;
+  background-color: rgb(255, 255, 255);
+  color: rgb(154, 154, 154);
   font-weight: bold;
   font-size: 1.5rem;
   display: flex;
