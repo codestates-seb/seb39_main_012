@@ -102,7 +102,7 @@ const Price = styled.div`
   font-weight: 500;
   line-height: 24px;
   font-size: 16px;
-  color: rgb(83, 82, 82);
+  color: rgb(69, 69, 69);
 
   @media (max-width: 500px) {
     margin-top: 2px;
@@ -114,8 +114,7 @@ const Rating = styled.div`
   align-items: center;
   gap: 3px;
   color: ${colors.mainColor};
-  margin-top: 3px;
-  font-size: 17px;
+  font-size: 16px;
 
   @media (max-width: 500px) {
     margin-top: 1px;
@@ -123,11 +122,11 @@ const Rating = styled.div`
 
   span {
     font-family: 'Inter';
-    font-style: normal;
+    font-weight: 450;
     font-size: 20px;
     line-height: 24px;
-    color: #555;
-    font-size: 14px;
+    color: rgb(85, 85, 85);
+    font-size: 13px;
 
     @media (max-width: 500px) {
       font-size: 12px;
