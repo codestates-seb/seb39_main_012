@@ -146,7 +146,6 @@ const MainSearchBar = styled.div`
   padding-bottom: 2rem;
   background-color: ${colors.grey1};
   border-radius: 10px;
-  overflow: hidden;
   perspective: 1px;
 `
 
