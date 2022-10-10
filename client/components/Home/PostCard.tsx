@@ -72,8 +72,8 @@ const Location = styled.div`
   display: flex;
   align-items: center;
   color: ${colors.grey2};
-  font-size: 14px;
-  margin-top: 15px;
+  font-size: 13px;
+  margin-top: 6px;
 
   @media (max-width: 500px) {
     font-size: 8px;
@@ -82,7 +82,7 @@ const Location = styled.div`
 `
 
 const Title = styled.h1`
-  margin-top: 10px;
+  margin-top: 8px;
   font-family: 'Inter';
   font-style: normal;
   font-weight: 800;
@@ -96,11 +96,12 @@ const Title = styled.h1`
 `
 
 const Price = styled.div`
-  margin-top: 10px;
+  margin-top: 6px;
   font-family: 'Inter';
   font-style: normal;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 24px;
+  font-size: 17px;
 
   @media (max-width: 500px) {
     margin-top: 2px;
@@ -110,9 +111,10 @@ const Price = styled.div`
 const Rating = styled.div`
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 3px;
   color: ${colors.mainColor};
-  margin-top: 8px;
+  margin-top: 3px;
+  font-size: 17px;
 
   @media (max-width: 500px) {
     margin-top: 1px;
@@ -123,7 +125,8 @@ const Rating = styled.div`
     font-style: normal;
     font-size: 20px;
     line-height: 24px;
-    color: black;
+    color: #555;
+    font-size: 14px;
 
     @media (max-width: 500px) {
       font-size: 12px;
