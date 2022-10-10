@@ -664,6 +664,7 @@ const CompanyInfoBottom = styled.div`
   display: flex;
   gap: 5rem;
   margin-top: 8rem;
+  width: 100%;
 `
 
 const CompanyDesc = styled.div`
