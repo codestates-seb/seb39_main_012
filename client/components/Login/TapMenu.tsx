@@ -1,29 +1,45 @@
 import {colors} from '@/styles/colors'
 import {useState} from 'react'
 import styled from 'styled-components'
+import {useRecoilState} from 'recoil'
+import {currentTabState} from '@/recoil/login'
+import LoginForm from './LoginForm'
 
-const TapMenu = () => {
-  const [currentTab, setCurrentTab] = useState(0)
+interface Prop {
+  // saveId: boolean
+  // setSaveId: React.Dispatch<React.SetStateAction<boolean>>
+  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void
+}
+
+const TapMenu = ({onSubmit}: Prop) => {
+  const [currentTab, setCurrentTab] = useRecoilState(currentTabState)
   const menuArr = [{name: '견주님 로그인'}, {name: '사장님 로그인'}]
 
   const selectMenuHandler = (index: number) => {
     setCurrentTab(index)
   }
 
+  console.log(currentTab)
+
   return (
-    <TabMenu>
-      {menuArr.map((ele, index) => {
-        return (
-          <li
-            key={index}
-            className={currentTab === index ? 'submenu focused' : 'submenu'}
-            onClick={() => selectMenuHandler(index)}
-          >
-            {ele.name}
-          </li>
-        )
-      })}
-    </TabMenu>
+    <>
+      <TabMenu>
+        {menuArr.map((ele, index) => {
+          return (
+            <li
+              key={index}
+              className={currentTab === index ? 'submenu focused' : 'submenu'}
+              onClick={() => selectMenuHandler(index)}
+            >
+              {ele.name}
+            </li>
+          )
+        })}
+      </TabMenu>
+      <Desc>
+        <LoginForm onSubmit={onSubmit} />
+      </Desc>
+    </>
   )
 }
 
@@ -54,3 +70,5 @@ const TabMenu = styled.ul`
     color: rgb(62, 62, 62);
   }
 `
+
+const Desc = styled.div``

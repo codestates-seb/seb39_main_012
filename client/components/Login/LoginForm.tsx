@@ -5,16 +5,25 @@ import {useRouter} from 'next/router'
 import Input from '../Input/Input'
 import AuthButton, {Button} from '../AuthButton/AuthButton'
 import LocalStorage from '../../utils/util/localStorage'
+import {useRecoilState} from 'recoil'
+import {currentTabState, saveIdState} from '@/recoil/login'
+import {authService} from '@/apis/AuthAPI'
+import {toast} from 'react-toastify'
+import {loginState} from '@/recoil/loginState'
 
 interface Prop {
-  saveId: boolean
-  setSaveId: React.Dispatch<React.SetStateAction<boolean>>
+  // saveId: boolean
+  // setSaveId: React.Dispatch<React.SetStateAction<boolean>>
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void
 }
 
-const LoginForm = ({saveId, setSaveId, onSubmit}: Prop) => {
+// const LoginForm = ({saveId, setSaveId, onSubmit}: Prop) => {
+const LoginForm = ({onSubmit}: Prop) => {
   const router = useRouter()
   const [email, setEmail] = React.useState('')
+  const [saveId, setSaveId] = useRecoilState(saveIdState)
+  const [currentTab, setCurrentTab] = useRecoilState(currentTabState)
+  const [isLogin, setIsLogin] = useRecoilState(loginState)
 
   useEffect(() => {
     const email = LocalStorage.getItem('email')
@@ -40,24 +49,33 @@ const LoginForm = ({saveId, setSaveId, onSubmit}: Prop) => {
     setSaveId(!saveId)
   }
 
-  // const guestLoginHandler = (e) => {
-  const guestLoginHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const guestLoginHandler = async (
+    e: React.MouseEvent<HTMLButtonElement>,
+    mode: string | undefined
+  ) => {
     e.preventDefault()
-    LocalStorage.setItem(
-      'userInfo',
-      JSON.stringify({
-        sub: 'admin@admin.com',
-        id: 28,
-        exp: 1665626072,
-        email: 'admin@admin.com',
-        username: 'admin',
+
+    if (mode === '견주님') {
+      const [result, userInfo] = await authService.Login({
+        email: 'guest@moongtel.com',
+        password: 'asdf1234!@#$',
       })
-    )
-    LocalStorage.setItem(
-      'accessToken',
-      'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBhZG1pbi5jb20iLCJpZCI6MjgsImV4cCI6MTY2NTYyNjMwMiwiZW1haWwiOiJhZG1pbkBhZG1pbi5jb20iLCJ1c2VybmFtZSI6ImFkbWluIn0.rQy4vCw1ftPBw-SIheq1Yw2jPPlyjPk9MT5M_sWvz-NaldhsnapgtuLLIANyl0whntLxjHxAeh--TydiAf1QJA'
-    )
-    router.push('/')
+      setIsLogin(userInfo)
+      if (result === 200) {
+        router.push('/')
+        toast.success('로그인 성공')
+      }
+    } else if (mode === '사장님') {
+      const [result, userInfo] = await authService.Login({
+        email: 'ceo@ceo.com',
+        password: 'asdf1234!@#$',
+      })
+      setIsLogin(userInfo)
+      if (result === 200) {
+        router.push('/')
+        toast.success('로그인 성공')
+      }
+    }
   }
 
   return (
@@ -99,7 +117,13 @@ const LoginForm = ({saveId, setSaveId, onSubmit}: Prop) => {
         height={'4.5rem'}
         hoverFontColor={'rgb(229, 249, 239)'}
       />
-      <GuestButton onClick={guestLoginHandler}>Guest</GuestButton>
+
+      {currentTab === 0 ? (
+        <GuestButton onClick={(e) => guestLoginHandler(e, '견주님')}>Guest 견주님</GuestButton>
+      ) : (
+        <GuestButton onClick={(e) => guestLoginHandler(e, '사장님')}>Guest 사장님</GuestButton>
+      )}
+
       <HelpLogin>
         <span>아아디 찾기</span>
         <span>비밀번호 찾기</span>

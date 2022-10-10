@@ -12,13 +12,11 @@ import {loginState} from '@/recoil/loginState'
 // import {bookingWishlist} from '@/recoil/bookingWishlist'
 
 const Login = () => {
-  // const [bookingWish, setBookingWish] = useRecoilState(bookingWishlist)
   const [isLogin, setIsLogin] = useRecoilState(loginState)
-
   const [error, setError] = useState(false)
-  const [saveId, setSaveId] = useState(false)
-
+  // const [saveId, setSaveId] = useState(false)
   const router = useRouter()
+
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const formdata = new FormData(e.currentTarget)
@@ -28,12 +26,6 @@ const Login = () => {
       email,
       password,
     }
-
-    // if (saveId) {
-    //   localStorage.setItem('email', email)
-    // } else {
-    //   localStorage.removeItem('email')
-    // }
 
     const [result, userInfo] = await authService.Login(form)
     console.log('Result', userInfo)
@@ -50,8 +42,8 @@ const Login = () => {
     <Container>
       <Wrapper>
         <Title>로그인</Title>
-        <TapMenu />
-        <LoginForm onSubmit={onSubmit} setSaveId={setSaveId} saveId={saveId} />
+        <TapMenu onSubmit={onSubmit} />
+        {/* <LoginForm onSubmit={onSubmit} setSaveId={setSaveId} saveId={saveId} /> */}
       </Wrapper>
     </Container>
   )
