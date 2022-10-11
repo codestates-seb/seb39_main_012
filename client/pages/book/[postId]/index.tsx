@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, {useEffect, useState} from 'react'
 import styled from 'styled-components'
 import {colors} from '@/styles/colors'
@@ -11,6 +12,8 @@ import {bookingService} from '@/apis/bookingAPI'
 import {useRouter} from 'next/router'
 import Footer from '@/components/Layout/Footer/Footer'
 import DogProfile from '@/components/Book/DogProfile'
+import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner'
+import {toast} from 'react-toastify'
 
 const Book = () => {
   const router = useRouter()
@@ -32,9 +35,8 @@ const Book = () => {
   }, [])
 
   if (!userInfo || !dogsInfo) {
-    return <div>로딩중</div>
+    return <LoadingSpinner></LoadingSpinner>
   }
-  console.log('test')
 
   const selectDogHandler = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault()
@@ -70,13 +72,21 @@ const Book = () => {
       reservationUserInfoDto,
     }
 
+    if (dogId.length === 0) {
+      toast.error('반려견을 선택해주세요.')
+    }
+
+    // if (dogId.length !== dogCount) {
+    //   toast.error('반려견 수가 일치해야합니다.')
+    // }
+
     const result = await bookingService.postBooking(Number(postId), requestForm as any)
-    console.log('Result', result)
+
     if (result.status === 201) {
       router.push(`/book_confirm/${result.data.reservedId}`)
       LocalStorage.removeItem('tempBooking')
     } else {
-      throw new Error('에러 발생!')
+      toast.error('예약에 실패했습니다.')
     }
   }
 
@@ -149,23 +159,23 @@ const Book = () => {
               </BookingHotelDetail>
               <BookingHotelDetail>
                 <h3>반려동물</h3>
-                <div>
-                  <div>
+                <NumberOfDogs>
+                  <DogNumber>
                     {tempBookingInfo?.dto.map.small
                       ? `소형견: ${tempBookingInfo?.dto.map.small}마리 \n`
                       : ''}
-                  </div>
-                  <div>
+                  </DogNumber>
+                  <DogNumber>
                     {tempBookingInfo?.dto.map.medium
                       ? `중형견: ${tempBookingInfo?.dto.map.medium}마리 \n`
                       : ''}
-                  </div>
-                  <div>
+                  </DogNumber>
+                  <DogNumber>
                     {tempBookingInfo?.dto.map.big
                       ? `대형견: ${tempBookingInfo?.dto.map.big}마리 \n`
                       : ''}
-                  </div>
-                </div>
+                  </DogNumber>
+                </NumberOfDogs>
               </BookingHotelDetail>
               <BookingHotelDetail>
                 <h3>체크인</h3>
@@ -361,6 +371,14 @@ const BookingHotelDetail = styled.div`
     font-size: 1.6rem;
     font-weight: 700;
   }
+`
+
+const NumberOfDogs = styled.div`
+  margin-top: 0.5rem;
+`
+
+const DogNumber = styled.div`
+  margin-bottom: 1rem;
 `
 
 const BookingHotelPrice = styled.div`

@@ -3,21 +3,15 @@ import React from 'react'
 import styled from 'styled-components'
 import {RiEditBoxLine} from 'react-icons/ri'
 import {useRouter} from 'next/router'
-import {Ceo, CeoInfo} from '@/types/ceopage'
+import {CeoInfo, PostRecoil} from '@/types/ceopage'
 import {flexCenter} from '@/styles/css'
-
-interface User {
-  profileImg: string
-  username: string
-  phone: string
-  email: string
-}
 
 interface Props {
   ceo: CeoInfo
+  post: PostRecoil
 }
 
-function CeoProfileCard({ceo}: Props) {
+function CeoProfileCard({ceo, post}: Props) {
   const router = useRouter()
   return (
     <Container>
@@ -36,7 +30,14 @@ function CeoProfileCard({ceo}: Props) {
         </UserName>
         <UserTell>{ceo.ceoPhone}</UserTell>
         <UserEmail>{ceo.ceoEmail}</UserEmail>
-        <AddCompanyButton onClick={() => router.push('/write')}>
+        <AddCompanyButton
+          onClick={() => {
+            if (post.title) {
+              return window.alert('업체는 최대 한개까지 등록 할 수 있습니다.')
+            }
+            router.push('/write')
+          }}
+        >
           <p>업체 등록하기</p>
           <RiEditBoxLine />
         </AddCompanyButton>

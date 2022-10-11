@@ -15,7 +15,6 @@ interface Props {
 }
 
 function ConfirmCardSwiper({dogDatas, id}: Props) {
-  console.log('data', dogDatas)
   return (
     <SwiperContainer>
       <Swiper

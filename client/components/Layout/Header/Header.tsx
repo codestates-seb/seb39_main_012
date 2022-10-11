@@ -11,7 +11,6 @@ import {BsSearch} from 'react-icons/bs'
 import {FaUserCircle} from 'react-icons/fa'
 import {HiOutlineBell} from 'react-icons/hi'
 import {RiHeart3Line} from 'react-icons/ri'
-import {useEffect} from 'react'
 import LocalStorage from '@/utils/util/localStorage'
 import {useRecoilState, useResetRecoilState} from 'recoil'
 import {loginState} from '@/recoil/loginState'
@@ -19,7 +18,8 @@ import {loginState} from '@/recoil/loginState'
 const Header = () => {
   const router = useRouter()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isLogin, setIsLogin] = useRecoilState(loginState)
+  const [isSubmenuOpen, setIsSubmenuOpen] = useState(false)
+  const [isLogin] = useRecoilState(loginState)
   const logOut = useResetRecoilState(loginState)
 
   return (
@@ -58,7 +58,11 @@ const Header = () => {
                 setIsMenuOpen(!isMenuOpen)
               }}
             >
-              <FaUserCircle />
+              <FaUserCircle
+                onClick={() => {
+                  setIsSubmenuOpen(!isSubmenuOpen)
+                }}
+              />
             </IconWrapper>
           ) : (
             <>
@@ -91,7 +95,7 @@ const Header = () => {
           )}
 
           {isLogin ? (
-            <Link href="/l">
+            <Link href="/">
               <IconWrapper>
                 <RiHeart3Line />
               </IconWrapper>
@@ -120,31 +124,72 @@ const Header = () => {
         )}
         {isMenuOpen && isLogin && (
           <MobileMenus>
+            {isLogin?.roles === 'ROLE_CUSTOMER' ? (
+              <>
+                <Link href="/mypage">
+                  <MobileMenu onClick={() => setIsMenuOpen(!isMenuOpen)}>마이페이지</MobileMenu>
+                </Link>
+                <Link href="/mypage">
+                  <MobileMenu onClick={() => setIsMenuOpen(!isMenuOpen)}>예약내역</MobileMenu>
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link href="/ceopage">
+                  <MobileMenu onClick={() => setIsMenuOpen(!isMenuOpen)}>업체페이지</MobileMenu>
+                </Link>
+                <Link href="/ceopage">
+                  <MobileMenu onClick={() => setIsMenuOpen(!isMenuOpen)}>예약회원</MobileMenu>
+                </Link>
+              </>
+            )}
+
             <Link href="/">
-              <MobileMenu onClick={() => setIsMenuOpen(!isMenuOpen)}>마이페이지</MobileMenu>
-            </Link>
-            <Link href="/">
-              <MobileMenu onClick={() => setIsMenuOpen(!isMenuOpen)}>예약내역</MobileMenu>
-            </Link>
-            <Link href="/">
-              <MobileMenu onClick={() => setIsMenuOpen(!isMenuOpen)}>로그아웃</MobileMenu>
+              <MobileMenu
+                onClick={() => {
+                  logOut()
+                  LocalStorage.removeItem('accessToken')
+                  LocalStorage.removeItem('userInfo')
+                  window.location.replace('/')
+                }}
+              >
+                로그아웃
+              </MobileMenu>
             </Link>
           </MobileMenus>
         )}
-        {isMenuOpen && isLogin && (
+        {isSubmenuOpen && isLogin && (
           <LogInMenu>
             {isLogin?.roles === 'ROLE_CUSTOMER' ? (
               <Link href="/mypage">
-                <MobileMenu onClick={() => console.log('ss')}>마이페이지</MobileMenu>
+                <MobileMenu
+                  onClick={() => {
+                    setIsSubmenuOpen(!isSubmenuOpen)
+                  }}
+                >
+                  마이페이지
+                </MobileMenu>
               </Link>
             ) : (
               <Link href="/ceopage">
-                <MobileMenu onClick={() => console.log('ss')}>업체페이지</MobileMenu>
+                <MobileMenu
+                  onClick={() => {
+                    setIsSubmenuOpen(!isSubmenuOpen)
+                  }}
+                >
+                  업체페이지
+                </MobileMenu>
               </Link>
             )}
 
             <Link href="/">
-              <MobileMenu onClick={() => setIsMenuOpen(!isMenuOpen)}>예약내역</MobileMenu>
+              <MobileMenu
+                onClick={() => {
+                  setIsSubmenuOpen(!isSubmenuOpen)
+                }}
+              >
+                예약내역
+              </MobileMenu>
             </Link>
             <Link href="/">
               <MobileMenu
@@ -330,7 +375,7 @@ const MobileMenu = styled.div`
 
 const IconWrapper = styled.div`
   font-size: 3.5rem;
-  color: #9e9e9e;
+  color: rgb(158, 158, 158);
   cursor: pointer;
 
   &:hover {
@@ -339,13 +384,12 @@ const IconWrapper = styled.div`
 `
 
 const LogInMenu = styled.div`
+  border: 1px solid ${colors.grey1};
   border-radius: 10px;
   z-index: 20;
   position: absolute;
-  right: 50px;
-  bottom: -100px;
-  background-color: white;
+  right: 100px;
+  bottom: -110px;
+  background-color: rgb(255, 255, 255);
   cursor: pointer;
 `
-
-const LinkWrapper = styled.div``

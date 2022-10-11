@@ -1,25 +1,23 @@
 import {userService} from '@/apis/MyPageAPI'
 import LabelInput from '@/components/LabelInput/LabelInput'
-import {passWordCheckState} from '@/recoil/passwordCheck'
+import {} from '@/recoil/passwordCheck'
 import {colors} from '@/styles/colors'
 import {flexCenter} from '@/styles/css'
-import {Validate} from '@/utils/validate'
 import {useRouter} from 'next/router'
-import React, {useEffect, useState} from 'react'
+import React, {useState} from 'react'
 import {toast} from 'react-toastify'
-import {useRecoilState} from 'recoil'
+import {} from 'recoil'
 import styled from 'styled-components'
 
 function EditPassword() {
   const router = useRouter()
-  // const [isCheck, setIsCheck] = useRecoilState(passWordCheckState)
 
   const [form, setForm] = useState({
     password: '',
     passwordCheck: '',
   })
 
-  const [error, setError] = useState(false)
+  const [error] = useState(false)
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {name, value} = e.target
@@ -32,7 +30,9 @@ function EditPassword() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log('submit')
+
+    window.alert('준비중인 기능입니다.')
+    return
 
     if (error) {
       return toast.error('비밀번호가 일치하지 않습니다.')

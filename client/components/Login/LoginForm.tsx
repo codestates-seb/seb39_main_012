@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState} from 'react'
 import styled from 'styled-components'
 import {colors} from '@/styles/colors'
@@ -15,8 +16,8 @@ import {Validate} from '@/utils/validate'
 const LoginForm = () => {
   const router = useRouter()
   const [saveId, setSaveId] = useRecoilState(saveIdState)
-  const [currentTab, setCurrentTab] = useRecoilState(currentTabState)
-  const [isLogin, setIsLogin] = useRecoilState(loginState)
+  const [currentTab] = useRecoilState(currentTabState)
+  const [, setIsLogin] = useRecoilState(loginState)
 
   const [form, setForm] = useState({
     email: '',
@@ -54,7 +55,7 @@ const LoginForm = () => {
     })
   }
 
-  const checkboxHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const checkboxHandler = () => {
     setSaveId(!saveId)
   }
 
@@ -114,7 +115,7 @@ const LoginForm = () => {
 
     if (mode === '견주님') {
       const [result, userInfo] = await authService.Login({
-        email: 'guest@moongtel.com',
+        email: 'test12@gmail.com',
         password: 'asdf1234!@#$',
       })
       setIsLogin(userInfo)
@@ -124,7 +125,7 @@ const LoginForm = () => {
       }
     } else if (mode === '사장님') {
       const [result, userInfo] = await authService.Login({
-        email: 'ceo@ceo.com',
+        email: 'ceo01@moongtel.com',
         password: 'asdf1234!@#$',
       })
       setIsLogin(userInfo)

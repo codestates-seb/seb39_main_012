@@ -1,7 +1,9 @@
 import {ceoService} from '@/apis/CeoPageAPI'
+import {dataState} from '@/recoil/mypage'
 import {PostRecoil} from '@/types/ceopage'
 import React from 'react'
 import {toast} from 'react-toastify'
+import {useRecoilState} from 'recoil'
 import styled from 'styled-components'
 import CardImage from '../CardImage/CardImage'
 import CompanyInfoTag from './CompanyInfoTag'
@@ -11,13 +13,18 @@ interface Props {
 }
 
 function CompanyInfoCard({post}: Props) {
+  const [, setIsChange] = useRecoilState(dataState)
   return (
     <Contaienr>
       <CardImage mode="post" imgUrl={post.thumbnail}></CardImage>
       <Title>{post.title}</Title>
       <Content>
-        {/* <Price>30,000원 / 1박</Price> */}
-        <CompanyInfoTag title={'수정'} onClick={() => console.log('수정')} />
+        <CompanyInfoTag
+          title={'수정'}
+          onClick={() => {
+            window.alert('준비중인 기능입니다.')
+          }}
+        />
         <CompanyInfoTag
           title={'삭제'}
           onClick={async () => {
@@ -25,6 +32,7 @@ function CompanyInfoCard({post}: Props) {
               const result = await ceoService.deleteMyCompany(post.id)
               if (result.status === 204) {
                 toast.success('삭제되었습니다.')
+                setIsChange((prev) => !prev)
                 return
               }
               toast.error('삭제에 실패했습니다.')
@@ -69,12 +77,4 @@ const Content = styled.div`
   display: flex;
   align-items: center;
   gap: 5px;
-`
-
-const Price = styled.p`
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 800;
-  font-size: 15px;
-  line-height: 18px;
 `

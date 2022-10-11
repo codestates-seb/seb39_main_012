@@ -3,7 +3,7 @@ import {dataState} from '@/recoil/mypage'
 import {colors} from '@/styles/colors'
 import {flexCenter} from '@/styles/css'
 import {Review} from '@/types/mypage'
-import React, {useEffect, useState} from 'react'
+import React, {useState} from 'react'
 import {toast} from 'react-toastify'
 import {useRecoilState} from 'recoil'
 import styled from 'styled-components'
@@ -184,7 +184,7 @@ const TableButtonBox = styled.div`
 const NoContent = styled.div`
   ${flexCenter};
   margin-top: 25px;
-  width: 90%;
+  width: 100%;
   font-size: 20px;
   color: gray;
   height: 50px;

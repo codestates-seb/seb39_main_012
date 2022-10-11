@@ -75,7 +75,6 @@ function AddDogModal({setIsOpen}: Props) {
   }
 
   const onClick = (name: string, value: boolean) => {
-    console.log(name, value)
     setDogInfo({
       ...dogInfo,
       [name]: value,

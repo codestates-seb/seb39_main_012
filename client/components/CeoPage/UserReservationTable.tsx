@@ -16,7 +16,7 @@ interface Props {
 
 function UserReservationTable({reservations, title}: Props) {
   const [isChange, setIsChange] = useRecoilState(dataState)
-  const [limit, setLimit] = useState(5)
+  const [limit] = useState(5)
   const [page, setPage] = useState(1)
   const offset = (page - 1) * limit // offset = 시작점
 
@@ -78,7 +78,6 @@ const ReviewTableBox = styled.div`
   margin-bottom: 30px;
 `
 
-// 15 20 15 15 15 20
 const TableHead = styled.div`
   display: flex;
   align-items: center;
@@ -121,8 +120,6 @@ const TableHeadEtc = styled.div`
   width: 20%;
 `
 
-// Body
-
 const TableBody = styled.div`
   display: flex;
   flex-direction: column;
@@ -163,35 +160,6 @@ const TableBodyEtc = styled(TableHeadEtc)`
     width: 80px;
     white-space: nowrap;
     cursor: pointer;
-  }
-`
-
-const TableButtonBox = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  width: 10%;
-  font-size: 10px;
-  button {
-    border-radius: 20px;
-    border: none;
-    width: 40%;
-    white-space: nowrap;
-    cursor: pointer;
-
-    @media (max-width: 768px) {
-      width: 24%;
-      font-size: 5px;
-    }
-  }
-
-  button:nth-child(1) {
-    background-color: ${colors.mainColor};
-    color: white;
-  }
-
-  @media (max-width: 768px) {
-    width: 25%;
   }
 `
 

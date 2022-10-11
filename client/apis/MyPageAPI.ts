@@ -26,7 +26,6 @@ const getMyPage = async () => {
 const createDogCard = async (form: any) => {
   try {
     const result = await authInstance.post(`/v1/customer/dogCard/create`, form)
-    console.log(result)
     return result
   } catch (e) {
     if (e instanceof Error) {

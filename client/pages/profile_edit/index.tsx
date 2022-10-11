@@ -64,6 +64,9 @@ function ProfileEdit() {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
+    window.alert('준비중인 기능입니다.')
+    return
+
     const formData = new FormData()
     formData.append('file', selectedFile)
     formData.append('dto', new Blob([JSON.stringify(form)], {type: 'application/json'}))

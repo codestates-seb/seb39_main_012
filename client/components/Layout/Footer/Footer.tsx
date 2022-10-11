@@ -1,6 +1,5 @@
 import React from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
 import {useRouter} from 'next/router'
 import styled from 'styled-components'
 
@@ -23,10 +22,33 @@ const Footer = () => {
             <Column>
               <ColumnTitle>MOONGTEL</ColumnTitle>
               <ColumnLists>
-                <ColumnList>프로젝트 뭉텔</ColumnList>
-                <ColumnList>Github</ColumnList>
-                <ColumnList>API문서</ColumnList>
-                <ColumnList>Figma</ColumnList>
+                <ColumnList>
+                  <a
+                    href="https://docs.google.com/presentation/d/1kDworaqfeTy1xYk_0UvHv_eAEzKO9PDQGQ9jYQXXZA8/edit#slide=id.g163e0cb4160_1_21"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    서비스 소개
+                  </a>
+                </ColumnList>
+                <ColumnList>
+                  <a
+                    href="https://github.com/codestates-seb/seb39_main_012"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Github
+                  </a>
+                </ColumnList>
+                <ColumnList>
+                  <a
+                    href="https://www.figma.com/file/IPeBo0ZKWKwJXa619E7rUY/Project-Moongtel"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Figma
+                  </a>
+                </ColumnList>
               </ColumnLists>
             </Column>
             <Column>
@@ -136,20 +158,12 @@ const LogoWrapper = styled.div`
   @media (max-width: 680px) {
     display: flex;
     align-items: flex-start;
-    /* padding: 0 1rem; */
   }
 
   @media (max-width: 600px) {
     display: none;
   }
 `
-
-const LogoImage = styled.svg`
-  min-width: 40px;
-  min-height: 40px;
-`
-
-const LogoPath = styled.path``
 
 const Nav = styled.div`
   flex: 3.5;

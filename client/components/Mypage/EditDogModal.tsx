@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @next/next/no-img-element */
 import {colors} from '@/styles/colors'
 import {flexCenter} from '@/styles/css'
@@ -139,8 +140,6 @@ function EditDogModal({setIsOpen}: Props) {
       etc: dogInfo.etc ? extraInfo._etc : '없음',
       bark: dogInfo.bark ? extraInfo._bark : '없음',
     }
-
-    console.log(requestForm)
 
     const formData = new FormData()
 

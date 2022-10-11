@@ -1,24 +1,17 @@
-import {addReviewState} from '@/recoil/editOpen'
-import {afterReservation, BeforeReservation} from '@/types/mypage'
+import {afterReservation} from '@/types/mypage'
 import {toLocalScale} from '@/utils/util'
 import React from 'react'
-import {useRecoilState} from 'recoil'
 import styled from 'styled-components'
 import CardImage from '../CardImage/CardImage'
-import AddReviewModal from './AddReviewModal'
 import ReservedTag from './ReservedTag'
-
-const imgUrl = 'https://cdn.imweb.me/upload/S201807025b39d1981b0b0/1fc55d055098b.jpg'
 
 interface Props {
   reservation: afterReservation
 }
 
 function ReservedCard({reservation}: Props) {
-  const [addReview, setAddReview] = useRecoilState(addReviewState)
   return (
     <Contaienr>
-      {/* {addReview && <AddReviewModal setIsOpen={setAddReview} />} */}
       <CardImage mode="post" imgUrl={reservation.url}></CardImage>
       <Title>{reservation.title}</Title>
       <Content>

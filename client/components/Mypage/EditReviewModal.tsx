@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @next/next/no-img-element */
 import {colors} from '@/styles/colors'
@@ -24,14 +25,12 @@ function AddReviewModal({setIsOpen, curReview}: Props) {
   const [selectedFile, setSelectedFile] = useState<any>([])
   const [fileDataURL, setFileDataURL] = useState<any>([])
 
-  console.log(curReview)
   const [form, setForm] = useState({
     title: curReview?.title,
     content: curReview?.content,
   })
 
   useEffect(() => {
-    console.log(selectedFile)
     let fileReader: FileReader,
       isCancel = false
     if (selectedFile.length > 0) {
@@ -93,7 +92,6 @@ function AddReviewModal({setIsOpen, curReview}: Props) {
     formData.append('dto', new Blob([JSON.stringify(request)], {type: 'application/json'}))
 
     const result = await reviewService.editReview(formData, curReview?.id as number)
-    console.log(result)
 
     if (result.status === 200) {
       setIsOpen(false)

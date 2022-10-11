@@ -1,8 +1,6 @@
 import React from 'react'
-import {colors} from '@/styles/colors'
 import Image from 'next/image'
 import styled from 'styled-components'
-import {FaDog} from 'react-icons/fa'
 
 interface AvailableServiceCardProps {
   serviceTitle: string
@@ -26,7 +24,6 @@ const AvailableServiceCard = ({
       <AvailableServiceIcon>
         <AvailableServiceIconBg>
           <AvailableServiceIconWrapper>
-            {/* <FaDog size={40} color={colors.grey2} /> */}
             <Image src={iconImageSrc} alt={alt} width={width} height={height} />
           </AvailableServiceIconWrapper>
         </AvailableServiceIconBg>

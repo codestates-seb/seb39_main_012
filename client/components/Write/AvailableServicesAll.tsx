@@ -1,7 +1,6 @@
 import React from 'react'
 import {colors} from '@/styles/colors'
 import styled from 'styled-components'
-import {FaDog} from 'react-icons/fa'
 import {BsRecordCircle} from 'react-icons/bs'
 import {availableServices} from '@/utils/options/options'
 import Image from 'next/image'

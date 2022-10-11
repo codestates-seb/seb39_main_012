@@ -1,8 +1,7 @@
 import React, {useState} from 'react'
 import styled from 'styled-components'
-import {BsGenderMale, BsGenderFemale} from 'react-icons/bs'
+import {BsGenderMale} from 'react-icons/bs'
 import Image from 'next/image'
-import {colors} from '@/styles/colors'
 
 interface DogProfileProps {
   id: string
@@ -26,12 +25,11 @@ interface Props {
 
 const DogProfile = ({dog, setDogId}: Props) => {
   const [dogSelected, setDogSelected] = useState(false)
-  const dogSelectHandler = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const dogSelectHandler = () => {
     setDogSelected(!dogSelected)
   }
 
   const dogInfoHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // setDogId(Number(e.target.id))
     setDogId((prev) => [...prev, Number(e.target.id)])
   }
 
@@ -49,7 +47,7 @@ const DogProfile = ({dog, setDogId}: Props) => {
             </DogGender>
           </div>
           <div>
-            <DogAge>{dog.age}</DogAge>
+            <DogAge>{dog.age}살</DogAge>
             <DogWeight>{dog.weight}kg</DogWeight>
           </div>
         </DogInfoBox>
@@ -92,9 +90,6 @@ const DogProfile = ({dog, setDogId}: Props) => {
             </label>
           </Checkbox>
         </InfoBox>
-        {/* <DeleteButton onClick={() => console.log('삭제')}>
-          <IoMdRemoveCircle />
-        </DeleteButton> */}
       </DogBottomInfoBox>
     </Container>
   )
@@ -108,7 +103,6 @@ const Container = styled.div`
   position: relative;
   border-radius: 10px;
   overflow: hidden;
-  /* box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px; */
   white-space: nowrap;
   border-radius: 20px;
   transition: 0.3s;

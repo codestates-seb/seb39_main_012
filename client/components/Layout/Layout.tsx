@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import {ToastContainer} from 'react-toastify'
 import styled from 'styled-components'
 import Adversting from '../\bAdversting/Adversting'
+import Footer from './Footer/Footer'
 import Header from './Header/Header'
 
 interface Props {
@@ -17,6 +18,7 @@ function Layout({children}: Props) {
         <Box>
           <Header />
           {children}
+          <Footer />
         </Box>
       </LayOutContainer>
       <ToastContainer />
