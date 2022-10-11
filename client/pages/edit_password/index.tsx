@@ -32,7 +32,9 @@ function EditPassword() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log('submit')
+
+    window.alert('준비중인 기능입니다.')
+    return
 
     if (error) {
       return toast.error('비밀번호가 일치하지 않습니다.')

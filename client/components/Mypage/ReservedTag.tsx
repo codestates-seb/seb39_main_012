@@ -18,8 +18,8 @@ function ReservedTag({title, reservation}: Props) {
     <Contaienr
       title={title}
       onClick={() => {
-        setAddReview(true)
         if (reservation) {
+          setAddReview(true)
           setPostId({
             postsId: reservation.postsId,
             roomPrice: reservation.roomPrice,

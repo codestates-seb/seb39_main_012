@@ -55,7 +55,7 @@ function CeoMyPage() {
       <Title>마이페이지</Title>
       <SectionTitle title={'사장님 정보'} />
       <ProfileBox>
-        <CeoProfileCard ceo={ceoInfo} />
+        <CeoProfileCard ceo={ceoInfo} post={post} />
       </ProfileBox>
       <SectionTitle title={'점포 정보'} />
       <CompanyInfoBox>
@@ -64,7 +64,6 @@ function CeoMyPage() {
         ) : (
           <CompanyInfoCard post={post} />
         )}
-        {/* <CompanyInfoCard post={post} /> */}
       </CompanyInfoBox>
       <SectionTitle title={'예약 현황 내역'} />
       <UserReservationTable title={post.title} reservations={reservations} />
