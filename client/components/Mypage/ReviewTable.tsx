@@ -184,7 +184,7 @@ const TableButtonBox = styled.div`
 const NoContent = styled.div`
   ${flexCenter};
   margin-top: 25px;
-  width: 90%;
+  width: 100%;
   font-size: 20px;
   color: gray;
   height: 50px;

@@ -17,7 +17,12 @@ function CompanyInfoCard({post}: Props) {
       <Title>{post.title}</Title>
       <Content>
         {/* <Price>30,000원 / 1박</Price> */}
-        <CompanyInfoTag title={'수정'} onClick={() => console.log('수정')} />
+        <CompanyInfoTag
+          title={'수정'}
+          onClick={() => {
+            window.alert('준비중인 기능입니다.')
+          }}
+        />
         <CompanyInfoTag
           title={'삭제'}
           onClick={async () => {

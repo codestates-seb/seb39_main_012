@@ -125,14 +125,37 @@ const Header = () => {
         )}
         {isMenuOpen && isLogin && (
           <MobileMenus>
+            {isLogin?.roles === 'ROLE_CUSTOMER' ? (
+              <>
+                <Link href="/mypage">
+                  <MobileMenu onClick={() => setIsMenuOpen(!isMenuOpen)}>마이페이지</MobileMenu>
+                </Link>
+                <Link href="/mypage">
+                  <MobileMenu onClick={() => setIsMenuOpen(!isMenuOpen)}>예약내역</MobileMenu>
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link href="/ceopage">
+                  <MobileMenu onClick={() => setIsMenuOpen(!isMenuOpen)}>업체페이지</MobileMenu>
+                </Link>
+                <Link href="/ceopage">
+                  <MobileMenu onClick={() => setIsMenuOpen(!isMenuOpen)}>예약회원</MobileMenu>
+                </Link>
+              </>
+            )}
+
             <Link href="/">
-              <MobileMenu onClick={() => setIsMenuOpen(!isMenuOpen)}>마이페이지</MobileMenu>
-            </Link>
-            <Link href="/">
-              <MobileMenu onClick={() => setIsMenuOpen(!isMenuOpen)}>예약내역</MobileMenu>
-            </Link>
-            <Link href="/">
-              <MobileMenu onClick={() => setIsMenuOpen(!isMenuOpen)}>로그아웃</MobileMenu>
+              <MobileMenu
+                onClick={() => {
+                  logOut()
+                  LocalStorage.removeItem('accessToken')
+                  LocalStorage.removeItem('userInfo')
+                  window.location.replace('/')
+                }}
+              >
+                로그아웃
+              </MobileMenu>
             </Link>
           </MobileMenus>
         )}
