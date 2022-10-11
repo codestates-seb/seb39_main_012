@@ -29,14 +29,21 @@ export const getStaticProps: GetStaticProps = async () => {
   }
 }
 
-LocalStorage.removeItem('accessToken')
-LocalStorage.removeItem('userInfo')
-
 function Home({posts1, posts2, pageInfo}: InferGetStaticPropsType<typeof getStaticProps>) {
   const [page, setPage] = useState(3)
   const [posts, setPosts] = useState<Post[]>([])
   const [totalPage, setTotalPage] = useState(pageInfo.totalPages)
   const [isLoading, setIsLoading] = useState(false)
+
+  useEffect(() => {
+    window.onbeforeunload = function (e) {
+      window.onunload = function () {
+        LocalStorage.removeItem('accessToken')
+        LocalStorage.removeItem('userInfo')
+      }
+      return undefined
+    }
+  }, [])
 
   const fetchMore = async () => {
     setIsLoading(true)
