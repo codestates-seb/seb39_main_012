@@ -36,16 +36,20 @@
 
 <br>
 
+## 🌟 ERD
 
+<br>
 
+## 🌟 서비스 아키텍쳐
+![스크린샷 2022-10-11 오전 9 27 16](https://user-images.githubusercontent.com/81212210/194971943-fb57d803-3723-4711-9011-e742728679d1.png)
+
+<br>
 
 ## 🌟 프로젝트 문서
 
 - 🖌 Figma [[바로가기]](https://www.figma.com/file/IPeBo0ZKWKwJXa619E7rUY/Project-Moongtel?node-id=0%3A1)
-- 📝 서비스 아키텍쳐
 
-  ![스크린샷 2022-10-11 오전 9 27 16](https://user-images.githubusercontent.com/81212210/194971943-fb57d803-3723-4711-9011-e742728679d1.png)
-
+- 📣 서비스 기능시연 + 발표자료 [[바로가기]](https://docs.google.com/presentation/d/1kDworaqfeTy1xYk_0UvHv_eAEzKO9PDQGQ9jYQXXZA8/edit?usp=sharing)
 
 <br>
 
