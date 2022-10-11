@@ -49,7 +49,7 @@ const DogProfile = ({dog, setDogId}: Props) => {
             </DogGender>
           </div>
           <div>
-            <DogAge>{dog.age}</DogAge>
+            <DogAge>{dog.age}살</DogAge>
             <DogWeight>{dog.weight}kg</DogWeight>
           </div>
         </DogInfoBox>

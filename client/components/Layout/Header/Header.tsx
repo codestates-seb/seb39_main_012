@@ -19,6 +19,7 @@ import {loginState} from '@/recoil/loginState'
 const Header = () => {
   const router = useRouter()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isSubmenuOpen, setIsSubmenuOpen] = useState(false)
   const [isLogin, setIsLogin] = useRecoilState(loginState)
   const logOut = useResetRecoilState(loginState)
 
@@ -58,7 +59,11 @@ const Header = () => {
                 setIsMenuOpen(!isMenuOpen)
               }}
             >
-              <FaUserCircle />
+              <FaUserCircle
+                onClick={() => {
+                  setIsSubmenuOpen(!isSubmenuOpen)
+                }}
+              />
             </IconWrapper>
           ) : (
             <>
@@ -154,28 +159,39 @@ const Header = () => {
             </Link>
           </MobileMenus>
         )}
-        {isMenuOpen && isLogin && (
+        {isSubmenuOpen && isLogin && (
           <LogInMenu>
             {isLogin?.roles === 'ROLE_CUSTOMER' ? (
-              <>
-                <Link href="/mypage">
-                  <MobileMenu onClick={() => console.log('ss')}>마이페이지</MobileMenu>
-                </Link>
-                <Link href="/mypage">
-                  <MobileMenu onClick={() => setIsMenuOpen(!isMenuOpen)}>예약내역</MobileMenu>
-                </Link>
-              </>
+              <Link href="/mypage">
+                <MobileMenu
+                  onClick={() => {
+                    setIsSubmenuOpen(!isSubmenuOpen)
+                  }}
+                >
+                  마이페이지
+                </MobileMenu>
+              </Link>
             ) : (
-              <>
-                <Link href="/ceopage">
-                  <MobileMenu onClick={() => console.log('ss')}>업체페이지</MobileMenu>
-                </Link>
-                <Link href="/ceopage">
-                  <MobileMenu onClick={() => setIsMenuOpen(!isMenuOpen)}>예약자명단</MobileMenu>
-                </Link>
-              </>
+              <Link href="/ceopage">
+                <MobileMenu
+                  onClick={() => {
+                    setIsSubmenuOpen(!isSubmenuOpen)
+                  }}
+                >
+                  업체페이지
+                </MobileMenu>
+              </Link>
             )}
 
+            <Link href="/">
+              <MobileMenu
+                onClick={() => {
+                  setIsSubmenuOpen(!isSubmenuOpen)
+                }}
+              >
+                예약내역
+              </MobileMenu>
+            </Link>
             <Link href="/">
               <MobileMenu
                 onClick={() => {
@@ -360,7 +376,7 @@ const MobileMenu = styled.div`
 
 const IconWrapper = styled.div`
   font-size: 3.5rem;
-  color: #9e9e9e;
+  color: rgb(158, 158, 158);
   cursor: pointer;
 
   &:hover {
@@ -369,12 +385,13 @@ const IconWrapper = styled.div`
 `
 
 const LogInMenu = styled.div`
+  border: 1px solid ${colors.grey1};
   border-radius: 10px;
   z-index: 20;
   position: absolute;
-  right: 50px;
-  bottom: -100px;
-  background-color: white;
+  right: 100px;
+  bottom: -110px;
+  background-color: rgb(255, 255, 255);
   cursor: pointer;
 `
 

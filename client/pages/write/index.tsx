@@ -1,9 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
-import {availableTags, categoryTags} from '@/utils/options/options'
 import AuthButton from '@/components/AuthButton/AuthButton'
 import SectionTitle from '@/components/StoreDetail/SectionTitle'
 import {colors} from '@/styles/colors'
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
 import styled from 'styled-components'
 import {ToastContainer} from 'react-toastify'
 import {toast} from 'react-toastify'
@@ -13,46 +12,9 @@ import Map from '@/components/Map/Map'
 import {useDaumPostcodePopup} from 'react-daum-postcode'
 import router from 'next/router'
 import {authPostService} from '@/apis/AuthPostAPI'
-import {availableServices} from '@/utils/options/options'
 import {IPostWrite} from '@/apis/type/types'
-import Footer from '@/components/Layout/Footer/Footer'
 
 const Write = () => {
-  // api1: get 회사 프로필
-
-  // api2: post 글작성
-
-  // const [form, setForm] = useState({
-  //   title: '이을 애견 호텔 12313213',
-  //   content:
-  //     '이을반려동물케어센터에서반려견들에게 품격있고 쾌적한 호텔 서비스3213123를 시작합니다. 가족분들의 사랑하는 마음을 담아 이을 반려동물 호텔이 정성껏 보살피겠습니다.',
-  //   latitude: '127.024554',
-  //   longitude: '37.4967012',
-  //   address: '서울특별시 서초구 106-13 ',
-  //   detailAddress: '신화빌딩 1층 ',
-  //   phone: '02-1232-0123',
-  //   checkInTime: '오전 11:00',
-  //   checkOutTime: '오후 11:00',
-  //   hashTag: ['소형견', '대형견', '미용', '산책', '테스트12'],
-  //   serviceTag: ['소형견 케어', '노견 케어', '산책', '미용', '케어 일지'],
-  //   roomCount: 10,
-  //   roomCreateDtoList: [
-  //     {
-  //       size: 'small',
-  //       price: 40000,
-  //     },
-  //     {
-  //       size: 'medium',
-  //       price: 60000,
-  //     },
-  //     {
-  //       size: 'big',
-  //       price: 80000,
-  //     },
-  //   ],
-  // })
-
-  // const [totalRoomCount, setTotalRoomCount] = useState(0)
   const [title, setTitle] = useState('')
   const [form, setForm] = useState<IPostWrite>({
     title: '',
@@ -70,28 +32,20 @@ const Write = () => {
     roomCreateDtoList: [
       {
         size: 'small',
-        price: 0,
+        price: undefined,
       },
       {
         size: 'medium',
-        price: 0,
+        price: undefined,
       },
       {
         size: 'big',
-        price: 0,
+        price: undefined,
       },
     ],
   })
 
-  // useEffect(() => {
-  //   authPostService.authGetCeoPage().then((result) => {
-  //     setForm({...form, title: result.companyInfo.companyName})
-  //     setTitle(result.companyInfo.companyName)
-  //   })
-  // }, [])
-
   const [selectedImage, setSelectedImage] = useState([])
-
   const [clickedService1, setClickedService1] = useState(false)
   const [clickedService2, setClickedService2] = useState(false)
   const [clickedService3, setClickedService3] = useState(false)
@@ -138,6 +92,21 @@ const Write = () => {
     clickedTag7,
   ]
 
+  const [smallDogPrice, setSmallDogPrice] = useState(0)
+  const [mediumDogPrice, setMediumDogPrice] = useState(0)
+  const [bigDogPrice, setBigDogPrice] = useState(0)
+
+  const handlePricePerDog = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const {name, value} = e.target
+    if (name === 'small') {
+      setSmallDogPrice(Number(value))
+    } else if (name === 'medium') {
+      setMediumDogPrice(Number(value))
+    } else if (name === 'big') {
+      setBigDogPrice(Number(value))
+    }
+  }
+
   const [files, setFiles] = useState<File[]>([])
 
   // const onLoadFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -164,9 +133,7 @@ const Write = () => {
   }
 
   const open = useDaumPostcodePopup()
-
   const [updatedAddress, setUpdatedAddress] = useState('')
-
   const handleComplete = (data: any) => {
     let fullAddress = data.address
     let extraAddress = ''
@@ -188,6 +155,29 @@ const Write = () => {
   const handleAddressClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
     open({onComplete: handleComplete})
+  }
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const {name, value} = e.target
+
+    setForm({
+      ...form,
+      [name]: value,
+    })
+  }
+
+  const onChangeTextarea = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    })
+  }
+
+  const roomCountHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm({
+      ...form,
+      roomCount: form.roomCount + Number(e.target.value),
+    })
   }
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -277,6 +267,23 @@ const Write = () => {
 
     // const finalImages = selectedImage.map((image) => new File([image], 'image'))
 
+    // if (
+    //   form.title === '' ||
+    //   form.content === '' ||
+    //   form.address === '' ||
+    //   form.detailAddress === '' ||
+    //   form.phone === '' ||
+    //   // form.checkInTime === '' ||
+    //   // form.checkOutTime === '' ||
+    //   form.roomCount === 0 ||
+    //   form.roomCreateDtoList[0].price === undefined ||
+    //   form.roomCreateDtoList[1].price === undefined ||
+    //   form.roomCreateDtoList[2].price === undefined
+    // ) {
+    //   toast.error('필수 입력란을 모두 입력해주세요.')
+    //   return
+    // }
+
     const formData = new FormData()
     if (files) {
       files.forEach((file: any) => {
@@ -298,450 +305,411 @@ const Write = () => {
       toast.success('새 포스트 등록이 완료되었습니다.')
     } else {
       toast.error('새 포스트 등록에 실패했습니다.')
-    }
-  }
-
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const {name, value} = e.target
-
-    setForm({
-      ...form,
-      [name]: value,
-    })
-  }
-
-  const onChangeTextarea = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    })
-  }
-
-  const roomCountHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({
-      ...form,
-      roomCount: form.roomCount + Number(e.target.value),
-    })
-  }
-
-  const [smallDogPrice, setSmallDogPrice] = useState(0)
-  const [mediumDogPrice, setMediumDogPrice] = useState(0)
-  const [bigDogPrice, setBigDogPrice] = useState(0)
-
-  const handlePricePerDog = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const {name, value} = e.target
-    if (name === 'small') {
-      setSmallDogPrice(Number(value))
-    } else if (name === 'medium') {
-      setMediumDogPrice(Number(value))
-    } else if (name === 'big') {
-      setBigDogPrice(Number(value))
+      return
     }
   }
 
   return (
-    <>
-      <CreatePostForm onSubmit={onSubmit}>
-        {/* <CreatePostForm> */}
-        <ToastContainer />
-        <Container>
-          <CompanyInfo>
-            <SectionTitle title={'애견호텔 소개'} />
-            <CompanyInfoBox>
-              <CompanyInfoItem>
-                <Label>업체명</Label>
-                <Input
-                  type="text"
-                  placeholder="업체명을 입력하세요."
-                  name="title"
-                  value={form?.title}
-                  onChange={onChange}
-                />
-              </CompanyInfoItem>
-              <CompanyInfoItem>
-                <Label>연락처</Label>
-                <Input
-                  type="tel"
-                  placeholder="예시) '010-1234-5678'"
-                  name="phone"
-                  value={form?.phone}
-                  onChange={onChange}
-                />
-              </CompanyInfoItem>
-              {/* <CompanyInfoItem>
+    <CreatePostForm onSubmit={onSubmit}>
+      <ToastContainer />
+      <Container>
+        <CompanyInfo>
+          <SectionTitle title={'애견호텔 소개'} />
+          <CompanyInfoBox>
+            <CompanyInfoItem>
+              <Label>업체명</Label>
+              <Input
+                type="text"
+                placeholder="업체명을 입력하세요."
+                name="title"
+                value={form?.title}
+                onChange={onChange}
+              />
+            </CompanyInfoItem>
+            <CompanyInfoItem>
+              <Label>연락처</Label>
+              <Input
+                type="tel"
+                placeholder="예시) '010-1234-5678'"
+                name="phone"
+                value={form?.phone}
+                onChange={onChange}
+              />
+            </CompanyInfoItem>
+            {/* <CompanyInfoItem>
               <Label>태그</Label>
               <Input type="text" placeholder="업체 설명 태그를 선택해주세요." name="tags" />
             </CompanyInfoItem> */}
-              <CompanyInfoItem>
-                <Label>태그</Label>
-                {clickedTag1 ||
-                clickedTag2 ||
-                clickedTag3 ||
-                clickedTag4 ||
-                clickedTag5 ||
-                clickedTag6 ||
-                clickedTag7 ? (
-                  <TagListBox>
-                    {clickedTag1 && (
-                      <Tag
-                        onClick={() => {
-                          setClickedTag1(!clickedTag1)
-                        }}
-                      >
-                        #소형견
-                      </Tag>
-                    )}
-                    {clickedTag2 && (
-                      <Tag
-                        onClick={() => {
-                          setClickedTag2(!clickedTag2)
-                        }}
-                      >
-                        #중형견
-                      </Tag>
-                    )}
-                    {clickedTag3 && (
-                      <Tag
-                        onClick={() => {
-                          setClickedTag3(!clickedTag3)
-                        }}
-                      >
-                        #대형견
-                      </Tag>
-                    )}
-                    {clickedTag4 && (
-                      <Tag
-                        onClick={() => {
-                          setClickedTag4(!clickedTag4)
-                        }}
-                      >
-                        #노견케어
-                      </Tag>
-                    )}
-                    {clickedTag5 && (
-                      <Tag
-                        onClick={() => {
-                          setClickedTag5(!clickedTag5)
-                        }}
-                      >
-                        #미용
-                      </Tag>
-                    )}
-                    {clickedTag6 && (
-                      <Tag
-                        onClick={() => {
-                          setClickedTag6(!clickedTag6)
-                        }}
-                      >
-                        #산책
-                      </Tag>
-                    )}
-                    {clickedTag7 && (
-                      <Tag
-                        onClick={() => {
-                          setClickedTag7(!clickedTag7)
-                        }}
-                      >
-                        #훈련
-                      </Tag>
-                    )}
-                  </TagListBox>
-                ) : (
-                  <Input
-                    type="text"
-                    placeholder="업체 설명 태그를 선택해주세요. (최대 3개)"
-                    name="tags"
-                    disabled
-                  />
-                )}
-              </CompanyInfoItem>
-              <CompanyInfoItem>
-                <Label></Label>
-                {/* <Input type="text" placeholder="체크아웃 시간 (예시) 오후 07:00" name="time"/> */}
-                <TagList>
-                  {clickedTag1 === false && (
+            <CompanyInfoItem>
+              <Label>태그</Label>
+              {clickedTag1 ||
+              clickedTag2 ||
+              clickedTag3 ||
+              clickedTag4 ||
+              clickedTag5 ||
+              clickedTag6 ||
+              clickedTag7 ? (
+                <TagListBox>
+                  {clickedTag1 && (
                     <Tag
                       onClick={() => {
                         setClickedTag1(!clickedTag1)
-                        setForm({
-                          ...form,
-                          hashTag: [...form.hashTag, '소형견'],
-                        })
                       }}
                     >
                       #소형견
                     </Tag>
                   )}
-                  {clickedTag2 === false && (
+                  {clickedTag2 && (
                     <Tag
                       onClick={() => {
                         setClickedTag2(!clickedTag2)
-                        setForm({
-                          ...form,
-                          hashTag: [...form.hashTag, '중형견'],
-                        })
                       }}
                     >
                       #중형견
                     </Tag>
                   )}
-                  {clickedTag3 === false && (
+                  {clickedTag3 && (
                     <Tag
                       onClick={() => {
                         setClickedTag3(!clickedTag3)
-                        setForm({
-                          ...form,
-                          hashTag: [...form.hashTag, '대형견'],
-                        })
                       }}
                     >
                       #대형견
                     </Tag>
                   )}
-                  {clickedTag4 === false && (
+                  {clickedTag4 && (
                     <Tag
                       onClick={() => {
                         setClickedTag4(!clickedTag4)
-                        setForm({
-                          ...form,
-                          hashTag: [...form.hashTag, '노견케어'],
-                        })
                       }}
                     >
                       #노견케어
                     </Tag>
                   )}
-                  {clickedTag5 === false && (
+                  {clickedTag5 && (
                     <Tag
                       onClick={() => {
                         setClickedTag5(!clickedTag5)
-                        setForm({
-                          ...form,
-                          hashTag: [...form.hashTag, '미용'],
-                        })
                       }}
                     >
                       #미용
                     </Tag>
                   )}
-                  {clickedTag6 === false && (
+                  {clickedTag6 && (
                     <Tag
                       onClick={() => {
                         setClickedTag6(!clickedTag6)
-                        setForm({
-                          ...form,
-                          hashTag: [...form.hashTag, '산책'],
-                        })
                       }}
                     >
                       #산책
                     </Tag>
                   )}
-                  {clickedTag7 === false && (
+                  {clickedTag7 && (
                     <Tag
                       onClick={() => {
                         setClickedTag7(!clickedTag7)
-                        setForm({
-                          ...form,
-                          hashTag: [...form.hashTag, '훈련'],
-                        })
                       }}
                     >
                       #훈련
                     </Tag>
                   )}
-                </TagList>
-              </CompanyInfoItem>
-              <CompanyInfoItem>
-                <Label>이용시간</Label>
+                </TagListBox>
+              ) : (
                 <Input
                   type="text"
-                  placeholder="체크인시간 (예시) 오전 09:00"
-                  name="checkInTime"
-                  value={form?.checkInTime}
-                  onChange={onChange}
-                ></Input>
-              </CompanyInfoItem>
-              <CompanyInfoItem>
-                <Label></Label>
-                <Input
-                  type="text"
-                  placeholder="체크아웃 시간 (예시) 오후 07:00"
-                  name="checkOutTime"
-                  value={form?.checkOutTime}
-                  onChange={onChange}
-                ></Input>
-              </CompanyInfoItem>
-              <CompanyInfoItem>
-                <Label>소개글</Label>
-                <Textarea
-                  placeholder="호텔링 소개글을 작성해주세요."
-                  name="content"
-                  value={form?.content}
-                  onChange={onChangeTextarea}
+                  placeholder="업체 설명 태그를 선택해주세요. (최대 3개까지만 반영)"
+                  name="tags"
+                  disabled
                 />
-              </CompanyInfoItem>
-              <CompanyInfoItem>
-                <Label>사진</Label>
-                <CompanyImages>
-                  <CompanyImagesBox>
-                    <AddImages>
-                      <label htmlFor="companyImg">
-                        <AiOutlineCamera size={30} />
-                        사진 {selectedImage.length}/5
-                      </label>
-                      <input
-                        type="file"
-                        id="companyImg"
-                        onChange={imageHandleChange}
-                        accept="image/png, image,jpeg, image/jpg"
-                        multiple
+              )}
+            </CompanyInfoItem>
+            <CompanyInfoItem>
+              <Label></Label>
+              {/* <Input type="text" placeholder="체크아웃 시간 (예시) 오후 07:00" name="time"/> */}
+              <TagList>
+                {clickedTag1 === false && (
+                  <Tag
+                    onClick={() => {
+                      setClickedTag1(!clickedTag1)
+                      setForm({
+                        ...form,
+                        hashTag: [...form.hashTag, '소형견'],
+                      })
+                    }}
+                  >
+                    #소형견
+                  </Tag>
+                )}
+                {clickedTag2 === false && (
+                  <Tag
+                    onClick={() => {
+                      setClickedTag2(!clickedTag2)
+                      setForm({
+                        ...form,
+                        hashTag: [...form.hashTag, '중형견'],
+                      })
+                    }}
+                  >
+                    #중형견
+                  </Tag>
+                )}
+                {clickedTag3 === false && (
+                  <Tag
+                    onClick={() => {
+                      setClickedTag3(!clickedTag3)
+                      setForm({
+                        ...form,
+                        hashTag: [...form.hashTag, '대형견'],
+                      })
+                    }}
+                  >
+                    #대형견
+                  </Tag>
+                )}
+                {clickedTag4 === false && (
+                  <Tag
+                    onClick={() => {
+                      setClickedTag4(!clickedTag4)
+                      setForm({
+                        ...form,
+                        hashTag: [...form.hashTag, '노견케어'],
+                      })
+                    }}
+                  >
+                    #노견케어
+                  </Tag>
+                )}
+                {clickedTag5 === false && (
+                  <Tag
+                    onClick={() => {
+                      setClickedTag5(!clickedTag5)
+                      setForm({
+                        ...form,
+                        hashTag: [...form.hashTag, '미용'],
+                      })
+                    }}
+                  >
+                    #미용
+                  </Tag>
+                )}
+                {clickedTag6 === false && (
+                  <Tag
+                    onClick={() => {
+                      setClickedTag6(!clickedTag6)
+                      setForm({
+                        ...form,
+                        hashTag: [...form.hashTag, '산책'],
+                      })
+                    }}
+                  >
+                    #산책
+                  </Tag>
+                )}
+                {clickedTag7 === false && (
+                  <Tag
+                    onClick={() => {
+                      setClickedTag7(!clickedTag7)
+                      setForm({
+                        ...form,
+                        hashTag: [...form.hashTag, '훈련'],
+                      })
+                    }}
+                  >
+                    #훈련
+                  </Tag>
+                )}
+              </TagList>
+            </CompanyInfoItem>
+            <CompanyInfoItem>
+              <Label>이용시간</Label>
+              <Input
+                type="text"
+                placeholder="체크인시간 (예시) 오전 09:00"
+                name="checkInTime"
+                value={form?.checkInTime}
+                onChange={onChange}
+              ></Input>
+            </CompanyInfoItem>
+            <CompanyInfoItem>
+              <Label></Label>
+              <Input
+                type="text"
+                placeholder="체크아웃 시간 (예시) 오후 07:00"
+                name="checkOutTime"
+                value={form?.checkOutTime}
+                onChange={onChange}
+              ></Input>
+            </CompanyInfoItem>
+            <CompanyInfoItem>
+              <Label>소개글</Label>
+              <Textarea
+                placeholder="호텔링 소개글을 작성해주세요."
+                name="content"
+                value={form?.content}
+                onChange={onChangeTextarea}
+              />
+            </CompanyInfoItem>
+            <CompanyInfoItem>
+              <Label>사진</Label>
+              <CompanyImages>
+                <div>용량이 작은 이미지 파일 5개를 업로드해주세요. (500kb 미만) </div>
+                <CompanyImagesBox>
+                  <AddImages>
+                    <label htmlFor="companyImg">
+                      <AiOutlineCamera size={30} />
+                      사진 {selectedImage.length}/5
+                    </label>
+                    <input
+                      type="file"
+                      id="companyImg"
+                      onChange={imageHandleChange}
+                      accept="image/png, image,jpeg, image/jpg"
+                      multiple
+                    />
+                  </AddImages>
+                  <Preview>
+                    {selectedImage.map((image: any) => (
+                      <img
+                        src={image}
+                        alt="companyImg"
+                        key={image}
+                        onClick={(e) => {
+                          setSelectedImage(selectedImage.filter((e) => e !== image))
+                        }}
                       />
-                    </AddImages>
-                    <Preview>
-                      {selectedImage.map((image: any) => (
-                        <img
-                          src={image}
-                          alt="companyImg"
-                          key={image}
-                          onClick={(e) => {
-                            setSelectedImage(selectedImage.filter((e) => e !== image))
-                          }}
-                        />
-                      ))}
-                    </Preview>
-                  </CompanyImagesBox>
-                </CompanyImages>
-              </CompanyInfoItem>
-            </CompanyInfoBox>
-          </CompanyInfo>
-          <DogOptions>
-            <DogOptionsSection>반려견 옵션</DogOptionsSection>
-            <DogOptionsCategories>
-              <div className="tableHeader">반려견 크기</div>
-              <div className="tableHeader">객실수</div>
-              <div className="tableHeader">1박 케어 가격</div>
-            </DogOptionsCategories>
-            <DogOptionsCategories>
-              <div>소형견</div>
-              <DogPriceOption
-                type="text"
-                name="availableRooms"
-                placeholder="예시) 객실 5개 -> 5 입력"
-                onChange={roomCountHandler}
-              />
-              <DogPriceOption
-                type="text"
-                name="small"
-                placeholder="예시) 3만원 -> 30000 입력"
-                onChange={handlePricePerDog}
-              />
-            </DogOptionsCategories>
-            <DogOptionsCategories>
-              <div>중형견</div>
-              <DogPriceOption
-                type="text"
-                name="availableRooms"
-                placeholder="예시) 객실 5개 -> 5 입력"
-                onChange={roomCountHandler}
-              />
-              <DogPriceOption
-                type="text"
-                name="medium"
-                placeholder="예시) 3만원 -> 30000 입력"
-                onChange={handlePricePerDog}
-              />
-            </DogOptionsCategories>
-            <DogOptionsCategories>
-              <div>대형견</div>
-              <DogPriceOption
-                type="text"
-                name="availableRooms"
-                placeholder="예시) 객실 5개 -> 5 입력"
-                onChange={roomCountHandler}
-              />
-              <DogPriceOption
-                type="text"
-                name="big"
-                placeholder="예시) 3만원 -> 30000 입력"
-                onChange={handlePricePerDog}
-              />
-            </DogOptionsCategories>
-          </DogOptions>
-          <DogOptionsSection>이용가능 서비스 선택</DogOptionsSection>
-          <AvailableServices>
-            <AvailableServiceChoice>
-              {/* {Array.from(Array(12).keys()).map((num, idx) => {
+                    ))}
+                  </Preview>
+                </CompanyImagesBox>
+              </CompanyImages>
+            </CompanyInfoItem>
+          </CompanyInfoBox>
+        </CompanyInfo>
+        <DogOptions>
+          <DogOptionsSection>반려견 옵션</DogOptionsSection>
+          <DogOptionsCategories>
+            <div className="tableHeader">반려견 크기</div>
+            <div className="tableHeader">객실수</div>
+            <div className="tableHeader">1박 케어 가격</div>
+          </DogOptionsCategories>
+          <DogOptionsCategories>
+            <div>소형견</div>
+            <DogPriceOption
+              type="text"
+              name="availableRooms"
+              placeholder="예시) 객실 5개 -> 5 입력"
+              onChange={roomCountHandler}
+            />
+            <DogPriceOption
+              type="text"
+              name="small"
+              placeholder="예시) 3만원 -> 30000 입력"
+              onChange={handlePricePerDog}
+            />
+          </DogOptionsCategories>
+          <DogOptionsCategories>
+            <div>중형견</div>
+            <DogPriceOption
+              type="text"
+              name="availableRooms"
+              placeholder="예시) 객실 5개 -> 5 입력"
+              onChange={roomCountHandler}
+            />
+            <DogPriceOption
+              type="text"
+              name="medium"
+              placeholder="예시) 3만원 -> 30000 입력"
+              onChange={handlePricePerDog}
+            />
+          </DogOptionsCategories>
+          <DogOptionsCategories>
+            <div>대형견</div>
+            <DogPriceOption
+              type="text"
+              name="availableRooms"
+              placeholder="예시) 객실 5개 -> 5 입력"
+              onChange={roomCountHandler}
+            />
+            <DogPriceOption
+              type="text"
+              name="big"
+              placeholder="예시) 3만원 -> 30000 입력"
+              onChange={handlePricePerDog}
+            />
+          </DogOptionsCategories>
+        </DogOptions>
+        <DogOptionsSection>이용가능 서비스 선택</DogOptionsSection>
+        <DogOptionGuide>상단 오른쪽 동그라미 버튼을 눌러 카드를 선택하세요.</DogOptionGuide>
+        <AvailableServices>
+          <AvailableServiceChoice>
+            {/* {Array.from(Array(12).keys()).map((num, idx) => {
               return (  )
             })} */}
-              <AvailableServicesAll
-                clickedService1={clickedService1}
-                clickedService2={clickedService2}
-                clickedService3={clickedService3}
-                clickedService4={clickedService4}
-                clickedService5={clickedService5}
-                clickedService6={clickedService6}
-                clickedService7={clickedService7}
-                clickedService8={clickedService8}
-                clickedService9={clickedService9}
-                clickedService10={clickedService10}
-                clickedService11={clickedService11}
-                clickedService12={clickedService12}
-                setClickedService1={setClickedService1}
-                setClickedService2={setClickedService2}
-                setClickedService3={setClickedService3}
-                setClickedService4={setClickedService4}
-                setClickedService5={setClickedService5}
-                setClickedService6={setClickedService6}
-                setClickedService7={setClickedService7}
-                setClickedService8={setClickedService8}
-                setClickedService9={setClickedService9}
-                setClickedService10={setClickedService10}
-                setClickedService11={setClickedService11}
-                setClickedService12={setClickedService12}
-                setForm={setForm}
-              />
-            </AvailableServiceChoice>
-          </AvailableServices>
-          <CompanyAddress>
-            <DogOptionsSection>주소</DogOptionsSection>
-            <CompanyAddressBox>
-              <AddressMain>
-                <AddressInputWrapper>
-                  <AddressInput
-                    type="text"
-                    name="address"
-                    value={updatedAddress}
-                    onChange={onChange}
-                  />
-                </AddressInputWrapper>
-                <AddressSearch>
-                  <AddressSearchButton onClick={handleAddressClick}>주소 검색</AddressSearchButton>
-                </AddressSearch>
-              </AddressMain>
-              <AddressSub>
-                <AddressInput type="text" name="detailAddress" onChange={onChange} />
-              </AddressSub>
-            </CompanyAddressBox>
-          </CompanyAddress>
-          <MapDisplay>
-            {/* <Map latitude={35.976749396987046} longitude={126.99599512792346} /> */}
-            {updatedAddress.length > 0 ? (
-              <Map address={updatedAddress} companyName={'호텔'} />
-            ) : (
-              <Map
-                address={'서울특별시 마포구 매봉산로 31 에스플렉스 지하 1층'}
-                companyName={'뭉텔 Moongtel'}
-              />
-            )}
-          </MapDisplay>
-          <SectionWrapper>
-            <AuthButton title={'저장하기'} />
-          </SectionWrapper>
-        </Container>
-      </CreatePostForm>
-      <Footer />
-    </>
+            <AvailableServicesAll
+              clickedService1={clickedService1}
+              clickedService2={clickedService2}
+              clickedService3={clickedService3}
+              clickedService4={clickedService4}
+              clickedService5={clickedService5}
+              clickedService6={clickedService6}
+              clickedService7={clickedService7}
+              clickedService8={clickedService8}
+              clickedService9={clickedService9}
+              clickedService10={clickedService10}
+              clickedService11={clickedService11}
+              clickedService12={clickedService12}
+              setClickedService1={setClickedService1}
+              setClickedService2={setClickedService2}
+              setClickedService3={setClickedService3}
+              setClickedService4={setClickedService4}
+              setClickedService5={setClickedService5}
+              setClickedService6={setClickedService6}
+              setClickedService7={setClickedService7}
+              setClickedService8={setClickedService8}
+              setClickedService9={setClickedService9}
+              setClickedService10={setClickedService10}
+              setClickedService11={setClickedService11}
+              setClickedService12={setClickedService12}
+              setForm={setForm}
+            />
+          </AvailableServiceChoice>
+        </AvailableServices>
+        <CompanyAddress>
+          <DogOptionsSection>주소</DogOptionsSection>
+          <CompanyAddressBox>
+            <AddressMain>
+              <AddressInputWrapper>
+                <AddressInput
+                  type="text"
+                  name="address"
+                  value={updatedAddress}
+                  onChange={onChange}
+                />
+              </AddressInputWrapper>
+              <AddressSearch>
+                <AddressSearchButton onClick={handleAddressClick}>주소 검색</AddressSearchButton>
+              </AddressSearch>
+            </AddressMain>
+            <AddressSub>
+              <AddressInput type="text" name="detailAddress" onChange={onChange} />
+            </AddressSub>
+          </CompanyAddressBox>
+        </CompanyAddress>
+        <MapDisplay>
+          {/* <Map latitude={35.976749396987046} longitude={126.99599512792346} /> */}
+          {updatedAddress.length > 0 ? (
+            <Map address={updatedAddress} companyName={form.title} />
+          ) : (
+            <Map
+              address={'서울특별시 마포구 매봉산로 31 에스플렉스 지하 1층'}
+              companyName={'뭉텔 Moongtel'}
+            />
+          )}
+        </MapDisplay>
+        <SectionWrapper>
+          <AuthButton title={'저장하기'} />
+        </SectionWrapper>
+      </Container>
+    </CreatePostForm>
   )
 }
 
@@ -859,6 +827,11 @@ const Textarea = styled.textarea`
 `
 const CompanyImages = styled.div`
   flex: 5;
+
+  div {
+    margin-bottom: -1rem;
+    color: #666;
+  }
 `
 
 const CompanyImagesBox = styled.div`
@@ -984,6 +957,15 @@ const AvailableServices = styled.div`
   margin-left: 1rem;
   width: 90%;
 `
+
+const DogOptionGuide = styled.div`
+  color: rgb(102, 102, 102);
+  font-size: 1rem;
+  margin-top: -1rem;
+  margin-left: 1rem;
+  margin-bottom: 2rem;
+`
+
 const AvailableServiceChoice = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -993,9 +975,11 @@ const AvailableServiceChoice = styled.div`
 const CompanyAddress = styled.div`
   margin-top: 7rem;
 `
+
 const CompanyAddressBox = styled.div`
   margin-left: 1rem;
 `
+
 const AddressMain = styled.div`
   display: flex;
   width: 90%;

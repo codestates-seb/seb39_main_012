@@ -114,7 +114,7 @@ const LoginForm = () => {
 
     if (mode === '견주님') {
       const [result, userInfo] = await authService.Login({
-        email: 'guest@moongtel.com',
+        email: 'test12@gmail.com',
         password: 'asdf1234!@#$',
       })
       setIsLogin(userInfo)
@@ -124,7 +124,7 @@ const LoginForm = () => {
       }
     } else if (mode === '사장님') {
       const [result, userInfo] = await authService.Login({
-        email: 'ceo@ceo.com',
+        email: 'ceo01@moongtel.com',
         password: 'asdf1234!@#$',
       })
       setIsLogin(userInfo)
