@@ -7,6 +7,8 @@ import {AiOutlineHeart} from 'react-icons/ai'
 import {FiShare} from 'react-icons/fi'
 import {PostById} from '@/types/post'
 import {authPostService} from '@/apis/AuthPostAPI'
+import LocalStorage from '@/utils/util/localStorage'
+import {toast} from 'react-toastify'
 
 interface Props {
   companyAddress: string
@@ -60,6 +62,11 @@ const CompanyTitleSection = ({
   }
 
   const addLikesHandler = async () => {
+    if (!LocalStorage.getItem('accessToken')) {
+      toast.error('로그인이 필요한 서비스입니다.')
+      return
+    }
+
     setClickedLike(!clickedLike)
     if (clickedLike) {
       setAddLikes(addLikes - 1)

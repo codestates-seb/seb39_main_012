@@ -23,10 +23,15 @@ const Footer = () => {
             <Column>
               <ColumnTitle>MOONGTEL</ColumnTitle>
               <ColumnLists>
-                <ColumnList>프로젝트 뭉텔</ColumnList>
-                <ColumnList>Github</ColumnList>
-                <ColumnList>API문서</ColumnList>
-                <ColumnList>Figma</ColumnList>
+                <ColumnList><a href="https://docs.google.com/presentation/d/1kDworaqfeTy1xYk_0UvHv_eAEzKO9PDQGQ9jYQXXZA8/edit#slide=id.g163e0cb4160_1_21" target="_blank" rel="noopener noreferrer">
+                    서비스 소개
+                  </a></ColumnList>
+                <ColumnList><a href="https://github.com/codestates-seb/seb39_main_012" target="_blank" rel="noopener noreferrer">
+                    Github
+                  </a></ColumnList>
+                <ColumnList><a href="https://www.figma.com/file/IPeBo0ZKWKwJXa619E7rUY/Project-Moongtel" target="_blank" rel="noopener noreferrer">
+                    Figma
+                  </a></ColumnList>
               </ColumnLists>
             </Column>
             <Column>
