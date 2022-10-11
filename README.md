@@ -68,6 +68,6 @@ ghksals09041@gmail.com|suji.sujeongji@gmail.com|hsj99215@gmail.com|moodeary@gmai
 
 ## 🌟 배포 주소
 
-링크
+[[바로가기]](https://moongtel.vercel.app/)
 
 
