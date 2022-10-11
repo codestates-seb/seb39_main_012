@@ -19,15 +19,18 @@ import {BiPlusCircle} from 'react-icons/bi'
 import {BiMinusCircle} from 'react-icons/bi'
 import AuthButton from '../AuthButton/AuthButton'
 import {toast} from 'react-toastify'
-
 import {PostById} from '@/types/post'
 import CompanyImageSlider from './CompanyImageSlider'
 import CompanyTitleSection from './CompanyTitleSection'
 import {availableServices} from '@/utils/options/options'
 import LocalStorage from '@/utils/util/localStorage'
 import {bookingService} from '@/apis/bookingAPI'
-import router from 'next/router'
+import {useRouter} from 'next/router'
 import {postService} from '@/apis/PostAndSearchAPI'
+import {userService} from '@/apis/MyPageAPI'
+import {DogCard} from '@/types/mypage'
+import Footer from '../Layout/Footer/Footer'
+// import Link from 'next/link'
 
 export const getDayOfDate = (reservationDate: string) => {
   const date = ['일', '월', '화', '수', '목', '금', '토']
@@ -36,12 +39,32 @@ export const getDayOfDate = (reservationDate: string) => {
 }
 
 const StoreDetail = ({postId}: {postId: number}) => {
-  const [error, setError] = useState(true)
+  const router = useRouter()
   const [post, setPost] = useState<PostById>()
   const [addLikes, setAddLikes] = useState(0)
   const [reviewClicked1, setReviewClicked1] = useState(false)
   const [reviewClicked2, setReviewClicked2] = useState(false)
   const [reviewClicked3, setReviewClicked3] = useState(false)
+  const [openDate, setOpenDate] = useState(false)
+  const [openDogNum, setOpenDogNum] = useState(false)
+  const [smallDogNum, setSmallDogNum] = useState(0)
+  const [mediumDogNum, setMediumDogNum] = useState(0)
+  const [largeDogNum, setLargeDogNum] = useState(0)
+  const [checkInTimeAMPM, setCheckInTimeAMPM] = useState('오전')
+  const [checkInTime, setCheckInTime] = useState('00:00')
+  const [checkOutTimeAMPM, setCheckOutTimeAMPM] = useState('오후')
+  const [checkOutTime, setCheckOutTime] = useState('00:00')
+  const companyAddress = post?.address.split(' ')[0] + ' ' + post?.address.split(' ')[1]
+  const companyName = post?.title.replace(/\s+/g, '')
+  const [openTime, setOpenTime] = useState(false)
+  const [dogsInfo, setDogsInfo] = useState<DogCard[] | undefined>()
+  const [date, setDate] = useState([
+    {
+      startDate: new Date(),
+      endDate: new Date(),
+      key: 'selection',
+    },
+  ])
 
   useEffect(() => {
     if (!postId) {
@@ -61,36 +84,20 @@ const StoreDetail = ({postId}: {postId: number}) => {
     })
   }, [postId])
 
-  const [openDate, setOpenDate] = useState(false)
-  const [openDogNum, setOpenDogNum] = useState(false)
-  const [smallDogNum, setSmallDogNum] = useState(0)
-  const [mediumDogNum, setMediumDogNum] = useState(0)
-  const [largeDogNum, setLargeDogNum] = useState(0)
-  const [checkInTimeAMPM, setCheckInTimeAMPM] = useState('오전')
-  const [checkInTime, setCheckInTime] = useState('00:00')
-  const [checkOutTimeAMPM, setCheckOutTimeAMPM] = useState('오후')
-  const [checkOutTime, setCheckOutTime] = useState('00:00')
-  const companyAddress = post?.address.split(' ')[0] + ' ' + post?.address.split(' ')[1]
-  const companyName = post?.title.replace(/\s+/g, '')
-  const [openTime, setOpenTime] = useState(false)
-  const [date, setDate] = useState([
-    {
-      startDate: new Date(),
-      endDate: new Date(),
-      key: 'selection',
-    },
-  ])
+  console.log(post?.roomDtos[0].price, 'ROOM')
+  console.log(post, 'post')
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
+    if (!LocalStorage.getItem('accessToken')) {
+      toast.error('로그인이 필요한 서비스입니다.')
+      return
+    }
+
     if (smallDogNum === 0 && mediumDogNum === 0 && largeDogNum === 0) {
       return toast.error('모든 항목을 입력해주세요.')
     }
-
-    // if (!checkInDate || !checkOutDate || !checkInTime || !checkOutTime) {
-    //   return toast.error('모든 항목을 입력해주세요.')
-    // }
 
     const requestForm = {
       map: {
@@ -103,6 +110,23 @@ const StoreDetail = ({postId}: {postId: number}) => {
       checkInTime: checkInTimeAMPM + ' ' + checkInTime,
       checkOutTime: checkOutTimeAMPM + ' ' + checkOutTime,
     }
+
+    if (
+      !requestForm.checkInDate ||
+      !requestForm.checkOutDate ||
+      !requestForm.checkInTime ||
+      !requestForm.checkOutTime
+    ) {
+      return toast.error('모든 항목을 입력해주세요.')
+    }
+
+    userService.getMyPage().then((result) => {
+      if (result.data.users.dogCardList.length === 0) {
+        toast.error('강아지카드를 먼저 작성해주세요.')
+      }
+      router.push('/mypage')
+    })
+
 
     const tempBooking = await bookingService.postBookingWish(postId, requestForm)
     if (tempBooking.status === 200) {
@@ -528,8 +552,19 @@ const StoreDetail = ({postId}: {postId: number}) => {
                     </CompanyReservationHowManyDogs>
                   )}
                 </CompanyReservationSubSection>
+                <AlertNotice>
+                  <ReservationAlert>
+                    ✔ <a>오늘 이후의 날짜</a>를 선택해주세요.
+                  </ReservationAlert>
+                  <ReservationAlert>
+                    ✔ 예약 요청 전, {/* <Link href="/mypage" passHref> */}
+                    <a> 마이페이지</a>
+                    {/* </Link> */}
+                    에서 반려견카드를 작성해주세요.
+                  </ReservationAlert>
+                </AlertNotice>
                 <CompanyReservationSubSection>
-                  <AuthButton title={'예약 요청'} width={'100%'} marginTop={'1rem'} />
+                  <AuthButton title={'예약 요청'} width={'100%'} />
                 </CompanyReservationSubSection>
               </CompanyReservationForm>
             </CompanyReservationTopContainer>
@@ -573,6 +608,7 @@ const StoreDetail = ({postId}: {postId: number}) => {
           <CompanyReservationBottom></CompanyReservationBottom>
         </CompanyReservation>
       </CompanyInfoBottom>
+      <Footer />
     </CompanyDetailContainer>
   )
 }
@@ -762,6 +798,27 @@ const CompanyReservationTopTitle = styled.div`
   color: ${colors.mainColor};
   font-weight: 700;
 `
+
+const AlertNotice = styled.div`
+  margin-top: 2rem;
+`
+
+const ReservationAlert = styled.div`
+  margin: 1rem 0 0 0.5rem;
+  font-size: 1.2rem;
+  color: #666;
+
+  a {
+    text-decoration: underline;
+    outline: none;
+    color: #555;
+  }
+    a:hover,
+  a:active {
+    text-decoration: underline;
+  }
+`
+
 const CompanyReservationForm = styled.div`
   margin-top: 3rem;
   display: flex;
