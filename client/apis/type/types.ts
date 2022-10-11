@@ -68,7 +68,7 @@ export interface IPostBooking {
 
 interface roomCreateDtoListProps {
   size: string
-  price: number | string
+  price: number | undefined
 }
 export interface IPostWrite {
   title: string
