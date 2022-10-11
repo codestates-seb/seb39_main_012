@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @next/next/no-img-element */
 import AuthButton from '@/components/AuthButton/AuthButton'
 import SectionTitle from '@/components/StoreDetail/SectionTitle'
@@ -15,7 +16,6 @@ import {authPostService} from '@/apis/AuthPostAPI'
 import {IPostWrite} from '@/apis/type/types'
 
 const Write = () => {
-  const [title, setTitle] = useState('')
   const [form, setForm] = useState<IPostWrite>({
     title: '',
     content: '',
@@ -59,21 +59,6 @@ const Write = () => {
   const [clickedService11, setClickedService11] = useState(false)
   const [clickedService12, setClickedService12] = useState(false)
 
-  const clickedServices = [
-    clickedService1,
-    clickedService2,
-    clickedService3,
-    clickedService4,
-    clickedService5,
-    clickedService6,
-    clickedService7,
-    clickedService8,
-    clickedService9,
-    clickedService10,
-    clickedService11,
-    clickedService12,
-  ]
-
   const [clickedTag1, setClickedTag1] = useState(false)
   const [clickedTag2, setClickedTag2] = useState(false)
   const [clickedTag3, setClickedTag3] = useState(false)
@@ -81,16 +66,6 @@ const Write = () => {
   const [clickedTag5, setClickedTag5] = useState(false)
   const [clickedTag6, setClickedTag6] = useState(false)
   const [clickedTag7, setClickedTag7] = useState(false)
-
-  const clickedTags = [
-    clickedTag1,
-    clickedTag2,
-    clickedTag3,
-    clickedTag4,
-    clickedTag5,
-    clickedTag6,
-    clickedTag7,
-  ]
 
   const [smallDogPrice, setSmallDogPrice] = useState(0)
   const [mediumDogPrice, setMediumDogPrice] = useState(0)
@@ -109,21 +84,11 @@ const Write = () => {
 
   const [files, setFiles] = useState<File[]>([])
 
-  // const onLoadFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   if (e.target.files) {
-  //     const fileArray: any = Array.from(e.target.files).map(
-  //       (file) => console.log(file, 'file!!!')
-  //       // setFiles((prev) => prev.concat(fileArray))
-  //     )
-  //   }
-  // }
-
   const imageHandleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       if (Number(e.target.files?.length) > 5 || selectedImage.length >= 5) {
         return toast.error('사진은 최대 5장까지 등록 가능합니다.')
       } else if (Number(e.target.files?.length) <= 5) {
-        // setSelectedFiles((prevImages) => prevImages.concat(Array.from(e.target.files as any)))
         setFiles((prevImages) => prevImages.concat(Array.from(e.target.files as any)))
         const fileArray = Array.from(e.target.files).map((file) => URL.createObjectURL(file))
         setSelectedImage((prevImages) => prevImages.concat(fileArray as any))
@@ -183,21 +148,6 @@ const Write = () => {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    // const finalSelection = clickedServices.forEach((service, idx) => {
-    //   if (service === true) {
-    //     // form.serviceTag.push(availableServices[idx][0])
-    //     setForm((prev) => ({...prev, serviceTag: [...prev.serviceTag, availableServices[idx][0]]}))
-    //   }
-    // })
-
-    // const finalTags = clickedTags.forEach((tag, idx) => {
-    //   if (tag === true) {
-    //     // form.hashTag.push(availableTags[idx])
-    //     // setForm((prev) => ([...prev, hashTag: [...hashtag, availableTags[idx]]))
-    //     setForm((prev) => ({...prev, hashTag: [...prev.hashTag, availableTags[idx]]}))
-    //   }
-    // })
-
     const finalRoomDto = [
       {
         size: 'small',
@@ -213,76 +163,6 @@ const Write = () => {
       },
     ]
     setForm((prev) => ({...prev, roomCreateDtoList: finalRoomDto}))
-
-    // const {
-    //   title,
-    //   content,
-    //   latitude,
-    //   longitude,
-    //   address,
-    //   detailAddress,
-    //   phone,
-    //   checkInTime,
-    //   checkOutTime,
-    //   hashTag,
-    //   serviceTag,
-    //   roomCount,
-    //   roomCreateDtoList,
-    // } = form
-
-    // const request = {
-    //   title: '이을 애견 호텔 12313213',
-    //   content:
-    //     '이을반려동물케어센터에서반려견들에게 품격있고 쾌적한 호텔 서비스3213123를 시작합니다. 가족분들의 사랑하는 마음을 담아 이을 반려동물 호텔이 정성껏 보살피겠습니다.',
-    //   latitude: '127.024554',
-    //   longitude: '37.4967012',
-    //   address: '서울특별시 서초구 106-13 ',
-    //   detailAddress: '신화빌딩 1층 ',
-    //   phone: '02-1232-0123',
-    //   checkInTime: '오전 11:00',
-    //   checkOutTime: '오후 11:00',
-    //   hashTag: ['소형견', '대형견', '미용', '산책', '테스트12'],
-    //   serviceTag: ['소형견 케어', '노견 케어', '산책', '미용', '케어 일지'],
-    //   roomCount: 10,
-    //   roomCreateDtoList: [
-    //     {
-    //       size: 'small',
-    //       price: 40000,
-    //     },
-    //     {
-    //       size: 'medium',
-    //       price: 60000,
-    //     },
-    //     {
-    //       size: 'big',
-    //       price: 80000,
-    //     },
-    //   ],
-    // }
-
-    // const finalSelection = selectedServices.filter((service, index) => { return service === true})
-    // console.log(finalSelection)
-
-    console.log(form, 'form')
-
-    // const finalImages = selectedImage.map((image) => new File([image], 'image'))
-
-    // if (
-    //   form.title === '' ||
-    //   form.content === '' ||
-    //   form.address === '' ||
-    //   form.detailAddress === '' ||
-    //   form.phone === '' ||
-    //   // form.checkInTime === '' ||
-    //   // form.checkOutTime === '' ||
-    //   form.roomCount === 0 ||
-    //   form.roomCreateDtoList[0].price === undefined ||
-    //   form.roomCreateDtoList[1].price === undefined ||
-    //   form.roomCreateDtoList[2].price === undefined
-    // ) {
-    //   toast.error('필수 입력란을 모두 입력해주세요.')
-    //   return
-    // }
 
     const formData = new FormData()
     if (files) {
@@ -336,10 +216,6 @@ const Write = () => {
                 onChange={onChange}
               />
             </CompanyInfoItem>
-            {/* <CompanyInfoItem>
-              <Label>태그</Label>
-              <Input type="text" placeholder="업체 설명 태그를 선택해주세요." name="tags" />
-            </CompanyInfoItem> */}
             <CompanyInfoItem>
               <Label>태그</Label>
               {clickedTag1 ||
@@ -425,7 +301,6 @@ const Write = () => {
             </CompanyInfoItem>
             <CompanyInfoItem>
               <Label></Label>
-              {/* <Input type="text" placeholder="체크아웃 시간 (예시) 오후 07:00" name="time"/> */}
               <TagList>
                 {clickedTag1 === false && (
                   <Tag
@@ -573,7 +448,7 @@ const Write = () => {
                         src={image}
                         alt="companyImg"
                         key={image}
-                        onClick={(e) => {
+                        onClick={() => {
                           setSelectedImage(selectedImage.filter((e) => e !== image))
                         }}
                       />
@@ -695,7 +570,6 @@ const Write = () => {
           </CompanyAddressBox>
         </CompanyAddress>
         <MapDisplay>
-          {/* <Map latitude={35.976749396987046} longitude={126.99599512792346} /> */}
           {updatedAddress.length > 0 ? (
             <Map address={updatedAddress} companyName={form.title} />
           ) : (
@@ -896,9 +770,6 @@ const DogOptionsSection = styled.div`
   margin-left: 1rem;
   margin-bottom: 2rem;
 `
-const DogOptionsBox = styled.div``
-
-const DogOptionsItem = styled.div``
 
 const DogOptionsCategories = styled.div`
   display: flex;

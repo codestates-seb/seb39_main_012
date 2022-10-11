@@ -26,7 +26,7 @@ function DogProfileCard({dog}: Props) {
           onClick={async () => {
             if (window.confirm('정말 삭제하시겠습니까?')) {
               const result = await userService.deleteMyDogById(dog.id)
-              console.log(result)
+
               if (result.status === 200) {
                 setIsChange(!isChange)
                 toast.success('삭제되었습니다.')

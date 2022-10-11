@@ -1,7 +1,6 @@
 import SignUpTab from '@/components/SignUp/SignUpTab'
 import UserForm from '@/components/SignUp/UserForm'
 import React, {useState} from 'react'
-import {ToastContainer} from 'react-toastify'
 import styled from 'styled-components'
 
 export interface Form {

@@ -1,4 +1,6 @@
-import {FC, useEffect} from 'react'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import {useEffect} from 'react'
 import styled from 'styled-components'
 
 interface Props {

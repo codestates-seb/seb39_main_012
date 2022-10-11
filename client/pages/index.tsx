@@ -36,7 +36,7 @@ function Home({posts1, posts2, pageInfo}: InferGetStaticPropsType<typeof getStat
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
-    window.onbeforeunload = function (e) {
+    window.onbeforeunload = function () {
       window.onunload = function () {
         LocalStorage.removeItem('accessToken')
         LocalStorage.removeItem('userInfo')

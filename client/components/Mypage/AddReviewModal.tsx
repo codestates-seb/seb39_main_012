@@ -19,7 +19,7 @@ interface Props {
 
 function AddReviewModal({setIsOpen}: Props) {
   const post = useRecoilValue(postIdState)
-  console.log(post)
+
   const [isChange, setIsChange] = useRecoilState(dataState)
   const [ratingValue, setRatingValue] = useState(2.5)
   const [selectedFile, setSelectedFile] = useState<any>([])
@@ -92,7 +92,6 @@ function AddReviewModal({setIsOpen}: Props) {
     formData.append('dto', new Blob([JSON.stringify(request)], {type: 'application/json'}))
 
     const result = await reviewService.createReview(formData)
-    console.log(result)
 
     if (result.status === 201) {
       setIsOpen(false)

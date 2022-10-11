@@ -73,21 +73,7 @@ const CompanyTitleSection = ({
     } else {
       setAddLikes(addLikes + 1)
     }
-
-    authPostService.authPostLikesAPI(postId).then((res) => {
-      console.log(res)
-    })
   }
-
-  // useEffect(() => {
-  //   // clickedLike ? setAddLikes(addLikes + 1) : setAddLikes(addLikes - 1)
-
-  //   async function fetchData() {
-  //     const result = await authPostService.authPostLikesAPI(postId)
-  //     console.log(result)
-  //   }
-  //   fetchData()
-  // }, [clickedLike])
 
   return (
     <CompanyInfoTitleBox>

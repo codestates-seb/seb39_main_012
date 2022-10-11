@@ -11,7 +11,6 @@ import {BsSearch} from 'react-icons/bs'
 import {FaUserCircle} from 'react-icons/fa'
 import {HiOutlineBell} from 'react-icons/hi'
 import {RiHeart3Line} from 'react-icons/ri'
-import {useEffect} from 'react'
 import LocalStorage from '@/utils/util/localStorage'
 import {useRecoilState, useResetRecoilState} from 'recoil'
 import {loginState} from '@/recoil/loginState'
@@ -20,7 +19,7 @@ const Header = () => {
   const router = useRouter()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isSubmenuOpen, setIsSubmenuOpen] = useState(false)
-  const [isLogin, setIsLogin] = useRecoilState(loginState)
+  const [isLogin] = useRecoilState(loginState)
   const logOut = useResetRecoilState(loginState)
 
   return (
@@ -394,5 +393,3 @@ const LogInMenu = styled.div`
   background-color: rgb(255, 255, 255);
   cursor: pointer;
 `
-
-const LinkWrapper = styled.div``

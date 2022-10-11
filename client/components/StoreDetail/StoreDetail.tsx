@@ -28,9 +28,7 @@ import {bookingService} from '@/apis/bookingAPI'
 import {useRouter} from 'next/router'
 import {postService} from '@/apis/PostAndSearchAPI'
 import {userService} from '@/apis/MyPageAPI'
-import {DogCard} from '@/types/mypage'
 import Footer from '../Layout/Footer/Footer'
-// import Link from 'next/link'
 
 export const getDayOfDate = (reservationDate: string) => {
   const date = ['일', '월', '화', '수', '목', '금', '토']
@@ -43,8 +41,6 @@ const StoreDetail = ({postId}: {postId: number}) => {
   const [post, setPost] = useState<PostById>()
   const [addLikes, setAddLikes] = useState(0)
   const [reviewClicked1, setReviewClicked1] = useState(false)
-  const [reviewClicked2, setReviewClicked2] = useState(false)
-  const [reviewClicked3, setReviewClicked3] = useState(false)
   const [openDate, setOpenDate] = useState(false)
   const [openDogNum, setOpenDogNum] = useState(false)
   const [smallDogNum, setSmallDogNum] = useState(0)
@@ -57,7 +53,6 @@ const StoreDetail = ({postId}: {postId: number}) => {
   const companyAddress = post?.address.split(' ')[0] + ' ' + post?.address.split(' ')[1]
   const companyName = post?.title.replace(/\s+/g, '')
   const [openTime, setOpenTime] = useState(false)
-  const [dogsInfo, setDogsInfo] = useState<DogCard[] | undefined>()
   const [date, setDate] = useState([
     {
       startDate: new Date(),
@@ -70,22 +65,12 @@ const StoreDetail = ({postId}: {postId: number}) => {
     if (!postId) {
       return
     }
-    // const getPost = async () => {
-    //   postService.getPostById(postId).then((result) => {
-    //     setPost(result)
-    //     setAddLikes(result.likesCount)
-    //   })
-    // }
-    // getPost()
 
     postService.getPostById(postId).then((result) => {
       setPost(result)
       setAddLikes(result.likesCount)
     })
   }, [postId])
-
-  console.log(post?.roomDtos[0].price, 'ROOM')
-  console.log(post, 'post')
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -120,20 +105,19 @@ const StoreDetail = ({postId}: {postId: number}) => {
       return toast.error('모든 항목을 입력해주세요.')
     }
 
-    userService.getMyPage().then((result) => {
-      if (result.data.users.dogCardList.length === 0) {
-        toast.error('강아지카드를 먼저 작성해주세요.')
-      }
-      router.push('/mypage')
-    })
+    const result = await userService.getMyPage()
 
+    if (result.data.users.dogCardList.length === 0) {
+      return toast.error('마이페이지에서 강아지 카드를 등록해주세요.')
+    }
 
     const tempBooking = await bookingService.postBookingWish(postId, requestForm)
+
     if (tempBooking.status === 200) {
       LocalStorage.setItem('tempBooking', JSON.stringify(tempBooking.data))
       router.push(`/book/${postId}`)
     } else {
-      throw new Error('에러 발생!')
+      toast.error('예약이 실패했습니다.')
     }
   }
 
@@ -221,24 +205,6 @@ const StoreDetail = ({postId}: {postId: number}) => {
               })}
             </CompanyReviewsCards>
             <CompanyReviewsList>
-              {/* {reviewClicked1 && (
-                <>
-                  <div>hi</div>
-                  <CompanyReviewListCard
-                    reviewStarNum={5}
-                    reviewerName={'김민겸'}
-                    reviewDate={'2022.09.21'}
-                    reviewTitle={'울 댕댕이 호텔가서 친구들이랑 잘 놀아서 좋습니다~!!!!!'}
-                    reviewContent={
-                      '보내주신 사진보니까 저희집 댕댕이가 친구들이랑 아주 잘노네요 ㅎㅎ 도그플래닛인싸입니다 ㅋㅋ 처음 맡길 때는 너무 말썽부리지 않을까 걱정반 불안반으로 맡기게 되었는데 결론은 선택을 잘한 것 같습니다~~ 처음 호텔링 이용해보는건데 실외배변 하던 아이라 걱정이 정말 많았거든요...ㅠㅠ 초반에 밥이랑 간식을 안먹기는했지만 그래도 4일 동안 무탈하게 잘 지내다가 와서 너무 감사드립니다! 다음 달에도해외 출장이 잡혀있어서 3일 정도 더 호텔링 예정인데 믿고 맡기도록 하겠습니다! ^^ 사장님 너무 친절하세용~ 도그플래닛 추천입니닷~!'
-                    }
-                    reviewImageSrc1={'/images/review4.jpg'}
-                    reviewImageSrc2={'/images/review5.jpg'}
-                    reviewImageSrc3={'/images/review6.jpg'}
-                  />
-                </>
-              )} */}
-
               {post?.reviewList.slice(3).map((review, idx) => {
                 return (
                   <CompanyReviewListCard
@@ -629,75 +595,6 @@ const CompanyInfoTop = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-`
-
-const CompanyInfoTitleBox = styled.div``
-
-const CompanyTitleText = styled.div`
-  h1 {
-    font-size: 2.1rem;
-    font-weight: 600;
-  }
-`
-
-const CompanyTitleSub = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-top: 1rem;
-`
-
-const CompanyTitleSubLeft = styled.div`
-  display: flex;
-  font-size: 1.5rem;
-`
-
-const CompanyTitleSubLeftReview = styled.div`
-  margin-right: 1rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  span:first-child {
-  }
-
-  span:last-child {
-    margin-left: 0.5rem;
-  }
-`
-const CompanyTitleSubLeftTag = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  span {
-    color: ${colors.grey4};
-    margin-left: 0.8rem;
-  }
-`
-
-const CompanyTitleSubRight = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.4rem;
-  color: rgb(174, 205, 163);
-`
-
-const CompanyPageShare = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  span:last-child {
-    margin-left: 0.5rem;
-    text-decoration: underline;
-    font-weight: 600;
-    cursor: pointer;
-  }
-
-  :hover {
-    color: ${colors.mainColor};
-  }
 `
 
 const CompanyInfoBottom = styled.div`

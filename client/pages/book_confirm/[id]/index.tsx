@@ -10,12 +10,11 @@ import styled from 'styled-components'
 function BookConfirm() {
   const router = useRouter()
   const id = Number(router.query.id)
-  console.log(id)
+
   const [dogDatas, setDogDatas] = useState<ConfirmBook[]>()
   useEffect(() => {
     if (id) {
       bookingService.confirmBooking(id).then((res) => {
-        console.log(res)
         setDogDatas(res)
       })
     }

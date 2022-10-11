@@ -50,11 +50,10 @@ const Login = async (LoginForm: ILogin) => {
     const accessToken = result.headers.authorization.split(' ')[1]
     LocalStorage.setItem('accessToken', accessToken)
     LocalStorage.setItem('userInfo', JSON.stringify(parseUserInfo(accessToken)))
-    
-    const userInfo = parseUserInfo(accessToken)
-    console.log(userInfo)
-    return [result.status, userInfo]
 
+    const userInfo = parseUserInfo(accessToken)
+
+    return [result.status, userInfo]
   } catch (e) {
     if (e instanceof Error) {
       throw new Error(e.message)

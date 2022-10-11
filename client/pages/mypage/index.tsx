@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import SectionTitle from '@/components/StoreDetail/SectionTitle'
 import React, {useEffect, useState} from 'react'
 import styled from 'styled-components'
@@ -24,7 +25,7 @@ function MyPage() {
   const [addOpen, setAddOpen] = useRecoilState(addOpenState)
   const [addReview, setAddReview] = useRecoilState(addReviewState)
   const [userInfo, setUserInfo] = useState<Users>()
-  const [userInfo2, setUserInfo2] = useRecoilState(userInfoState)
+  const [, setUserInfo2] = useRecoilState(userInfoState)
 
   const [dogs, setDogs] = useState<DogCard[]>()
   const [reviews, setReviews] = useState<Review[]>()
@@ -42,7 +43,7 @@ function MyPage() {
         beforeReviewPromise,
         afterReviewPromise,
       ])
-      console.log('userInfo', userInfo)
+
       setUserInfo(userInfo.data.users)
       setUserInfo2({
         name: userInfo.data.users.username,
@@ -98,7 +99,6 @@ function MyPage() {
         ) : (
           <ReservedSwiper afterReservations={afterReservations} />
         )}
-        {/* <ReservedSwiper afterReservations={afterReservations} /> */}
       </WentToBox>
       <SectionTitle title={'리뷰관리'} />
       <ReviewTable reviews={reviews} username={userInfo.username} />

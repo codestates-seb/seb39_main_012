@@ -139,7 +139,6 @@ function UserForm({mode}: Props) {
     }
 
     const result = await authService.signUp(request, mode)
-    console.log(result)
 
     if (result?.status === 201) {
       router.push('/login')

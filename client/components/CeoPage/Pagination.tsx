@@ -27,7 +27,6 @@ function Pagination({total, limit, page, setPage}: Props) {
           <Button
             key={number}
             onClick={() => {
-              console.log(page)
               setPage(number)
             }}
           >

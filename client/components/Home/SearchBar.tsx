@@ -19,7 +19,6 @@ function SearchBar() {
   })
 
   const handleClick = () => {
-    console.log(value)
     if (!value.local || value.checkin.length <= 7 || value.checkout.length <= 7 || !value.dogSize) {
       return toast.error('모든 항목을 입력해주세요.')
     }
