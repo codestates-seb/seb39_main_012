@@ -11,12 +11,3 @@ export const loginState = atom<{
   key: 'loginState',
   default: null,
 })
-
-// {
-//   email: '',
-//   exp: 0,
-//   id: 0,
-//   roles: '',
-//   sub: '',
-//   username: '',
-// }

@@ -26,19 +26,30 @@
 <br>
 
 ## 🌟 BE 기술 스택
-![SpringBoot](https://img.shields.io/badge/springboot-%236DB33F.svg?style=for-the-badge&logo=springboot&logoColor=white)
-![SpringSecurity](https://img.shields.io/badge/SpringSecurity-%236DB33F.svg?style=for-the-badge&logo=SpringSecurity&logoColor=white)
-![JPA](https://img.shields.io/badge/JPA-%236DB33F.svg?style=for-the-badge&logo=JPA&logoColor=white)
-![MySQL](https://img.shields.io/badge/mysql-%2300f.svg?style=for-the-badge&logo=mysql&logoColor=white)
-![JWT](https://img.shields.io/badge/JWT-%2300f.svg?style=for-the-badge&logo=JWT&logoColor=white)
-<img alt="AWS" src="https://img.shields.io/badge/Amazon AWS-f7f7f7?style=for-the-badge&logo=Amazon AWS&logoColor=f89400">
+
+![스크린샷 2022-10-11 오전 9 25 46](https://user-images.githubusercontent.com/81212210/194971814-4d48eab2-1cb3-48e3-8016-d319937edfca.png)
+
+<br>
+
+## 🌟 배포
+![스크린샷 2022-10-11 오전 9 25 22](https://user-images.githubusercontent.com/81212210/194971782-078d8f96-a0a2-4aed-aa9f-71cbfe988c2a.png)
+
+<br>
+
+## 🌟 ERD
+
+<br>
+
+## 🌟 서비스 아키텍쳐
+![스크린샷 2022-10-11 오전 9 27 16](https://user-images.githubusercontent.com/81212210/194971943-fb57d803-3723-4711-9011-e742728679d1.png)
 
 <br>
 
 ## 🌟 프로젝트 문서
+
 - 🖌 Figma [[바로가기]](https://www.figma.com/file/IPeBo0ZKWKwJXa619E7rUY/Project-Moongtel?node-id=0%3A1)
-- 📝 프로젝트 기획서
-- 📝 API 문서
+
+- 📣 서비스 기능시연 + 발표자료 [[바로가기]](https://docs.google.com/presentation/d/1kDworaqfeTy1xYk_0UvHv_eAEzKO9PDQGQ9jYQXXZA8/edit?usp=sharing)
 
 <br>
 

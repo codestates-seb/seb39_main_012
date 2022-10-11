@@ -250,7 +250,7 @@ const Options = styled.div`
 const Button = styled.button`
   width: 10%;
   height: 80%;
-  font-size: 20px;
+  font-size: 16px;
   margin-right: 20px;
   background-color: ${colors.mainColor};
   color: white;
@@ -259,9 +259,10 @@ const Button = styled.button`
   border-radius: 10px;
 
   @media (max-width: 768px) {
-    height: 40%;
-    width: 80%;
+    height: 30%;
+    width: 60%;
     font-size: 15px;
     margin-right: 0;
+    margin-top: 1rem;
   }
 `

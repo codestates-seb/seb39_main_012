@@ -43,3 +43,4 @@ const IconBox = styled.div`
   right: 0;
   margin-right: 30px;
   margin-top: 4px;
+`

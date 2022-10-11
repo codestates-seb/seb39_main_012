@@ -21,7 +21,7 @@ interface DogProfileProps {
 
 interface Props {
   dog: DogProfileProps
-  setDogId: React.Dispatch<React.SetStateAction<number>>
+  setDogId: React.Dispatch<React.SetStateAction<number[]>>
 }
 
 const DogProfile = ({dog, setDogId}: Props) => {
@@ -31,7 +31,8 @@ const DogProfile = ({dog, setDogId}: Props) => {
   }
 
   const dogInfoHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDogId(Number(e.target.id))
+    // setDogId(Number(e.target.id))
+    setDogId((prev) => [...prev, Number(e.target.id)])
   }
 
   return (

@@ -3,26 +3,42 @@ import styled from 'styled-components'
 import CardImage from '../CardImage/CardImage'
 import {BsGenderMale} from 'react-icons/bs'
 import {toLocalScale} from '@/utils/util'
+import {ConfirmBook} from '@/types/book'
+import {toast} from 'react-toastify'
+import {useRouter} from 'next/router'
+import {bookingService} from '@/apis/bookingAPI'
 
-const imgUrl = 'https://dimg.donga.com/wps/NEWS/IMAGE/2022/01/28/111500268.2.jpg'
+interface Props {
+  dogInfo: ConfirmBook
+  id: number
+}
 
-function ConfirmCard() {
+function ConfirmCard({dogInfo, id}: Props) {
+  const router = useRouter()
+  const cancelBooking = (id: number) => {
+    bookingService.deleteBooking(id).then((res) => {
+      if (res.status === 204) {
+        toast.success('예약이 취소되었습니다.')
+        router.push('/')
+      }
+    })
+  }
   return (
     <Container>
       <ImgBox>
-        <CardImage imgUrl={imgUrl} mode="my"></CardImage>
+        <CardImage imgUrl={dogInfo.photoImgUrl} mode="my"></CardImage>
       </ImgBox>
       <ImageTextBox>
         <DogInfoBox>
           <div>
-            <DogName>뽀삐</DogName>
+            <DogName>{dogInfo.dogName}</DogName>
             <DogGender>
               <BsGenderMale />
             </DogGender>
           </div>
           <div>
             <DogAge>10살</DogAge>
-            <DogWeight>7.5kg</DogWeight>
+            <DogWeight>{dogInfo.weight}kg</DogWeight>
           </div>
         </DogInfoBox>
         <DogBreed>불독</DogBreed>
@@ -31,57 +47,57 @@ function ConfirmCard() {
         <InfoBox>
           <div>
             <InfoTitle>중성화</InfoTitle>
-            <InfoContent>완료</InfoContent>
+            <InfoContent>{dogInfo.surgery}</InfoContent>
           </div>
           <div>
             <InfoTitle>입질&짖음</InfoTitle>
-            <InfoContent>약간 짖음</InfoContent>
+            <InfoContent>{dogInfo.bark}</InfoContent>
           </div>
           <div>
             <InfoTitle>특이사항</InfoTitle>
-            <InfoContent>없음</InfoContent>
+            <InfoContent>{dogInfo.etc}</InfoContent>
           </div>
         </InfoBox>
         <InfoBox>
           <div>
             <InfoTitle>배변방식</InfoTitle>
-            <InfoContent>실내</InfoContent>
+            <InfoContent>{dogInfo.bowelTrained}</InfoContent>
           </div>
           <div>
             <InfoTitle>간식급여</InfoTitle>
-            <InfoContent>미급여</InfoContent>
+            <InfoContent>{dogInfo.snackMethod}</InfoContent>
           </div>
         </InfoBox>
       </DogBottomInfoBox>
       <UserInfoBox>
-        <DesignTitle className="DesignTitle">우리 뽀삐 호캉스 가는날!</DesignTitle>
+        <DesignTitle className="DesignTitle">우리 {dogInfo.dogName} 호캉스 가는날!</DesignTitle>
         <UserNameAndTell>
           <Name>
             <p className="title">예약자</p>
-            <p className="content">김뽀삐</p>
+            <p className="content">{dogInfo.name}</p>
           </Name>
           <Tell>
             <p className="title">연락처</p>
-            <p>010-1234-5678</p>
+            <p>{dogInfo.phone}</p>
           </Tell>
         </UserNameAndTell>
         <UserAddress>
           <p className="title">숙소</p>
-          <p>서울 강남구 도곡동 반려호텔 N층</p>
+          <p>{dogInfo.address}</p>
         </UserAddress>
         <Check>
           <p className="title">체크인</p>
-          <p>22.09.22(목)09:00</p>
+          <p>{dogInfo.checkInDate + '' + dogInfo.checkInTime}</p>
         </Check>
         <Check>
           <p className="title">체크아웃</p>
-          <p>22.09.22(목)09:00</p>
+          <p>{dogInfo.checkOutDate + '' + dogInfo.checkOutTime}</p>
         </Check>
         <TotalPrice>
           <p className="title">총 결제 금액(VAT포함)</p>
-          <p>{toLocalScale(107800)}원</p>
+          <p>{toLocalScale(dogInfo.totalPrice)}원</p>
         </TotalPrice>
-        <RejectButton>예약 취소</RejectButton>
+        <RejectButton onClick={() => cancelBooking(id)}>예약 취소</RejectButton>
       </UserInfoBox>
     </Container>
   )

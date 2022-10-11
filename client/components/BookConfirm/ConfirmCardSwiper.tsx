@@ -7,7 +7,15 @@ import 'swiper/css/pagination'
 import 'swiper/css/navigation'
 import styled from 'styled-components'
 import {colors} from '@/styles/colors'
-function ConfirmCardSwiper() {
+import {ConfirmBook} from '@/types/book'
+
+interface Props {
+  dogDatas: ConfirmBook[]
+  id: number
+}
+
+function ConfirmCardSwiper({dogDatas, id}: Props) {
+  console.log('data', dogDatas)
   return (
     <SwiperContainer>
       <Swiper
@@ -37,24 +45,11 @@ function ConfirmCardSwiper() {
           },
         }}
       >
-        <SwiperSlide>
-          <ConfirmCard />
-        </SwiperSlide>
-        <SwiperSlide>
-          <ConfirmCard />
-        </SwiperSlide>
-        <SwiperSlide>
-          <ConfirmCard />
-        </SwiperSlide>
-        <SwiperSlide>
-          <ConfirmCard />
-        </SwiperSlide>
-        <SwiperSlide>
-          <ConfirmCard />
-        </SwiperSlide>
-        <SwiperSlide>
-          <ConfirmCard />
-        </SwiperSlide>
+        {dogDatas.map((data, idx) => (
+          <SwiperSlide key={idx}>
+            <ConfirmCard dogInfo={data} id={id} />
+          </SwiperSlide>
+        ))}
       </Swiper>
     </SwiperContainer>
   )

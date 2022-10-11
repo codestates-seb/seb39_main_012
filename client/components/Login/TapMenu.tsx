@@ -1,9 +1,11 @@
 import {colors} from '@/styles/colors'
-import {useState} from 'react'
 import styled from 'styled-components'
+import {useRecoilState} from 'recoil'
+import {currentTabState} from '@/recoil/login'
+import LoginForm from './LoginForm'
 
 const TapMenu = () => {
-  const [currentTab, setCurrentTab] = useState(0)
+  const [currentTab, setCurrentTab] = useRecoilState(currentTabState)
   const menuArr = [{name: '견주님 로그인'}, {name: '사장님 로그인'}]
 
   const selectMenuHandler = (index: number) => {
@@ -11,27 +13,32 @@ const TapMenu = () => {
   }
 
   return (
-    <TabMenu>
-      {menuArr.map((ele, index) => {
-        return (
-          <li
-            key={index}
-            className={currentTab === index ? 'submenu focused' : 'submenu'}
-            onClick={() => selectMenuHandler(index)}
-          >
-            {ele.name}
-          </li>
-        )
-      })}
-    </TabMenu>
+    <>
+      <TabMenu>
+        {menuArr.map((ele, index) => {
+          return (
+            <li
+              key={index}
+              className={currentTab === index ? 'submenu focused' : 'submenu'}
+              onClick={() => selectMenuHandler(index)}
+            >
+              {ele.name}
+            </li>
+          )
+        })}
+      </TabMenu>
+      <Desc>
+        <LoginForm />
+      </Desc>
+    </>
   )
 }
 
 export default TapMenu
 
 const TabMenu = styled.ul`
-  background-color: #fff;
-  color: #9a9a9a;
+  background-color: rgb(255, 255, 255);
+  color: rgb(154, 154, 154);
   font-weight: bold;
   font-size: 1.5rem;
   display: flex;
@@ -54,3 +61,5 @@ const TabMenu = styled.ul`
     color: rgb(62, 62, 62);
   }
 `
+
+const Desc = styled.div``

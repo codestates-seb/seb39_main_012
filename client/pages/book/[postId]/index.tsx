@@ -7,7 +7,7 @@ import {userService} from '@/apis/MyPageAPI'
 import LocalStorage from '@/utils/util/localStorage'
 import {booking} from '@/types/book'
 import {getDayOfDate} from '@/components/StoreDetail/StoreDetail'
-import {bookingService} from '@/apis/BookingAPI'
+import {bookingService} from '@/apis/bookingAPI'
 import {useRouter} from 'next/router'
 import Footer from '@/components/Layout/Footer/Footer'
 import DogProfile from '@/components/Book/DogProfile'
@@ -19,7 +19,7 @@ const Book = () => {
   const [dogsInfo, setDogsInfo] = useState<DogCard[] | undefined>()
   const [tempBookingInfo, setTempBookingInfo] = useState<booking | undefined>()
   const [clickedDog, setClickedDog] = useState(false)
-  const [dogId, setDogId] = useState(0)
+  const [dogId, setDogId] = useState<number[]>([])
 
   useEffect(() => {
     userService.getMyPage().then((result) => {
@@ -34,6 +34,7 @@ const Book = () => {
   if (!userInfo || !dogsInfo) {
     return <div>로딩중</div>
   }
+  console.log('test')
 
   const selectDogHandler = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault()
@@ -51,24 +52,28 @@ const Book = () => {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    const requestForm = {
-      reservationCreateDto: {
-        ...tempBookingInfo,
-      },
-      reservationUserInfoDto: {
-        dogCardsId: dogId,
-        userInfo: {
-          name: userInfo?.username,
-          phone: userInfo?.phone,
-          email: userInfo?.email,
-        },
+    const reservationCreateDto = {
+      ...tempBookingInfo,
+    }
+
+    const reservationUserInfoDto = {
+      dogCardsId: dogId,
+      userInfo: {
+        name: userInfo?.username,
+        phone: userInfo?.phone,
+        email: userInfo?.email,
       },
     }
 
+    const requestForm = {
+      reservationCreateDto,
+      reservationUserInfoDto,
+    }
+
     const result = await bookingService.postBooking(Number(postId), requestForm as any)
+    console.log('Result', result)
     if (result.status === 201) {
-      router.push(`/book_confirm`)
-      // router.push(`/book_confirm/${result.data.id}`)
+      router.push(`/book_confirm/${result.data.reservedId}`)
       LocalStorage.removeItem('tempBooking')
     } else {
       throw new Error('에러 발생!')
@@ -145,15 +150,21 @@ const Book = () => {
               <BookingHotelDetail>
                 <h3>반려동물</h3>
                 <div>
-                  {tempBookingInfo?.dto.map.small
-                    ? `소형견: ${tempBookingInfo?.dto.map.medium}마리`
-                    : ''}
-                  {tempBookingInfo?.dto.map.medium
-                    ? ` / 중형견: ${tempBookingInfo?.dto.map.medium}마리`
-                    : ''}
-                  {tempBookingInfo?.dto.map.big
-                    ? ` / 대형견: ${tempBookingInfo?.dto.map.medium}마리`
-                    : ''}
+                  <div>
+                    {tempBookingInfo?.dto.map.small
+                      ? `소형견: ${tempBookingInfo?.dto.map.small}마리 \n`
+                      : ''}
+                  </div>
+                  <div>
+                    {tempBookingInfo?.dto.map.medium
+                      ? `중형견: ${tempBookingInfo?.dto.map.medium}마리 \n`
+                      : ''}
+                  </div>
+                  <div>
+                    {tempBookingInfo?.dto.map.big
+                      ? `대형견: ${tempBookingInfo?.dto.map.big}마리 \n`
+                      : ''}
+                  </div>
                 </div>
               </BookingHotelDetail>
               <BookingHotelDetail>

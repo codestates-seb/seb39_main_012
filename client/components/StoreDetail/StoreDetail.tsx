@@ -25,7 +25,7 @@ import CompanyImageSlider from './CompanyImageSlider'
 import CompanyTitleSection from './CompanyTitleSection'
 import {availableServices} from '@/utils/options/options'
 import LocalStorage from '@/utils/util/localStorage'
-import {bookingService} from '@/apis/BookingAPI'
+import {bookingService} from '@/apis/bookingAPI'
 import router from 'next/router'
 import {postService} from '@/apis/PostAndSearchAPI'
 
@@ -86,8 +86,11 @@ const StoreDetail = ({postId}: {postId: number}) => {
 
     if (smallDogNum === 0 && mediumDogNum === 0 && largeDogNum === 0) {
       return toast.error('모든 항목을 입력해주세요.')
-      return
     }
+
+    // if (!checkInDate || !checkOutDate || !checkInTime || !checkOutTime) {
+    //   return toast.error('모든 항목을 입력해주세요.')
+    // }
 
     const requestForm = {
       map: {
@@ -582,12 +585,14 @@ const CompanyDetailContainer = styled.div`
   justify-content: center;
   align-items: center;
   margin-top: 4rem;
+  width: 100%;
 `
 
 const CompanyInfoTop = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
+  width: 100%;
 `
 
 const CompanyInfoTitleBox = styled.div``
@@ -664,6 +669,7 @@ const CompanyInfoBottom = styled.div`
   display: flex;
   gap: 5rem;
   margin-top: 8rem;
+  width: 100%;
 `
 
 const CompanyDesc = styled.div`

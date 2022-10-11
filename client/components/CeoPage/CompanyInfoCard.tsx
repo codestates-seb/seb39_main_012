@@ -23,7 +23,7 @@ function CompanyInfoCard({post}: Props) {
           onClick={async () => {
             if (window.confirm('정말 삭제하시겠습니까?')) {
               const result = await ceoService.deleteMyCompany(post.id)
-              if (result.status === 200) {
+              if (result.status === 204) {
                 toast.success('삭제되었습니다.')
                 return
               }

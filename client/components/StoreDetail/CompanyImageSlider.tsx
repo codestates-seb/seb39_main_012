@@ -24,6 +24,7 @@ const CompanyImageSlider = ({postImg, companyName, companyAddress}: Props) => {
         onInit={onInit}
         plugins={[lgZoom, lgThumbnail, lgShare, lgRotate, lgFullscreen]}
         mode="lg-fade"
+        licenseKey={process.env.NEXT_PUBLIC_LIGHT_GALLERY_KEY}
       >
         {postImg?.map((img, index) => {
           return (

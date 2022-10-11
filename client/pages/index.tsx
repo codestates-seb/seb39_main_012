@@ -14,6 +14,7 @@ import {GetStaticProps, InferGetStaticPropsType} from 'next'
 import BannerSwiper from '@/components/Home/BannerSwiper'
 import {bannerImages} from '@/public/images'
 import Image from 'next/image'
+import LocalStorage from '@/utils/util/localStorage'
 
 export const getStaticProps: GetStaticProps = async () => {
   const res1 = await postService.getPosts(1)
@@ -33,6 +34,16 @@ function Home({posts1, posts2, pageInfo}: InferGetStaticPropsType<typeof getStat
   const [posts, setPosts] = useState<Post[]>([])
   const [totalPage, setTotalPage] = useState(pageInfo.totalPages)
   const [isLoading, setIsLoading] = useState(false)
+
+  useEffect(() => {
+    window.onbeforeunload = function (e) {
+      window.onunload = function () {
+        LocalStorage.removeItem('accessToken')
+        LocalStorage.removeItem('userInfo')
+      }
+      return undefined
+    }
+  }, [])
 
   const fetchMore = async () => {
     setIsLoading(true)
@@ -81,7 +92,9 @@ function Home({posts1, posts2, pageInfo}: InferGetStaticPropsType<typeof getStat
         ))}
       </PostCardBox>
       <SubBanner>
-        <Image src={bannerImages.subBanner} sizes={'100%'} alt={'BannerImg'} />
+        <ImageWrapper>
+          <Image src={bannerImages.subBanner} sizes={'100%'} alt={'BannerImg'} />
+        </ImageWrapper>
       </SubBanner>
       <PostCardBox>
         {posts2.map((post: Post, idx: number) => (
@@ -89,7 +102,9 @@ function Home({posts1, posts2, pageInfo}: InferGetStaticPropsType<typeof getStat
         ))}
       </PostCardBox>
       <SubBanner>
-        <Image src={bannerImages.subBanner2} sizes={'100%'} alt={'BannerImg'} />
+        <ImageWrapper>
+          <Image src={bannerImages.subBanner2} sizes={'100%'} alt={'BannerImg'} />
+        </ImageWrapper>
       </SubBanner>
       <PostCardBox>
         {posts.map((post: Post, idx: number) => (
@@ -126,6 +141,10 @@ const MainBanner = styled.div`
     width: 150%;
   }
 
+  @media (min-width: 1540px) {
+    width: 150%;
+  }
+
   @media (max-width: 1280px) {
     width: 100%;
   }
@@ -137,6 +156,8 @@ const MainSearchBar = styled.div`
   padding-top: 2rem;
   padding-bottom: 2rem;
   background-color: ${colors.grey1};
+  border-radius: 10px;
+  perspective: 1px;
 `
 
 const CategoryBox = styled.div`
@@ -184,6 +205,10 @@ const SubBanner = styled.div`
   @media (max-width: 1280px) {
     width: 100%;
   } */
+`
+
+const ImageWrapper = styled.div`
+  margin-bottom: 4rem;
 `
 
 const SpinnerBox = styled.div`
