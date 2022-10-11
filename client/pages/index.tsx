@@ -14,6 +14,7 @@ import {GetStaticProps, InferGetStaticPropsType} from 'next'
 import BannerSwiper from '@/components/Home/BannerSwiper'
 import {bannerImages} from '@/public/images'
 import Image from 'next/image'
+import LocalStorage from '@/utils/util/localStorage'
 
 export const getStaticProps: GetStaticProps = async () => {
   const res1 = await postService.getPosts(1)
@@ -27,6 +28,9 @@ export const getStaticProps: GetStaticProps = async () => {
     revalidate: 14400, // 4시간
   }
 }
+
+LocalStorage.removeItem('accessToken')
+LocalStorage.removeItem('userInfo')
 
 function Home({posts1, posts2, pageInfo}: InferGetStaticPropsType<typeof getStaticProps>) {
   const [page, setPage] = useState(3)
