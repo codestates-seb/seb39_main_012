@@ -1,7 +1,6 @@
-import React, {useState} from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import StoreDetail from '@/components/StoreDetail/StoreDetail'
-import Footer from '@/components/Layout/Footer/Footer'
 import {useRouter} from 'next/router'
 
 // export const getServerSideProps = async (context: {query: {id: any}}) => {
@@ -30,7 +29,6 @@ const Detail = () => {
     <Container>
       {/* <StoreDetail post={tempPost} /> */}
       <StoreDetail postId={Number(postId)} />
-      <Footer />
     </Container>
   )
 }
