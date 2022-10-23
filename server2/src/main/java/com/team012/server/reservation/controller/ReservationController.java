@@ -1,6 +1,6 @@
 package com.team012.server.reservation.controller;
 
-import com.team012.server.reservation.entity.ReservationList;
+import com.team012.server.reservation.entity.Reservation;
 import com.team012.server.common.config.userDetails.PrincipalDetails;
 import com.team012.server.common.response.MultiResponseDto;
 import com.team012.server.company.service.CompanyService;
@@ -35,10 +35,10 @@ public class ReservationController {
         Long findCompanyId = companyService.getCompany(principalDetails.getUsers().getId()).getId();
         if(companyId != findCompanyId) throw new RuntimeException("company가 일치하지 않음");
 
-        Page<ReservationList> reservationPage= reservationService.getReservation(companyId, page -1, size);
-        List<ReservationList> reservationList = reservationPage.getContent();
+        Page<Reservation> reservationPage= reservationService.getReservation(companyId, page -1, size);
+        List<Reservation> reservation = reservationPage.getContent();
 
-        return new ResponseEntity<>(new MultiResponseDto<>(reservationList, reservationPage), HttpStatus.OK);
+        return new ResponseEntity<>(new MultiResponseDto<>(reservation, reservationPage), HttpStatus.OK);
     }
 
     // 예약확정 API (회사기준)

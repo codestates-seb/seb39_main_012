@@ -47,7 +47,7 @@ public class PostsCombineService {
                 .longitude(posts.getLongitude())
                 .address(posts.getAddress())
                 .detailAddress(posts.getDetailAddress())
-                .roomCount(posts.getRoomCount())
+//                .roomCount(posts.getRoomCount())
                 .phone(posts.getPhone())
                 .companyId(companyId)
                 .avgScore(posts.getAvgScore())
@@ -94,12 +94,12 @@ public class PostsCombineService {
                 .checkInTime(posts.getCheckInTime().format(DateTimeFormatter.ofPattern("a hh:mm")))
                 .checkOutTime(posts.getCheckOutTime().format(DateTimeFormatter.ofPattern("a hh:mm")))
                 .likesCount(posts.getLikesCount())
-                .roomCount(posts.getRoomCount())
+//                .roomCount(posts.getRoomCount())
                 .postsImgList(imgDtos)
                 .hashTag(hashTagResponseDtos)
                 .serviceTag(serviceResponseDtos)
                 .roomDtos(roomDtos)
-                .roomCount(posts.getRoomCount())
+//                .roomCount(posts.getRoomCount())
                 .reviewList(reviewList)
                 .build();
     }

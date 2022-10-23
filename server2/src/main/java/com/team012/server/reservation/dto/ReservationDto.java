@@ -1,6 +1,6 @@
 package com.team012.server.reservation.dto;
 
-import com.team012.server.reservation.entity.ReservationList;
+import com.team012.server.reservation.entity.Reservation;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,10 +39,10 @@ public class ReservationDto {
     @Setter
     @NoArgsConstructor
     public static class ReservationListResponse {
-        private Page<ReservationList> reservationList;
+        private Page<Reservation> reservationList;
 
         @Builder
-        public ReservationListResponse(Page<ReservationList> reservationList) {
+        public ReservationListResponse(Page<Reservation> reservationList) {
             this.reservationList = reservationList;
         }
     }

@@ -2,9 +2,8 @@ package com.team012.server.room.service;
 
 import com.team012.server.room.converter.RoomConverter;
 import com.team012.server.room.dto.RoomCreateDto;
-import com.team012.server.room.dto.RoomDto;
-import com.team012.server.room.dto.RoomUpdateDto;
 import com.team012.server.room.entity.Room;
+import com.team012.server.room.repository.RoomJDBCRepository;
 import com.team012.server.room.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,29 +12,28 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 @Transactional
 @RequiredArgsConstructor
 @Service
 public class RoomService {
 
     private final RoomRepository roomRepository;
-    private final RoomConverter roomConverter;
+    private final RoomJDBCRepository roomJDBCRepository;
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public List<Room> saveList(List<RoomCreateDto> list, Long postsId) {
+    public void saveList(List<RoomCreateDto> list, Long postsId) {
         List<Room> roomList = new ArrayList<>();
         for(RoomCreateDto room : list) {
             Room room1 = Room.builder()
                     .size(room.getSize())
                     .price(room.getPrice())
+                    .roomCount(room.getRoomCount())
                     .postsId(postsId)
                     .build();
             roomList.add(room1);
         }
 
-        List<Room> list1 = roomRepository.saveAll(roomList);
-        return list1;
+        roomJDBCRepository.batchInsert(roomList);
     }
 
 //    public RoomDto update(RoomUpdateDto roomUpdateDto) {
@@ -55,6 +53,7 @@ public class RoomService {
         for(int i = 0; i< roomDto.size(); i++) {
             Room room = rooms.get(i);
             room.setPrice(roomDto.get(i).getPrice());
+            room.setRoomCount(roomDto.get(i).getRoomCount());
         }
         return roomRepository.saveAll(rooms);
     }

@@ -18,4 +18,6 @@ public class PostsResponseListDto {
     private Integer likesCount;
     private ImgDto img;
     private Integer minPrice;
+
+
 }

@@ -1,4 +1,4 @@
-package com.team012.server.common.converter;
+package com.team012.server.common.utils.converter;
 
 import java.util.List;
 

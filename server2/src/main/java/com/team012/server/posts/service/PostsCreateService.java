@@ -35,7 +35,6 @@ public class PostsCreateService {
     private final ServiceTagService serviceTagService;
     private final PostsCombineService postsCombineService;
 
-    @Transactional(propagation = Propagation.REQUIRED)
     public PostsResponseDto createPostsResponse(PostsCreateDto request, List<MultipartFile> file, Long usersId){
         Company company = companyService.getCompany(usersId);
         Long companyId = company.getId();
@@ -49,9 +48,10 @@ public class PostsCreateService {
 
         Long postsId = posts.getId();
 
-        List<Room> roomList1 = roomService.saveList(roomList, postsId);
+        roomService.saveList(roomList, postsId);
+        List<Room> roomList1 = roomService.findAllRoom(postsId);
 
-        List<HashTag> tags = tagService.saveOrFind(hashTag);
+                List<HashTag> tags = tagService.saveOrFind(hashTag);
         List<PostsHashTags> postsHashTags = tagService.saveCompanyPostsTags(tags, posts);
 
         List<ServiceTag> serviceTags = serviceTagService.saveServiceTags(serviceTag);

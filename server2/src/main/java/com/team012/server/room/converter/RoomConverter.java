@@ -1,6 +1,6 @@
 package com.team012.server.room.converter;
 
-import com.team012.server.common.converter.Converter;
+import com.team012.server.common.utils.converter.Converter;
 import com.team012.server.room.dto.RoomDto;
 import com.team012.server.room.entity.Room;
 import org.springframework.stereotype.Component;
@@ -17,6 +17,7 @@ public class RoomConverter implements Converter<Room, RoomDto> {
                 .roomId(room.getId())
                 .size(room.getSize())
                 .price(room.getPrice())
+                .roomCount(room.getRoomCount())
                 .build();
     }
 

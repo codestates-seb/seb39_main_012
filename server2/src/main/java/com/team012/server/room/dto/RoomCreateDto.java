@@ -14,4 +14,9 @@ public class RoomCreateDto {
     private String size;
     @Min(0)
     private Integer price;
+
+    @Min(0)
+    private Integer roomCount;
+
+    //갯수
 }

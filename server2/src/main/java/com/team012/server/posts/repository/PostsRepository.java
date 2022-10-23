@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
-public interface PostsRepository extends JpaRepository<Posts, Long> {
+public interface PostsRepository extends JpaRepository<Posts, Long> , PostsRepositoryCustom{
 
     Page<Posts> findByAddressContaining(String address, Pageable pageable);
 

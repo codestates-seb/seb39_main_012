@@ -3,6 +3,7 @@ package com.team012.server.posts.controller;
 import com.team012.server.common.response.MultiResponseDto;
 import com.team012.server.posts.dto.PostsResponseDto;
 import com.team012.server.posts.dto.PostsResponseListDto;
+import com.team012.server.posts.entity.TemptMainPageDto;
 import com.team012.server.posts.entity.Posts;
 import com.team012.server.posts.repository.RoomPriceDto;
 import com.team012.server.posts.service.PostListService;
@@ -10,7 +11,6 @@ import com.team012.server.posts.service.PostsCombineService;
 import com.team012.server.posts.service.PostsSearchService;
 import com.team012.server.posts.service.PostsService;
 import com.team012.server.review.dto.ReviewPostsResponse;
-import com.team012.server.review.entity.Review;
 import com.team012.server.review.service.ReviewService;
 import com.team012.server.room.entity.Room;
 import com.team012.server.room.service.RoomService;
@@ -71,11 +71,15 @@ public class PostsPageController {
     @GetMapping("/search-title")
     public ResponseEntity searchByTitle(@RequestParam int page,
                                         @RequestParam int size,
-                                        @RequestParam String title) {
-        Page<Posts> postsPage = postsSearchService.findPostsByTitle(title, page - 1, size);
+                                        @RequestParam(required = false) String title,
+                                        @RequestParam(required = false) String contents) {
+
+//        Page<TemptMainPageDto> postsPage = postsSearchService.findPageByTitleOrContents(title, contents, page - 1, size);
+//        List<TemptMainPageDto> list = postsPage.getContent();
+        Page<Posts> postsPage = postsSearchService.findPostsByTitle(title, contents,page - 1, size);
         List<Posts> postsList = postsPage.getContent();
 
-        Page<RoomPriceDto> roomPriceDtos = postsSearchService.findAllRoomPriceTitle(page - 1, size, title);
+        Page<RoomPriceDto> roomPriceDtos = postsSearchService.findAllRoomPriceTitle(page - 1, size, title, contents);
         List<RoomPriceDto> roomPriceDtos1 = roomPriceDtos.getContent();
 
         List<PostsResponseListDto> postsResponseListDtos = postListService.postsResponseListDtos(postsList, roomPriceDtos1);

@@ -1,13 +1,12 @@
 package com.team012.server.users.service;
 
-import com.amazonaws.services.ec2.model.Reservation;
 import com.team012.server.company.entity.Company;
 import com.team012.server.company.repository.CompanyRepository;
 import com.team012.server.posts.dto.PostsReviewInfo;
 import com.team012.server.posts.entity.Posts;
 import com.team012.server.posts.repository.PostsRepository;
-import com.team012.server.reservation.entity.ReservationList;
-import com.team012.server.reservation.repository.ReservationListRepository;
+import com.team012.server.reservation.entity.Reservation;
+import com.team012.server.reservation.repository.ReservationRepository;
 import com.team012.server.review.dto.ReviewInfoDto;
 import com.team012.server.review.entity.Review;
 import com.team012.server.review.entity.ReviewImg;
@@ -37,7 +36,7 @@ public class UsersManageReviewService {
 
     private final CompanyRepository companyRepository;
 
-    private final ReservationListRepository reservationListRepository;
+    private final ReservationRepository reservationRepository;
 
     // 작성한 리뷰 유저 아이디를 통한 조회
     @Transactional(readOnly = true)
@@ -55,7 +54,7 @@ public class UsersManageReviewService {
         for (Review review : reviewList) {
             Posts posts = postsRepository.findById(review.getPostsId()).orElse(null);
             Company company = companyRepository.findById(Objects.requireNonNull(posts).getCompanyId()).orElse(null);
-            ReservationList reservation = reservationListRepository.findByCompanyId(Objects.requireNonNull(company).getId());
+            Reservation reservation = reservationRepository.findByCompanyId(Objects.requireNonNull(company).getId());
             PostsReviewInfo postsReviewInfo = PostsReviewInfo
                     .builder()
                     .postsCompanyName(Objects.requireNonNull(company).getCompanyName())

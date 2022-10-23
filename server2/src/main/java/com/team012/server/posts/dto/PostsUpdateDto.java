@@ -1,8 +1,6 @@
 package com.team012.server.posts.dto;
 
 import com.team012.server.room.dto.RoomCreateDto;
-import com.team012.server.room.dto.RoomDto;
-import com.team012.server.room.dto.RoomUpdateDto;
 import lombok.Getter;
 
 import javax.validation.constraints.Pattern;

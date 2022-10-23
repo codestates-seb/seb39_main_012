@@ -21,6 +21,10 @@ public class Room {
     @Column(name = "price") // 두당 가격
     private Integer price;
 
+    //갯수 엔티티 추가
+    @Column(name = "room_count")
+    private Integer roomCount;
+
     @Column(name = "posts_id")
     private Long postsId;
 

@@ -45,7 +45,7 @@ interface userInfoProps {
 }
 export interface IPostBooking {
   reservationCreateDto: {
-    reservationList: reservationListProps[]
+    reservation: reservationListProps[]
     dto: {
       map: mapProps
       checkInDate: string

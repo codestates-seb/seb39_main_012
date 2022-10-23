@@ -1,6 +1,5 @@
 package com.team012.server.reservation.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,14 +9,12 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ReservationList {
+public class Reservation {
 
 
     @PrePersist
@@ -67,28 +64,32 @@ public class ReservationList {
     @ElementCollection(fetch = FetchType.LAZY)
     private List<Long> dogIdList = new ArrayList<>(); //강아지 카드 아이디 리스트
 
+
+
     @Embedded
     private UserInfo userInfo; //예약 상세 페이지에 이름, 전화번호, 이메일을 적는 칸이 있어서 넣었습니다.
 
-//    @OneToMany(mappedBy = "reservationList", cascade = CascadeType.REMOVE)
-//    @JsonManagedReference
-//    private List<Reservation> reservations;
+    @ElementCollection
+    @CollectionTable
+    @OrderColumn
+    private List<BookingInfo> bookingInfos = new ArrayList<>();
 
     public void setStatus(String status) {
         this.status = status;
     }
 
     @Builder
-    public ReservationList(Long reservedId,
-                           LocalDate checkInDate,
-                           LocalDate checkOutDate,
-                           LocalTime checkInTime,
-                           LocalTime checkOutTime,
-                           String status,
-                           Long usersId, Long postsId,
-                           Integer totalPrice, Long companyId,
-                           Integer dogCount,List<Long> dogIdList,
-                           UserInfo userInfo) {
+    public Reservation(Long reservedId,
+                       LocalDate checkInDate,
+                       LocalDate checkOutDate,
+                       LocalTime checkInTime,
+                       LocalTime checkOutTime,
+                       String status,
+                       Long usersId, Long postsId,
+                       Integer totalPrice, Long companyId,
+                       Integer dogCount, List<Long> dogIdList,
+                       List<BookingInfo> bookingInfos,
+                       UserInfo userInfo) {
         this.reservedId = reservedId;
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;
@@ -101,11 +102,8 @@ public class ReservationList {
         this.companyId = companyId;
         this.dogCount = dogCount;
         this.dogIdList = dogIdList;
+        this.bookingInfos = bookingInfos;
         this.userInfo = userInfo;
-//        this.reservations = reservations;
     }
 
-//    public void setReservations(List<Reservation> reservations) {
-//        this.reservations = reservations;
-//    }
 }

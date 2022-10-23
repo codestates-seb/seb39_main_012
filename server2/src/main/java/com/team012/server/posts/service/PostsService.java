@@ -4,7 +4,6 @@ import com.team012.server.common.aws.service.AwsS3Service;
 import com.team012.server.posts.dto.PostsCreateDto;
 import com.team012.server.posts.dto.PostsUpdateDto;
 import com.team012.server.posts.entity.Posts;
-import com.team012.server.posts.img.dto.ImgUpdateDto;
 import com.team012.server.posts.img.entity.PostsImg;
 import com.team012.server.posts.img.service.PostsImgService;
 import com.team012.server.posts.repository.PostsRepository;
@@ -12,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -35,7 +33,6 @@ public class PostsService {
     private final PostsImgService postsImgService;
     private final AwsS3Service awsS3Service;
 
-    @Transactional(propagation = Propagation.REQUIRED)
     public Posts save(PostsCreateDto post, List<MultipartFile> files, Long companyId) {
 
         LocalTime checkIn = convertCheckInToTime(post.getCheckInTime());
@@ -51,23 +48,23 @@ public class PostsService {
                 .address(post.getAddress())
                 .detailAddress(post.getDetailAddress())
                 .phone(post.getPhone())
-                .roomCount(post.getRoomCount())//add
+//                .roomCount(post.getRoomCount())//add
                 .checkInTime(checkIn)
                 .checkOutTime(checkOut)
                 .build();
 
-        List<PostsImg> lists = awsS3Service.convertPostImg(files);
+        Posts savedPosts = postsRepository.save(posts);
 
+        List<PostsImg> lists = awsS3Service.convertPostImg(files, savedPosts);
+        postsImgService.saveAll(lists);
+
+        lists = postsImgService.findByPostsId(savedPosts.getId());
         posts.setPostsImgList(lists);
-        for (PostsImg c : lists) {
-            c.setPosts(posts);
-        }
 
-        return postsRepository.save(posts);
+        return savedPosts;
 
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
     public Posts update(PostsUpdateDto post, List<MultipartFile> files, Long companyId) throws FileUploadException {
         Long postsId = post.getId();
         Posts findPosts = findById(postsId);
@@ -82,7 +79,7 @@ public class PostsService {
         Optional.ofNullable(post.getPhone()).ifPresent(findPosts::setPhone);
         Optional.ofNullable(post.getTitle()).ifPresent(findPosts::setTitle);
         Optional.ofNullable(post.getContent()).ifPresent(findPosts::setContent);
-        Optional.ofNullable(post.getRoomCount()).ifPresent(findPosts::setRoomCount); //add
+//        Optional.ofNullable(post.getRoomCount()).ifPresent(findPosts::setRoomCount); //add
 
         if (StringUtils.hasText(post.getCheckInTime())) {
             LocalTime checkIn = convertCheckInToTime(post.getCheckInTime());
