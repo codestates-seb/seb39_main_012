@@ -3,7 +3,6 @@ package com.team012.server.posts.controller;
 import com.team012.server.common.response.MultiResponseDto;
 import com.team012.server.posts.dto.PostsResponseDto;
 import com.team012.server.posts.dto.PostsResponseListDto;
-import com.team012.server.posts.entity.TemptMainPageDto;
 import com.team012.server.posts.entity.Posts;
 import com.team012.server.posts.repository.RoomPriceDto;
 import com.team012.server.posts.service.PostListService;
@@ -74,8 +73,8 @@ public class PostsPageController {
                                         @RequestParam(required = false) String title,
                                         @RequestParam(required = false) String contents) {
 
-//        Page<TemptMainPageDto> postsPage = postsSearchService.findPageByTitleOrContents(title, contents, page - 1, size);
-//        List<TemptMainPageDto> list = postsPage.getContent();
+//        Page<PostsMainPageDto> postsPage = postsSearchService.findPageByTitleOrContents(title, contents, page - 1, size);
+//        List<PostsMainPageDto> list = postsPage.getContent();
         Page<Posts> postsPage = postsSearchService.findPostsByTitle(title, contents,page - 1, size);
         List<Posts> postsList = postsPage.getContent();
 

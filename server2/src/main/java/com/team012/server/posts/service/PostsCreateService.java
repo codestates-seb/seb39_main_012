@@ -1,9 +1,6 @@
 package com.team012.server.posts.service;
 
 import com.team012.server.company.entity.Company;
-import com.team012.server.room.dto.RoomCreateDto;
-import com.team012.server.room.entity.Room;
-import com.team012.server.room.service.RoomService;
 import com.team012.server.company.service.CompanyService;
 import com.team012.server.posts.Tag.HashTag.entity.HashTag;
 import com.team012.server.posts.Tag.HashTag.entity.PostsHashTags;
@@ -14,10 +11,11 @@ import com.team012.server.posts.Tag.ServiceTag.service.ServiceTagService;
 import com.team012.server.posts.dto.PostsCreateDto;
 import com.team012.server.posts.dto.PostsResponseDto;
 import com.team012.server.posts.entity.Posts;
+import com.team012.server.room.dto.RoomCreateDto;
+import com.team012.server.room.entity.Room;
+import com.team012.server.room.service.RoomService;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 

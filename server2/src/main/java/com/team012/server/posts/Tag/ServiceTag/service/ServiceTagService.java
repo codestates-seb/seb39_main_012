@@ -1,5 +1,7 @@
 package com.team012.server.posts.Tag.ServiceTag.service;
 
+import com.team012.server.common.exception.BusinessLogicException;
+import com.team012.server.common.exception.ExceptionCode;
 import com.team012.server.posts.Tag.ServiceTag.dto.ServiceTagUpdateDto;
 import com.team012.server.posts.Tag.ServiceTag.entity.PostsServiceTag;
 import com.team012.server.posts.Tag.ServiceTag.entity.ServiceTag;
@@ -49,19 +51,9 @@ public class ServiceTagService {
         return postsServiceTagRepository.saveAll(postsAvailableTags);
     }
 
-//    public ServiceTag updateServiceTag(ServiceTagUpdateDto serviceTagUpdateDto) {
-//        Optional<ServiceTag> serviceTag = serviceTagRepository.findById(serviceTagUpdateDto.getServiceTagId());
-//        ServiceTag findTag = serviceTag.orElseThrow(() -> new RuntimeException("serviceTag not found"));
-//
-//        Optional.ofNullable(serviceTagUpdateDto.getTag()).ifPresent(findTag::setTag);
-//        serviceTagRepository.save(findTag);
-//
-//        return  findTag;
-//    }
-
     public void deleteServiceTag(Long serviceTagId) {
         Optional<ServiceTag> serviceTag = serviceTagRepository.findById(serviceTagId);
-        ServiceTag findTag = serviceTag.orElseThrow(() -> new RuntimeException("serviceTag not found"));
+        ServiceTag findTag = serviceTag.orElseThrow(() -> new BusinessLogicException(ExceptionCode.SERVICE_TAG_NOT_FOUND));
 
         serviceTagRepository.delete(findTag);
     }

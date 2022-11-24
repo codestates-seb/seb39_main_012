@@ -1,5 +1,7 @@
 package com.team012.server.users.service;
 
+import com.team012.server.common.exception.BusinessLogicException;
+import com.team012.server.common.exception.ExceptionCode;
 import com.team012.server.company.service.CompanyService;
 import com.team012.server.users.dto.CustomerSignUpRequestDto;
 import com.team012.server.users.dto.CustomerUpdateRequestDto;
@@ -77,19 +79,19 @@ public class UsersService {
     @Transactional(readOnly = true)
     public Users findUsersById(Long usersId) {
         return usersRepository.findById(usersId)
-                .orElseThrow(() -> new RuntimeException("member Not found"));
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
     }
 
-    public Users updateCustomer(Long id, CustomerUpdateRequestDto dto, String imgUrl) {
+    public void updateCustomer(Long id, CustomerUpdateRequestDto dto, String imgUrl) {
         Users findUsers = usersRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("찾는 유저가 없습니다."));
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
         findUsers.setUsername(dto.getUserName());
         findUsers.setPhone(dto.getPhone());
 
         savedUsersImg(id, imgUrl);
 
-        return usersRepository.save(findUsers);
+        usersRepository.save(findUsers);
     }
 
     /// 추가 코드 ///
@@ -107,13 +109,13 @@ public class UsersService {
     }
 
     // 유저 이미지 업로드
-    public UsersImg savedUsersImg(Long id, String imgUrl) {
+    public void savedUsersImg(Long id, String imgUrl) {
         UsersImg usersImg = UsersImg
                 .builder()
                 .usersId(id)
                 .imgUrl(imgUrl)
                 .build();
-        return usersImgRepository.save(usersImg);
+        usersImgRepository.save(usersImg);
     }
 
 }

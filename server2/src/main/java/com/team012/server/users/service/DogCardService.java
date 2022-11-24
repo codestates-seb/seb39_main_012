@@ -1,6 +1,8 @@
 package com.team012.server.users.service;
 
 import com.team012.server.common.config.userDetails.PrincipalDetails;
+import com.team012.server.common.exception.BusinessLogicException;
+import com.team012.server.common.exception.ExceptionCode;
 import com.team012.server.users.dto.DogCardResponseDto;
 import com.team012.server.users.entity.DogCard;
 import com.team012.server.users.entity.Users;
@@ -57,7 +59,7 @@ public class DogCardService {
 
         Optional<DogCard> findDogCard = dogCardRepository.findById(dogCardId);
 
-        return findDogCard.orElseThrow(() -> new RuntimeException("DogCard Not Found"));
+        return findDogCard.orElseThrow(() -> new BusinessLogicException(ExceptionCode.DOG_NOT_FOUND));
     }
 
     @Transactional(readOnly = true)

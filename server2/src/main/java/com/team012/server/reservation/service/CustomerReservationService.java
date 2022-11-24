@@ -1,6 +1,8 @@
 package com.team012.server.reservation.service;
 
 
+import com.team012.server.common.exception.BusinessLogicException;
+import com.team012.server.common.exception.ExceptionCode;
 import com.team012.server.company.repository.CompanyRepository;
 import com.team012.server.posts.entity.Posts;
 import com.team012.server.posts.service.PostsService;
@@ -71,9 +73,9 @@ public class CustomerReservationService {
 
         //당일 예약 불가 및 하루 전날 예약 불가
         if (checkIn.isBefore(LocalDate.now().plusDays(1)) || checkOut.isBefore(LocalDate.now().plusDays(1))) {
-            throw new RuntimeException("당일예약/오늘 이전 날짜 예약 불가");
+            throw new BusinessLogicException(ExceptionCode.SAME_DAY_RESERVATION_NOT_ALLOWED);
         } else if (checkOut.isBefore(checkIn)) {
-            throw new RuntimeException("체크아웃 날짜는 체크인보다 뒤에 있어야 한다");
+            throw new BusinessLogicException(ExceptionCode.CHECKIN_CHECKOUT_ERROR);
         }
     }
 
@@ -193,7 +195,7 @@ public class CustomerReservationService {
         if (LocalDate.now().until(findReservation.getCheckInDate(), ChronoUnit.DAYS) < 1) {
             log.info("{}", findReservation.getCheckInDate().until(LocalDate.now(), ChronoUnit.DAYS));
 
-            throw new RuntimeException("예약 취소는 하루 전에만 가능합니다");
+            throw new BusinessLogicException(ExceptionCode.SAME_DAY_RESERVATION_CANCEL_NOT_ALLOWED);
         }
 
         reservationRepository.delete(findReservation);

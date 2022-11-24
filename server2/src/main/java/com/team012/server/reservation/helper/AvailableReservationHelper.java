@@ -44,7 +44,7 @@ public class AvailableReservationHelper {
             Integer occupied = reservations.stream()
                     .filter(reservation -> isBetween(currentDate, reservation))
 
-                    .mapToInt(room -> {
+                    .mapToInt(room -> { //whyrano....
                         List<BookingInfo> list = room.getBookingInfos();
                         int count = 0;
                         for (BookingInfo bookingInfo : list)

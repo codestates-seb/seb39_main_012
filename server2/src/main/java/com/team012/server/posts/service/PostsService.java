@@ -1,6 +1,7 @@
 package com.team012.server.posts.service;
 
 import com.team012.server.common.aws.service.AwsS3Service;
+import com.team012.server.common.exception.BusinessLogicException;
 import com.team012.server.posts.dto.PostsCreateDto;
 import com.team012.server.posts.dto.PostsUpdateDto;
 import com.team012.server.posts.entity.Posts;
@@ -22,6 +23,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
+
+import static com.team012.server.common.exception.ExceptionCode.*;
 
 @Transactional
 @Service
@@ -48,7 +51,6 @@ public class PostsService {
                 .address(post.getAddress())
                 .detailAddress(post.getDetailAddress())
                 .phone(post.getPhone())
-//                .roomCount(post.getRoomCount())//add
                 .checkInTime(checkIn)
                 .checkOutTime(checkOut)
                 .build();
@@ -70,7 +72,7 @@ public class PostsService {
         Posts findPosts = findById(postsId);
         log.info(findPosts.getTitle() ,"{}");
 
-        if (!Objects.equals(findPosts.getCompanyId(), companyId)) throw new RuntimeException("companyId 일치하지 않음");
+        if (!Objects.equals(findPosts.getCompanyId(), companyId)) throw new BusinessLogicException(COMPANY_ID_NOT_MATCHED);
 
         Optional.ofNullable(post.getLatitude()).ifPresent(findPosts::setLatitude);
         Optional.ofNullable(post.getLongitude()).ifPresent(findPosts::setLongitude);
@@ -79,7 +81,6 @@ public class PostsService {
         Optional.ofNullable(post.getPhone()).ifPresent(findPosts::setPhone);
         Optional.ofNullable(post.getTitle()).ifPresent(findPosts::setTitle);
         Optional.ofNullable(post.getContent()).ifPresent(findPosts::setContent);
-//        Optional.ofNullable(post.getRoomCount()).ifPresent(findPosts::setRoomCount); //add
 
         if (StringUtils.hasText(post.getCheckInTime())) {
             LocalTime checkIn = convertCheckInToTime(post.getCheckInTime());
@@ -109,12 +110,12 @@ public class PostsService {
         Optional<Posts> findCompanyPosts
                 = postsRepository.findById(postsId);
 
-        return findCompanyPosts.orElseThrow(() -> new RuntimeException("Posts Not Found"));
+        return findCompanyPosts.orElseThrow(() -> new BusinessLogicException(POST_NOT_FOUND));
     }
 
     public void delete(Long postsId, Long companyId) {
         Posts posts = findById(postsId);
-        if (posts.getCompanyId() != companyId) throw new RuntimeException("companyId가 일치하지 않음");
+        if (posts.getCompanyId() != companyId) throw new BusinessLogicException(COMPANY_ID_NOT_MATCHED);
         awsS3Service.deleteFile(posts.getPostsImgList());
         postsRepository.delete(posts);
     }
@@ -145,6 +146,6 @@ public class PostsService {
     }
 
     private void validateCheckInCheckOut(LocalTime checkIn, LocalTime checkOut) {
-        if(checkOut.isBefore(checkIn)) throw new IllegalArgumentException("checkIn must be lesser then checkOut");
+        if(checkOut.isBefore(checkIn)) throw new BusinessLogicException(CHECKIN_CHECKOUT_ERROR);
     }
 }

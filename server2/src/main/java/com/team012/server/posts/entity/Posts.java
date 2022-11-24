@@ -55,9 +55,6 @@ public class Posts {
     @Column(name = "company_id")
     private Long companyId;
 
-//    @Column(name = "room_count")
-//    private Integer roomCount; //room에 count없에는 대신 추가(전체 방의 갯수)
-
     @Column(name = "likes_count")
     private Integer likesCount;
 
@@ -97,10 +94,7 @@ public class Posts {
         this.address = address;
         this.detailAddress = detailAddress;
         this.phone = phone;
-//        this.roomCount = roomCount; // add
         this.companyId = companyId;
-//        this.avgScore = avgScore; // add
-//        this.likesCount = likesCount;
         this.checkInTime = checkInTime;
         this.checkOutTime = checkOutTime;
 

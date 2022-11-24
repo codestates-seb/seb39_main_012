@@ -1,5 +1,7 @@
 package com.team012.server.room.service;
 
+import com.team012.server.common.exception.BusinessLogicException;
+import com.team012.server.common.exception.ExceptionCode;
 import com.team012.server.room.converter.RoomConverter;
 import com.team012.server.room.dto.RoomCreateDto;
 import com.team012.server.room.entity.Room;
@@ -36,17 +38,6 @@ public class RoomService {
         roomJDBCRepository.batchInsert(roomList);
     }
 
-//    public RoomDto update(RoomUpdateDto roomUpdateDto) {
-//
-//        Optional<Room> room = roomRepository.findById(roomUpdateDto.getRoomId());
-//        Room findRoom = room.orElseThrow(() -> new RuntimeException("room not exist"));
-//
-//        Optional.ofNullable(roomUpdateDto.getSize()).ifPresent(findRoom::setSize);
-//        Optional.of(roomUpdateDto.getPrice()).ifPresent(findRoom::setPrice);
-//
-//        return roomConverter.toDTO(roomRepository.save(findRoom));
-//    }
-
     public List<Room> updateRoomList(List<RoomCreateDto> roomDto, Long postsId) {
         List<Room> rooms = roomRepository.findAllByPostsId(postsId);
         if(rooms.size() != 3) throw new IllegalArgumentException("3개");
@@ -63,14 +54,14 @@ public class RoomService {
         return roomRepository.findByPostsIdAndSize(postsId, size)
                 .orElseThrow(() -> new RuntimeException("room not found"));
     }
-    @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
+    @Transactional(readOnly = true)
     public List<Room> findAllRoom(Long postsId) {
         List<Room> roomList = roomRepository.findAllByPostsId(postsId);
         return roomList;
     }
 
     public void deleteRoom(Long roomId) {
-        Room room = roomRepository.findById(roomId).orElseThrow(() -> new RuntimeException("room not exist"));
+        Room room = roomRepository.findById(roomId).orElseThrow(() -> new BusinessLogicException(ExceptionCode.ROOM_NOT_EXIST));
         roomRepository.delete(room);
     }
 

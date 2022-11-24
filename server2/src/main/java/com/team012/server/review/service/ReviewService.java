@@ -1,5 +1,7 @@
 package com.team012.server.review.service;
 
+import com.team012.server.common.exception.BusinessLogicException;
+import com.team012.server.common.exception.ExceptionCode;
 import com.team012.server.review.dto.ReviewPostsResponse;
 import com.team012.server.review.repository.ReviewRepository;
 import com.team012.server.review.dto.ReviewCreateRequestDto;
@@ -129,7 +131,7 @@ public class ReviewService {
 
     public Review findByReviewId(Long reviewId) {
         return reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 리뷰입니다."));
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.REVIEW_NOT_FOUND));
     }
 
     public List<ReviewImg> findByImg(Long reviewId) {

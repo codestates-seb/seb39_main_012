@@ -1,5 +1,6 @@
-package com.team012.server.common.response;
+package com.team012.server.common.advice;
 
+import com.team012.server.common.exception.ExceptionCode;
 import lombok.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
@@ -26,6 +27,10 @@ public class ErrorResponse {
                           final List<ConstraintViolationError> violationErrors) {
         this.fieldErrors = fieldErrors;
         this.violationErrors = violationErrors;
+    }
+
+    public static ErrorResponse of(ExceptionCode exceptionCode) {
+        return new ErrorResponse(exceptionCode.getStatus(), exceptionCode.getMessage());
     }
 
     public static ErrorResponse of(BindingResult bindingResult) {

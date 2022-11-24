@@ -1,13 +1,9 @@
 package com.team012.server.posts.service;
 
 import com.team012.server.posts.Tag.HashTag.converter.HashTagConverter;
-import com.team012.server.posts.Tag.ServiceTag.converter.ServiceTagConverter;
-import com.team012.server.review.dto.ReviewPostsResponse;
-import com.team012.server.room.converter.RoomConverter;
-import com.team012.server.room.dto.RoomDto;
-import com.team012.server.room.entity.Room;
 import com.team012.server.posts.Tag.HashTag.dto.HashTagResponseDto;
 import com.team012.server.posts.Tag.HashTag.entity.PostsHashTags;
+import com.team012.server.posts.Tag.ServiceTag.converter.ServiceTagConverter;
 import com.team012.server.posts.Tag.ServiceTag.dto.ServiceResponseDto;
 import com.team012.server.posts.Tag.ServiceTag.entity.PostsServiceTag;
 import com.team012.server.posts.dto.PostsResponseDto;
@@ -15,6 +11,10 @@ import com.team012.server.posts.dto.PostsResponseListDto;
 import com.team012.server.posts.entity.Posts;
 import com.team012.server.posts.img.converter.PostsImgConverter;
 import com.team012.server.posts.img.dto.ImgDto;
+import com.team012.server.review.dto.ReviewPostsResponse;
+import com.team012.server.room.converter.RoomConverter;
+import com.team012.server.room.dto.RoomDto;
+import com.team012.server.room.entity.Room;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -47,7 +47,6 @@ public class PostsCombineService {
                 .longitude(posts.getLongitude())
                 .address(posts.getAddress())
                 .detailAddress(posts.getDetailAddress())
-//                .roomCount(posts.getRoomCount())
                 .phone(posts.getPhone())
                 .companyId(companyId)
                 .avgScore(posts.getAvgScore())
@@ -94,12 +93,10 @@ public class PostsCombineService {
                 .checkInTime(posts.getCheckInTime().format(DateTimeFormatter.ofPattern("a hh:mm")))
                 .checkOutTime(posts.getCheckOutTime().format(DateTimeFormatter.ofPattern("a hh:mm")))
                 .likesCount(posts.getLikesCount())
-//                .roomCount(posts.getRoomCount())
                 .postsImgList(imgDtos)
                 .hashTag(hashTagResponseDtos)
                 .serviceTag(serviceResponseDtos)
                 .roomDtos(roomDtos)
-//                .roomCount(posts.getRoomCount())
                 .reviewList(reviewList)
                 .build();
     }

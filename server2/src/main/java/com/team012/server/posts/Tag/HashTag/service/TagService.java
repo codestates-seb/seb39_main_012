@@ -1,5 +1,7 @@
 package com.team012.server.posts.Tag.HashTag.service;
 
+import com.team012.server.common.exception.BusinessLogicException;
+import com.team012.server.common.exception.ExceptionCode;
 import com.team012.server.posts.Tag.HashTag.dto.HashTagUpdateDto;
 import com.team012.server.posts.Tag.HashTag.entity.HashTag;
 import com.team012.server.posts.Tag.HashTag.entity.PostsHashTags;
@@ -44,20 +46,10 @@ public class TagService {
         return postsHashTagRepository.saveAll(postsHashTags);
     }
 
-//    public HashTag updateHashTag(HashTagUpdateDto hashTag) {
-//        Optional<HashTag> hashTag1 = hashTagRepository.findById(hashTag.getHashTagId());
-//        HashTag findTag = hashTag1.orElseThrow(() -> new RuntimeException("hashtag not found"));
-//
-//        Optional.ofNullable(hashTag.getTag()).ifPresent(findTag::setTag);
-//        hashTagRepository.save(findTag);
-//
-//        return  findTag;
-//    }
-
 
     public void deleteHashTag(Long hashTagId) {
         Optional<HashTag> hashTag1 = hashTagRepository.findById(hashTagId);
-        HashTag findTag = hashTag1.orElseThrow(() -> new RuntimeException("hashtag not found"));
+        HashTag findTag = hashTag1.orElseThrow(() -> new BusinessLogicException(ExceptionCode.HASH_TAG_NOT_FOUND));
 
         hashTagRepository.delete(findTag);
     }

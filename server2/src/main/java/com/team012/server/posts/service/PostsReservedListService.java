@@ -19,8 +19,6 @@ public class PostsReservedListService {
     private final PostsRepository postsRepository;
     private final RoomService roomService;
 
-    private final CustomerReservationService customerReservationService;
-
     public List<PostsReservationListDto.BookedList> findReservedHotels(List<Reservation> reservations) {
         List<Long> postsIdList = reservations.stream().map(Reservation::getPostsId).collect(Collectors.toList());
 

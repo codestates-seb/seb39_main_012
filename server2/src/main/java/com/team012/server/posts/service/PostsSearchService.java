@@ -1,6 +1,5 @@
 package com.team012.server.posts.service;
 
-import com.team012.server.posts.entity.TemptMainPageDto;
 import com.team012.server.posts.entity.Posts;
 import com.team012.server.posts.repository.PostsRepository;
 import com.team012.server.posts.repository.PostsRepositoryImpl;
@@ -65,7 +64,6 @@ public class PostsSearchService {
     }
 
     public Page<RoomPriceDto> findAllRoomPriceTitle(int page, int size, String title, String contents) {
-//        return postsRepository.findAllRoomMinPriceTitleContaining(PageRequest.of(page, size, Sort.Direction.DESC, "avgScore"), title);
         return postsRepositoryImpl.findAllRoomMinPriceTitleOrContentsContaining(title, contents ,PageRequest.of(page, size, Sort.Direction.DESC, "avgScore"));
     }
 
