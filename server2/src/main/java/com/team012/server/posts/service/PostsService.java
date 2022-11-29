@@ -38,9 +38,9 @@ public class PostsService {
 
     public Posts save(PostsCreateDto post, List<MultipartFile> files, Long companyId) {
 
-        LocalTime checkIn = convertCheckInToTime(post.getCheckInTime());
-        LocalTime checkOut = convertCheckOutToTime(post.getCheckOutTime());
-        validateCheckInCheckOut(checkIn, checkOut);
+        LocalTime checkInTime = convertCheckInToTime(post.getCheckInTime());
+        LocalTime checkOutTime = convertCheckOutToTime(post.getCheckOutTime());
+        validateCheckInCheckOut(checkInTime, checkOutTime);
 
         Posts posts = Posts.builder()
                 .title(post.getTitle())
@@ -51,22 +51,21 @@ public class PostsService {
                 .address(post.getAddress())
                 .detailAddress(post.getDetailAddress())
                 .phone(post.getPhone())
-                .checkInTime(checkIn)
-                .checkOutTime(checkOut)
+                .checkInTime(checkInTime)
+                .checkOutTime(checkOutTime)
                 .build();
 
         Posts savedPosts = postsRepository.save(posts);
 
-        List<PostsImg> lists = awsS3Service.convertPostImg(files, savedPosts);
-        postsImgService.saveAll(lists);
+        List<PostsImg> postsImgs = awsS3Service.convertPostImg(files, savedPosts);
+        postsImgService.saveAll(postsImgs);
 
-        lists = postsImgService.findByPostsId(savedPosts.getId());
-        posts.setPostsImgList(lists);
+        postsImgs = postsImgService.findByPostsId(savedPosts.getId());
+        posts.setPostsImgList(postsImgs);
 
         return savedPosts;
 
     }
-
     public Posts update(PostsUpdateDto post, List<MultipartFile> files, Long companyId) throws FileUploadException {
         Long postsId = post.getId();
         Posts findPosts = findById(postsId);
@@ -74,6 +73,18 @@ public class PostsService {
 
         if (!Objects.equals(findPosts.getCompanyId(), companyId)) throw new BusinessLogicException(COMPANY_ID_NOT_MATCHED);
 
+        updatePosts(post, findPosts);
+        updateCheckInTime(post, findPosts);
+        updateCheckOutTime(post, findPosts);
+
+        validateCheckInCheckOut(findPosts.getCheckInTime(), findPosts.getCheckOutTime());
+
+        updatePostsImages(files,findPosts, postsId);
+
+        return postsRepository.save(findPosts);
+    }
+
+    private void updatePosts(PostsUpdateDto post,Posts findPosts) {
         Optional.ofNullable(post.getLatitude()).ifPresent(findPosts::setLatitude);
         Optional.ofNullable(post.getLongitude()).ifPresent(findPosts::setLongitude);
         Optional.ofNullable(post.getAddress()).ifPresent(findPosts::setAddress);
@@ -81,17 +92,33 @@ public class PostsService {
         Optional.ofNullable(post.getPhone()).ifPresent(findPosts::setPhone);
         Optional.ofNullable(post.getTitle()).ifPresent(findPosts::setTitle);
         Optional.ofNullable(post.getContent()).ifPresent(findPosts::setContent);
+    }
 
+    private void updateCheckInTime(PostsUpdateDto post, Posts findPosts) {
         if (StringUtils.hasText(post.getCheckInTime())) {
-            LocalTime checkIn = convertCheckInToTime(post.getCheckInTime());
-            findPosts.setCheckInTime(checkIn);
+            LocalTime checkInTime = convertCheckInToTime(post.getCheckInTime());
+            findPosts.setCheckInTime(checkInTime);
         }
+    }
+    private void updateCheckOutTime(PostsUpdateDto post, Posts findPosts) {
         if (StringUtils.hasText(post.getCheckOutTime())) {
-            LocalTime checkOut = convertCheckOutToTime(post.getCheckOutTime());
-            findPosts.setCheckOutTime(checkOut);
+            LocalTime checkOutTime = convertCheckOutToTime(post.getCheckOutTime());
+            findPosts.setCheckOutTime(checkOutTime);
         }
-        validateCheckInCheckOut(findPosts.getCheckInTime(), findPosts.getCheckOutTime());
+    }
+    private LocalTime convertCheckInToTime(String strCheckIn) {
+        strCheckIn = strCheckIn.trim();
+        return LocalTime.parse(strCheckIn, DateTimeFormatter.ofPattern("a hh:mm").withLocale(Locale.KOREA));
+    }
+    private LocalTime convertCheckOutToTime(String strCheckOut) {
+        strCheckOut = strCheckOut.trim();
+        return LocalTime.parse(strCheckOut, DateTimeFormatter.ofPattern("a hh:mm").withLocale(Locale.KOREA));
+    }
+    private void validateCheckInCheckOut(LocalTime checkIn, LocalTime checkOut) {
+        if(checkOut.isBefore(checkIn)) throw new BusinessLogicException(CHECKIN_CHECKOUT_ERROR);
+    }
 
+    private void updatePostsImages(List<MultipartFile> files, Posts findPosts, long postsId) throws FileUploadException {
         if (!CollectionUtils.isEmpty(files)) {
             List<PostsImg> postsImgList = postsImgService.updatePostsImg(files, postsId);
             findPosts.setPostsImgList(postsImgList);
@@ -99,10 +126,6 @@ public class PostsService {
                 postsImg.setPosts(findPosts);
             }
         }
-
-        Posts posts1 = postsRepository.save(findPosts);
-        return posts1;
-
     }
 
     @Transactional(readOnly = true)
@@ -115,7 +138,7 @@ public class PostsService {
 
     public void delete(Long postsId, Long companyId) {
         Posts posts = findById(postsId);
-        if (posts.getCompanyId() != companyId) throw new BusinessLogicException(COMPANY_ID_NOT_MATCHED);
+        if (!Objects.equals(posts.getCompanyId(), companyId)) throw new BusinessLogicException(COMPANY_ID_NOT_MATCHED);
         awsS3Service.deleteFile(posts.getPostsImgList());
         postsRepository.delete(posts);
     }
@@ -133,19 +156,7 @@ public class PostsService {
         return postsRepository.findByCompanyId(companyId);
     }
 
-    private LocalTime convertCheckInToTime(String strCheckIn) {
-        strCheckIn = strCheckIn.trim();
 
-        return LocalTime.parse(strCheckIn, DateTimeFormatter.ofPattern("a hh:mm").withLocale(Locale.KOREA));
-    }
 
-    private LocalTime convertCheckOutToTime(String strCheckOut) {
-        strCheckOut = strCheckOut.trim();
 
-        return LocalTime.parse(strCheckOut, DateTimeFormatter.ofPattern("a hh:mm").withLocale(Locale.KOREA));
-    }
-
-    private void validateCheckInCheckOut(LocalTime checkIn, LocalTime checkOut) {
-        if(checkOut.isBefore(checkIn)) throw new BusinessLogicException(CHECKIN_CHECKOUT_ERROR);
-    }
 }
