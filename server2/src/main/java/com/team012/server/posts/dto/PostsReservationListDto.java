@@ -7,9 +7,9 @@ public class PostsReservationListDto {
 
     @Getter
     public static class BookedList {
-        private String title;
-        private Integer roomPrice;
-        private String url;
+        private final String title;
+        private final Integer roomPrice;
+        private final String url;
 
         @Builder
         public BookedList(String title, Integer roomPrice, String url) {
@@ -21,10 +21,10 @@ public class PostsReservationListDto {
 
     @Getter
     public static class BookedListAfterCheckOut {
-        private Long postsId;
-        private String title;
-        private Integer roomPrice;
-        private String url;
+        private final Long postsId;
+        private final String title;
+        private final Integer roomPrice;
+        private final String url;
 
         @Builder
         public BookedListAfterCheckOut(Long postsId, String title, Integer roomPrice, String url) {

@@ -33,29 +33,41 @@ public class PostsCreateService {
     private final ServiceTagService serviceTagService;
     private final PostsCombineService postsCombineService;
 
-    public PostsResponseDto createPostsResponse(PostsCreateDto request, List<MultipartFile> file, Long usersId){
+    public PostsResponseDto createPostsResponse(PostsCreateDto postsCreateDto, List<MultipartFile> images, Long usersId){
         Company company = companyService.getCompany(usersId);
         Long companyId = company.getId();
 
-        List<String> hashTag = request.getHashTag();
-        List<String> serviceTag = request.getServiceTag();
+        Posts posts = postsService.save(postsCreateDto, images, companyId);
 
-        List<RoomCreateDto> roomList = request.getRoomCreateDtoList();
-
-        Posts posts = postsService.save(request, file, companyId);
+        List<PostsHashTags> postsHashTags = savePostsHashTags(postsCreateDto, posts);
+        List<PostsServiceTag>  postsServiceTags = savePostsServiceTag(postsCreateDto, posts);
 
         Long postsId = posts.getId();
 
-        roomService.saveList(roomList, postsId);
-        List<Room> roomList1 = roomService.findAllRoom(postsId);
+        List<Room> roomList = saveRoom(postsCreateDto, postsId);
 
-                List<HashTag> tags = tagService.saveOrFind(hashTag);
-        List<PostsHashTags> postsHashTags = tagService.saveCompanyPostsTags(tags, posts);
+        return postsCombineService.combine(companyId, posts, roomList, postsHashTags, postsServiceTags);
+    }
 
+    private List<PostsHashTags> savePostsHashTags(PostsCreateDto postsCreateDto, Posts posts) {
+        List<String> hashTag = postsCreateDto.getHashTag();
+        List<HashTag> tags = tagService.saveOrFind(hashTag);
+
+        return tagService.saveCompanyPostsTags(tags, posts);
+    }
+
+    private List<PostsServiceTag> savePostsServiceTag(PostsCreateDto postsCreateDto, Posts posts) {
+        List<String> serviceTag = postsCreateDto.getServiceTag();
         List<ServiceTag> serviceTags = serviceTagService.saveServiceTags(serviceTag);
-        List<PostsServiceTag>  postsServiceTags = serviceTagService.saveCompanyPostsTags(serviceTags, posts);
 
-        return postsCombineService.combine(companyId, posts, roomList1, postsHashTags, postsServiceTags);
+        return serviceTagService.saveCompanyPostsTags(serviceTags, posts);
+    }
+
+    private List<Room> saveRoom(PostsCreateDto postsCreateDto ,long postsId) {
+        List<RoomCreateDto> roomList = postsCreateDto.getRoomCreateDtoList();
+
+        roomService.saveList(roomList, postsId);
+        return roomService.findAllRoom(postsId);
     }
 
 
