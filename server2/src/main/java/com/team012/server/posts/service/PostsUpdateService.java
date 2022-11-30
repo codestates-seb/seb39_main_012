@@ -2,9 +2,11 @@ package com.team012.server.posts.service;
 
 import com.team012.server.company.entity.Company;
 import com.team012.server.company.service.CompanyService;
+import com.team012.server.posts.Tag.HashTag.entity.HashTag;
 import com.team012.server.posts.Tag.HashTag.entity.PostsHashTags;
 import com.team012.server.posts.Tag.HashTag.service.TagService;
 import com.team012.server.posts.Tag.ServiceTag.entity.PostsServiceTag;
+import com.team012.server.posts.Tag.ServiceTag.entity.ServiceTag;
 import com.team012.server.posts.Tag.ServiceTag.service.ServiceTagService;
 import com.team012.server.posts.dto.PostsResponseDto;
 import com.team012.server.posts.dto.PostsUpdateDto;
@@ -33,27 +35,38 @@ public class PostsUpdateService {
     private final ServiceTagService serviceTagService;
     private final PostsCombineService postsCombineService;
 
-    @Transactional(propagation = Propagation.REQUIRED)
-    public PostsResponseDto updatePostResponse(PostsUpdateDto request, List<MultipartFile> files, Long usersId) throws FileUploadException {
-        Company company = companyService.getCompany(usersId);
-        Long companyId = company.getId();
+    public PostsResponseDto updatePostResponse(PostsUpdateDto postsUpdateDto, List<MultipartFile> images, Long usersId) throws FileUploadException {
+        Long companyId = findCompanyId(usersId);
 
-        Posts response = postsService.update(request, files, companyId);
-        List<Room> roomList = roomService.updateRoomList(request.getRoomDtoList(), request.getId());
-        System.out.println("# hashTag");
+        Posts response = postsService.update(postsUpdateDto, images, companyId);
+        List<Room> roomList = roomService.updateRoomList(postsUpdateDto.getRoomDtoList(), postsUpdateDto.getId());
 
-        Long postsId = response.getId();
+        List<PostsHashTags> postsHashTags = updateHashTags(postsUpdateDto, response);
+        List<PostsServiceTag> postsServiceTags = updateServiceTags(postsUpdateDto, response);
 
-        tagService.deleteAllHashTag(postsId);
-        List<PostsHashTags> hashTagsList =
-                tagService.saveCompanyPostsTags(tagService.saveOrFind(request.getHashTag()), response);
-
-        serviceTagService.deleteAllServiceTag(postsId);
-        List<PostsServiceTag> serviceTagList =
-                serviceTagService.saveCompanyPostsTags(serviceTagService.saveServiceTags(request.getServiceTag()), response);
-
-
-        System.out.println("# serviceTags");
-        return postsCombineService.combine(companyId, response, roomList, hashTagsList,serviceTagList);
+        return postsCombineService.combine(companyId, response, roomList, postsHashTags,postsServiceTags);
     }
+    private Long findCompanyId(Long usersId) {
+        Company company = companyService.getCompany(usersId);
+        return company.getId();
+    }
+
+    private List<PostsHashTags> updateHashTags(PostsUpdateDto postsUpdateDto, Posts posts) {
+        tagService.deleteAllHashTag(posts.getId());
+        List<HashTag> hashTags = tagService.saveOrFind(postsUpdateDto.getHashTag());
+        List<PostsHashTags> postsHashTags =
+                tagService.saveCompanyPostsTags(hashTags, posts);
+
+        return postsHashTags;
+    }
+
+    private List<PostsServiceTag> updateServiceTags(PostsUpdateDto postsUpdateDto, Posts posts) {
+        serviceTagService.deleteAllServiceTag(posts.getId());
+        List<ServiceTag> serviceTags = serviceTagService.saveServiceTags(postsUpdateDto.getServiceTag());
+        List<PostsServiceTag> postsServiceTags =
+                serviceTagService.saveCompanyPostsTags(serviceTags, posts);
+
+        return postsServiceTags;
+    }
+
 }

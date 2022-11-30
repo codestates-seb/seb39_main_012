@@ -16,7 +16,7 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 @Service
-public class PostListService { //어...이건 컨버터로 가야 하나요 아니면 service로 가야하나요...?
+public class PostListService {
     private final RoomService roomService;
     private final PostsImgConverter postsImgConverter;
     private final PostsCombineService postsCombineService;
