@@ -4,7 +4,7 @@ import com.team012.server.review.dto.ReviewPostsResponse;
 import com.team012.server.room.dto.RoomDto;
 import com.team012.server.posts.Tag.HashTag.dto.HashTagResponseDto;
 import com.team012.server.posts.Tag.ServiceTag.dto.ServiceResponseDto;
-import com.team012.server.posts.img.dto.ImgDto;
+import com.team012.server.posts.img.dto.ImageDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,7 +29,7 @@ public class PostsResponseDto {
     private String checkOutTime; //추가
     //    private List<Review> reviewList; // 리뷰 리스트 최신 아이디 순
     private Integer roomCount;
-    private List<ImgDto> postsImgList;
+    private List<ImageDto> postsImgList;
     private List<HashTagResponseDto> hashTag;
     private List<ServiceResponseDto> serviceTag;
     private List<RoomDto> roomDtos;
@@ -48,7 +48,7 @@ public class PostsResponseDto {
     public PostsResponseDto(Long id, String title, String content, String latitude,
                             String longitude, String address, String detailAddress,
                             String phone, Long companyId, Double avgScore, Integer likesCount,
-                            String checkInTime, String checkOutTime, Integer roomCount, List<ImgDto> postsImgList,
+                            String checkInTime, String checkOutTime, Integer roomCount, List<ImageDto> postsImgList,
                             List<HashTagResponseDto> hashTag, List<ServiceResponseDto> serviceTag,
                             List<RoomDto> roomDtos, List<ReviewPostsResponse> reviewList) {
         this.id = id;
@@ -77,7 +77,7 @@ public class PostsResponseDto {
                             String latitude, String longitude, String address,
                             String detailAddress, String phone, Long companyId,
                             Double avgScore, Integer likesCount, String checkInTime,
-                            String checkOutTime, Integer roomCount, List<ImgDto> postsImgList,
+                            String checkOutTime, Integer roomCount, List<ImageDto> postsImgList,
                             List<ReviewPostsResponse> reviewList) {
         this.id = id;
         this.title = title;

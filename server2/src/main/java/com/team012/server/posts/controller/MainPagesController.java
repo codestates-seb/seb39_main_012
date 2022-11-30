@@ -5,7 +5,7 @@ import com.team012.server.posts.dto.PostsResponseDto;
 import com.team012.server.posts.dto.PostsResponseListDto;
 import com.team012.server.posts.entity.Posts;
 import com.team012.server.posts.repository.RoomPriceDto;
-import com.team012.server.posts.service.PostListService;
+import com.team012.server.posts.service.MainPagesPostsService;
 import com.team012.server.posts.service.PostsCombineService;
 import com.team012.server.posts.service.PostsSearchService;
 import com.team012.server.posts.service.PostsService;
@@ -24,13 +24,13 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/v1/posts")
 @RestController
-public class PostsPageController {
+public class MainPagesController {
 
     private final PostsSearchService postsSearchService;
     private final PostsService postsService;
     private final RoomService roomService;
     private final ReviewService reviewService;
-    private final PostListService postListService;
+    private final MainPagesPostsService mainPagesPostsService;
     private final PostsCombineService postsCombineService;
 
     //     메인페이지 조회 (별점 순으로 기준해서 정렬)
@@ -38,17 +38,13 @@ public class PostsPageController {
     public ResponseEntity gets(@RequestParam int page,
                                @RequestParam int size) {
         // avgScore 기준으로 정렬된 페이징 처리
-        System.out.println("====================================start==============================");
-        Long startTime = System.currentTimeMillis();
-        System.out.println("# start : " + startTime);
         Page<Posts> postsPage = postsSearchService.findAll(page - 1, size);
         Page<RoomPriceDto> roomPriceDtos = postsSearchService.findAllRoomPrice(page - 1, size);
 
         List<Posts> postsList = postsPage.getContent();
         List<RoomPriceDto> roomPriceDtos1 = roomPriceDtos.getContent();
 
-        List<PostsResponseListDto> postsResponseListDtos = postListService.postsResponseListDtos(postsList, roomPriceDtos1);
-        System.out.println("# end : " + (System.currentTimeMillis() - startTime));
+        List<PostsResponseListDto> postsResponseListDtos = mainPagesPostsService.postsResponseListDtos(postsList, roomPriceDtos1);
         return new ResponseEntity<>(new MultiResponseDto<>(postsResponseListDtos, postsPage), HttpStatus.OK);
     }
 
@@ -63,7 +59,7 @@ public class PostsPageController {
         Page<RoomPriceDto> roomPriceDtos = postsSearchService.findAllRoomPriceAddress(page - 1, size, address);
         List<RoomPriceDto> roomPriceDtos1 = roomPriceDtos.getContent();
 
-        List<PostsResponseListDto> postsResponseListDtos = postListService.postsResponseListDtos(postsList, roomPriceDtos1);
+        List<PostsResponseListDto> postsResponseListDtos = mainPagesPostsService.postsResponseListDtos(postsList, roomPriceDtos1);
         return new ResponseEntity<>(new MultiResponseDto<>(postsResponseListDtos, postsPage), HttpStatus.OK);
     }
 
@@ -73,15 +69,13 @@ public class PostsPageController {
                                         @RequestParam(required = false) String title,
                                         @RequestParam(required = false) String contents) {
 
-//        Page<PostsMainPageDto> postsPage = postsSearchService.findPageByTitleOrContents(title, contents, page - 1, size);
-//        List<PostsMainPageDto> list = postsPage.getContent();
-        Page<Posts> postsPage = postsSearchService.findPostsByTitle(title, contents,page - 1, size);
+        Page<Posts> postsPage = postsSearchService.findPostsByTitleOrContents(title, contents,page - 1, size);
         List<Posts> postsList = postsPage.getContent();
 
-        Page<RoomPriceDto> roomPriceDtos = postsSearchService.findAllRoomPriceTitle(page - 1, size, title, contents);
+        Page<RoomPriceDto> roomPriceDtos = postsSearchService.findAllRoomPriceByTitleOrContents(page - 1, size, title, contents);
         List<RoomPriceDto> roomPriceDtos1 = roomPriceDtos.getContent();
 
-        List<PostsResponseListDto> postsResponseListDtos = postListService.postsResponseListDtos(postsList, roomPriceDtos1);
+        List<PostsResponseListDto> postsResponseListDtos = mainPagesPostsService.postsResponseListDtos(postsList, roomPriceDtos1);
         return new ResponseEntity<>(new MultiResponseDto<>(postsResponseListDtos, postsPage), HttpStatus.OK);
     }
 
@@ -92,7 +86,7 @@ public class PostsPageController {
         Page<Posts> postsPage = postsSearchService.findByTag(tag, page - 1, size);
         List<Posts> postsList = postsPage.getContent();
 
-        List<PostsResponseListDto> postsResponseListDtos = postListService.postsResponseListDtos(postsList);
+        List<PostsResponseListDto> postsResponseListDtos = mainPagesPostsService.postsResponseListDtos(postsList);
         return new ResponseEntity<>(new MultiResponseDto<>(postsResponseListDtos, postsPage), HttpStatus.OK);
     }
 
@@ -102,9 +96,6 @@ public class PostsPageController {
                               @RequestParam Integer page,
                               @RequestParam Integer size) {
         Posts response = postsService.findById(id);
-
-        // 작성된 리뷰 리스트 페이징처리 해서 넣어주기
-//        List<Review> reviewPage = reviewService.findByPage(page - 1, size, id).getContent();
 
         List<ReviewPostsResponse> reviewPostsResponses = reviewService.getByPage(page, size, id);
         List<Room> roomList = roomService.findAllRoom(id);

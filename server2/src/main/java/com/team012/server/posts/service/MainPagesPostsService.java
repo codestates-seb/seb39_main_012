@@ -3,7 +3,7 @@ package com.team012.server.posts.service;
 import com.team012.server.posts.dto.PostsResponseListDto;
 import com.team012.server.posts.entity.Posts;
 import com.team012.server.posts.img.converter.PostsImgConverter;
-import com.team012.server.posts.img.dto.ImgDto;
+import com.team012.server.posts.img.dto.ImageDto;
 import com.team012.server.posts.repository.RoomPriceDto;
 import com.team012.server.room.service.RoomService;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 @Service
-public class PostListService {
+public class MainPagesPostsService {
     private final RoomService roomService;
     private final PostsImgConverter postsImgConverter;
     private final PostsCombineService postsCombineService;
@@ -27,9 +27,9 @@ public class PostListService {
 
         for (Posts post : posts) {
             Integer minPrice = roomService.findMinPrice(post.getId());
-            ImgDto imgDto = postsImgConverter.convertToImgDto(post.getPostsImgList());
+            ImageDto imageDto = postsImgConverter.convertToImgDto(post.getPostsImgList());
 
-            PostsResponseListDto postsResponseListDto = postsCombineService.combine(post, minPrice, imgDto);
+            PostsResponseListDto postsResponseListDto = postsCombineService.combine(post, minPrice, imageDto);
 
             postsResponseListDtos.add(postsResponseListDto);
         }
@@ -40,7 +40,7 @@ public class PostListService {
     public List<PostsResponseListDto> postsResponseListDtos(List<Posts> posts, List<RoomPriceDto> roomList) {
         List<PostsResponseListDto> postsResponseListDtos = new ArrayList<>();
         for (int i = 0; i< posts.size();i++) {
-            ImgDto imgDto = postsImgConverter.convertToImgDto(posts.get(i).getPostsImgList());
+            ImageDto imageDto = postsImgConverter.convertToImgDto(posts.get(i).getPostsImgList());
 
             PostsResponseListDto postsResponseListDto = PostsResponseListDto.builder()
                     .id(posts.get(i).getId())
@@ -49,7 +49,7 @@ public class PostListService {
                     .likesCount(posts.get(i).getLikesCount())
                     .address(posts.get(i).getAddress())
                     .minPrice(roomList.get(i).getPrice())
-                    .img(imgDto)
+                    .img(imageDto)
                     .build();
 
             postsResponseListDtos.add(postsResponseListDto);
