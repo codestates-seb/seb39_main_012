@@ -45,22 +45,22 @@ public class PostsSearchService {
 
         return posts;
     }
-
-
-
-    //tag로 검색한 결과 페이지로 리턴
-    public Page<Posts> findByTag(String tag, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "avgScore");
-        Page<Posts> posts = postsRepository.findByHashTag(tag, pageable);
-
-        return posts;
-    }
     public Page<RoomPriceDto> findAllRoomPrice(int page, int size) {
         return postsRepository.findAllRoomMinPrice(PageRequest.of(page, size, Sort.Direction.DESC, "avgScore"));
     }
 
+    public Page<Posts> findByHashTag(String tag, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "avgScore");
+        Page<Posts> posts = postsRepositoryImpl.findByHashTags(tag, pageable);
+
+        return posts;
+    }
+    public Page<RoomPriceDto> findAllRoomPrice(int page, int size, String tags) {
+        return postsRepositoryImpl.findAllRoomMinPriceByTags(tags,PageRequest.of(page, size, Sort.Direction.DESC, "avgScore"));
+    }
+
     public Page<RoomPriceDto> findAllRoomPriceAddress(int page, int size, String address) {
-        return postsRepositoryImpl.findAllRoomMinPriceAddressContaining(PageRequest.of(page, size, Sort.Direction.DESC, "avgScore"), address);
+        return postsRepositoryImpl.findAllRoomMinPriceAddressContain(PageRequest.of(page, size, Sort.Direction.DESC, "avgScore"), address);
     }
 
     public Page<RoomPriceDto> findAllRoomPriceByTitleOrContents(int page, int size, String title, String contents) {

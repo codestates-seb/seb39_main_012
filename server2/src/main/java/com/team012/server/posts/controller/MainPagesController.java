@@ -83,10 +83,13 @@ public class MainPagesController {
     public ResponseEntity searchByTag(@RequestParam int page,
                                       @RequestParam int size,
                                       @RequestParam String tag) {
-        Page<Posts> postsPage = postsSearchService.findByTag(tag, page - 1, size);
+        Page<Posts> postsPage = postsSearchService.findByHashTag(tag, page - 1, size);
         List<Posts> postsList = postsPage.getContent();
 
-        List<PostsResponseListDto> postsResponseListDtos = mainPagesPostsService.postsResponseListDtos(postsList);
+        Page<RoomPriceDto> roomPriceDtos = postsSearchService.findAllRoomPrice(page - 1, size,tag);
+        List<RoomPriceDto> roomPriceDtos1 = roomPriceDtos.getContent();
+
+        List<PostsResponseListDto> postsResponseListDtos = mainPagesPostsService.postsResponseListDtos(postsList, roomPriceDtos1);
         return new ResponseEntity<>(new MultiResponseDto<>(postsResponseListDtos, postsPage), HttpStatus.OK);
     }
 

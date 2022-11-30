@@ -13,21 +13,7 @@ public interface PostsRepository extends JpaRepository<Posts, Long> , PostsRepos
 
     Page<Posts> findByAddressContaining(String address, Pageable pageable);
 
-    Page<Posts> findByTitleContaining(String title, Pageable pageable);
-
-    @Query("select distinct(p) from Posts p join p.postsHashTags h " +
-            "where h.hashTag.tag = :tag")
-    Page<Posts> findByHashTag(@Param("tag") String tag, Pageable pageable);
-
     Posts findByCompanyId(Long companyId);
-
-    @Query("select new com.team012.server.posts.repository.RoomPriceDto(r.postsId, min(r.price)) " +
-            " from Posts p, Room r where p.id = r.postsId and p.address Like %:address% group by p.id")
-    Page<RoomPriceDto> findAllRoomMinPriceAddressContaining(Pageable pageable, String address);
-
-    @Query("select new com.team012.server.posts.repository.RoomPriceDto(r.postsId, min(r.price)) " +
-            " from Posts p, Room r where p.id = r.postsId and p.title Like %:title% group by p.id")
-    Page<RoomPriceDto> findAllRoomMinPriceTitleContaining(Pageable pageable, String title);
 
 
     @Query("select new com.team012.server.posts.repository.RoomPriceDto(r.postsId, min(r.price)) " +

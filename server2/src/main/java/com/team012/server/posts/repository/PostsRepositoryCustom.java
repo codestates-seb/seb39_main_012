@@ -8,10 +8,8 @@ public interface PostsRepositoryCustom {
 
     Page<Posts> searchPageByTitleAndContents(String title, String contents, Pageable pageable);
     Page<RoomPriceDto> findAllRoomMinPriceTitleOrContentsContaining(String title, String contents,Pageable pageable);
-
     Page<Posts> findByAddressContaining(String address, Pageable pageable);
-
-    Page<RoomPriceDto> findAllRoomMinPriceAddressContaining(Pageable pageable, String address);
-
-
+    Page<RoomPriceDto> findAllRoomMinPriceAddressContain(Pageable pageable, String address);
+    Page<Posts> findByHashTags(String hashTag, Pageable pageable);
+    Page<RoomPriceDto> findAllRoomMinPriceByTags(String hashTag, Pageable pageable);
 }

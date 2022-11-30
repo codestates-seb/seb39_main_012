@@ -17,25 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class MainPagesPostsService {
-    private final RoomService roomService;
     private final PostsImgConverter postsImgConverter;
-    private final PostsCombineService postsCombineService;
-
-    public List<PostsResponseListDto> postsResponseListDtos(List<Posts> posts) {
-
-        List<PostsResponseListDto> postsResponseListDtos = new ArrayList<>();
-
-        for (Posts post : posts) {
-            Integer minPrice = roomService.findMinPrice(post.getId());
-            ImageDto imageDto = postsImgConverter.convertToImgDto(post.getPostsImgList());
-
-            PostsResponseListDto postsResponseListDto = postsCombineService.combine(post, minPrice, imageDto);
-
-            postsResponseListDtos.add(postsResponseListDto);
-        }
-
-        return postsResponseListDtos;
-    }
 
     public List<PostsResponseListDto> postsResponseListDtos(List<Posts> posts, List<RoomPriceDto> roomList) {
         List<PostsResponseListDto> postsResponseListDtos = new ArrayList<>();

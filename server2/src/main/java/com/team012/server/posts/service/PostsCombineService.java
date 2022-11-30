@@ -7,7 +7,6 @@ import com.team012.server.posts.Tag.ServiceTag.converter.ServiceTagConverter;
 import com.team012.server.posts.Tag.ServiceTag.dto.ServiceResponseDto;
 import com.team012.server.posts.Tag.ServiceTag.entity.PostsServiceTag;
 import com.team012.server.posts.dto.PostsResponseDto;
-import com.team012.server.posts.dto.PostsResponseListDto;
 import com.team012.server.posts.entity.Posts;
 import com.team012.server.posts.img.converter.PostsImgConverter;
 import com.team012.server.posts.img.dto.ImageDto;
@@ -57,19 +56,6 @@ public class PostsCombineService {
                 .hashTag(hashTags)
                 .serviceTag(serviceTags)
                 .roomDtos(roomDtos)
-                .build();
-    }
-
-
-    public PostsResponseListDto combine(Posts post, Integer minPrice, ImageDto imageDto) {
-        return PostsResponseListDto.builder()
-                .id(post.getId())
-                .title(post.getTitle())
-                .address(post.getAddress())
-                .avgScore(post.getAvgScore())
-                .likesCount(post.getLikesCount())
-                .img(imageDto)
-                .minPrice(minPrice)
                 .build();
     }
 
