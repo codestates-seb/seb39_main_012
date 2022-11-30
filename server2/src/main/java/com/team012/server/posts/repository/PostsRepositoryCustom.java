@@ -12,4 +12,6 @@ public interface PostsRepositoryCustom {
     Page<RoomPriceDto> findAllRoomMinPriceAddressContain(Pageable pageable, String address);
     Page<Posts> findByHashTags(String hashTag, Pageable pageable);
     Page<RoomPriceDto> findAllRoomMinPriceByTags(String hashTag, Pageable pageable);
+
+    Page<RoomPriceDto> findAllRoomMinPrice(Pageable pageable);
 }

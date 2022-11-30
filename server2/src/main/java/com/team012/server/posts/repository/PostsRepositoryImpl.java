@@ -6,7 +6,6 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.team012.server.posts.Tag.HashTag.entity.QHashTag;
-import com.team012.server.posts.Tag.HashTag.entity.QPostsHashTags;
 import com.team012.server.posts.entity.Posts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -144,6 +143,24 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
                 .on(posts.id.eq(postsHashTags.posts.id))
                 .where(posts.id.eq(room.postsId)
                         .and(postsHashTags.hashTag.tag.eq(hashTag)))
+                .groupBy(posts.id);
+        return PageableExecutionUtils.getPage(postsList,pageable, count::fetchCount);
+    }
+
+    @Override
+    public Page<RoomPriceDto> findAllRoomMinPrice(Pageable pageable) {
+        List<RoomPriceDto> postsList = queryFactory
+                .select(Projections.constructor(RoomPriceDto.class, room.postsId, room.price.min()))
+                .from(posts, room)
+                .where(posts.id.eq(room.postsId))
+                .groupBy(posts.id)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+        JPQLQuery<RoomPriceDto> count = queryFactory
+                .select(Projections.constructor(RoomPriceDto.class, room.postsId, room.price.min()))
+                .from(posts, room)
+                .where(posts.id.eq(room.postsId))
                 .groupBy(posts.id);
         return PageableExecutionUtils.getPage(postsList,pageable, count::fetchCount);
     }

@@ -46,7 +46,7 @@ public class PostsSearchService {
         return posts;
     }
     public Page<RoomPriceDto> findAllRoomPrice(int page, int size) {
-        return postsRepository.findAllRoomMinPrice(PageRequest.of(page, size, Sort.Direction.DESC, "avgScore"));
+        return postsRepositoryImpl.findAllRoomMinPrice(PageRequest.of(page, size, Sort.Direction.DESC, "avgScore"));
     }
 
     public Page<Posts> findByHashTag(String tag, int page, int size) {
