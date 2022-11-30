@@ -3,8 +3,8 @@ package com.team012.server.reservation.controller;
 import com.team012.server.common.config.userDetails.PrincipalDetails;
 import com.team012.server.common.response.MultiResponseDto;
 import com.team012.server.common.response.SingleResponseDto;
-import com.team012.server.posts.dto.PostsReservationListDto;
-import com.team012.server.posts.service.PostsReservedListService;
+import com.team012.server.posts.dto.ReservationsInfoDto;
+import com.team012.server.posts.service.ReservationsBeforeOrAfterCheckOutService;
 import com.team012.server.reservation.dto.*;
 import com.team012.server.reservation.entity.Reservation;
 import com.team012.server.reservation.service.CustomerReservationService;
@@ -25,7 +25,7 @@ import java.util.List;
 public class CustomerReservationController {
 
     private final CustomerReservationService customerReservationService;
-    private final PostsReservedListService postsReservedListService;
+    private final ReservationsBeforeOrAfterCheckOutService reservationsBeforeOrAfterCheckOutService;
     private final ReservationConfirmService reservationConfirmService;
 
     private final DogCardService dogCardService;
@@ -81,7 +81,7 @@ public class CustomerReservationController {
         Page<Reservation> reservationList = customerReservationService.findReservationList(userId, page - 1, size);
         List<Reservation> reservations = reservationList.getContent();
 
-        List<PostsReservationListDto.BookedList> reservationListDtos = postsReservedListService.findReservedHotels(reservations);
+        List<ReservationsInfoDto> reservationListDtos = reservationsBeforeOrAfterCheckOutService.reservedHotels(reservations);
 
         return new ResponseEntity<>(new MultiResponseDto<>(reservationListDtos, reservationList), HttpStatus.OK);
     }
@@ -94,7 +94,7 @@ public class CustomerReservationController {
         Page<Reservation> reservationList = customerReservationService.findReservationAfterCheckOutList(userId, page - 1, size);
         List<Reservation> reservations = reservationList.getContent();
 
-        List<PostsReservationListDto.BookedListAfterCheckOut> reservationListDtos = postsReservedListService.findReservedHotelsAfterCheckOut(reservations);
+        List<ReservationsInfoDto> reservationListDtos = reservationsBeforeOrAfterCheckOutService.reservedHotels(reservations);
 
         return new ResponseEntity<>(new MultiResponseDto<>(reservationListDtos, reservationList), HttpStatus.OK);
     }
