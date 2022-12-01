@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Builder
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class ReviewImg {
 
@@ -17,15 +17,15 @@ public class ReviewImg {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "file_name")
+    @Column(name = "FILE_NAME")
     private String fileName;
 
-    @Column(name = "img_url")
+    @Column(name = "IMAGE_URL")
     @Lob
     private String imgUrl;
 
     @ManyToOne
-    @JoinColumn(name = "review_id")
+    @JoinColumn(name = "Review_Id")
     @JsonIgnore
     private Review review;
 }
