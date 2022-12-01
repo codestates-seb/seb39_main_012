@@ -10,13 +10,13 @@ import javax.persistence.Embeddable;
 @Getter
 public class UserInfo {
 
-    @Column(name = "name")
+    @Column(name = "NAME")
     private String name;
 
-    @Column(name = "phone")
+    @Column(name = "PHONE")
     private String phone;
 
-    @Column(name = "email")
+    @Column(name = "EMAIL")
     private String email;
 
 }

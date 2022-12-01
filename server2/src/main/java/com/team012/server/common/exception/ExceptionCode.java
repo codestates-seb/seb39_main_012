@@ -16,7 +16,11 @@ public enum ExceptionCode {
     REVIEW_NOT_FOUND(404,"review not found"),
     ROOM_NOT_EXIST(404,"room not exist"),
     DOG_NOT_FOUND(404,"Dog Not Found"),
-    MEMBER_NOT_FOUND(404, "Member Not Found");
+    MEMBER_NOT_FOUND(404, "Member Not Found"),
+    ROOMS_ARE_FULLY_BOOKED(400, "rooms are fully booked"),
+    RESERVATION_NOT_FOUND(404, "reservation not found"),
+    EDIT_OTHER_USERS_REVIEW_IS_FORBIDDEN(403, "Modifications other than your own review are not possible."),
+    DELETE_OTHER_USERS_REVIEW_IS_FORBIDDEN(403,"Delete other users review is forbidden");
 
     @Getter
     private final int status;

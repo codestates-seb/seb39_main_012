@@ -58,7 +58,6 @@ public class CustomerReservationController {
 
         Reservation reservation =
                 customerReservationService.createReservation(reservationCreateDto,userId, postsId, reservationUserInfoDto);
-        Long reservationId = reservation.getReservedId();
         return new ResponseEntity<>(reservation, HttpStatus.CREATED);
     }
 
@@ -91,20 +90,20 @@ public class CustomerReservationController {
     public ResponseEntity findReservationAfterCheckOut(@RequestParam int page, int size
             , @AuthenticationPrincipal PrincipalDetails principalDetails) {
         Long userId = principalDetails.getUsers().getId();
-        Page<Reservation> reservationList = customerReservationService.findReservationAfterCheckOutList(userId, page - 1, size);
-        List<Reservation> reservations = reservationList.getContent();
+        Page<Reservation> reservationPages = customerReservationService.findReservationAfterCheckOutList(userId, page - 1, size);
+        List<Reservation> reservations = reservationPages.getContent();
 
         List<ReservationsInfoDto> reservationListDtos = reservationsBeforeOrAfterCheckOutService.reservedHotels(reservations);
 
-        return new ResponseEntity<>(new MultiResponseDto<>(reservationListDtos, reservationList), HttpStatus.OK);
+        return new ResponseEntity<>(new MultiResponseDto<>(reservationListDtos, reservationPages), HttpStatus.OK);
     }
 
     //reservListId 로 삭제
-    @DeleteMapping("/{reservListId}")
-    public ResponseEntity deleteReservation(@PathVariable("reservListId") Long reservListId,
+    @DeleteMapping("/{reservation-id}")
+    public ResponseEntity deleteReservation(@PathVariable("reservation-id") Long reservationId,
                                             @AuthenticationPrincipal PrincipalDetails principalDetails) {
         Long userId = principalDetails.getUsers().getId();
-        customerReservationService.deleteReservation(userId, reservListId);
+        customerReservationService.deleteReservation(userId, reservationId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

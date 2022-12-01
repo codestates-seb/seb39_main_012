@@ -10,12 +10,12 @@ import javax.persistence.Embeddable;
 @Embeddable
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BookingInfo {
+public class ReservedRoomInfo {
     private String roomName;
     private Integer count;
 
     @Builder
-    public BookingInfo(String roomName, Integer count) {
+    public ReservedRoomInfo(String roomName, Integer count) {
         this.roomName = roomName;
         this.count = count;
     }

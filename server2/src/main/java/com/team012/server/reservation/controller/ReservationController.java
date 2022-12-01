@@ -1,10 +1,12 @@
 package com.team012.server.reservation.controller;
 
+import com.team012.server.common.exception.BusinessLogicException;
+import com.team012.server.common.exception.ExceptionCode;
 import com.team012.server.reservation.entity.Reservation;
 import com.team012.server.common.config.userDetails.PrincipalDetails;
 import com.team012.server.common.response.MultiResponseDto;
 import com.team012.server.company.service.CompanyService;
-import com.team012.server.reservation.dto.ReservationDto;
+import com.team012.server.reservation.dto.ReservationResponseDto;
 import com.team012.server.reservation.service.ReservationService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -14,13 +16,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.team012.server.common.utils.constant.Constant.DELETE_RESERVATION_SUCCESS;
+
 @RestController
 @RequestMapping("/v1/company/reservation")
 public class ReservationController {
 
     private final ReservationService reservationService;
     private final CompanyService companyService;
-
     public ReservationController(ReservationService reservationService, CompanyService companyService) {
         this.reservationService = reservationService;
         this.companyService = companyService;
@@ -33,7 +36,7 @@ public class ReservationController {
                                           @RequestParam Integer size,
                                           @AuthenticationPrincipal PrincipalDetails principalDetails) {
         Long findCompanyId = companyService.getCompany(principalDetails.getUsers().getId()).getId();
-        if(companyId != findCompanyId) throw new RuntimeException("company가 일치하지 않음");
+        if(companyId != findCompanyId) throw new BusinessLogicException(ExceptionCode.COMPANY_ID_NOT_MATCHED);
 
         Page<Reservation> reservationPage= reservationService.getReservation(companyId, page -1, size);
         List<Reservation> reservation = reservationPage.getContent();
@@ -54,11 +57,9 @@ public class ReservationController {
     public ResponseEntity cancelReservation(@PathVariable("reservationId") Long id){
 
         reservationService.cancelReservation(id);
-        ReservationDto.Response response =
-                ReservationDto.Response
-                        .builder()
-                        .message("예약 삭제 성공")
-                        .build();
+        ReservationResponseDto response = ReservationResponseDto.builder()
+                                .message(DELETE_RESERVATION_SUCCESS.getMessage())
+                                .build();
 
         return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
     }
