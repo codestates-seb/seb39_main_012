@@ -15,6 +15,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.team012.server.common.utils.constant.Constant.ROLE_COMPANY;
+import static com.team012.server.common.utils.constant.Constant.ROLE_CUSTOMER;
+
 @Transactional
 @RequiredArgsConstructor
 @Service
@@ -46,7 +49,7 @@ public class UsersService {
                 .password(encPassword)
                 .username(dto.getUsername())
                 .phone(dto.getPhone())
-                .roles("ROLE_COMPANY")
+                .roles(ROLE_COMPANY.getMessage())
                 .build();
 
         Users users = usersRepository.save(savedCompanyUser);
@@ -67,7 +70,7 @@ public class UsersService {
                 .password(encPassword)
                 .username(dto.getUsername())
                 .phone(dto.getPhone())
-                .roles("ROLE_CUSTOMER")
+                .roles(ROLE_CUSTOMER.getMessage())
                 .build();
 
         // DB에 저장
