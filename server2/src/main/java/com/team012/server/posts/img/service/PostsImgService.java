@@ -1,18 +1,24 @@
 package com.team012.server.posts.img.service;
 
-import com.team012.server.posts.entity.Posts;
+import com.team012.server.posts.img.converter.PostsImgConverter;
+import com.team012.server.posts.img.dto.ImgDto;
+import com.team012.server.posts.img.dto.ImgUpdateDto;
 import com.team012.server.posts.img.entity.PostsImg;
-import com.team012.server.posts.img.repository.PostsImgJDBCRepository;
 import com.team012.server.posts.img.repository.PostsImgRepository;
 import com.team012.server.common.aws.service.AwsS3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 
 @Transactional
@@ -21,23 +27,15 @@ import java.util.*;
 @Service
 public class PostsImgService {
     private final PostsImgRepository imgRepository;
-    private final PostsImgJDBCRepository postsImgJDBCRepository;
     private final AwsS3Service awsS3Service;
 
-
-    public void saveAll(List<PostsImg> postsImgs) {
-        postsImgJDBCRepository.batchInsert(postsImgs);
-    }
 
     @Transactional(readOnly = true)
     public PostsImg findById(Long imgId) {
         return imgRepository.findById(imgId).orElseThrow(()-> new NoSuchElementException("img not found"));
     }
 
-    public List<PostsImg> findByPostsId(Long postsId) {
-        return imgRepository.findAllByPostsId(postsId);
-    }
-
+    @Transactional(propagation = Propagation.REQUIRED)
     public List<PostsImg> updatePostsImg(List<MultipartFile> files, Long postsId) throws FileUploadException {
         log.info("updatePostImg");
 

@@ -1,6 +1,6 @@
 package com.team012.server.posts.dto;
 
-import com.team012.server.posts.img.dto.ImageDto;
+import com.team012.server.posts.img.dto.ImgDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,8 +16,6 @@ public class PostsResponseListDto {
     private String address;
     private Double avgScore;  // 평균 점수 추가
     private Integer likesCount;
-    private ImageDto img;
+    private ImgDto img;
     private Integer minPrice;
-
-
 }

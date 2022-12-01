@@ -5,7 +5,6 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.team012.server.common.aws.service.AwsS3Service;
 import com.team012.server.common.config.filter.JwtProperties;
 import com.team012.server.common.config.userDetails.PrincipalDetails;
-import com.team012.server.common.utils.constant.Constant;
 import com.team012.server.users.dto.*;
 import com.team012.server.users.entity.Users;
 import com.team012.server.users.service.PasswordChangeService;
@@ -24,8 +23,6 @@ import javax.validation.Valid;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Random;
-
-import static com.team012.server.common.utils.constant.Constant.*;
 
 @RestController
 @RequestMapping("/v1/users")
@@ -48,7 +45,7 @@ public class UsersController {
         usersManageCompanyService.createCompany(dto);
         UsersMessageResponseDto response = UsersMessageResponseDto
                 .builder()
-                .message(Constant.USER_JOIN_SUCCESS.getMessage())
+                .message("회원가입 완료..!")
                 .build();
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
@@ -59,7 +56,7 @@ public class UsersController {
         usersService.createCustomer(dto);
         UsersMessageResponseDto response = UsersMessageResponseDto
                 .builder()
-                .message(Constant.USER_JOIN_SUCCESS.getMessage())
+                .message("회원가입 완료..!")
                 .build();
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
@@ -89,7 +86,7 @@ public class UsersController {
                 UsersMessageResponseDto
                         .builder()
                         .etc("Bearer " + jwtToken)
-                        .message(MODIFIED_SUCCESS.getMessage())
+                        .message("수정 완료..!")
                         .build();
 
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -103,9 +100,9 @@ public class UsersController {
 
         boolean checkPassword = passwordChangeService.changePassword(dto, findUsers);
 
-        if (checkPassword) return new ResponseEntity<>(CHECK_YOUR_PASSWORD.getMessage(), HttpStatus.BAD_REQUEST);
+        if (checkPassword) return new ResponseEntity<>("비밀번호를 다시 확인해주세요.", HttpStatus.BAD_REQUEST);
 
-        return new ResponseEntity<>(MODIFIED_SUCCESS.getMessage(), HttpStatus.OK);
+        return new ResponseEntity<>("수정완료..!", HttpStatus.OK);
     }
 
     // 이메일 중복확인
@@ -120,10 +117,10 @@ public class UsersController {
     @GetMapping("/find/email")
     public ResponseEntity findEmailUser(@RequestParam String phone) {
         Users users = usersService.findByEmail(phone);
-        if (users == null) return new ResponseEntity<>(WRITE_AGAIN_PLEASE.getMessage(), HttpStatus.NOT_FOUND);
+        if (users == null) return new ResponseEntity<>("다시 입력해주세요", HttpStatus.NOT_FOUND);
         UsersMessageResponseDto response = UsersMessageResponseDto
                 .builder()
-                .message(HERE_IS_YOUR_EMAIL.getMessage() + users.getEmail())
+                .message("찾으시는 이메일입니다. " + users.getEmail())
                 .build();
 
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -133,7 +130,7 @@ public class UsersController {
     @GetMapping("/find/password")
     public ResponseEntity findEmailPassword(@RequestParam String email) {
         Users users = usersService.findByPassword(email);
-        if (users == null) return new ResponseEntity<>(WRITE_AGAIN_PLEASE.getMessage(), HttpStatus.NOT_FOUND);
+        if (users == null) return new ResponseEntity<>("다시 입력해주세요", HttpStatus.NOT_FOUND);
 
         // 임시 비밀번호 만들기
         byte[] array = new byte[7];
@@ -149,8 +146,9 @@ public class UsersController {
         String findPassword = users.getPassword();
         UsersMessageResponseDto response = UsersMessageResponseDto
                 .builder()
-                .message(HERE_IS_YOUR_PASSWORD.getMessage() + findPassword + CHANGE_YOUR_PASSWORD_PLEASE.getMessage())
+                .message("찾으시는 비밀번호입니다. " + findPassword + " 꼭 비밀번호를 변경해주세요.")
                 .build();
+
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

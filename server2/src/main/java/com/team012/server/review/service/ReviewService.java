@@ -1,15 +1,13 @@
 package com.team012.server.review.service;
 
-import com.team012.server.common.aws.service.AwsS3Service;
-import com.team012.server.common.exception.BusinessLogicException;
-import com.team012.server.common.exception.ExceptionCode;
+import com.team012.server.review.dto.ReviewPostsResponse;
+import com.team012.server.review.repository.ReviewRepository;
 import com.team012.server.review.dto.ReviewCreateRequestDto;
 import com.team012.server.review.dto.ReviewPatchRequestDto;
-import com.team012.server.review.dto.ReviewPostsResponse;
 import com.team012.server.review.entity.Review;
-import com.team012.server.review.entity.ReviewImg;
 import com.team012.server.review.repository.ReviewImgRepository;
-import com.team012.server.review.repository.ReviewRepository;
+import com.team012.server.common.aws.service.AwsS3Service;
+import com.team012.server.review.entity.ReviewImg;
 import com.team012.server.users.entity.Users;
 import com.team012.server.users.service.UsersService;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.team012.server.common.utils.constant.Constant.REVIEW_IMAGE_LIST;
+import java.util.NoSuchElementException;
 
 @Transactional
 @Slf4j
@@ -64,8 +61,8 @@ public class ReviewService {
     }
 
     public Review updateReview(Long id, ReviewPatchRequestDto dto, List<MultipartFile> files) {
-        Review findReview = reviewRepository.findById(id)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.REVIEW_NOT_FOUND));
+        Review findReview = reviewRepository.findById(id).orElse(null);
+        if (findReview == null) throw new NullPointerException("리뷰가 없습니다.");
 
         // 데이터 수정
         findReview.setTitle(dto.getTitle());
@@ -74,7 +71,7 @@ public class ReviewService {
 
         // 리뷰 이미지 검색
         List<ReviewImg> reviewImgList = reviewImgRepository.findByReview_Id(id);
-        log.info(REVIEW_IMAGE_LIST.getMessage(), reviewImgList);
+        log.info("리뷰에 달린 파일들 : {}", reviewImgList);
 
         List<ReviewImg> lists = awsS3Service.updateReviewImg(reviewImgList, files);
 
@@ -132,7 +129,7 @@ public class ReviewService {
 
     public Review findByReviewId(Long reviewId) {
         return reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.REVIEW_NOT_FOUND));
+                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 리뷰입니다."));
     }
 
     public List<ReviewImg> findByImg(Long reviewId) {

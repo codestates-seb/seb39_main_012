@@ -4,7 +4,7 @@ import com.team012.server.company.dto.CompanyProfileResponseDto;
 import com.team012.server.company.entity.Company;
 import com.team012.server.posts.entity.Posts;
 import com.team012.server.posts.service.PostsService;
-import com.team012.server.reservation.entity.Reservation;
+import com.team012.server.reservation.entity.ReservationList;
 import com.team012.server.reservation.service.ReservationService;
 import com.team012.server.users.entity.Users;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public class CompanyInfoService {
         Posts posts = postsService.findByCompanyId(companyId);
 
         // 2. 예약현황 (예약번호 / 점포명 / 체크인 / 체크아웃 / 예약자)
-        Page<Reservation> reservationList = reservationService.getReservation(companyId, page - 1, size);
+        Page<ReservationList> reservationList = reservationService.getReservation(companyId, page - 1, size);
 
         CompanyProfileResponseDto dto =
                 CompanyProfileResponseDto
@@ -37,7 +37,7 @@ public class CompanyInfoService {
                         .phone(findUsers.getPhone())
                         .companyInfo(company)
                         .postsInfo(posts)
-                        .reservationPage(reservationList.getContent())
+                        .reservationListPage(reservationList.getContent())
                         .build();
 
         return dto;

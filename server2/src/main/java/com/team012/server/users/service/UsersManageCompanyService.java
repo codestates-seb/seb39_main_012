@@ -10,8 +10,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.team012.server.common.utils.constant.Constant.ROLE_COMPANY;
-
 @Transactional
 @RequiredArgsConstructor
 @Service
@@ -34,7 +32,7 @@ public class UsersManageCompanyService {
                 .password(encPassword)
                 .username(dto.getUsername())
                 .phone(dto.getPhone())
-                .roles(ROLE_COMPANY.getMessage())
+                .roles("ROLE_COMPANY")
                 .build();
 
         Users users = usersRepository.save(savedCompanyUser);

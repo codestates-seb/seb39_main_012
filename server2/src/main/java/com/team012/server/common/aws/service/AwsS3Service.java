@@ -11,7 +11,6 @@ import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.util.IOUtils;
-import com.team012.server.posts.entity.Posts;
 import com.team012.server.posts.img.entity.PostsImg;
 import com.team012.server.review.entity.ReviewImg;
 import com.team012.server.common.aws.utils.CommonUtils;
@@ -95,7 +94,7 @@ public class AwsS3Service {
         return url;
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     //파일 이름 추출하는 메서드
     public String originalFileName(MultipartFile multipartFile) {
         try {
@@ -162,7 +161,8 @@ public class AwsS3Service {
 
     //file 이름과 url 받아서 List<PostsImg> 로 리턴하는 메서드
 
-    public List<PostsImg> convertPostImg(List<MultipartFile> multipartFileList, Posts posts) {
+    @Transactional(propagation = Propagation.REQUIRED)
+    public List<PostsImg> convertPostImg(List<MultipartFile> multipartFileList) {
         if (multipartFileList.size() != 5) {
             throw new RuntimeException("you need to upload 5 image");
         }
@@ -181,7 +181,6 @@ public class AwsS3Service {
             PostsImg postsImg = PostsImg.builder()
                     .fileName(fileName)
                     .imgUrl(url)
-                    .posts(posts)
                     .build();
             fileList.add(postsImg);
         }

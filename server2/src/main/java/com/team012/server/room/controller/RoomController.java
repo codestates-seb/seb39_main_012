@@ -1,13 +1,14 @@
 package com.team012.server.room.controller;
 
+import com.team012.server.room.dto.RoomDto;
+import com.team012.server.room.dto.RoomUpdateDto;
 import com.team012.server.room.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -15,6 +16,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class RoomController {
 
     private final RoomService roomService;
+
+//    @PatchMapping("/{posts-id}")
+//    public ResponseEntity<RoomDto> update(@PathVariable("posts-id") Long postsId,
+//                                          @RequestBody List<RoomUpdateDto> request) {
+//
+//        RoomDto roomDto = roomService.update(request);
+//
+//        return new ResponseEntity<>(roomDto, HttpStatus.OK);
+//    }
 
     @DeleteMapping("/{room-id}")
     public ResponseEntity<Void> deleteRoom(@PathVariable("room-id") Long roomId) {

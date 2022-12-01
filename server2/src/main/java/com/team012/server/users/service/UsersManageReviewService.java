@@ -1,14 +1,13 @@
 package com.team012.server.users.service;
 
-import com.team012.server.common.exception.BusinessLogicException;
-import com.team012.server.common.exception.ExceptionCode;
+import com.amazonaws.services.ec2.model.Reservation;
 import com.team012.server.company.entity.Company;
 import com.team012.server.company.repository.CompanyRepository;
 import com.team012.server.posts.dto.PostsReviewInfo;
 import com.team012.server.posts.entity.Posts;
 import com.team012.server.posts.repository.PostsRepository;
-import com.team012.server.reservation.entity.Reservation;
-import com.team012.server.reservation.repository.ReservationRepository;
+import com.team012.server.reservation.entity.ReservationList;
+import com.team012.server.reservation.repository.ReservationListRepository;
 import com.team012.server.review.dto.ReviewInfoDto;
 import com.team012.server.review.entity.Review;
 import com.team012.server.review.entity.ReviewImg;
@@ -38,7 +37,7 @@ public class UsersManageReviewService {
 
     private final CompanyRepository companyRepository;
 
-    private final ReservationRepository reservationRepository;
+    private final ReservationListRepository reservationListRepository;
 
     // 작성한 리뷰 유저 아이디를 통한 조회
     @Transactional(readOnly = true)
@@ -54,50 +53,29 @@ public class UsersManageReviewService {
         List<Review> reviewList = getListReview(userId);
         List<ReviewInfoDto> response = new ArrayList<>();
         for (Review review : reviewList) {
-            Posts posts = postsRepository.findById(review.getPostsId())
-                    .orElseThrow(() -> new BusinessLogicException(ExceptionCode.POST_NOT_FOUND));
-
-            Company company = companyRepository.findById(posts.getCompanyId())
-                    .orElseThrow(() -> new BusinessLogicException(ExceptionCode.COMPANY_NOT_FOUND));
-
-            Reservation reservation = reservationRepository.findByCompanyId(Objects.requireNonNull(company).getId());
-
-            PostsReviewInfo postsReviewInfo = postsReviewInfo(posts, company, reservation);
-            ReviewInfoDto reviewInfoDto = reviewInfoDto(review, postsReviewInfo);
-
+            Posts posts = postsRepository.findById(review.getPostsId()).orElse(null);
+            Company company = companyRepository.findById(Objects.requireNonNull(posts).getCompanyId()).orElse(null);
+            ReservationList reservation = reservationListRepository.findByCompanyId(Objects.requireNonNull(company).getId());
+            PostsReviewInfo postsReviewInfo = PostsReviewInfo
+                    .builder()
+                    .postsCompanyName(Objects.requireNonNull(company).getCompanyName())
+                    .postsImg(posts.getPostsImgList().get(0).getImgUrl())  // 첫번째 이미지만 준다.
+                    .totalPrice(reservation.getTotalPrice())
+                    .build();
+            ReviewInfoDto reviewInfoDto = ReviewInfoDto
+                    .builder()
+                    .createdAt(review.getCreatedAt().format(DateTimeFormatter.ISO_DATE))
+                    .modifiedAt(review.getModifiedAt().format(DateTimeFormatter.ISO_DATE))
+                    .id(review.getId())
+                    .title(review.getTitle())
+                    .content(review.getContent())
+                    .score(review.getScore())
+                    .userId(review.getUserId())
+                    .reviewImg(getListReviewImgList(review.getId()))
+                    .companyInfo(postsReviewInfo)
+                    .build();
             response.add(reviewInfoDto);
         }
         return response;
-    }
-    private PostsReviewInfo postsReviewInfo(Posts posts, Company company, Reservation reservation) {
-        String companyName = company.getCompanyName();
-        String postsImgUrl = posts.getPostsImgList().get(0).getImgUrl();
-        int totalPrice = reservation.getTotalPrice();
-
-        return PostsReviewInfo
-                .builder()
-                .postsCompanyName(companyName)
-                .postsImg(postsImgUrl)  // 첫번째 이미지만 준다.
-                .totalPrice(totalPrice)
-                .build();
-    }
-
-    private ReviewInfoDto reviewInfoDto(Review review, PostsReviewInfo postsReviewInfo) {
-        String createdAt = review.getCreatedAt().format(DateTimeFormatter.ISO_DATE);
-        String modifiedAt = review.getModifiedAt().format(DateTimeFormatter.ISO_DATE);
-
-
-        return ReviewInfoDto
-                .builder()
-                .createdAt(createdAt)
-                .modifiedAt(modifiedAt)
-                .id(review.getId())
-                .title(review.getTitle())
-                .content(review.getContent())
-                .score(review.getScore())
-                .userId(review.getUserId())
-                .reviewImg(getListReviewImgList(review.getId()))
-                .companyInfo(postsReviewInfo)
-                .build();
     }
 }

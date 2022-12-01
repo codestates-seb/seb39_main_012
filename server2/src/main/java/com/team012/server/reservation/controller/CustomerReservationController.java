@@ -3,10 +3,11 @@ package com.team012.server.reservation.controller;
 import com.team012.server.common.config.userDetails.PrincipalDetails;
 import com.team012.server.common.response.MultiResponseDto;
 import com.team012.server.common.response.SingleResponseDto;
-import com.team012.server.posts.dto.ReservationsInfoDto;
-import com.team012.server.posts.service.ReservationsBeforeOrAfterCheckOutService;
+import com.team012.server.posts.dto.PostsReservationListDto;
+import com.team012.server.posts.service.PostsReservedListService;
+import com.team012.server.posts.service.PostsService;
 import com.team012.server.reservation.dto.*;
-import com.team012.server.reservation.entity.Reservation;
+import com.team012.server.reservation.entity.ReservationList;
 import com.team012.server.reservation.service.CustomerReservationService;
 import com.team012.server.reservation.service.ReservationConfirmService;
 import com.team012.server.users.service.DogCardService;
@@ -25,7 +26,7 @@ import java.util.List;
 public class CustomerReservationController {
 
     private final CustomerReservationService customerReservationService;
-    private final ReservationsBeforeOrAfterCheckOutService reservationsBeforeOrAfterCheckOutService;
+    private final PostsReservedListService postsReservedListService;
     private final ReservationConfirmService reservationConfirmService;
 
     private final DogCardService dogCardService;
@@ -56,9 +57,10 @@ public class CustomerReservationController {
         ReservationCreateDto reservationCreateDto = dto.getReservationCreateDto();
         ReservationUserInfoDto reservationUserInfoDto = dto.getReservationUserInfoDto();
 
-        Reservation reservation =
+        ReservationList reservationList =
                 customerReservationService.createReservation(reservationCreateDto,userId, postsId, reservationUserInfoDto);
-        return new ResponseEntity<>(reservation, HttpStatus.CREATED);
+        Long reservationId = reservationList.getReservedId();
+        return new ResponseEntity<>(reservationList, HttpStatus.CREATED);
     }
 
     //예약 확인 페이지
@@ -77,10 +79,10 @@ public class CustomerReservationController {
     public ResponseEntity findReservationsBeforeCheckIn(@RequestParam int page, int size
             , @AuthenticationPrincipal PrincipalDetails principalDetails) {
         Long userId = principalDetails.getUsers().getId();
-        Page<Reservation> reservationList = customerReservationService.findReservationList(userId, page - 1, size);
-        List<Reservation> reservations = reservationList.getContent();
+        Page<ReservationList> reservationList = customerReservationService.findReservationList(userId, page - 1, size);
+        List<ReservationList> reservations = reservationList.getContent();
 
-        List<ReservationsInfoDto> reservationListDtos = reservationsBeforeOrAfterCheckOutService.reservedHotels(reservations);
+        List<PostsReservationListDto.BookedList> reservationListDtos = postsReservedListService.findReservedHotels(reservations);
 
         return new ResponseEntity<>(new MultiResponseDto<>(reservationListDtos, reservationList), HttpStatus.OK);
     }
@@ -90,20 +92,20 @@ public class CustomerReservationController {
     public ResponseEntity findReservationAfterCheckOut(@RequestParam int page, int size
             , @AuthenticationPrincipal PrincipalDetails principalDetails) {
         Long userId = principalDetails.getUsers().getId();
-        Page<Reservation> reservationPages = customerReservationService.findReservationAfterCheckOutList(userId, page - 1, size);
-        List<Reservation> reservations = reservationPages.getContent();
+        Page<ReservationList> reservationList = customerReservationService.findReservationAfterCheckOutList(userId, page - 1, size);
+        List<ReservationList> reservations = reservationList.getContent();
 
-        List<ReservationsInfoDto> reservationListDtos = reservationsBeforeOrAfterCheckOutService.reservedHotels(reservations);
+        List<PostsReservationListDto.BookedListAfterCheckOut> reservationListDtos = postsReservedListService.findReservedHotelsAfterCheckOut(reservations);
 
-        return new ResponseEntity<>(new MultiResponseDto<>(reservationListDtos, reservationPages), HttpStatus.OK);
+        return new ResponseEntity<>(new MultiResponseDto<>(reservationListDtos, reservationList), HttpStatus.OK);
     }
 
     //reservListId 로 삭제
-    @DeleteMapping("/{reservation-id}")
-    public ResponseEntity deleteReservation(@PathVariable("reservation-id") Long reservationId,
+    @DeleteMapping("/{reservListId}")
+    public ResponseEntity deleteReservation(@PathVariable("reservListId") Long reservListId,
                                             @AuthenticationPrincipal PrincipalDetails principalDetails) {
         Long userId = principalDetails.getUsers().getId();
-        customerReservationService.deleteReservation(userId, reservationId);
+        customerReservationService.deleteReservation(userId, reservListId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

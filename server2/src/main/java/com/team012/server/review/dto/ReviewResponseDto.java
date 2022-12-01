@@ -9,6 +9,8 @@ import lombok.Setter;
 import java.util.List;
 
 @Getter
+@Setter
+@NoArgsConstructor
 public class ReviewResponseDto {
 
     private Long id;

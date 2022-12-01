@@ -1,6 +1,6 @@
 package com.team012.server.posts.Tag.HashTag.converter;
 
-import com.team012.server.common.utils.converter.Converter;
+import com.team012.server.common.converter.Converter;
 import com.team012.server.posts.Tag.HashTag.dto.HashTagResponseDto;
 import com.team012.server.posts.Tag.HashTag.entity.PostsHashTags;
 import org.springframework.stereotype.Component;

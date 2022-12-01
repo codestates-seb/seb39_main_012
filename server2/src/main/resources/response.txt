@@ -102,7 +102,7 @@
             "etc": "testEtc"
         }
     ],
-    "reservation": [],
+    "reservationList": [],
     "reviewList": [
         {
             "createdAt": "2022-10-04T06:44:48.59688",

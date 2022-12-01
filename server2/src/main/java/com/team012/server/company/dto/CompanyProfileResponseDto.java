@@ -2,7 +2,7 @@ package com.team012.server.company.dto;
 
 import com.team012.server.company.entity.Company;
 import com.team012.server.posts.entity.Posts;
-import com.team012.server.reservation.entity.Reservation;
+import com.team012.server.reservation.entity.ReservationList;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,5 +20,5 @@ public class CompanyProfileResponseDto {
     private String phone;
     private Company companyInfo;
     private Posts postsInfo;
-    private List<Reservation> reservationPage;
+    private List<ReservationList> reservationListPage;
 }

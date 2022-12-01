@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 @Entity
 @Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
 public class Review extends BaseEntity {
 
@@ -19,22 +19,22 @@ public class Review extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "TITLE")
+    @Column(name = "title")
     private String title;
 
-    @Column(name = "CONTENT")
+    @Column(name = "content")
     private String content;
 
-    @Column(name = "SCORE")
+    @Column(name = "score")
     private Double score;
 
-    @Column(name = "USER_ID")
+    @Column(name = "user_id")
     private Long userId;
 
-    @Column(name = "POSTS_ID")
+    @Column(name = "posts_id")
     private Long postsId;
 
-    @OneToMany(mappedBy = "REVIEW", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "review", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<ReviewImg> reviewImgList;
 }

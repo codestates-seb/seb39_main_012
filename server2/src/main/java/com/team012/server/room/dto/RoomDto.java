@@ -9,5 +9,4 @@ public class RoomDto {
     private Long roomId;
     private String size;
     private Integer price;
-    private Integer roomCount;
 }

@@ -23,8 +23,7 @@ public class CorsConfig {
         config.setAllowedOrigins(Arrays.asList(
                 "http://localhost:3000",
                 "https://master.drmie9omao0gi.amplifyapp.com",
-                "https://moongtel.vercel.app/",
-                "http://localhost:8080/h2"));
+                "https://moongtel.vercel.app/"));
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         config.addExposedHeader("Authorization");

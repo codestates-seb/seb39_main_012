@@ -8,19 +8,17 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
 @Getter
+@Setter
+@Builder
 @Validated
+@NoArgsConstructor
+@AllArgsConstructor
 public class ReviewCreateRequestDto {
     private String title;
     private String content;
+
     @Min(0) @Max(5)
     private Double score;
-    private Long postsId;
 
-    @Builder
-    public ReviewCreateRequestDto(String title, String content, Double score, Long postsId) {
-        this.title = title;
-        this.content = content;
-        this.score = score;
-        this.postsId = postsId;
-    }
+    private Long postsId;
 }

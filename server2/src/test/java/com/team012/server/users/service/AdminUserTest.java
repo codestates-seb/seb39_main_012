@@ -1,7 +1,9 @@
 package com.team012.server.users.service;
 
+import com.amazonaws.services.s3.AmazonS3Client;
 import com.team012.server.company.entity.Company;
 import com.team012.server.company.repository.CompanyRepository;
+import com.team012.server.review.repository.ReviewImgRepository;
 import com.team012.server.users.entity.Users;
 import com.team012.server.users.repository.UsersRepository;
 import org.junit.jupiter.api.Test;

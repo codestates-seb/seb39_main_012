@@ -17,8 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-import static com.team012.server.common.utils.constant.Constant.*;
-
 @RequestMapping("/v1/customer/dogCard")
 @RestController
 @RequiredArgsConstructor
@@ -37,11 +35,11 @@ public class DogCardController {
         DogCard dogCard = mapper.dogDtoToDogCard(dogCardDto);
         dogCardService.savedDogCard(dogCard, file, principalDetails.getUsers());
 
-        log.info(DOG_NAME_LOG.getMessage(), dogCard.getDogName());
-        log.info(DOG_TYPE_LOG.getMessage(), dogCard.getType());
-        log.info(DOG_IMAGE_URL.getMessage(), dogCard.getPhotoImgUrl());
+        log.info("dogName = {}", dogCard.getDogName());
+        log.info("dogType = {}", dogCard.getType());
+        log.info("dogImageUrl = {}", dogCard.getPhotoImgUrl());
 
-        return new ResponseEntity<>(new SingleResponseDto<>(CREATE_SUCCESS.getMessage()), HttpStatus.CREATED);
+        return new ResponseEntity<>(new SingleResponseDto<>("create success"), HttpStatus.CREATED);
     }
 
     // 강아지 큐카드 수정
@@ -56,7 +54,7 @@ public class DogCardController {
         dogCardService.updateDogCard(dogCardId, dogCard, file, principalDetails.getUsers());
 
         return new ResponseEntity<>(new SingleResponseDto<>
-                (MODIFIED_SUCCESS.getMessage()), HttpStatus.CREATED);
+                ("patch success"), HttpStatus.CREATED);
     }
 
     // 강아지 카드 상세 조회
@@ -75,7 +73,7 @@ public class DogCardController {
 
         dogCardService.deleteDogCard(dogCardId);
 
-        return new ResponseEntity<>(DELETE_SUCCESS.getMessage(), HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>("삭제 완료", HttpStatus.OK);
     }
 
     // 유저가 가지고 있는 강아지 전체 조회

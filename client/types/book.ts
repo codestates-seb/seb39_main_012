@@ -12,7 +12,7 @@ interface mapProps {
 }
 
 export interface booking {
-  reservation: reservationListProps[]
+  reservationList: reservationListProps[]
   dto: {
     map: mapProps
     checkInDate: string

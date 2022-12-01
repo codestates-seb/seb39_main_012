@@ -5,7 +5,12 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
 @Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ReviewPostsResponse {
 
     private Long id;
@@ -16,16 +21,4 @@ public class ReviewPostsResponse {
     private Double score;
     private String writer;
     private List<ReviewImg> reviewImgList;
-
-    @Builder
-    public ReviewPostsResponse(Long id, String createdAt, String modifiedAt, String title, String content, Double score, String writer, List<ReviewImg> reviewImgList) {
-        this.id = id;
-        this.createdAt = createdAt;
-        this.modifiedAt = modifiedAt;
-        this.title = title;
-        this.content = content;
-        this.score = score;
-        this.writer = writer;
-        this.reviewImgList = reviewImgList;
-    }
 }

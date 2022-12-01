@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.team012.server.posts.entity.Posts;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
@@ -14,7 +13,8 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostsImg {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "file_name")
@@ -30,9 +30,8 @@ public class PostsImg {
     private Posts posts;
 
     @Builder
-    public PostsImg(String fileName, String imgUrl, Posts posts) {
+    public PostsImg(String fileName, String imgUrl) {
         this.fileName = fileName;
         this.imgUrl = imgUrl;
-        this.posts = posts;
     }
 }
