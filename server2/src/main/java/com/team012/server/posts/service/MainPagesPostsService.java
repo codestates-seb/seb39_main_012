@@ -5,7 +5,6 @@ import com.team012.server.posts.entity.Posts;
 import com.team012.server.posts.img.converter.PostsImgConverter;
 import com.team012.server.posts.img.dto.ImageDto;
 import com.team012.server.posts.repository.RoomPriceDto;
-import com.team012.server.room.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
