@@ -6,4 +6,5 @@ import lombok.Getter;
 public class RoomUpdateDto {
     private String size;
     private Integer price;
+    private Integer roomCount;
 }

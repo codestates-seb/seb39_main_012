@@ -4,8 +4,8 @@ import com.team012.server.common.config.userDetails.PrincipalDetails;
 import com.team012.server.company.entity.Company;
 import com.team012.server.company.service.CompanyService;
 import com.team012.server.reservation.dto.TotalReservationDto;
-import com.team012.server.reservation.entity.ReservationList;
-import com.team012.server.reservation.repository.ReservationListRepository;
+import com.team012.server.reservation.entity.Reservation;
+import com.team012.server.reservation.repository.ReservationRepository;
 import com.team012.server.users.entity.DogCard;
 import com.team012.server.users.service.DogCardService;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ import java.util.Optional;
 public class ReservationConfirmService {
 
     private final CompanyService companyService;
-    private final ReservationListRepository reservationListRepository;
+    private final ReservationRepository reservationRepository;
     private final DogCardService dogCardService;
 
     @Transactional(readOnly = true)
@@ -34,9 +34,9 @@ public class ReservationConfirmService {
 
         Long userId = principalDetails.getUsers().getId();
 
-        Optional<ReservationList> byUsersIdAndReservedId = reservationListRepository.findByUsersIdAndReservedId(userId, reservationId);
+        Optional<Reservation> byUsersIdAndReservedId = reservationRepository.findByUsersIdAndReservedId(userId, reservationId);
 
-        ReservationList findReservation = byUsersIdAndReservedId.orElse(null);
+        Reservation findReservation = byUsersIdAndReservedId.orElse(null);
 
 
 

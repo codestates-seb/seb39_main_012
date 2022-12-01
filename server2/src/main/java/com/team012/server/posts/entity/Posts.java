@@ -55,16 +55,13 @@ public class Posts {
     @Column(name = "company_id")
     private Long companyId;
 
-    @Column(name = "room_count")
-    private Integer roomCount; //room에 count없에는 대신 추가(전체 방의 갯수)
-
     @Column(name = "likes_count")
     private Integer likesCount;
 
     @Column(name = "avg_score")
     private Double avgScore;
 
-    @Column(name = "check_in_time")
+    @Column(name = "check_in")
     @DateTimeFormat(pattern = "HH:mm")
     private LocalTime checkInTime;
 
@@ -73,7 +70,7 @@ public class Posts {
     private LocalTime checkOutTime;
 
     // 이미지 업로드 테이블
-    @OneToMany(mappedBy = "posts", cascade = CascadeType.ALL,fetch = FetchType.EAGER)// ----> 이거 질문 N+1문제는 해결이 되었으나 괜찮은 것인가....
+    @OneToMany(mappedBy = "posts", cascade = CascadeType.ALL)
     @JsonManagedReference  // 순환참조 방지(...)
     private List<PostsImg> postsImgList = new ArrayList<>();
 
@@ -88,7 +85,7 @@ public class Posts {
     @Builder
     public Posts(String title, String content,
                  String latitude, String longitude,
-                 String address, String detailAddress, String phone, Integer roomCount,
+                 String address, String detailAddress, String phone,
                  Long companyId, LocalTime checkInTime, LocalTime checkOutTime) {
         this.title = title;
         this.content = content;
@@ -97,10 +94,7 @@ public class Posts {
         this.address = address;
         this.detailAddress = detailAddress;
         this.phone = phone;
-        this.roomCount = roomCount; // add
         this.companyId = companyId;
-//        this.avgScore = avgScore; // add
-//        this.likesCount = likesCount;
         this.checkInTime = checkInTime;
         this.checkOutTime = checkOutTime;
 

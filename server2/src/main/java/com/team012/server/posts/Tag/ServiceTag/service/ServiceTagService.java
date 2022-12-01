@@ -1,11 +1,12 @@
 package com.team012.server.posts.Tag.ServiceTag.service;
 
-import com.team012.server.posts.Tag.ServiceTag.dto.ServiceTagUpdateDto;
+import com.team012.server.common.exception.BusinessLogicException;
+import com.team012.server.common.exception.ExceptionCode;
 import com.team012.server.posts.Tag.ServiceTag.entity.PostsServiceTag;
 import com.team012.server.posts.Tag.ServiceTag.entity.ServiceTag;
-import com.team012.server.posts.entity.Posts;
 import com.team012.server.posts.Tag.ServiceTag.repository.PostsServiceTagRepository;
 import com.team012.server.posts.Tag.ServiceTag.repository.serviceTagRepository;
+import com.team012.server.posts.entity.Posts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -24,7 +25,6 @@ public class ServiceTagService {
     private final serviceTagRepository serviceTagRepository;
     private final PostsServiceTagRepository postsServiceTagRepository;
 
-    @Transactional(propagation = Propagation.REQUIRED)
     public List<ServiceTag> saveServiceTags(List<String> postsTags) {
         List<ServiceTag> list =  postsTags.stream().map(tag -> {
                 ServiceTag serviceTag = ServiceTag.builder()
@@ -35,41 +35,24 @@ public class ServiceTagService {
         return serviceTagRepository.saveAll(list);
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
     public List<PostsServiceTag> saveCompanyPostsTags(List<ServiceTag> serviceTags, Posts posts) {
         List<PostsServiceTag> postsAvailableTags = new ArrayList<>();
         for(ServiceTag a : serviceTags) {
-            PostsServiceTag pat = PostsServiceTag.builder()
+            PostsServiceTag postsServiceTag = PostsServiceTag.builder()
                     .posts(posts)
                     .serviceTag(a)
                     .build();
-            postsAvailableTags.add(pat);
+            postsAvailableTags.add(postsServiceTag);
         }
         posts.setPostAvailableTags(postsAvailableTags);
         return postsServiceTagRepository.saveAll(postsAvailableTags);
     }
-
-//    public ServiceTag updateServiceTag(ServiceTagUpdateDto serviceTagUpdateDto) {
-//        Optional<ServiceTag> serviceTag = serviceTagRepository.findById(serviceTagUpdateDto.getServiceTagId());
-//        ServiceTag findTag = serviceTag.orElseThrow(() -> new RuntimeException("serviceTag not found"));
-//
-//        Optional.ofNullable(serviceTagUpdateDto.getTag()).ifPresent(findTag::setTag);
-//        serviceTagRepository.save(findTag);
-//
-//        return  findTag;
-//    }
-
-    public void deleteServiceTag(Long serviceTagId) {
-        Optional<ServiceTag> serviceTag = serviceTagRepository.findById(serviceTagId);
-        ServiceTag findTag = serviceTag.orElseThrow(() -> new RuntimeException("serviceTag not found"));
-
-        serviceTagRepository.delete(findTag);
-    }
-
     public void deleteAllServiceTag(Long postsId) {
         List<PostsServiceTag> postsTags = postsServiceTagRepository.findByPostsId(postsId);
 
-        if(!postsTags.isEmpty()) postsServiceTagRepository.deleteAll(postsTags);
+        if(!postsTags.isEmpty()) {
+            postsServiceTagRepository.deleteAll(postsTags);
+        }
     }
 
 }

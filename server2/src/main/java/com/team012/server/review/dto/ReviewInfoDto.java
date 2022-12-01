@@ -7,10 +7,6 @@ import lombok.*;
 import java.util.List;
 
 @Getter
-@Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class ReviewInfoDto {
     private String createdAt;
     private String modifiedAt;
@@ -21,4 +17,17 @@ public class ReviewInfoDto {
     private Long userId;
     private PostsReviewInfo companyInfo;
     private List<ReviewImg> reviewImg;
+
+    @Builder
+    public ReviewInfoDto(String createdAt, String modifiedAt, Long id, String title, String content, Double score, Long userId, PostsReviewInfo companyInfo, List<ReviewImg> reviewImg) {
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.score = score;
+        this.userId = userId;
+        this.companyInfo = companyInfo;
+        this.reviewImg = reviewImg;
+    }
 }

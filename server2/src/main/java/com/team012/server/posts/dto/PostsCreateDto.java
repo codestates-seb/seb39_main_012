@@ -29,7 +29,6 @@ public class PostsCreateDto {
 
     @NotBlank
     private String detailAddress;
-    //0번째는 위도, 1번째는 경도, 2번째는 주소, 3번째는 상세 주소
 
     @NotBlank
     @Pattern(regexp = "(오전|오후) ([0]?[0-9]|1[0-2]):[0-5][0-9]")

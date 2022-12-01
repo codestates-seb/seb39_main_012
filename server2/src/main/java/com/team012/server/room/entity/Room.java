@@ -16,12 +16,16 @@ public class Room {
     private Long id;
 
     @Column(name = "size") // 대, 중, 소 (개 사이즈, 방 사이즈)
-    private String size;
+    private String roomSize;
 
     @Column(name = "price") // 두당 가격
     private Integer price;
 
-    @Column(name = "posts_id")
+    //갯수 엔티티 추가
+    @Column(name = "ROOM_COUNT")
+    private Integer roomCount;
+
+    @Column(name = "POSTS_ID")
     private Long postsId;
 
 }

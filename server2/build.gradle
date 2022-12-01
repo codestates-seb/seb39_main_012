@@ -41,6 +41,13 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     implementation 'com.auth0:java-jwt:4.0.0' // 추가
 
+    implementation "com.querydsl:querydsl-jpa:5.0.0"
+    implementation 'org.springframework.data:spring-data-elasticsearch:4.4.6'
+    annotationProcessor(
+            "jakarta.persistence:jakarta.persistence-api",
+            "jakarta.annotation:jakarta.annotation-api",
+            "com.querydsl:querydsl-apt:5.0.0:jpa")
+
 }
 
 tasks.named('test') {

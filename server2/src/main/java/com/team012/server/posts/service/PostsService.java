@@ -1,10 +1,10 @@
 package com.team012.server.posts.service;
 
 import com.team012.server.common.aws.service.AwsS3Service;
+import com.team012.server.common.exception.BusinessLogicException;
 import com.team012.server.posts.dto.PostsCreateDto;
 import com.team012.server.posts.dto.PostsUpdateDto;
 import com.team012.server.posts.entity.Posts;
-import com.team012.server.posts.img.dto.ImgUpdateDto;
 import com.team012.server.posts.img.entity.PostsImg;
 import com.team012.server.posts.img.service.PostsImgService;
 import com.team012.server.posts.repository.PostsRepository;
@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -25,6 +24,8 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.team012.server.common.exception.ExceptionCode.*;
+
 @Transactional
 @Service
 @Slf4j
@@ -35,76 +36,98 @@ public class PostsService {
     private final PostsImgService postsImgService;
     private final AwsS3Service awsS3Service;
 
-    @Transactional(propagation = Propagation.REQUIRED)
-    public Posts save(PostsCreateDto post, List<MultipartFile> files, Long companyId) {
+    public Posts save(PostsCreateDto postsDto, List<MultipartFile> images, Long companyId) {
 
-        LocalTime checkIn = convertCheckInToTime(post.getCheckInTime());
-        LocalTime checkOut = convertCheckOutToTime(post.getCheckOutTime());
-        validateCheckInCheckOut(checkIn, checkOut);
+        LocalTime checkInTime = convertCheckInToTime(postsDto.getCheckInTime());
+        LocalTime checkOutTime = convertCheckOutToTime(postsDto.getCheckOutTime());
+        validateCheckInCheckOut(checkInTime, checkOutTime);
 
         Posts posts = Posts.builder()
-                .title(post.getTitle())
-                .content(post.getContent())
+                .title(postsDto.getTitle())
+                .content(postsDto.getContent())
                 .companyId(companyId)
-                .latitude(post.getLatitude())
-                .longitude(post.getLongitude())
-                .address(post.getAddress())
-                .detailAddress(post.getDetailAddress())
-                .phone(post.getPhone())
-                .roomCount(post.getRoomCount())//add
-                .checkInTime(checkIn)
-                .checkOutTime(checkOut)
+                .latitude(postsDto.getLatitude())
+                .longitude(postsDto.getLongitude())
+                .address(postsDto.getAddress())
+                .detailAddress(postsDto.getDetailAddress())
+                .phone(postsDto.getPhone())
+                .checkInTime(checkInTime)
+                .checkOutTime(checkOutTime)
                 .build();
 
-        List<PostsImg> lists = awsS3Service.convertPostImg(files);
+        posts = postsRepository.save(posts);
+        savePostsImages(images, posts);
 
-        posts.setPostsImgList(lists);
-        for (PostsImg c : lists) {
-            c.setPosts(posts);
-        }
-
-        return postsRepository.save(posts);
-
+        return posts;
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
-    public Posts update(PostsUpdateDto post, List<MultipartFile> files, Long companyId) throws FileUploadException {
-        Long postsId = post.getId();
+    private void savePostsImages(List<MultipartFile> images, Posts posts) {
+        List<PostsImg> postsImgs = awsS3Service.convertPostImg(images, posts);
+        postsImgService.saveAll(postsImgs);
+
+        postsImgs = postsImgService.findByPostsId(posts.getId());
+        posts.setPostsImgList(postsImgs);
+    }
+    public Posts update(PostsUpdateDto postsDto, List<MultipartFile> images, Long companyId) throws FileUploadException {
+        Long postsId = postsDto.getId();
         Posts findPosts = findById(postsId);
         log.info(findPosts.getTitle() ,"{}");
 
-        if (!Objects.equals(findPosts.getCompanyId(), companyId)) throw new RuntimeException("companyId 일치하지 않음");
+        if (!Objects.equals(findPosts.getCompanyId(), companyId)) throw new BusinessLogicException(COMPANY_ID_NOT_MATCHED);
 
-        Optional.ofNullable(post.getLatitude()).ifPresent(findPosts::setLatitude);
-        Optional.ofNullable(post.getLongitude()).ifPresent(findPosts::setLongitude);
-        Optional.ofNullable(post.getAddress()).ifPresent(findPosts::setAddress);
-        Optional.ofNullable(post.getDetailAddress()).ifPresent(findPosts::setDetailAddress);
-        Optional.ofNullable(post.getPhone()).ifPresent(findPosts::setPhone);
-        Optional.ofNullable(post.getTitle()).ifPresent(findPosts::setTitle);
-        Optional.ofNullable(post.getContent()).ifPresent(findPosts::setContent);
-        Optional.ofNullable(post.getRoomCount()).ifPresent(findPosts::setRoomCount); //add
+        updatePosts(postsDto, findPosts);
+        updateCheckInTime(postsDto, findPosts);
+        updateCheckOutTime(postsDto, findPosts);
 
-        if (StringUtils.hasText(post.getCheckInTime())) {
-            LocalTime checkIn = convertCheckInToTime(post.getCheckInTime());
-            findPosts.setCheckInTime(checkIn);
-        }
-        if (StringUtils.hasText(post.getCheckOutTime())) {
-            LocalTime checkOut = convertCheckOutToTime(post.getCheckOutTime());
-            findPosts.setCheckOutTime(checkOut);
-        }
         validateCheckInCheckOut(findPosts.getCheckInTime(), findPosts.getCheckOutTime());
 
-        if (!CollectionUtils.isEmpty(files)) {
-            List<PostsImg> postsImgList = postsImgService.updatePostsImg(files, postsId);
-            findPosts.setPostsImgList(postsImgList);
-            for (PostsImg postsImg : postsImgList) {
+        updatePostsImages(images,findPosts, postsId);
+
+        return postsRepository.save(findPosts);
+    }
+
+    private void updatePosts(PostsUpdateDto postsDto,Posts findPosts) {
+        Optional.ofNullable(postsDto.getLatitude()).ifPresent(findPosts::setLatitude);
+        Optional.ofNullable(postsDto.getLongitude()).ifPresent(findPosts::setLongitude);
+        Optional.ofNullable(postsDto.getAddress()).ifPresent(findPosts::setAddress);
+        Optional.ofNullable(postsDto.getDetailAddress()).ifPresent(findPosts::setDetailAddress);
+        Optional.ofNullable(postsDto.getPhone()).ifPresent(findPosts::setPhone);
+        Optional.ofNullable(postsDto.getTitle()).ifPresent(findPosts::setTitle);
+        Optional.ofNullable(postsDto.getContent()).ifPresent(findPosts::setContent);
+    }
+
+    private void updateCheckInTime(PostsUpdateDto postsDto, Posts findPosts) {
+        if (StringUtils.hasText(postsDto.getCheckInTime())) {
+            LocalTime checkInTime = convertCheckInToTime(postsDto.getCheckInTime());
+            findPosts.setCheckInTime(checkInTime);
+        }
+    }
+    private void updateCheckOutTime(PostsUpdateDto postsDto, Posts findPosts) {
+        if (StringUtils.hasText(postsDto.getCheckOutTime())) {
+            LocalTime checkOutTime = convertCheckOutToTime(postsDto.getCheckOutTime());
+            findPosts.setCheckOutTime(checkOutTime);
+        }
+    }
+    private LocalTime convertCheckInToTime(String checkInTime) {
+        checkInTime = checkInTime.trim();
+        return LocalTime.parse(checkInTime, DateTimeFormatter.ofPattern("a hh:mm").withLocale(Locale.KOREA));
+    }
+    private LocalTime convertCheckOutToTime(String checkOutTime) {
+        checkOutTime = checkOutTime.trim();
+        return LocalTime.parse(checkOutTime, DateTimeFormatter.ofPattern("a hh:mm").withLocale(Locale.KOREA));
+    }
+    private void validateCheckInCheckOut(LocalTime checkInTime, LocalTime checkOutTime) {
+        if(checkOutTime.isBefore(checkInTime)) throw new BusinessLogicException(CHECKIN_CHECKOUT_ERROR);
+    }
+
+    private void updatePostsImages(List<MultipartFile> Images, Posts findPosts, long postsId) throws FileUploadException {
+        if (!CollectionUtils.isEmpty(Images)) {
+            List<PostsImg> postsImages = postsImgService.updatePostsImg(Images, postsId);
+            findPosts.setPostsImgList(postsImages);
+            for (PostsImg postsImg : postsImages) {
                 postsImg.setPosts(findPosts);
             }
         }
-
-        Posts posts1 = postsRepository.save(findPosts);
-        return posts1;
-
     }
 
     @Transactional(readOnly = true)
@@ -112,12 +135,12 @@ public class PostsService {
         Optional<Posts> findCompanyPosts
                 = postsRepository.findById(postsId);
 
-        return findCompanyPosts.orElseThrow(() -> new RuntimeException("Posts Not Found"));
+        return findCompanyPosts.orElseThrow(() -> new BusinessLogicException(POST_NOT_FOUND));
     }
 
     public void delete(Long postsId, Long companyId) {
         Posts posts = findById(postsId);
-        if (posts.getCompanyId() != companyId) throw new RuntimeException("companyId가 일치하지 않음");
+        if (!Objects.equals(posts.getCompanyId(), companyId)) throw new BusinessLogicException(COMPANY_ID_NOT_MATCHED);
         awsS3Service.deleteFile(posts.getPostsImgList());
         postsRepository.delete(posts);
     }
@@ -135,19 +158,7 @@ public class PostsService {
         return postsRepository.findByCompanyId(companyId);
     }
 
-    private LocalTime convertCheckInToTime(String strCheckIn) {
-        strCheckIn = strCheckIn.trim();
 
-        return LocalTime.parse(strCheckIn, DateTimeFormatter.ofPattern("a hh:mm").withLocale(Locale.KOREA));
-    }
 
-    private LocalTime convertCheckOutToTime(String strCheckOut) {
-        strCheckOut = strCheckOut.trim();
 
-        return LocalTime.parse(strCheckOut, DateTimeFormatter.ofPattern("a hh:mm").withLocale(Locale.KOREA));
-    }
-
-    private void validateCheckInCheckOut(LocalTime checkIn, LocalTime checkOut) {
-        if(checkOut.isBefore(checkIn)) throw new IllegalArgumentException("checkIn must be lesser then checkOut");
-    }
 }

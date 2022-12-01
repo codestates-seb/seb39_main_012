@@ -1,22 +1,23 @@
 package com.team012.server.users.service;
 
 import com.team012.server.common.config.userDetails.PrincipalDetails;
-import com.team012.server.users.dto.DogCardResponseDto;
+import com.team012.server.common.exception.BusinessLogicException;
+import com.team012.server.common.exception.ExceptionCode;
+import com.team012.server.common.utils.constant.Constant;
 import com.team012.server.users.entity.DogCard;
 import com.team012.server.users.entity.Users;
 import com.team012.server.common.aws.service.AwsS3Service;
 import com.team012.server.users.repository.DogCardRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import static com.team012.server.common.exception.ExceptionCode.CHOOSE_YOUR_CORRECT_DOG_ID;
 
 @Transactional
 @RequiredArgsConstructor
@@ -27,7 +28,7 @@ public class DogCardService {
     private final DogCardRepository dogCardRepository;
     private final AwsS3Service awsS3Service;
 
-    public DogCard savedDogCard(DogCard dogCard, MultipartFile file, Users users) {
+    public void savedDogCard(DogCard dogCard, MultipartFile file, Users users) {
 
         String url = awsS3Service.singleUploadFile(file);
 
@@ -36,19 +37,17 @@ public class DogCardService {
 
         dogCardRepository.save(dogCard);
 
-        return dogCard;
     }
 
-    public DogCard updateDogCard(long dogCardId, DogCard dogCard, MultipartFile file, Users users) {
+    public void updateDogCard(long dogCardId, DogCard dogCard, MultipartFile file, Users users) {
 
-
-        Optional<DogCard> f2indDogCard = dogCardRepository.findById(dogCardId);
-        DogCard findDogCard = f2indDogCard.orElseThrow(RuntimeException::new);
+        Optional<DogCard> tempDogCard = dogCardRepository.findById(dogCardId);
+        DogCard findDogCard = tempDogCard.orElseThrow(() -> new BusinessLogicException(ExceptionCode.DOG_NOT_FOUND));
 
         String url = awsS3Service.singleUploadFile(file);
         updateDogCard(dogCard, findDogCard, url);
 
-        return dogCardRepository.save(findDogCard);
+        dogCardRepository.save(findDogCard);
     }
 
 
@@ -57,25 +56,21 @@ public class DogCardService {
 
         Optional<DogCard> findDogCard = dogCardRepository.findById(dogCardId);
 
-        return findDogCard.orElseThrow(() -> new RuntimeException("DogCard Not Found"));
+        return findDogCard.orElseThrow(() -> new BusinessLogicException(ExceptionCode.DOG_NOT_FOUND));
     }
 
     @Transactional(readOnly = true)
     public DogCard findMyDogCardById(Long dogCardId,PrincipalDetails principalDetails) {
 
-        DogCard dogCardById = dogCardRepository.findDogCardById(dogCardId);
+        DogCard dogCard = dogCardRepository.findDogCardById(dogCardId);
         Users users = principalDetails.getUsers();
 
-        try {
-            if (dogCardById.getUsers().getId().equals(users.getId())) {
-            } else {
-                throw new RuntimeException();
-            }
-        } catch (RuntimeException e){
-            log.info("정확한 본인의 강아지 Id를 선택해주세요.");
-            return null;
+        long usersId = dogCard.getUsers().getId();
+        if(usersId != users.getId()) {
+            log.info(Constant.CHOOSE_YOUR_CORRECT_DOG_ID.getMessage());
+            throw new BusinessLogicException(CHOOSE_YOUR_CORRECT_DOG_ID);
         }
-        return dogCardById;
+        return dogCard;
     }
 
     public void deleteDogCard(Long dogCardId) {

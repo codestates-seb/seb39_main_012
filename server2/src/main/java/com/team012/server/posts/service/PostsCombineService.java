@@ -1,20 +1,19 @@
 package com.team012.server.posts.service;
 
 import com.team012.server.posts.Tag.HashTag.converter.HashTagConverter;
+import com.team012.server.posts.Tag.HashTag.dto.HashTagResponseDto;
+import com.team012.server.posts.Tag.HashTag.entity.PostsHashTags;
 import com.team012.server.posts.Tag.ServiceTag.converter.ServiceTagConverter;
+import com.team012.server.posts.Tag.ServiceTag.dto.ServiceResponseDto;
+import com.team012.server.posts.Tag.ServiceTag.entity.PostsServiceTag;
+import com.team012.server.posts.dto.PostsResponseDto;
+import com.team012.server.posts.entity.Posts;
+import com.team012.server.posts.img.converter.PostsImgConverter;
+import com.team012.server.posts.img.dto.ImageDto;
 import com.team012.server.review.dto.ReviewPostsResponse;
 import com.team012.server.room.converter.RoomConverter;
 import com.team012.server.room.dto.RoomDto;
 import com.team012.server.room.entity.Room;
-import com.team012.server.posts.Tag.HashTag.dto.HashTagResponseDto;
-import com.team012.server.posts.Tag.HashTag.entity.PostsHashTags;
-import com.team012.server.posts.Tag.ServiceTag.dto.ServiceResponseDto;
-import com.team012.server.posts.Tag.ServiceTag.entity.PostsServiceTag;
-import com.team012.server.posts.dto.PostsResponseDto;
-import com.team012.server.posts.dto.PostsResponseListDto;
-import com.team012.server.posts.entity.Posts;
-import com.team012.server.posts.img.converter.PostsImgConverter;
-import com.team012.server.posts.img.dto.ImgDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -34,7 +33,7 @@ public class PostsCombineService {
     public PostsResponseDto combine(Long companyId, Posts posts, List<Room> roomList1,
                                     List<PostsHashTags> postsHashTags,
                                     List<PostsServiceTag> postsServiceTags) {
-        List<ImgDto> imgDtos = postsImgConverter.toListDTO(posts.getPostsImgList());
+        List<ImageDto> imageDtos = postsImgConverter.toListDTO(posts.getPostsImgList());
         List<HashTagResponseDto> hashTags = hashTagConverter.toListDTO(postsHashTags);
         List<ServiceResponseDto> serviceTags = serviceTagConverter.toListDTO(postsServiceTags);
         List<RoomDto> roomDtos = roomConverter.toListDTO(roomList1);
@@ -47,35 +46,21 @@ public class PostsCombineService {
                 .longitude(posts.getLongitude())
                 .address(posts.getAddress())
                 .detailAddress(posts.getDetailAddress())
-                .roomCount(posts.getRoomCount())
                 .phone(posts.getPhone())
                 .companyId(companyId)
                 .avgScore(posts.getAvgScore())
                 .likesCount(posts.getLikesCount())
                 .checkInTime(posts.getCheckInTime().format(DateTimeFormatter.ofPattern("a hh:mm").withLocale(Locale.KOREA)))
                 .checkOutTime(posts.getCheckOutTime().format(DateTimeFormatter.ofPattern("a hh:mm").withLocale(Locale.KOREA)))
-                .postsImgList(imgDtos)
+                .postsImgList(imageDtos)
                 .hashTag(hashTags)
                 .serviceTag(serviceTags)
                 .roomDtos(roomDtos)
                 .build();
     }
 
-
-    public PostsResponseListDto combine(Posts post, Integer minPrice, ImgDto imgDto) {
-        return PostsResponseListDto.builder()
-                .id(post.getId())
-                .title(post.getTitle())
-                .address(post.getAddress())
-                .avgScore(post.getAvgScore())
-                .likesCount(post.getLikesCount())
-                .img(imgDto)
-                .minPrice(minPrice)
-                .build();
-    }
-
     public PostsResponseDto combine(Posts posts, List<ReviewPostsResponse> reviewList, List<Room> roomList) {
-        List<ImgDto> imgDtos = postsImgConverter.toListDTO(posts.getPostsImgList());
+        List<ImageDto> imageDtos = postsImgConverter.toListDTO(posts.getPostsImgList());
         List<HashTagResponseDto> hashTagResponseDtos = hashTagConverter.toListDTO(posts.getPostsHashTags());
         List<ServiceResponseDto> serviceResponseDtos = serviceTagConverter.toListDTO(posts.getPostAvailableTags());
         List<RoomDto> roomDtos = roomConverter.toListDTO(roomList);
@@ -94,12 +79,10 @@ public class PostsCombineService {
                 .checkInTime(posts.getCheckInTime().format(DateTimeFormatter.ofPattern("a hh:mm")))
                 .checkOutTime(posts.getCheckOutTime().format(DateTimeFormatter.ofPattern("a hh:mm")))
                 .likesCount(posts.getLikesCount())
-                .roomCount(posts.getRoomCount())
-                .postsImgList(imgDtos)
+                .postsImgList(imageDtos)
                 .hashTag(hashTagResponseDtos)
                 .serviceTag(serviceResponseDtos)
                 .roomDtos(roomDtos)
-                .roomCount(posts.getRoomCount())
                 .reviewList(reviewList)
                 .build();
     }

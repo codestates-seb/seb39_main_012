@@ -1,6 +1,7 @@
 package com.team012.server.reservation.helper;
 
-import com.team012.server.reservation.entity.ReservationList;
+import com.team012.server.reservation.entity.ReservedRoomInfo;
+import com.team012.server.reservation.entity.Reservation;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -13,25 +14,27 @@ import java.util.Set;
 public class AvailableReservationHelper {
 
     //선택한 날짜사이에 예약되어 있는 최대 강아지 수
-    public Integer occupiedRoomCount(List<ReservationList>reservations,
+    public Integer occupiedRoomCount(List<Reservation>reservations,
+                                      String roomName,
                                       LocalDate checkInDate,
                                       LocalDate checkOutDate) {
-        Map<LocalDate, Integer> occupiedMap = getOccupiedMap(reservations, checkInDate, checkOutDate);
+        Map<LocalDate, Integer> occupiedMap = getOccupiedMap(reservations, roomName,checkInDate, checkOutDate);
         Set<LocalDate> dateSet = occupiedMap.keySet();
 
-        Integer max = 0;
+        Integer occupiedRoomMaxCount = 0;
         for (LocalDate localDate : dateSet) {
-            Integer bookedQuantity = occupiedMap.get(localDate);
+            Integer reservedQuantity = occupiedMap.get(localDate);
 
-            if(max <= bookedQuantity) {
-                max = bookedQuantity;
+            if(occupiedRoomMaxCount <= reservedQuantity) {
+                occupiedRoomMaxCount = reservedQuantity;
             }
         }
-        return max;
+        return occupiedRoomMaxCount;
     }
 
     //선택한 날짜 사이에 일별마다 예약된 강아지수
-    public Map<LocalDate, Integer> getOccupiedMap(List<ReservationList>reservations,
+    private Map<LocalDate, Integer> getOccupiedMap(List<Reservation>reservations,
+                                               String roomName,
                                                LocalDate checkInDate,
                                                LocalDate checkOutDate) {
 
@@ -40,14 +43,24 @@ public class AvailableReservationHelper {
             LocalDate currentDate = date;
             Integer occupied = reservations.stream()
                     .filter(reservation -> isBetween(currentDate, reservation))
-                    .mapToInt(ReservationList::getDogCount).sum();
+                    .mapToInt(room -> countReservedRoom(roomName, room)).sum();
 
             occupiedMap.put(currentDate, occupied);
         }
         return occupiedMap;
     }
+    private int countReservedRoom(String roomName, Reservation reservation) {
+        List<ReservedRoomInfo> list = reservation.getReservedRoomInfos();
+        int count = 0;
+        for (ReservedRoomInfo reservedRoomInfo : list)
+            if (reservedRoomInfo.getRoomName().equals(roomName)) {
+                count = reservedRoomInfo.getCount();
+            }
+        return count;
+    }
 
-    public boolean isBetween(LocalDate date, ReservationList reservation) {
+
+    private boolean isBetween(LocalDate date, Reservation reservation) {
         LocalDate checkInDate = reservation.getCheckInDate();
         LocalDate checkOutDate = reservation.getCheckOutDate();
         return date.isBefore(checkOutDate) && date.isAfter(checkInDate);
