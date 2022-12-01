@@ -39,7 +39,7 @@ public class RoomService {
 
     public List<Room> updateRoomList(List<RoomCreateDto> roomDto, Long postsId) {
         List<Room> rooms = roomRepository.findAllByPostsId(postsId);
-        if(rooms.size() != 3) throw new IllegalArgumentException("3개");
+        if(rooms.size() != 3) throw new BusinessLogicException(ExceptionCode.ONLY_CREATE_ROOM_COUNT_THREE); //shit, is was me...
         for(int i = 0; i< roomDto.size(); i++) {
             Room room = rooms.get(i);
             room.setPrice(roomDto.get(i).getPrice());
@@ -51,7 +51,7 @@ public class RoomService {
     @Transactional(readOnly = true)
     public Room findRoomByPostsIdAndSize(Long postsId, String size) {
         return roomRepository.findByPostsIdAndSize(postsId, size)
-                .orElseThrow(() -> new RuntimeException("room not found"));
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ROOM_NOT_EXIST));
     }
     @Transactional(readOnly = true)
     public List<Room> findAllRoom(Long postsId) {

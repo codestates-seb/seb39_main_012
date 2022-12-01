@@ -20,7 +20,10 @@ public enum ExceptionCode {
     ROOMS_ARE_FULLY_BOOKED(400, "rooms are fully booked"),
     RESERVATION_NOT_FOUND(404, "reservation not found"),
     EDIT_OTHER_USERS_REVIEW_IS_FORBIDDEN(403, "Modifications other than your own review are not possible."),
-    DELETE_OTHER_USERS_REVIEW_IS_FORBIDDEN(403,"Delete other users review is forbidden");
+    DELETE_OTHER_USERS_REVIEW_IS_FORBIDDEN(403,"Delete other users review is forbidden"),
+
+    ONLY_CREATE_ROOM_COUNT_THREE(400, "room count must be 3"),
+    CHOOSE_YOUR_CORRECT_DOG_ID(400, "Choose your correct dog id");
 
     @Getter
     private final int status;

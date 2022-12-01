@@ -16,15 +16,6 @@ public class RoomController {
 
     private final RoomService roomService;
 
-//    @PatchMapping("/{posts-id}")
-//    public ResponseEntity<RoomDto> update(@PathVariable("posts-id") Long postsId,
-//                                          @RequestBody List<RoomUpdateDto> request) {
-//
-//        RoomDto roomDto = roomService.update(request);
-//
-//        return new ResponseEntity<>(roomDto, HttpStatus.OK);
-//    }
-
     @DeleteMapping("/{room-id}")
     public ResponseEntity<Void> deleteRoom(@PathVariable("room-id") Long roomId) {
 

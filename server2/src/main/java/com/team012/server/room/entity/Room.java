@@ -22,10 +22,10 @@ public class Room {
     private Integer price;
 
     //갯수 엔티티 추가
-    @Column(name = "room_count")
+    @Column(name = "ROOM_COUNT")
     private Integer roomCount;
 
-    @Column(name = "posts_id")
+    @Column(name = "POSTS_ID")
     private Long postsId;
 
 }
