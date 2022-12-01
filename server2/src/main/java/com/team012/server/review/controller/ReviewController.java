@@ -1,6 +1,7 @@
 package com.team012.server.review.controller;
 
 import com.team012.server.common.config.userDetails.PrincipalDetails;
+import com.team012.server.common.exception.ExceptionCode;
 import com.team012.server.posts.entity.PostsAvgScore;
 import com.team012.server.posts.service.PostsAvgScoreService;
 import com.team012.server.review.dto.ReviewCreateRequestDto;
@@ -17,6 +18,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+
+import static com.team012.server.common.exception.ExceptionCode.DELETE_OTHER_USERS_REVIEW_IS_FORBIDDEN;
+import static com.team012.server.common.utils.constant.Constant.*;
 
 @RestController
 @RequestMapping("/v1/customer/review")
@@ -46,7 +50,7 @@ public class ReviewController {
                 .content(savedReview.getContent())
                 .score(savedReview.getScore())
                 .reviewImgList(savedReview.getReviewImgList())
-                .message("리뷰 작성 완료....!")
+                .message(REVIEW_WRITTEN.getMessage())
                 .build();
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -63,7 +67,7 @@ public class ReviewController {
         Review review = reviewService.findByReviewId(reviewId);
 
         if (review.getUserId() != users.getId()) {
-            return new ResponseEntity<>("본인의 리뷰 이외에는 수정 불가능 합니다.", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(ExceptionCode.EDIT_OTHER_USERS_REVIEW_IS_FORBIDDEN.getMessage(), HttpStatus.FORBIDDEN);
         }
 
         Review updateReview = reviewService.updateReview(reviewId, dto, multipartFile);
@@ -76,27 +80,27 @@ public class ReviewController {
                 .content(updateReview.getContent())
                 .score(updateReview.getScore())
                 .reviewImgList(updateReview.getReviewImgList())
-                .message("리뷰 수정 완료...!")
+                .message(MODIFIED_REVIEW_SUCCESS.getMessage())
                 .build();
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     // 고객이 업체 리뷰삭제 API
-    @DeleteMapping("/delete/{reviewId}")
-    public ResponseEntity deleteReview(@PathVariable("reviewId") Long reviewId,
+    @DeleteMapping("/delete/{review-id}")
+    public ResponseEntity deleteReview(@PathVariable("review-id") Long reviewId,
                                        @AuthenticationPrincipal PrincipalDetails principalDetails) {
         Users users = principalDetails.getUsers();
         Review review = reviewService.findByReviewId(reviewId);
 
         if (review.getUserId() != users.getId()) {
-            return new ResponseEntity<>("본인의 리뷰 이외에는 삭제 불가능 합니다.", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(DELETE_OTHER_USERS_REVIEW_IS_FORBIDDEN.getMessage(), HttpStatus.FORBIDDEN);
         }
 
         reviewService.deleteReview(reviewId);
         ReviewResponseDto response = ReviewResponseDto
                 .builder()
-                .message("리뷰 삭제 완료...!")
+                .message(DELETE_REVIEW_SUCCESS.getMessage())
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
