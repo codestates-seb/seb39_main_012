@@ -2,7 +2,6 @@ package com.team012.server.room.repository;
 
 import com.team012.server.common.utils.JDBC.JDBCRepository;
 import com.team012.server.room.entity.Room;
-import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -29,7 +28,7 @@ public class RoomJDBCRepository extends JDBCRepository<Room> {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
                 Room room = lists.get(i);
-                ps.setString(1, room.getSize());
+                ps.setString(1, room.getRoomSize());
                 ps.setInt(2, room.getPrice());
                 ps.setInt(3, room.getRoomCount());
                 ps.setLong(4, room.getPostsId());

@@ -16,7 +16,7 @@ public class Room {
     private Long id;
 
     @Column(name = "size") // 대, 중, 소 (개 사이즈, 방 사이즈)
-    private String size;
+    private String roomSize;
 
     @Column(name = "price") // 두당 가격
     private Integer price;

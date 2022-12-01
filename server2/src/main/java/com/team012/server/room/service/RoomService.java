@@ -2,7 +2,6 @@ package com.team012.server.room.service;
 
 import com.team012.server.common.exception.BusinessLogicException;
 import com.team012.server.common.exception.ExceptionCode;
-import com.team012.server.room.converter.RoomConverter;
 import com.team012.server.room.dto.RoomCreateDto;
 import com.team012.server.room.entity.Room;
 import com.team012.server.room.repository.RoomJDBCRepository;
@@ -27,7 +26,7 @@ public class RoomService {
         List<Room> roomList = new ArrayList<>();
         for(RoomCreateDto room : list) {
             Room room1 = Room.builder()
-                    .size(room.getSize())
+                    .roomSize(room.getSize())
                     .price(room.getPrice())
                     .roomCount(room.getRoomCount())
                     .postsId(postsId)

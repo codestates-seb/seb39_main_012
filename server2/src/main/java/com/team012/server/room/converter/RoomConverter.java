@@ -15,7 +15,7 @@ public class RoomConverter implements Converter<Room, RoomDto> {
     public RoomDto toDTO(Room room) {
         return RoomDto.builder()
                 .roomId(room.getId())
-                .size(room.getSize())
+                .size(room.getRoomSize())
                 .price(room.getPrice())
                 .roomCount(room.getRoomCount())
                 .build();
