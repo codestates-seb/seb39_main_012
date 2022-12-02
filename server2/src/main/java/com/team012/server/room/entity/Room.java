@@ -15,17 +15,17 @@ public class Room {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "size") // 대, 중, 소 (개 사이즈, 방 사이즈)
+    @Column(name = "room_size") // 대, 중, 소 (개 사이즈, 방 사이즈)
     private String roomSize;
 
     @Column(name = "price") // 두당 가격
     private Integer price;
 
     //갯수 엔티티 추가
-    @Column(name = "ROOM_COUNT")
+    @Column(name = "room_count")
     private Integer roomCount;
 
-    @Column(name = "POSTS_ID")
+    @Column(name = "posts_id")
     private Long postsId;
 
 }

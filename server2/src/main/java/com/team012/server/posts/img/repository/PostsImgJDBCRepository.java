@@ -29,7 +29,6 @@ public class PostsImgJDBCRepository extends JDBCRepository<PostsImg> {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
                 PostsImg postsImg = lists.get(i);
-//                ps.setLong(1, postsImg.getId());
                 ps.setString(1, postsImg.getFileName());
                 ps.setString(2, postsImg.getImgUrl());
                 ps.setLong(3, postsImg.getPosts().getId());

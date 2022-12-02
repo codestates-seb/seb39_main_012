@@ -14,7 +14,7 @@ import java.util.List;
 public class RoomJDBCRepository extends JDBCRepository<Room> {
 
     String sql = "INSERT INTO room" +
-            "(size, price, room_count, posts_id) VALUES (?,?,?,?)";
+            "(room_size, price, room_count, posts_id) VALUES (?,?,?,?)";
 
     protected RoomJDBCRepository(JdbcTemplate jdbcTemplate) {
         super(jdbcTemplate);
