@@ -19,7 +19,7 @@ public class PostsHashTags {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "PostsTags_ID")
+    @JoinColumn(name = "hashTags_ID")
     private HashTag hashTag;
 
     @ManyToOne

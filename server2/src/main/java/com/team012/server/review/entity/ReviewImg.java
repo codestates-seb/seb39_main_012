@@ -17,15 +17,15 @@ public class ReviewImg {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "FILE_NAME")
+    @Column(name = "file_name")
     private String fileName;
 
-    @Column(name = "IMAGE_URL")
+    @Column(name = "img_url")
     @Lob
     private String imgUrl;
 
     @ManyToOne
-    @JoinColumn(name = "Review_Id")
+    @JoinColumn(name = "review_id")
     @JsonIgnore
     private Review review;
 }

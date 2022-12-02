@@ -26,39 +26,39 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reservedId;
 
-    @Column(name = "CHECK_IN_DATE")
+    @Column(name = "check_in")
     @DateTimeFormat(pattern = "yyyy-mm-dd")
     private LocalDate checkInDate;
 
-    @Column(name = "CHECK_OUT_DATE")
+    @Column(name = "check_out")
     @DateTimeFormat(pattern = "yyyy-mm-dd")
     private LocalDate checkOutDate;
 
-    @Column(name = "CHECK_IN_TIME")
+    @Column(name = "check_in_time")
     @DateTimeFormat(pattern = "HH:mm")
     private LocalTime checkInTime;
 
-    @Column(name = "CHECK_OUT_TIME")
+    @Column(name = "check_out_time")
     @DateTimeFormat(pattern = "HH:mm")
     private LocalTime checkOutTime;
 
     // 예약 확정인지 아닌지 판별 -->
-    @Column(name = "STATUS")
+    @Column(name = "status")
     private String status = Constant.UNDEFINED.getMessage();
 
-    @Column(name = "USER_ID")
+    @Column(name = "users_id")
     private Long usersId;
 
-    @Column(name = "POSTS_ID")
+    @Column(name = "posts_id")
     private Long postsId;
 
-    @Column(name = "TOTAL_PRICE")
+    @Column(name = "total_price")
     private Integer totalPrice;
 
-    @Column(name = "COMPANY_ID")
+    @Column(name = "companyId")
     private Long companyId;
 
-    @Column(name = "TOTAL_DOG_COUNT")
+    @Column(name = "total_dog_count")
     private Integer totalDogCount; //예약된 강아지 수
 
     @ElementCollection(fetch = FetchType.LAZY)
