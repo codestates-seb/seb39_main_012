@@ -22,7 +22,7 @@ public class GlobalExceptionAdvice {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleMethodArgumentNotValidException(
-            MethodArgumentNotValidException e) {
+            MethodArgumentNotValidException e) { //@valid 예외 처리
         return ErrorResponse.of(e.getBindingResult());
     }
 
@@ -45,7 +45,7 @@ public class GlobalExceptionAdvice {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleHttpMessageNotReadableException(
-            HttpMessageNotReadableException e) {
+            HttpMessageNotReadableException e) { //잘못된 형식으로 request 를 요청할 경우 예외 발생
 
         return ErrorResponse.of(400,
                 "Required request body is missing");
@@ -54,7 +54,7 @@ public class GlobalExceptionAdvice {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleMissingServletRequestParameterException(
-            MissingServletRequestParameterException e) {
+            MissingServletRequestParameterException e) { //필수 파라미터 결여시
 
         return ErrorResponse.of(400,
                 e.getMessage());
@@ -62,17 +62,15 @@ public class GlobalExceptionAdvice {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleConstraintViolationException(
+    public ErrorResponse handleConstraintViolationException( //@Validated 에러
             ConstraintViolationException e) {
         return ErrorResponse.of(e.getConstraintViolations());
     }
 
-    // 찾는 정보가 없는 경우에 사용
-    @ExceptionHandler(NullPointerException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleNullPointerException(
-            NullPointerException e) {
-        return ErrorResponse.of(HttpStatus.NOT_FOUND);
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleIllegalArgumentException(IllegalArgumentException e) {
+        return ErrorResponse.of(400, e.getMessage());
     }
 
     @ExceptionHandler({AuthenticationException.class})
