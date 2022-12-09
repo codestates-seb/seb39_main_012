@@ -2,6 +2,7 @@ package com.team012.server.posts.dto;
 
 import com.team012.server.room.dto.RoomCreateDto;
 import lombok.Getter;
+import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.*;
 import java.util.List;
