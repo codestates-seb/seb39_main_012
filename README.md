@@ -46,8 +46,9 @@
 <br>
 
 ## 🌟 프로젝트 문서
+- 📖 요구사항 정의서 [[바로가기]](https://luck-inch-735.notion.site/c44fb9960be544ea857b769988af09e1?v=90bcdaef0fbc447e994db97568a0667f)
 
-- 🖌 Figma [[바로가기]](https://www.figma.com/file/IPeBo0ZKWKwJXa619E7rUY/Project-Moongtel?node-id=0%3A1)
+- 🖌 Figma 화면 설계서 [[바로가기]](https://www.figma.com/file/IPeBo0ZKWKwJXa619E7rUY/Project-Moongtel?node-id=0%3A1)
 
 - 📣 서비스 기능시연 + 발표자료 [[바로가기]](https://docs.google.com/presentation/d/1kDworaqfeTy1xYk_0UvHv_eAEzKO9PDQGQ9jYQXXZA8/edit?usp=sharing)
 
