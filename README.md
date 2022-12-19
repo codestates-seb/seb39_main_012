@@ -50,7 +50,7 @@
 
 - 🖌 Figma 화면 설계서 [[바로가기]](https://www.figma.com/file/IPeBo0ZKWKwJXa619E7rUY/Project-Moongtel?node-id=0%3A1)
 
-- 📣 서비스 기능시연 + 발표자료 [[바로가기]](https://docs.google.com/presentation/d/1kDworaqfeTy1xYk_0UvHv_eAEzKO9PDQGQ9jYQXXZA8/edit?usp=sharing)
+- 📣 서비스 기능시연 + 발표자료 [[바로가기]](https://docs.google.com/presentation/d/1biPMaqbCm-69d4dGTeGeaycWu2-4iRlS6gWRonRijG0/edit?usp=sharing)
 
 <br>
 
