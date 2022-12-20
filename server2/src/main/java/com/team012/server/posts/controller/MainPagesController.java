@@ -13,6 +13,9 @@ import com.team012.server.review.dto.ReviewPostsResponse;
 import com.team012.server.review.service.ReviewService;
 import com.team012.server.room.entity.Room;
 import com.team012.server.room.service.RoomService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -20,7 +23,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 @RequiredArgsConstructor
 @RequestMapping("/v1/posts")
 @RestController
@@ -35,8 +37,9 @@ public class MainPagesController {
 
     //     메인페이지 조회 (별점 순으로 기준해서 정렬)
     @GetMapping
-    public ResponseEntity gets(@RequestParam int page,
-                               @RequestParam int size) {
+    public ResponseEntity gets(
+            @RequestParam int page,
+            @RequestParam int size) {
         // avgScore 기준으로 정렬된 페이징 처리
         Page<Posts> postsPage = postsSearchService.findAll(page - 1, size);
         Page<RoomPriceDto> roomPriceDtos = postsSearchService.findAllRoomPrice(page - 1, size);
@@ -50,9 +53,10 @@ public class MainPagesController {
 
 
     @GetMapping("/search-address")
-    public ResponseEntity searchByAddress(@RequestParam int page,
-                                          @RequestParam int size,
-                                          @RequestParam String address) {
+    public ResponseEntity searchByAddress(
+            @RequestParam int page,
+            @RequestParam int size,
+            @RequestParam String address) {
         Page<Posts> postsPage = postsSearchService.findPostsByAddress(address, page - 1, size);
         List<Posts> postsList = postsPage.getContent();
 

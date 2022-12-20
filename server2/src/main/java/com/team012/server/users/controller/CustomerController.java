@@ -10,6 +10,8 @@ import com.team012.server.users.repository.UsersImgRepository;
 import com.team012.server.users.service.DogCardService;
 import com.team012.server.users.service.UsersManageReviewService;
 import com.team012.server.users.service.UsersService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -32,7 +34,8 @@ public class CustomerController {
 
     // 고객 상세페이지
     @GetMapping("/profile")
-    public ResponseEntity getCustomer(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public ResponseEntity getCustomer(
+            @AuthenticationPrincipal PrincipalDetails principalDetails) {
         Long userId = principalDetails.getUsers().getId();
         log.info("userId : {}", userId);
         Users findUser = usersService.findUsersById(userId);

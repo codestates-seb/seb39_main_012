@@ -7,8 +7,10 @@ import com.team012.server.common.response.SingleResponseDto;
 import com.team012.server.users.dto.DogCardResponseDto;
 import com.team012.server.users.mapper.DogCardMapper;
 import com.team012.server.users.service.DogCardService;
+import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.Parameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -30,7 +32,8 @@ public class DogCardController {
 
     // 강아지 큐카드 생성
     @PostMapping("/create")
-    public ResponseEntity createCard(@RequestPart(value = "dogCardDto") DogCardCreateDto dogCardDto,
+    public ResponseEntity createCard(
+            @RequestPart(name = "dogCardDto") DogCardCreateDto dogCardDto,
                                      @RequestPart(value = "file") MultipartFile file,
                                      @AuthenticationPrincipal PrincipalDetails principalDetails) {
 

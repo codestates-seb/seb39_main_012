@@ -5,6 +5,7 @@ import com.team012.server.common.exception.ExceptionCode;
 import com.team012.server.posts.Tag.HashTag.entity.HashTag;
 import com.team012.server.posts.Tag.HashTag.entity.PostsHashTags;
 import com.team012.server.posts.Tag.HashTag.repository.HashTagRepository;
+import com.team012.server.posts.Tag.HashTag.repository.PostsHashTagJDBCRepository;
 import com.team012.server.posts.Tag.HashTag.repository.PostsHashTagRepository;
 import com.team012.server.posts.entity.Posts;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 public class TagService {
 
     private final HashTagRepository hashTagRepository;
+    private final PostsHashTagJDBCRepository postsHashTagJDBCRepository;
     private final PostsHashTagRepository postsHashTagRepository;
 
     public List<HashTag> saveOrFind(List<String> postsTags) {
@@ -32,7 +34,7 @@ public class TagService {
         return hashTagRepository.saveAll(hashTags);
     }
 
-    public List<PostsHashTags> saveCompanyPostsTags(List<HashTag> postsTags, Posts posts) {
+    public void saveCompanyPostsTags(List<HashTag> postsTags, Posts posts) {
         List<PostsHashTags> postsHashTags = new ArrayList<>();
         for(HashTag hashTag : postsTags) {
             PostsHashTags postsHashTag = PostsHashTags.builder()
@@ -42,7 +44,7 @@ public class TagService {
             postsHashTags.add(postsHashTag);
         }
         posts.setPostsHashTags(postsHashTags);
-        return postsHashTagRepository.saveAll(postsHashTags);
+        postsHashTagJDBCRepository.batchInsert(postsHashTags);
     }
 
 

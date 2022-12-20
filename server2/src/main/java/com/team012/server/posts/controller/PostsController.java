@@ -48,11 +48,13 @@ public class PostsController {
                                  @RequestPart(value = "file") List<MultipartFile> file,
                                  @AuthenticationPrincipal PrincipalDetails principalDetails){
 
+        long a = System.currentTimeMillis();
+        System.out.println(a);
         Long userId = principalDetails.getUsers().getId();
         // 회사정보 --> posts 에 넣어줘야 한다..
-        PostsResponseDto responseDto = postsCreateService.createPostsResponse(request, file, userId);
-
-        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
+        postsCreateService.createPostsResponse(request, file, userId);
+        System.out.println(System.currentTimeMillis() - a);
+        return new ResponseEntity<>("complete", HttpStatus.CREATED);
     }
 
     @PatchMapping("/{id}")
@@ -64,9 +66,9 @@ public class PostsController {
         Long userId = principalDetails.getUsers().getId(); // -> id : 2
         request.setId(postsId); // -> id : 1
 
-        PostsResponseDto postsResponseDto = postsUpdateService.updatePostResponse(request, file, userId);
+        postsUpdateService.updatePostResponse(request, file, userId);
 
-        return new ResponseEntity<>(postsResponseDto, HttpStatus.OK);
+        return new ResponseEntity<>("complete", HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
