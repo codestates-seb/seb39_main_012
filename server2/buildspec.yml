@@ -1,0 +1,21 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      java: corretto11
+  build:
+    commands:
+      - echo Build Starting on `date`
+      - cd seb39_main_012/server2
+      - chmod 700 ./gradlew
+      - ./gradlew build
+  post_build:
+    commands:
+      - echo $(basename ./server2/build/libs/*.jar)
+artifacts:
+  files:
+    - server2/build/libs/*.jar
+    - server2/scripts/**
+    - server2/appspec.yml
+  discard-paths: yes
