@@ -32,17 +32,17 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
 
-    - name : cd server2
-      run : cd server2/
-    
+    - name: cd server2
+      run: cd server2/
+
     - name: Run chmod to make gradlew executable
-      run: chmod +x ./gradlew
+      run: chmod +x ./server2/gradlew
     
     - name: Build with Gradle
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       with:
         arguments: build
-     build한 후 프로젝트를 압축합니다.
+    # build한 후 프로젝트를 압축합니다.
     - name: Make zip file
       run: zip -r ./deploy.zip .
       shell: bash
