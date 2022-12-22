@@ -36,14 +36,14 @@ jobs:
       run: cd server2/
 
     - name: Run chmod to make gradlew executable
-      run: chmod +x ./gradlew
+      run: chmod +x ./server2/gradlew
     
     - name: Build with Gradle
-      run: ./gradlew build
-#      uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
-#      with:
-#        arguments: build
-    # build한 후 프로젝트를 압축합니다.
+#      run: ./gradlew build
+      uses: server2/gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+      with:
+        arguments: build
+     build한 후 프로젝트를 압축합니다.
     - name: Make zip file
       run: zip -r ./deploy.zip .
       shell: bash
