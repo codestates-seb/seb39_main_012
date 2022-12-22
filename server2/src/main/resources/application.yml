@@ -1,0 +1,54 @@
+spring:
+  datasource:
+    hikari:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: {AWS RDS Endpoint}
+      username: {RDS Mysql Admin id}
+      password: {RDS Mysql Admin password}
+#config.domain: {AWS S3 EndPoint}
+
+  jpa:
+    hibernate:
+      ddl-auto: create  # (1) ??? ?? ??
+    properties:
+      hibernate:
+        format_sql: true  # (3) SQL pretty print
+        jdbc:
+          batch_size: 100
+          batch_versioned_data: true
+        order_inserts: true # hibernate 내부에 추가한 insert 작업을 먼저 정렬 후 순서대로 insert 작업 실행
+        order_updates: true
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+logging:
+  level:
+    org:
+      springframework:
+        orm:
+          jpa: DEBUG
+        data:
+          elasticsearch:
+            client:
+              WIRE: TRACE
+
+cloud:
+  aws:
+    credentials:
+      accessKey: { AWS ACCESS KEY }  # AWS IAM AccessKey 적기
+      secretKey: { AWS SECRET KEY } # AWS IAM SecretKey 적기
+    s3:
+      bucket: { bucket name }
+    region:
+      static: "ap-northeast-2"
+    stack:
+      auto: false
+

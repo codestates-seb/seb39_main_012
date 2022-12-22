@@ -1,0 +1,6 @@
+aws:
+  paramstore:
+    enabled: true
+    prefix: /seb-39-main-012
+    name: hsj # 리소스 이름을 작성합니다.
+    profileSeparator: _
