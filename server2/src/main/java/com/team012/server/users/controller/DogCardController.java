@@ -1,16 +1,14 @@
 package com.team012.server.users.controller;
 
-import com.team012.server.users.dto.DogCardCreateDto;
-import com.team012.server.users.entity.DogCard;
 import com.team012.server.common.config.userDetails.PrincipalDetails;
 import com.team012.server.common.response.SingleResponseDto;
+import com.team012.server.users.dto.DogCardCreateDto;
 import com.team012.server.users.dto.DogCardResponseDto;
+import com.team012.server.users.entity.DogCard;
 import com.team012.server.users.mapper.DogCardMapper;
 import com.team012.server.users.service.DogCardService;
-import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.annotations.Parameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
