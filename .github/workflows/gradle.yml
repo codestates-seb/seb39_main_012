@@ -34,11 +34,11 @@ jobs:
 
     - name: Run chmod to make gradlew executable
       run: chmod +x ./gradlew
-      working-directory: ./home/runner/work/seb39_main_012/server2
+      working-directory: ./server2
     
     - name: Build with Gradle
       run: ./gradlew build
-      working-directory: ./seb39_main_012/server2
+      working-directory: ./server2
 
 
     # build한 후 프로젝트를 압축합니다.
