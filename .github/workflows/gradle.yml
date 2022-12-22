@@ -34,7 +34,7 @@ jobs:
 
     - name: Run chmod to make gradlew executable
       run: chmod +x ./gradlew
-      working-directory: ./seb39_main_012/server2
+      working-directory: /home/runner/work/seb39_main_012/server2
     
     - name: Build with Gradle
       run: ./gradlew build
