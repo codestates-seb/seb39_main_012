@@ -32,9 +32,6 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
 
-    - name: cd server2
-      run: cd server2/
-
     - name: Run chmod to make gradlew executable
       run: chmod +x ./server2/gradlew
     
