@@ -26,7 +26,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: "seb39_main_012/server2"
+        working-directory: "/server2"
 
     steps:
     - uses: actions/checkout@v3
