@@ -63,5 +63,5 @@ jobs:
       run: >
         aws deploy create-deployment --application-name seb-39-main-012
         --deployment-config-name CodeDeployDefault.AllAtOnce
-        --deployment-group-name seb-39-main-012
-        --s3-location bucket=codepipeline-ap-northeast-2-943642356704,bundleType=zip,key=deploy.zip
+        --deployment-group-name seb-39-main-012-group
+        --s3-location bucket= codepipeline-ap-northeast-2-943642356704 ,bundleType=zip,key=deploy.zip
