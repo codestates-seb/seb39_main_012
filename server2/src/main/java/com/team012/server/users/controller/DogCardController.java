@@ -1,10 +1,10 @@
 package com.team012.server.users.controller;
 
-import com.team012.server.users.dto.DogCardCreateDto;
-import com.team012.server.users.entity.DogCard;
 import com.team012.server.common.config.userDetails.PrincipalDetails;
 import com.team012.server.common.response.SingleResponseDto;
+import com.team012.server.users.dto.DogCardCreateDto;
 import com.team012.server.users.dto.DogCardResponseDto;
+import com.team012.server.users.entity.DogCard;
 import com.team012.server.users.mapper.DogCardMapper;
 import com.team012.server.users.service.DogCardService;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,8 @@ public class DogCardController {
 
     // 강아지 큐카드 생성
     @PostMapping("/create")
-    public ResponseEntity createCard(@RequestPart(value = "dogCardDto") DogCardCreateDto dogCardDto,
+    public ResponseEntity createCard(
+            @RequestPart(name = "dogCardDto") DogCardCreateDto dogCardDto,
                                      @RequestPart(value = "file") MultipartFile file,
                                      @AuthenticationPrincipal PrincipalDetails principalDetails) {
 

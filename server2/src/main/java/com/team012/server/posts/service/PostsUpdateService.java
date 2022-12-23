@@ -35,38 +35,37 @@ public class PostsUpdateService {
     private final ServiceTagService serviceTagService;
     private final PostsCombineService postsCombineService;
 
-    public PostsResponseDto updatePostResponse(PostsUpdateDto postsUpdateDto, List<MultipartFile> images, Long usersId) throws FileUploadException {
+    public void updatePostResponse(PostsUpdateDto postsUpdateDto, List<MultipartFile> images, Long usersId) throws FileUploadException {
         Long companyId = findCompanyId(usersId);
 
         Posts response = postsService.update(postsUpdateDto, images, companyId);
         List<Room> roomList = roomService.updateRoomList(postsUpdateDto.getRoomDtoList(), postsUpdateDto.getId());
 
-        List<PostsHashTags> postsHashTags = updateHashTags(postsUpdateDto, response);
-        List<PostsServiceTag> postsServiceTags = updateServiceTags(postsUpdateDto, response);
+        updateHashTags(postsUpdateDto, response);
+        updateServiceTags(postsUpdateDto, response);
 
-        return postsCombineService.combine(companyId, response, roomList, postsHashTags,postsServiceTags);
+//        return postsCombineService.combine(companyId, response, roomList, postsHashTags,postsServiceTags);
     }
     private Long findCompanyId(Long usersId) {
         Company company = companyService.getCompany(usersId);
         return company.getId();
     }
 
-    private List<PostsHashTags> updateHashTags(PostsUpdateDto postsUpdateDto, Posts posts) {
+    private void updateHashTags(PostsUpdateDto postsUpdateDto, Posts posts) {
         tagService.deleteAllHashTag(posts.getId());
         List<HashTag> hashTags = tagService.saveOrFind(postsUpdateDto.getHashTag());
-        List<PostsHashTags> postsHashTags =
-                tagService.saveCompanyPostsTags(hashTags, posts);
+        tagService.saveCompanyPostsTags(hashTags, posts);
 
-        return postsHashTags;
+//        return postsHashTags;
     }
 
-    private List<PostsServiceTag> updateServiceTags(PostsUpdateDto postsUpdateDto, Posts posts) {
+    private void updateServiceTags(PostsUpdateDto postsUpdateDto, Posts posts) {
         serviceTagService.deleteAllServiceTag(posts.getId());
         List<ServiceTag> serviceTags = serviceTagService.saveServiceTags(postsUpdateDto.getServiceTag());
-        List<PostsServiceTag> postsServiceTags =
+
                 serviceTagService.saveCompanyPostsTags(serviceTags, posts);
 
-        return postsServiceTags;
+//        return postsServiceTags;
     }
 
 }

@@ -1,13 +1,11 @@
 package com.team012.server.users.controller;
 
-import com.team012.server.common.aws.service.AwsS3Service;
-import com.team012.server.review.dto.ReviewInfoDto;
 import com.team012.server.common.config.userDetails.PrincipalDetails;
+import com.team012.server.review.dto.ReviewInfoDto;
 import com.team012.server.users.dto.CustomerProfileViewResponseDto;
 import com.team012.server.users.entity.Users;
 import com.team012.server.users.entity.UsersImg;
 import com.team012.server.users.repository.UsersImgRepository;
-import com.team012.server.users.service.DogCardService;
 import com.team012.server.users.service.UsersManageReviewService;
 import com.team012.server.users.service.UsersService;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -32,7 +32,8 @@ public class CustomerController {
 
     // 고객 상세페이지
     @GetMapping("/profile")
-    public ResponseEntity getCustomer(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public ResponseEntity getCustomer(
+            @AuthenticationPrincipal PrincipalDetails principalDetails) {
         Long userId = principalDetails.getUsers().getId();
         log.info("userId : {}", userId);
         Users findUser = usersService.findUsersById(userId);
